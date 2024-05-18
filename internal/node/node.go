@@ -2,6 +2,9 @@ package node
 
 import (
 	"fmt"
+	"io"
+	"net/http"
+	"os"
 	"os/exec"
 
 	"github.com/sionpixley/polyn/internal"
@@ -17,7 +20,7 @@ func Handle(args []string) {
 	}
 
 	var err error
-	command := constants.ConvertToCommand(args[0])
+	command := internal.ConvertToCommand(args[0])
 	switch command {
 	case constants.ADD:
 		if len(args) > 1 {
@@ -57,6 +60,46 @@ func Handle(args []string) {
 }
 
 func add(version string) error {
+	fileName := "node-" + version + "-win-x64.zip"
+	fmt.Println("Downloading " + fileName + "...")
+
+	url := "https://nodejs.org/dist/" + version + "/" + fileName
+
+	client := new(http.Client)
+	request, err := http.NewRequest(http.MethodGet, url, nil)
+	if err != nil {
+		return err
+	}
+
+	response, err := client.Do(request)
+	if err != nil {
+		return err
+	}
+	defer response.Body.Close()
+
+	err = os.Mkdir("node", os.ModePerm)
+	if err != nil {
+		return err
+	}
+
+	filePath := "./node/" + fileName
+	file, err := os.Create(filePath)
+	if err != nil {
+		return err
+	}
+	defer file.Close()
+
+	_, err = io.Copy(file, response.Body)
+	if err != nil {
+		return err
+	}
+
+	output, err := exec.Command("./emb/7za.exe", "x", ".\\node\\node-v20.13.1-win-x64.zip", "-o.\\node\\"+version).Output()
+	if err != nil {
+		return err
+	}
+	fmt.Print(output)
+
 	return nil
 }
 

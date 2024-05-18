@@ -47,26 +47,3 @@ const (
 	REMOVE
 	USE
 )
-
-func ConvertToCommand(commandStr string) models.Command {
-	switch commandStr {
-	case "add":
-		return ADD
-	case "current":
-		return CURRENT
-	case "install":
-		return INSTALL
-	case "ls":
-		fallthrough
-	case "list":
-		return LIST
-	case "rm":
-		fallthrough
-	case "remove":
-		return REMOVE
-	case "use":
-		return USE
-	default:
-		return NA
-	}
-}
