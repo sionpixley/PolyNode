@@ -2,6 +2,7 @@ package internal
 
 import (
 	"fmt"
+	"os/exec"
 
 	"github.com/sionpixley/polyn/internal/constants"
 	"github.com/sionpixley/polyn/internal/models"
@@ -41,4 +42,13 @@ func PrintError(err error) {
 func PrintHelp() {
 	help := constants.DESCRIPTION + "\n\n" + constants.USAGE + "\n\n" + constants.ENVS + "\n\n" + constants.COMMANDS
 	fmt.Println(help)
+}
+
+func UnzipFile(source string, destination string) error {
+	output, err := exec.Command("./emb/7za.exe", "x", source, "-o"+destination).Output()
+	if err != nil {
+		return err
+	}
+	fmt.Print(string(output))
+	return nil
 }

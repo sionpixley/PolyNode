@@ -61,7 +61,7 @@ func Handle(args []string) {
 
 func add(version string) error {
 	fileName := "node-" + version + "-win-x64.zip"
-	fmt.Println("Downloading " + fileName + "...")
+	fmt.Println("\nDownloading " + fileName + "...")
 
 	url := "https://nodejs.org/dist/" + version + "/" + fileName
 
@@ -87,20 +87,16 @@ func add(version string) error {
 	if err != nil {
 		return err
 	}
-	defer file.Close()
 
 	_, err = io.Copy(file, response.Body)
 	if err != nil {
 		return err
 	}
+	// Calling file.Close() explicitly instead of with defer because the 7za command was getting a lock error on the zip file.
+	file.Close()
 
-	output, err := exec.Command("./emb/7za.exe", "x", ".\\node\\node-v20.13.1-win-x64.zip", "-o.\\node\\"+version).Output()
-	if err != nil {
-		return err
-	}
-	fmt.Print(output)
-
-	return nil
+	err = internal.UnzipFile(filePath, "./node/"+version)
+	return err
 }
 
 func install(version string) error {
