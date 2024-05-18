@@ -29,6 +29,9 @@ Description:
   deno
   node : Default if runtime is not provided.`
 
+	// Unsupported operating system error message.
+	UNSUPPORTED_OS string = "Unsupported operating system."
+
 	// Syntax for using the polyn CLI.
 	USAGE string = `Usage:
 
@@ -36,6 +39,13 @@ Description:
 
 	// PolyNode's version.
 	VERSION string = "v0.1.0"
+)
+
+// NA is for Not Applicable.
+const (
+	NA_ARCH models.Architecture = iota
+	ARM64
+	X64
 )
 
 // NA is for Not Applicable.

@@ -1,6 +1,7 @@
 package node
 
 import (
+	"errors"
 	"fmt"
 	"io"
 	"net/http"
@@ -13,8 +14,8 @@ import (
 )
 
 // Main function for Node.js actions.
-// The args parameter should not include the optional env.
-func Handle(args []string, operatingSystem models.Os) {
+// The args parameter should not include the optional runtime.
+func Handle(args []string, operatingSystem models.Os, arch models.Architecture) {
 	if args == nil || len(args) == 0 {
 		internal.PrintHelp()
 		return
@@ -25,7 +26,7 @@ func Handle(args []string, operatingSystem models.Os) {
 	switch command {
 	case constants.ADD:
 		if len(args) > 1 {
-			err = add(args[1])
+			err = add(args[1], operatingSystem, arch)
 		} else {
 			internal.PrintHelp()
 		}
@@ -33,7 +34,7 @@ func Handle(args []string, operatingSystem models.Os) {
 		printCurrent()
 	case constants.INSTALL:
 		if len(args) > 1 {
-			err = install(args[1])
+			err = install(args[1], operatingSystem, arch)
 		} else {
 			internal.PrintHelp()
 		}
@@ -60,8 +61,13 @@ func Handle(args []string, operatingSystem models.Os) {
 	}
 }
 
-func add(version string) error {
-	fileName := "node-" + version + "-win-x64.zip"
+func add(version string, operatingSystem models.Os, arch models.Architecture) error {
+	archiveName, err := getTargetArchiveName(operatingSystem, arch)
+	if err != nil {
+		return err
+	}
+
+	fileName := "node-" + version + "-" + archiveName
 	fmt.Println("\nDownloading " + fileName + "...")
 
 	url := "https://nodejs.org/dist/" + version + "/" + fileName
@@ -93,15 +99,39 @@ func add(version string) error {
 	if err != nil {
 		return err
 	}
-	// Calling file.Close() explicitly instead of with defer because the 7za command was getting a lock error on the zip file.
+	// Calling file.Close() explicitly instead of with defer because the 7-zip command was getting a lock error on the zip file.
 	file.Close()
 
-	err = internal.UnzipFile(filePath, "./node/"+version)
+	err = internal.UnzipFile(filePath, "./node/"+version, operatingSystem, arch)
 	return err
 }
 
-func install(version string) error {
-	err := add(version)
+func getTargetArchiveName(operatingSystem models.Os, arch models.Architecture) (string, error) {
+	archiveName := ""
+	switch operatingSystem {
+	case constants.LINUX:
+		if arch == constants.ARM64 {
+			archiveName = "linux-arm64.tar.xz"
+		} else if arch == constants.X64 {
+			archiveName = "linux-x64.tar.xz"
+		}
+	case constants.MAC:
+		if arch == constants.ARM64 {
+			archiveName = "darwin-arm64.tar.gz"
+		} else if arch == constants.X64 {
+			archiveName = "darwin-x64.tar.gz"
+		}
+	case constants.WIN:
+		archiveName = "win-x64.zip"
+	default:
+		return "", errors.New(constants.UNSUPPORTED_OS)
+	}
+
+	return archiveName, nil
+}
+
+func install(version string, operatingSystem models.Os, arch models.Architecture) error {
+	err := add(version, operatingSystem, arch)
 	if err != nil {
 		return err
 	}

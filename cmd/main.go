@@ -20,27 +20,28 @@ func main() {
 	}
 
 	operatingSystem := internal.ConvertToOs(runtime.GOOS)
+	arch := internal.ConvertToArchitecture(runtime.GOARCH)
 
 	args := []string{}
 	for _, arg := range os.Args {
 		args = append(args, strings.ToLower(arg))
 	}
 
-	env := args[1]
-	switch env {
+	runtime := args[1]
+	switch runtime {
 	case "bun":
 		bun.Handle(args[2:], operatingSystem)
 	case "deno":
 		deno.Handle(args[2:], operatingSystem)
 	case "node":
-		node.Handle(args[2:], operatingSystem)
+		node.Handle(args[2:], operatingSystem, arch)
 	case "version":
 		printVersion()
 	default:
-		if internal.IsKnownCommand(env) {
+		if internal.IsKnownCommand(runtime) {
 			// We default to Node.js.
-			// Also, we slice starting with index 1 instead of 2 because the command is missing an env.
-			node.Handle(args[1:], operatingSystem)
+			// Also, we slice starting with index 1 instead of 2 because the command is missing a runtime.
+			node.Handle(args[1:], operatingSystem, arch)
 		} else {
 			internal.PrintHelp()
 		}
