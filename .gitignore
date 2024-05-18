@@ -1,3 +1,9 @@
 # Specific files and folders
 
 /node
+
+# General files and folders
+
+*.bin
+*.exe
+*.o
