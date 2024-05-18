@@ -22,15 +22,17 @@ Description:
 
   PolyNode is a CLI tool that helps install and switch between multiple versions of Bun, Deno, and/or Node.js on the same device. It is compatible with Linux, macOS, and Windows.`
 
-	// List of envs for printing to the user.
-	ENVS string = `Envs:
+	// List of runtimes for printing to the user.
+	RUNTIMES string = `Runtimes:
 
   bun
   deno
-  node : Default if env is not provided.`
+  node : Default if runtime is not provided.`
 
 	// Syntax for using the polyn CLI.
-	USAGE string = "Usage:\n\n  polyn [env] command <version>"
+	USAGE string = `Usage:
+
+  polyn [runtime] command <version>`
 
 	// PolyNode's version.
 	VERSION string = "v0.1.0"
@@ -39,11 +41,19 @@ Description:
 // NA is for Not Applicable.
 // We don't include the version command in this. The version command is handled in main().
 const (
-	NA models.Command = iota
+	NA_COMM models.Command = iota
 	ADD
 	CURRENT
 	INSTALL
 	LIST
 	REMOVE
 	USE
+)
+
+// NA is for Not Applicable.
+const (
+	NA_OS models.Os = iota
+	LINUX
+	MAC
+	WIN
 )

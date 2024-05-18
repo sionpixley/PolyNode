@@ -27,12 +27,25 @@ func ConvertToCommand(commandStr string) models.Command {
 	case "use":
 		return constants.USE
 	default:
-		return constants.NA
+		return constants.NA_COMM
+	}
+}
+
+func ConvertToOs(osStr string) models.Os {
+	switch osStr {
+	case "darwin":
+		return constants.MAC
+	case "linux":
+		return constants.LINUX
+	case "windows":
+		return constants.WIN
+	default:
+		return constants.NA_OS
 	}
 }
 
 func IsKnownCommand(command string) bool {
-	return ConvertToCommand(command) != constants.NA
+	return ConvertToCommand(command) != constants.NA_COMM
 }
 
 func PrintError(err error) {
@@ -40,7 +53,7 @@ func PrintError(err error) {
 }
 
 func PrintHelp() {
-	help := constants.DESCRIPTION + "\n\n" + constants.USAGE + "\n\n" + constants.ENVS + "\n\n" + constants.COMMANDS
+	help := constants.DESCRIPTION + "\n\n" + constants.USAGE + "\n\n" + constants.RUNTIMES + "\n\n" + constants.COMMANDS
 	fmt.Println(help)
 }
 

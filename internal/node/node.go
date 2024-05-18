@@ -9,11 +9,12 @@ import (
 
 	"github.com/sionpixley/polyn/internal"
 	"github.com/sionpixley/polyn/internal/constants"
+	"github.com/sionpixley/polyn/internal/models"
 )
 
 // Main function for Node.js actions.
 // The args parameter should not include the optional env.
-func Handle(args []string) {
+func Handle(args []string, operatingSystem models.Os) {
 	if args == nil || len(args) == 0 {
 		internal.PrintHelp()
 		return
