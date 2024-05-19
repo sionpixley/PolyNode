@@ -1,9 +1,10 @@
-# Specific files and folders
-
-/node
-
 # General files and folders
 
 *.bin
 *.exe
 *.o
+
+# Specific files and folders
+
+/node
+!/emb/7z/win/7za.exe
