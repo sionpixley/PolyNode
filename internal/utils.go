@@ -102,9 +102,9 @@ func get7zipCmdLocation(operatingSystem models.OperatingSystem, arch models.Arch
 	switch operatingSystem {
 	case constants.LINUX:
 		if arch == constants.ARM64 {
-			command = "./emb/7z/linux/7zzs-arm64"
+			command = "./emb/7z/linux/arm/7zzs"
 		} else if arch == constants.X64 {
-			command = "./emb/7z/linux/7zzs-x64"
+			command = "./emb/7z/linux/x64/7zzs"
 		}
 	case constants.MAC:
 		command = "./emb/7z/mac/7zz"

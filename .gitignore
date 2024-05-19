@@ -1,10 +1,20 @@
 # General files and folders
 
-*.bin
 *.exe
-*.o
 
 # Specific files and folders
 
 /node
 !/emb/7z/win/7za.exe
+/polyn-darwin-arm64
+/polyn-darwin-x64
+/polyn-linux-arm64
+/polyn-linux-x64
+/install/setup-darwin-arm64
+/install/setup-darwin-x64
+/install/setup-linux-arm64
+/install/setup-linux-x64
+/uninstall/uninstall-darwin-arm64
+/uninstall/uninstall-darwin-x64
+/uninstall/uninstall-linux-arm64
+/uninstall/uninstall-linux-x64
