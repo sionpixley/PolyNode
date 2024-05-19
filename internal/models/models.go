@@ -4,4 +4,4 @@ type Architecture int
 
 type Command int
 
-type Os int
+type OperatingSystem int

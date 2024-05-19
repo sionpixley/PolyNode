@@ -15,7 +15,7 @@ import (
 
 // Main function for Node.js actions.
 // The args parameter should not include the optional runtime.
-func Handle(args []string, operatingSystem models.Os, arch models.Architecture) {
+func Handle(args []string, operatingSystem models.OperatingSystem, arch models.Architecture) {
 	if args == nil || len(args) == 0 {
 		internal.PrintHelp()
 		return
@@ -61,7 +61,7 @@ func Handle(args []string, operatingSystem models.Os, arch models.Architecture) 
 	}
 }
 
-func add(version string, operatingSystem models.Os, arch models.Architecture) error {
+func add(version string, operatingSystem models.OperatingSystem, arch models.Architecture) error {
 	archiveName, err := getTargetArchiveName(operatingSystem, arch)
 	if err != nil {
 		return err
@@ -84,12 +84,17 @@ func add(version string, operatingSystem models.Os, arch models.Architecture) er
 	}
 	defer response.Body.Close()
 
-	err = os.Mkdir("node", os.ModePerm)
+	err = os.MkdirAll("node", os.ModePerm)
 	if err != nil {
 		return err
 	}
 
 	filePath := "./node/" + fileName
+	err = internal.DeleteFileIfExists(filePath)
+	if err != nil {
+		return err
+	}
+
 	file, err := os.Create(filePath)
 	if err != nil {
 		return err
@@ -102,11 +107,19 @@ func add(version string, operatingSystem models.Os, arch models.Architecture) er
 	// Calling file.Close() explicitly instead of with defer because the 7-zip command was getting a lock error on the zip file.
 	file.Close()
 
-	err = internal.UnzipFile(filePath, "./node/"+version, operatingSystem, arch)
+	folderPath := "./node/" + version
+	err = os.RemoveAll(folderPath)
+
+	err = internal.UnzipFile(filePath, folderPath, operatingSystem, arch)
+	if err != nil {
+		return err
+	}
+
+	err = internal.DeleteFileIfExists(filePath)
 	return err
 }
 
-func getTargetArchiveName(operatingSystem models.Os, arch models.Architecture) (string, error) {
+func getTargetArchiveName(operatingSystem models.OperatingSystem, arch models.Architecture) (string, error) {
 	archiveName := ""
 	switch operatingSystem {
 	case constants.LINUX:
@@ -130,7 +143,7 @@ func getTargetArchiveName(operatingSystem models.Os, arch models.Architecture) (
 	return archiveName, nil
 }
 
-func install(version string, operatingSystem models.Os, arch models.Architecture) error {
+func install(version string, operatingSystem models.OperatingSystem, arch models.Architecture) error {
 	err := add(version, operatingSystem, arch)
 	if err != nil {
 		return err

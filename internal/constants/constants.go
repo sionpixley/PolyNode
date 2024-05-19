@@ -62,7 +62,7 @@ const (
 
 // NA is for Not Applicable.
 const (
-	NA_OS models.Os = iota
+	NA_OS models.OperatingSystem = iota
 	LINUX
 	MAC
 	WIN

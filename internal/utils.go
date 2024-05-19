@@ -3,6 +3,7 @@ package internal
 import (
 	"errors"
 	"fmt"
+	"os"
 	"os/exec"
 
 	"github.com/sionpixley/polyn/internal/constants"
@@ -43,7 +44,7 @@ func ConvertToCommand(commandStr string) models.Command {
 	}
 }
 
-func ConvertToOs(osStr string) models.Os {
+func ConvertToOs(osStr string) models.OperatingSystem {
 	switch osStr {
 	case "darwin":
 		return constants.MAC
@@ -54,6 +55,14 @@ func ConvertToOs(osStr string) models.Os {
 	default:
 		return constants.NA_OS
 	}
+}
+
+func DeleteFileIfExists(filePath string) error {
+	var err error
+	if doesFileExist(filePath) {
+		err = os.Remove(filePath)
+	}
+	return err
 }
 
 func IsKnownCommand(command string) bool {
@@ -69,7 +78,7 @@ func PrintHelp() {
 	fmt.Println(help)
 }
 
-func UnzipFile(source string, destination string, operatingSystem models.Os, arch models.Architecture) error {
+func UnzipFile(source string, destination string, operatingSystem models.OperatingSystem, arch models.Architecture) error {
 	command, err := get7zipCmdLocation(operatingSystem, arch)
 	if err != nil {
 		return err
@@ -83,7 +92,12 @@ func UnzipFile(source string, destination string, operatingSystem models.Os, arc
 	return nil
 }
 
-func get7zipCmdLocation(operatingSystem models.Os, arch models.Architecture) (string, error) {
+func doesFileExist(filePath string) bool {
+	_, err := os.Stat(filePath)
+	return !os.IsNotExist(err)
+}
+
+func get7zipCmdLocation(operatingSystem models.OperatingSystem, arch models.Architecture) (string, error) {
 	command := ""
 	switch operatingSystem {
 	case constants.LINUX:
