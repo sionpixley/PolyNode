@@ -1,6 +1,9 @@
 # General files and folders
 
 *.exe
+*.tar.gz
+*.tar.xz
+*.zip
 
 # Specific files and folders
 
