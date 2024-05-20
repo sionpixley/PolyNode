@@ -1,8 +1,7 @@
-## License Information
-
 This project includes multiple licenses as part of its distribution:
 
 - The source code for PolyNode is covered under the GPL-3.0 license. See the `LICENSE` file for more details.
+
 - The 7-zip binaries are licensed under their own respective licenses. 
   - For Linux distros see `emb/7z/linux/License.txt` for more details.
   - For macOS see `emb/7z/mac/License.txt` for more details.
