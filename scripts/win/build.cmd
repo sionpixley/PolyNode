@@ -44,9 +44,8 @@ cd ..\..\..\..\..
 copy .\emb\7z\linux\arm\7zzs .\linux-%version%-arm64\polyn\emb\7z\linux\arm
 copy .\emb\7z\linux\License.txt .\linux-%version%-arm64\polyn\emb\7z\linux
 
-.\emb\7z\win\7za.exe a -ttar linux-%version%-arm64.tar linux-%version%-arm64\
-
-.\emb\7z\win\7za.exe a -txz -mx9 linux-%version%-arm64.tar.xz linux-%version%-arm64.tar
+.\emb\7z\win\7za a -ttar linux-%version%-arm64.tar linux-%version%-arm64\
+.\emb\7z\win\7za a -txz -mx9 linux-%version%-arm64.tar.xz linux-%version%-arm64.tar
 
 del linux-%version%-arm64 /s /f /q > nul
 rmdir linux-%version%-arm64 /s /q
@@ -94,8 +93,8 @@ cd ..\..\..\..\..
 copy .\emb\7z\linux\x64\7zzs .\linux-%version%-x64\polyn\emb\7z\linux\x64
 copy .\emb\7z\linux\License.txt .\linux-%version%-x64\polyn\emb\7z\linux
 
-.\emb\7z\win\7za.exe a -ttar linux-%version%-x64.tar linux-%version%-x64\
-.\emb\7z\win\7za.exe a -txz -mx9 linux-%version%-x64.tar.xz linux-%version%-x64.tar
+.\emb\7z\win\7za a -ttar linux-%version%-x64.tar linux-%version%-x64\
+.\emb\7z\win\7za a -txz -mx9 linux-%version%-x64.tar.xz linux-%version%-x64.tar
 
 del linux-%version%-x64 /s /f /q > nul
 rmdir linux-%version%-x64 /s /q
@@ -141,8 +140,8 @@ cd ..\..\..\..
 copy .\emb\7z\mac\7zz .\darwin-%version%-arm64\polyn\emb\7z\mac
 copy .\emb\7z\mac\License.txt .\darwin-%version%-arm64\polyn\emb\7z\mac
 
-.\emb\7z\win\7za.exe a -ttar darwin-%version%-arm64.tar darwin-%version%-arm64\
-.\emb\7z\win\7za.exe a -tgzip -mx9 darwin-%version%-arm64.tar.gz darwin-%version%-arm64.tar
+.\emb\7z\win\7za a -ttar darwin-%version%-arm64.tar darwin-%version%-arm64\
+.\emb\7z\win\7za a -tgzip -mx9 darwin-%version%-arm64.tar.gz darwin-%version%-arm64.tar
 
 del darwin-%version%-arm64 /s /f /q > nul
 rmdir darwin-%version%-arm64 /s /q
@@ -188,8 +187,8 @@ cd ..\..\..\..
 copy .\emb\7z\mac\7zz .\darwin-%version%-x64\polyn\emb\7z\mac
 copy .\emb\7z\mac\License.txt .\darwin-%version%-x64\polyn\emb\7z\mac
 
-.\emb\7z\win\7za.exe a -ttar darwin-%version%-x64.tar darwin-%version%-x64\
-.\emb\7z\win\7za.exe a -tgzip -mx9 darwin-%version%-x64.tar.gz darwin-%version%-x64.tar
+.\emb\7z\win\7za a -ttar darwin-%version%-x64.tar darwin-%version%-x64\
+.\emb\7z\win\7za a -tgzip -mx9 darwin-%version%-x64.tar.gz darwin-%version%-x64.tar
 
 del darwin-%version%-x64 /s /f /q > nul
 rmdir darwin-%version%-x64 /s /q
@@ -237,6 +236,7 @@ copy .\emb\7z\win\7za.dll .\win-%version%-x64\polyn\emb\7z\win
 copy .\emb\7z\win\7zxa.dll .\win-%version%-x64\polyn\emb\7z\win
 copy .\emb\7z\win\License.txt .\win-%version%-x64\polyn\emb\7z\win
 
-.\emb\7z\win\7za.exe a -tzip -mx9 win-%version%-x64.zip win-%version%-x64\
+.\emb\7z\win\7za a -tzip -mx9 win-%version%-x64.zip win-%version%-x64\
+
 del win-%version%-x64 /s /f /q > nul
 rmdir win-%version%-x64 /s /q

@@ -109,7 +109,7 @@ func get7zipCmdLocation(operatingSystem models.OperatingSystem, arch models.Arch
 	case constants.MAC:
 		command = "./emb/7z/mac/7zz"
 	case constants.WIN:
-		command = "./emb/7z/win/7za.exe"
+		command = "./emb/7z/win/7za"
 	default:
 		return "", errors.New(constants.UNSUPPORTED_OS)
 	}

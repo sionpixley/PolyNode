@@ -16,5 +16,4 @@ PolyNode is a CLI tool that helps install and switch between multiple versions o
 
 ## Information
 
-Written in Go. <br>
 Go v1.22.2
