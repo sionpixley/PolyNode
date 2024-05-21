@@ -78,18 +78,15 @@ func PrintHelp() {
 	fmt.Println(help)
 }
 
+// Works with more than just .zip files.
 func UnzipFile(source string, destination string, operatingSystem models.OperatingSystem, arch models.Architecture) error {
 	command, err := get7zipCmdLocation(operatingSystem, arch)
 	if err != nil {
 		return err
 	}
 
-	output, err := exec.Command(command, "x", source, "-o"+destination).Output()
-	if err != nil {
-		return err
-	}
-	fmt.Print(string(output))
-	return nil
+	_, err = exec.Command(command, "x", source, "-o"+destination).Output()
+	return err
 }
 
 func doesFileExist(filePath string) bool {

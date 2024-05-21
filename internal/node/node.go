@@ -110,6 +110,7 @@ func add(version string, operatingSystem models.OperatingSystem, arch models.Arc
 	folderPath := "./node/" + version
 	err = os.RemoveAll(folderPath)
 
+	fmt.Println("Decompressing " + fileName + "...")
 	err = internal.UnzipFile(filePath, folderPath, operatingSystem, arch)
 	if err != nil {
 		return err
