@@ -40,10 +40,10 @@ mkdir 7z
 cd 7z
 mkdir linux
 cd linux
-mkdir arm
+mkdir arm64
 cd ../../../../..
 
-cp ./emb/7z/linux/arm/7zzs ./linux-$version-arm64/polyn/emb/7z/linux/arm
+cp ./emb/7z/linux/arm64/7zzs ./linux-$version-arm64/polyn/emb/7z/linux/arm64
 cp ./emb/7z/linux/License.txt ./linux-$version-arm64/polyn/emb/7z/linux
 
 ./emb/7z/mac/7zz a -ttar linux-$version-arm64.tar linux-$version-arm64/
