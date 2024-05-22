@@ -8,13 +8,13 @@ host_arch=$(go env GOARCH)
 go env -w GOOS=linux
 go env -w GOARCH=arm64
 
-go build -o polyn-linux-arm64 ./cmd
+go build -o polyn-linux-arm64
 
 cd install
-go build -o ../setup-linux-arm64 ./cmd
+go build -o ../setup-linux-arm64
 
 cd ../uninstall
-go build -o ../uninstall-linux-arm64 ./cmd
+go build -o ../uninstall-linux-arm64
 
 cd ..
 mkdir linux-$version-arm64
@@ -56,13 +56,13 @@ rm -f linux-$version-arm64.tar
 go env -w GOOS=linux
 go env -w GOARCH=amd64
 
-go build -o polyn-linux-x64 ./cmd
+go build -o polyn-linux-x64
 
 cd install
-go build -o ../setup-linux-x64 ./cmd
+go build -o ../setup-linux-x64
 
 cd ../uninstall
-go build -o ../uninstall-linux-x64 ./cmd
+go build -o ../uninstall-linux-x64
 
 cd ..
 mkdir linux-$version-x64
@@ -104,13 +104,13 @@ rm -f linux-$version-x64.tar
 go env -w GOOS=darwin
 go env -w GOARCH=arm64
 
-go build -o polyn-darwin-arm64 ./cmd
+go build -o polyn-darwin-arm64
 
 cd install
-go build -o ../setup-darwin-arm64 ./cmd
+go build -o ../setup-darwin-arm64
 
 cd ../uninstall
-go build -o ../uninstall-darwin-arm64 ./cmd
+go build -o ../uninstall-darwin-arm64
 
 cd ..
 mkdir darwin-$version-arm64
@@ -150,13 +150,13 @@ rm -f darwin-$version-arm64.tar
 go env -w GOOS=darwin
 go env -w GOARCH=amd64
 
-go build -o polyn-darwin-x64 ./cmd
+go build -o polyn-darwin-x64
 
 cd install
-go build -o ../setup-darwin-x64 ./cmd
+go build -o ../setup-darwin-x64
 
 cd ../uninstall
-go build -o ../uninstall-darwin-x64 ./cmd
+go build -o ../uninstall-darwin-x64
 
 cd ..
 mkdir darwin-$version-x64
@@ -196,13 +196,13 @@ rm -f darwin-$version-x64.tar
 go env -w GOOS=windows
 go env -w GOARCH=amd64
 
-go build -o polyn.exe ./cmd
+go build -o polyn.exe
 
 cd install
-go build -o ../setup.exe ./cmd
+go build -o ../setup.exe
 
 cd ../uninstall
-go build -o ../uninstall.exe ./cmd
+go build -o ../uninstall.exe
 
 cd ..
 mkdir win-$version-x64
