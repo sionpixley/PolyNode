@@ -1,4 +1,4 @@
-package node
+package internal
 
 import (
 	"errors"
@@ -7,61 +7,57 @@ import (
 	"net/http"
 	"os"
 	"os/exec"
-
-	"github.com/sionpixley/polyn/internal"
-	"github.com/sionpixley/polyn/internal/constants"
-	"github.com/sionpixley/polyn/internal/models"
 )
 
 // Main function for Node.js actions.
 // The args parameter should not include the optional runtime.
-func Handle(args []string, operatingSystem models.OperatingSystem, arch models.Architecture) {
+func HandleNode(args []string, operatingSystem OperatingSystem, arch Architecture) {
 	if args == nil || len(args) == 0 {
-		internal.PrintHelp()
+		PrintHelp(operatingSystem)
 		return
 	}
 
 	var err error
-	command := internal.ConvertToCommand(args[0])
+	command := convertToCommand(args[0])
 	switch command {
-	case constants.ADD:
+	case c_ADD:
 		if len(args) > 1 {
 			err = add(args[1], operatingSystem, arch)
 		} else {
-			internal.PrintHelp()
+			PrintHelp(operatingSystem)
 		}
-	case constants.CURRENT:
+	case c_CURRENT:
 		printCurrent()
-	case constants.INSTALL:
+	case c_INSTALL:
 		if len(args) > 1 {
 			err = install(args[1], operatingSystem, arch)
 		} else {
-			internal.PrintHelp()
+			PrintHelp(operatingSystem)
 		}
-	case constants.LIST:
+	case c_LIST:
 		listDownloaded()
-	case constants.REMOVE:
+	case c_REMOVE:
 		if len(args) > 1 {
 			err = remove(args[1])
 		} else {
-			internal.PrintHelp()
+			PrintHelp(operatingSystem)
 		}
-	case constants.USE:
+	case c_USE:
 		if len(args) > 1 {
 			err = use(args[1])
 		} else {
-			internal.PrintHelp()
+			PrintHelp(operatingSystem)
 		}
 	default:
-		internal.PrintHelp()
+		PrintHelp(operatingSystem)
 	}
 
 	if err != nil {
-		internal.PrintError(err)
+		printError(err)
 	}
 }
 
-func add(version string, operatingSystem models.OperatingSystem, arch models.Architecture) error {
+func add(version string, operatingSystem OperatingSystem, arch Architecture) error {
 	archiveName, err := getTargetArchiveName(operatingSystem, arch)
 	if err != nil {
 		return err
@@ -90,7 +86,7 @@ func add(version string, operatingSystem models.OperatingSystem, arch models.Arc
 	}
 
 	filePath := "./node/" + fileName
-	err = internal.DeleteFileIfExists(filePath)
+	err = deleteFileIfExists(filePath)
 	if err != nil {
 		return err
 	}
@@ -111,40 +107,40 @@ func add(version string, operatingSystem models.OperatingSystem, arch models.Arc
 	err = os.RemoveAll(folderPath)
 
 	fmt.Println("Decompressing " + fileName + "...")
-	err = internal.UnzipFile(filePath, folderPath, operatingSystem, arch)
+	err = unzipFile(filePath, folderPath, operatingSystem, arch)
 	if err != nil {
 		return err
 	}
 
-	err = internal.DeleteFileIfExists(filePath)
+	err = deleteFileIfExists(filePath)
 	return err
 }
 
-func getTargetArchiveName(operatingSystem models.OperatingSystem, arch models.Architecture) (string, error) {
+func getTargetArchiveName(operatingSystem OperatingSystem, arch Architecture) (string, error) {
 	archiveName := ""
 	switch operatingSystem {
-	case constants.LINUX:
-		if arch == constants.ARM64 {
+	case c_LINUX:
+		if arch == c_ARM64 {
 			archiveName = "linux-arm64.tar.xz"
-		} else if arch == constants.X64 {
+		} else if arch == c_X64 {
 			archiveName = "linux-x64.tar.xz"
 		}
-	case constants.MAC:
-		if arch == constants.ARM64 {
+	case c_MAC:
+		if arch == c_ARM64 {
 			archiveName = "darwin-arm64.tar.gz"
-		} else if arch == constants.X64 {
+		} else if arch == c_X64 {
 			archiveName = "darwin-x64.tar.gz"
 		}
-	case constants.WIN:
+	case c_WIN:
 		archiveName = "win-x64.zip"
 	default:
-		return "", errors.New(constants.UNSUPPORTED_OS)
+		return "", errors.New(c_UNSUPPORTED_OS)
 	}
 
 	return archiveName, nil
 }
 
-func install(version string, operatingSystem models.OperatingSystem, arch models.Architecture) error {
+func install(version string, operatingSystem OperatingSystem, arch Architecture) error {
 	err := add(version, operatingSystem, arch)
 	if err != nil {
 		return err

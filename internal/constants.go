@@ -1,10 +1,8 @@
-package constants
-
-import "github.com/sionpixley/polyn/internal/models"
+package internal
 
 const (
 	// List of commands for printing to the user.
-	COMMANDS string = `Commands:
+	c_COMMANDS string = `Commands:
 	
       add : Downloads a version of the env, but does not switch it to your current version.
   current : Prints the current version of the env.
@@ -17,23 +15,23 @@ const (
   version : Prints the current version of PolyNode.`
 
 	// PolyNode description for printing to the user.
-	DESCRIPTION string = `
+	c_DESCRIPTION string = `
 Description:
 
   PolyNode is a CLI tool that helps install and switch between multiple versions of Bun, Deno, and/or Node.js on the same device.`
 
 	// List of runtimes for printing to the user.
-	RUNTIMES string = `Runtimes:
+	c_RUNTIMES string = `Runtimes:
 
   bun
   deno
   node : Default if runtime is not provided.`
 
 	// Unsupported operating system error message.
-	UNSUPPORTED_OS string = "Unsupported operating system."
+	c_UNSUPPORTED_OS string = "Unsupported operating system."
 
 	// Syntax for using the polyn CLI.
-	USAGE string = `Usage:
+	c_USAGE string = `Usage:
 
   polyn [runtime] command <version>`
 
@@ -43,27 +41,27 @@ Description:
 
 // NA is for Not Applicable.
 const (
-	NA_ARCH models.Architecture = iota
-	ARM64
-	X64
+	c_NA_ARCH Architecture = iota
+	c_ARM64
+	c_X64
 )
 
 // NA is for Not Applicable.
 // We don't include the version command in this. The version command is handled in main().
 const (
-	NA_COMM models.Command = iota
-	ADD
-	CURRENT
-	INSTALL
-	LIST
-	REMOVE
-	USE
+	c_NA_COMM command = iota
+	c_ADD
+	c_CURRENT
+	c_INSTALL
+	c_LIST
+	c_REMOVE
+	c_USE
 )
 
 // NA is for Not Applicable.
 const (
-	NA_OS models.OperatingSystem = iota
-	LINUX
-	MAC
-	WIN
+	c_NA_OS OperatingSystem = iota
+	c_LINUX
+	c_MAC
+	c_WIN
 )

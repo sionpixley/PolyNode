@@ -1,7 +1,7 @@
-package models
+package internal
 
 type Architecture int
 
-type Command int
-
 type OperatingSystem int
+
+type command int

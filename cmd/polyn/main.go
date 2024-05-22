@@ -7,20 +7,16 @@ import (
 	"strings"
 
 	"github.com/sionpixley/polyn/internal"
-	"github.com/sionpixley/polyn/internal/bun"
-	"github.com/sionpixley/polyn/internal/constants"
-	"github.com/sionpixley/polyn/internal/deno"
-	"github.com/sionpixley/polyn/internal/node"
 )
 
 func main() {
+	operatingSystem := internal.ConvertToOperatingSystem(runtime.GOOS)
+	arch := internal.ConvertToArchitecture(runtime.GOARCH)
+
 	if len(os.Args) == 1 {
-		internal.PrintHelp()
+		internal.PrintHelp(operatingSystem)
 		return
 	}
-
-	operatingSystem := internal.ConvertToOs(runtime.GOOS)
-	arch := internal.ConvertToArchitecture(runtime.GOARCH)
 
 	args := []string{}
 	for _, arg := range os.Args {
@@ -30,24 +26,24 @@ func main() {
 	runtime := args[1]
 	switch runtime {
 	case "bun":
-		bun.Handle(args[2:], operatingSystem)
+		internal.HandleBun(args[2:], operatingSystem)
 	case "deno":
-		deno.Handle(args[2:], operatingSystem)
+		internal.HandleDeno(args[2:], operatingSystem)
 	case "node":
-		node.Handle(args[2:], operatingSystem, arch)
+		internal.HandleNode(args[2:], operatingSystem, arch)
 	case "version":
 		printVersion()
 	default:
 		if internal.IsKnownCommand(runtime) {
 			// We default to Node.js.
 			// Also, we slice starting with index 1 instead of 2 because the command is missing a runtime.
-			node.Handle(args[1:], operatingSystem, arch)
+			internal.HandleNode(args[1:], operatingSystem, arch)
 		} else {
-			internal.PrintHelp()
+			internal.PrintHelp(operatingSystem)
 		}
 	}
 }
 
 func printVersion() {
-	fmt.Println(constants.VERSION)
+	fmt.Println(internal.VERSION)
 }
