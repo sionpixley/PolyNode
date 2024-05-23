@@ -15,8 +15,7 @@ const (
   version : Prints the current version of PolyNode.`
 
 	// PolyNode description for printing to the user.
-	c_DESCRIPTION string = `
-Description:
+	c_DESCRIPTION string = `Description:
 
   PolyNode is a CLI tool that helps install and switch between multiple versions of Bun, Deno, and/or Node.js on the same device.`
 
@@ -28,7 +27,7 @@ Description:
   node : Default if runtime is not provided.`
 
 	// Unsupported operating system error message.
-	c_UNSUPPORTED_OS string = "Unsupported operating system."
+	c_UNSUPPORTED_OS string = "unsupported operating system"
 
 	// Syntax for using the polyn CLI.
 	c_USAGE string = `Usage:

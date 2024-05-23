@@ -36,11 +36,23 @@ func IsKnownCommand(command string) bool {
 	return convertToCommand(command) != c_NA_COMM
 }
 
-func PrintHelp(operatingSystem OperatingSystem) {
-	help := c_DESCRIPTION + "\n\n" + c_USAGE + "\n\n" + c_RUNTIMES + "\n\n" + c_COMMANDS
-	fmt.Println(help)
+func IsSupportedArchitecture(arch Architecture) bool {
+	return arch != c_NA_ARCH
+}
 
-	if operatingSystem == c_LINUX {
+func IsSupportedOperatingSystem(operatingSystem OperatingSystem) bool {
+	return operatingSystem != c_NA_OS
+}
+
+func PrintHelp(operatingSystem OperatingSystem) {
+	help := "\n" + c_DESCRIPTION + "\n\n" + c_USAGE + "\n\n" + c_RUNTIMES + "\n\n" + c_COMMANDS
+	fmt.Println(help)
+}
+
+// Windows automatically adds a new line at the end of stdout.
+// Linux and macOS need an extra line printed to make the output look better.
+func PrintOptionalLine(operatingSystem OperatingSystem) {
+	if operatingSystem != c_WIN {
 		fmt.Println()
 	}
 }
@@ -87,14 +99,22 @@ func extractFile(source string, destination string, operatingSystem OperatingSys
 		return err
 	}
 
-	if strings.Contains(source, ".tar.") {
-		_, err = exec.Command(command, "x", source, "-o"+destination).Output()
+	if operatingSystem != c_WIN {
+		err = exec.Command(command, "x", source).Run()
 		if err != nil {
 			return err
 		}
-		_, err = exec.Command(command, "x", source[:len(source)-3], "-o"+destination).Output()
+
+		tarball := strings.Split(source, "/")[2]
+		tarball = tarball[:len(tarball)-3]
+
+		err = exec.Command(command, "x", tarball, "-o"+destination).Run()
+		if err != nil {
+			return err
+		}
+		err = deleteFileIfExists(source)
 	} else {
-		_, err = exec.Command(command, "x", source, "-o"+destination).Output()
+		err = exec.Command(command, "x", source, "-o"+destination).Run()
 	}
 
 	return err

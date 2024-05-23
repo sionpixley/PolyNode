@@ -13,6 +13,16 @@ func main() {
 	operatingSystem := internal.ConvertToOperatingSystem(runtime.GOOS)
 	arch := internal.ConvertToArchitecture(runtime.GOARCH)
 
+	defer internal.PrintOptionalLine(operatingSystem)
+
+	if !internal.IsSupportedOperatingSystem(operatingSystem) {
+		fmt.Println("Not a supported operating system.")
+		return
+	} else if !internal.IsSupportedArchitecture(arch) {
+		fmt.Println("Not a supported CPU architecture.")
+		return
+	}
+
 	if len(os.Args) == 1 {
 		internal.PrintHelp(operatingSystem)
 		return
