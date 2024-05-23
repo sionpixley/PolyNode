@@ -5,6 +5,7 @@ import (
 	"fmt"
 	"os"
 	"os/exec"
+	"strings"
 )
 
 func ConvertToArchitecture(archStr string) Architecture {
@@ -80,6 +81,25 @@ func doesFileExist(filePath string) bool {
 	return !os.IsNotExist(err)
 }
 
+func extractFile(source string, destination string, operatingSystem OperatingSystem, arch Architecture) error {
+	command, err := get7ZipCmdLocation(operatingSystem, arch)
+	if err != nil {
+		return err
+	}
+
+	if strings.Contains(source, ".tar.") {
+		_, err = exec.Command(command, "x", source, "-o"+destination).Output()
+		if err != nil {
+			return err
+		}
+		_, err = exec.Command(command, "x", source[:len(source)-3], "-o"+destination).Output()
+	} else {
+		_, err = exec.Command(command, "x", source, "-o"+destination).Output()
+	}
+
+	return err
+}
+
 func get7ZipCmdLocation(operatingSystem OperatingSystem, arch Architecture) (string, error) {
 	command := ""
 	switch operatingSystem {
@@ -102,15 +122,4 @@ func get7ZipCmdLocation(operatingSystem OperatingSystem, arch Architecture) (str
 
 func printError(err error) {
 	fmt.Println(err.Error())
-}
-
-// Works with more than just .zip files.
-func unzipFile(source string, destination string, operatingSystem OperatingSystem, arch Architecture) error {
-	command, err := get7ZipCmdLocation(operatingSystem, arch)
-	if err != nil {
-		return err
-	}
-
-	_, err = exec.Command(command, "x", source, "-o"+destination).Output()
-	return err
 }

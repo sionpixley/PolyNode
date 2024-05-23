@@ -22,29 +22,29 @@ func HandleNode(args []string, operatingSystem OperatingSystem, arch Architectur
 	switch command {
 	case c_ADD:
 		if len(args) > 1 {
-			err = add(args[1], operatingSystem, arch)
+			err = addNode(args[1], operatingSystem, arch)
 		} else {
 			PrintHelp(operatingSystem)
 		}
 	case c_CURRENT:
-		printCurrent()
+		printCurrentNode()
 	case c_INSTALL:
 		if len(args) > 1 {
-			err = install(args[1], operatingSystem, arch)
+			err = installNode(args[1], operatingSystem, arch)
 		} else {
 			PrintHelp(operatingSystem)
 		}
 	case c_LIST:
-		listDownloaded()
+		listDownloadedNodes()
 	case c_REMOVE:
 		if len(args) > 1 {
-			err = remove(args[1])
+			err = removeNode(args[1])
 		} else {
 			PrintHelp(operatingSystem)
 		}
 	case c_USE:
 		if len(args) > 1 {
-			err = use(args[1])
+			err = useNode(args[1])
 		} else {
 			PrintHelp(operatingSystem)
 		}
@@ -57,8 +57,8 @@ func HandleNode(args []string, operatingSystem OperatingSystem, arch Architectur
 	}
 }
 
-func add(version string, operatingSystem OperatingSystem, arch Architecture) error {
-	archiveName, err := getTargetArchiveName(operatingSystem, arch)
+func addNode(version string, operatingSystem OperatingSystem, arch Architecture) error {
+	archiveName, err := getNodeTargetArchiveName(operatingSystem, arch)
 	if err != nil {
 		return err
 	}
@@ -106,8 +106,8 @@ func add(version string, operatingSystem OperatingSystem, arch Architecture) err
 	folderPath := "./node/" + version
 	err = os.RemoveAll(folderPath)
 
-	fmt.Println("Decompressing " + fileName + "...")
-	err = unzipFile(filePath, folderPath, operatingSystem, arch)
+	fmt.Println("Extracting " + fileName + "...")
+	err = extractFile(filePath, folderPath, operatingSystem, arch)
 	if err != nil {
 		return err
 	}
@@ -116,7 +116,7 @@ func add(version string, operatingSystem OperatingSystem, arch Architecture) err
 	return err
 }
 
-func getTargetArchiveName(operatingSystem OperatingSystem, arch Architecture) (string, error) {
+func getNodeTargetArchiveName(operatingSystem OperatingSystem, arch Architecture) (string, error) {
 	archiveName := ""
 	switch operatingSystem {
 	case c_LINUX:
@@ -140,21 +140,21 @@ func getTargetArchiveName(operatingSystem OperatingSystem, arch Architecture) (s
 	return archiveName, nil
 }
 
-func install(version string, operatingSystem OperatingSystem, arch Architecture) error {
-	err := add(version, operatingSystem, arch)
+func installNode(version string, operatingSystem OperatingSystem, arch Architecture) error {
+	err := addNode(version, operatingSystem, arch)
 	if err != nil {
 		return err
 	}
 
-	err = use(version)
+	err = useNode(version)
 	return err
 }
 
-func listDownloaded() {
+func listDownloadedNodes() {
 
 }
 
-func printCurrent() {
+func printCurrentNode() {
 	output, err := exec.Command("node", "-v").Output()
 	if err != nil {
 		fmt.Println("There aren't any Node.js versions set as the current version.")
@@ -163,10 +163,10 @@ func printCurrent() {
 	}
 }
 
-func remove(version string) error {
+func removeNode(version string) error {
 	return nil
 }
 
-func use(version string) error {
+func useNode(version string) error {
 	return nil
 }

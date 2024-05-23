@@ -12,8 +12,45 @@ PolyNode is a CLI tool that helps install and switch between multiple versions o
 
 ## How to install
 
+### With Go
+
+1. If you already have Go installed on your machine, then just run this command in the shell of your choosing: `go install github.com/sionpixley/polyn@latest`
+2. Verify that the `polyn` command is installed: `polyn version`
+
+### For Linux
+
+#### ARM64 based CPUs
+
+1. Navigate to the <a href="https://github.com/sionpixley/polyn/releases" target="_blank">Releases</a> section and download the linux-\<version\>-arm64.tar.xz file
+2. Extract the .tar.xz file and run the `setup` executable
+
+#### x86-64 based CPUs
+
+1. Navigate to the <a href="https://github.com/sionpixley/polyn/releases" target="_blank">Releases</a> section and download the linux-\<version\>-x64.tar.xz file
+2. Extract the .tar.xz file and run the `setup` executable
+
+### For macOS
+
+#### ARM64 based CPUs
+
+1. Navigate to the <a href="https://github.com/sionpixley/polyn/releases" target="_blank">Releases</a> section and download the darwin-\<version\>-arm64.tar.gz file
+2. Extract the .tar.gz file and run the `setup` executable
+
+#### x86-64 based CPUs
+
+1. Navigate to the <a href="https://github.com/sionpixley/polyn/releases" target="_blank">Releases</a> section and download the darwin-\<version\>-x64.tar.gz file
+2. Extract the .tar.gz file and run the `setup` executable
+
+### For Windows
+
+1. Navigate to the <a href="https://github.com/sionpixley/polyn/releases" target="_blank">Releases</a> section and download the win-\<version\>-x64.zip file
+2. Extract the .zip file and run the `setup.exe` executable
+
+### From source
+
 ## How to use
 
 ## Information
 
-Go v1.22.2
+Go v1.22.2 <br>
+7-Zip 24.05
