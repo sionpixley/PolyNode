@@ -52,5 +52,5 @@ PolyNode is a CLI tool that helps install and switch between multiple versions o
 
 ## Information
 
-Go v1.22.2 <br>
+Go v1.22.3 <br>
 7-Zip 24.05
