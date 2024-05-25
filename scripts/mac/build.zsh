@@ -8,7 +8,7 @@ host_arch=$(go env GOARCH)
 go env -w GOOS=linux
 go env -w GOARCH=arm64
 
-go build -o polyn-linux-arm64
+go build -o polyn-linux-arm64 ./cmd/polyn
 
 cd install
 go build -o ../setup-linux-arm64
@@ -56,7 +56,7 @@ rm -f linux-$version-arm64.tar
 go env -w GOOS=linux
 go env -w GOARCH=amd64
 
-go build -o polyn-linux-x64
+go build -o polyn-linux-x64 ./cmd/polyn
 
 cd install
 go build -o ../setup-linux-x64
@@ -104,7 +104,7 @@ rm -f linux-$version-x64.tar
 go env -w GOOS=darwin
 go env -w GOARCH=arm64
 
-go build -o polyn-darwin-arm64
+go build -o polyn-darwin-arm64 ./cmd/polyn
 
 cd install
 go build -o ../setup-darwin-arm64
@@ -150,7 +150,7 @@ rm -f darwin-$version-arm64.tar
 go env -w GOOS=darwin
 go env -w GOARCH=amd64
 
-go build -o polyn-darwin-x64
+go build -o polyn-darwin-x64 ./cmd/polyn
 
 cd install
 go build -o ../setup-darwin-x64
@@ -196,7 +196,7 @@ rm -f darwin-$version-x64.tar
 go env -w GOOS=windows
 go env -w GOARCH=amd64
 
-go build -o polyn.exe
+go build -o polyn.exe ./cmd/polyn
 
 cd install
 go build -o ../setup.exe

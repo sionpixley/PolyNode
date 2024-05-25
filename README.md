@@ -12,11 +12,6 @@ PolyNode is a CLI tool that helps install and switch between multiple versions o
 
 ## How to install
 
-### With Go
-
-1. If you already have Go installed on your machine, then just run this command in the shell of your choosing: `go install github.com/sionpixley/polyn@latest`
-2. Verify that the `polyn` command is installed: `polyn version`
-
 ### For Linux
 
 #### ARM64 based CPUs
