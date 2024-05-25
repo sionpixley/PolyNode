@@ -5,12 +5,25 @@
     "version": "0.2.0",
     "configurations": [
         {
-            "name": "Launch Package",
+            "name": "Debug polyn",
             "type": "go",
             "request": "launch",
             "mode": "debug",
-            "program": "${workspaceFolder}",
-            "args": ["add", "v20.13.1"]
+            "program": "${workspaceFolder}/cmd/polyn"
+        },
+        {
+            "name": "Debug setup",
+            "type": "go",
+            "request": "launch",
+            "mode": "debug",
+            "program": "${workspaceFolder}/install"
+        },
+        {
+            "name": "Debug uninstall",
+            "type": "go",
+            "request": "launch",
+            "mode": "debug",
+            "program": "${workspaceFolder}/uninstall"
         }
     ]
 }
