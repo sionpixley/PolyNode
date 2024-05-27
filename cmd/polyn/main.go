@@ -6,7 +6,7 @@ import (
 	"runtime"
 	"strings"
 
-	"github.com/sionpixley/polyn/internal"
+	"github.com/sionpixley/PolyNode/internal"
 )
 
 func main() {

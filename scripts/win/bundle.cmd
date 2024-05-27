@@ -19,19 +19,19 @@ mkdir linux-%version%-arm64
 move setup-linux-arm64 .\linux-%version%-arm64\setup
 
 cd linux-%version%-arm64
-mkdir polyn
+mkdir PolyNode
 cd ..
-move polyn-linux-arm64 .\linux-%version%-arm64\polyn\polyn
+move polyn-linux-arm64 .\linux-%version%-arm64\PolyNode\polyn
 
-copy README.md .\linux-%version%-arm64\polyn
-copy LICENSE.md .\linux-%version%-arm64\polyn
+copy README.md .\linux-%version%-arm64\PolyNode
+copy LICENSE.md .\linux-%version%-arm64\PolyNode
 
-cd .\linux-%version%-arm64\polyn
+cd .\linux-%version%-arm64\PolyNode
 mkdir uninstall
 cd ..\..
-move uninstall-linux-arm64 .\linux-%version%-arm64\polyn\uninstall\uninstall
+move uninstall-linux-arm64 .\linux-%version%-arm64\PolyNode\uninstall\uninstall
 
-cd .\linux-%version%-arm64\polyn
+cd .\linux-%version%-arm64\PolyNode
 mkdir emb
 cd emb
 mkdir 7z
@@ -41,8 +41,8 @@ cd linux
 mkdir arm64
 cd ..\..\..\..\..
 
-copy .\emb\7z\linux\arm64\7zzs .\linux-%version%-arm64\polyn\emb\7z\linux\arm64
-copy .\emb\7z\linux\License.txt .\linux-%version%-arm64\polyn\emb\7z\linux
+copy .\emb\7z\linux\arm64\7zzs .\linux-%version%-arm64\PolyNode\emb\7z\linux\arm64
+copy .\emb\7z\linux\License.txt .\linux-%version%-arm64\PolyNode\emb\7z\linux
 
 .\emb\7z\win\7za a -ttar linux-%version%-arm64.tar linux-%version%-arm64\
 .\emb\7z\win\7za a -txz -mx9 linux-%version%-arm64.tar.xz linux-%version%-arm64.tar
@@ -68,19 +68,19 @@ mkdir linux-%version%-x64
 move setup-linux-x64 .\linux-%version%-x64\setup
 
 cd linux-%version%-x64
-mkdir polyn
+mkdir PolyNode
 cd ..
-move polyn-linux-x64 .\linux-%version%-x64\polyn\polyn
+move polyn-linux-x64 .\linux-%version%-x64\PolyNode\polyn
 
-copy README.md .\linux-%version%-x64\polyn
-copy LICENSE.md .\linux-%version%-x64\polyn
+copy README.md .\linux-%version%-x64\PolyNode
+copy LICENSE.md .\linux-%version%-x64\PolyNode
 
-cd .\linux-%version%-x64\polyn
+cd .\linux-%version%-x64\PolyNode
 mkdir uninstall
 cd ..\..
-move uninstall-linux-x64 .\linux-%version%-x64\polyn\uninstall\uninstall
+move uninstall-linux-x64 .\linux-%version%-x64\PolyNode\uninstall\uninstall
 
-cd .\linux-%version%-x64\polyn
+cd .\linux-%version%-x64\PolyNode
 mkdir emb
 cd emb
 mkdir 7z
@@ -90,8 +90,8 @@ cd linux
 mkdir x64
 cd ..\..\..\..\..
 
-copy .\emb\7z\linux\x64\7zzs .\linux-%version%-x64\polyn\emb\7z\linux\x64
-copy .\emb\7z\linux\License.txt .\linux-%version%-x64\polyn\emb\7z\linux
+copy .\emb\7z\linux\x64\7zzs .\linux-%version%-x64\PolyNode\emb\7z\linux\x64
+copy .\emb\7z\linux\License.txt .\linux-%version%-x64\PolyNode\emb\7z\linux
 
 .\emb\7z\win\7za a -ttar linux-%version%-x64.tar linux-%version%-x64\
 .\emb\7z\win\7za a -txz -mx9 linux-%version%-x64.tar.xz linux-%version%-x64.tar
@@ -117,19 +117,19 @@ mkdir darwin-%version%-arm64
 move setup-darwin-arm64 .\darwin-%version%-arm64\setup
 
 cd darwin-%version%-arm64
-mkdir polyn
+mkdir PolyNode
 cd ..
-move polyn-darwin-arm64 .\darwin-%version%-arm64\polyn\polyn
+move polyn-darwin-arm64 .\darwin-%version%-arm64\PolyNode\polyn
 
-copy README.md .\darwin-%version%-arm64\polyn
-copy LICENSE.md .\darwin-%version%-arm64\polyn
+copy README.md .\darwin-%version%-arm64\PolyNode
+copy LICENSE.md .\darwin-%version%-arm64\PolyNode
 
-cd .\darwin-%version%-arm64\polyn
+cd .\darwin-%version%-arm64\PolyNode
 mkdir uninstall
 cd ..\..
-move uninstall-darwin-arm64 .\darwin-%version%-arm64\polyn\uninstall\uninstall
+move uninstall-darwin-arm64 .\darwin-%version%-arm64\PolyNode\uninstall\uninstall
 
-cd .\darwin-%version%-arm64\polyn
+cd .\darwin-%version%-arm64\PolyNode
 mkdir emb
 cd emb
 mkdir 7z
@@ -137,8 +137,8 @@ cd 7z
 mkdir mac
 cd ..\..\..\..
 
-copy .\emb\7z\mac\7zz .\darwin-%version%-arm64\polyn\emb\7z\mac
-copy .\emb\7z\mac\License.txt .\darwin-%version%-arm64\polyn\emb\7z\mac
+copy .\emb\7z\mac\7zz .\darwin-%version%-arm64\PolyNode\emb\7z\mac
+copy .\emb\7z\mac\License.txt .\darwin-%version%-arm64\PolyNode\emb\7z\mac
 
 .\emb\7z\win\7za a -ttar darwin-%version%-arm64.tar darwin-%version%-arm64\
 .\emb\7z\win\7za a -tgzip -mx9 darwin-%version%-arm64.tar.gz darwin-%version%-arm64.tar
@@ -164,19 +164,19 @@ mkdir darwin-%version%-x64
 move setup-darwin-x64 .\darwin-%version%-x64\setup
 
 cd darwin-%version%-x64
-mkdir polyn
+mkdir PolyNode
 cd ..
-move polyn-darwin-x64 .\darwin-%version%-x64\polyn\polyn
+move polyn-darwin-x64 .\darwin-%version%-x64\PolyNode\polyn
 
-copy README.md .\darwin-%version%-x64\polyn
-copy LICENSE.md .\darwin-%version%-x64\polyn
+copy README.md .\darwin-%version%-x64\PolyNode
+copy LICENSE.md .\darwin-%version%-x64\PolyNode
 
-cd .\darwin-%version%-x64\polyn
+cd .\darwin-%version%-x64\PolyNode
 mkdir uninstall
 cd ..\..
-move uninstall-darwin-x64 .\darwin-%version%-x64\polyn\uninstall\uninstall
+move uninstall-darwin-x64 .\darwin-%version%-x64\PolyNode\uninstall\uninstall
 
-cd .\darwin-%version%-x64\polyn
+cd .\darwin-%version%-x64\PolyNode
 mkdir emb
 cd emb
 mkdir 7z
@@ -184,8 +184,8 @@ cd 7z
 mkdir mac
 cd ..\..\..\..
 
-copy .\emb\7z\mac\7zz .\darwin-%version%-x64\polyn\emb\7z\mac
-copy .\emb\7z\mac\License.txt .\darwin-%version%-x64\polyn\emb\7z\mac
+copy .\emb\7z\mac\7zz .\darwin-%version%-x64\PolyNode\emb\7z\mac
+copy .\emb\7z\mac\License.txt .\darwin-%version%-x64\PolyNode\emb\7z\mac
 
 .\emb\7z\win\7za a -ttar darwin-%version%-x64.tar darwin-%version%-x64\
 .\emb\7z\win\7za a -tgzip -mx9 darwin-%version%-x64.tar.gz darwin-%version%-x64.tar
@@ -211,19 +211,19 @@ mkdir win-%version%-x64
 move setup.exe .\win-%version%-x64
 
 cd win-%version%-x64
-mkdir polyn
+mkdir PolyNode
 cd ..
-move polyn.exe .\win-%version%-x64\polyn
+move polyn.exe .\win-%version%-x64\PolyNode
 
-copy README.md .\win-%version%-x64\polyn
-copy LICENSE.md .\win-%version%-x64\polyn
+copy README.md .\win-%version%-x64\PolyNode
+copy LICENSE.md .\win-%version%-x64\PolyNode
 
-cd .\win-%version%-x64\polyn
+cd .\win-%version%-x64\PolyNode
 mkdir uninstall
 cd ..\..
-move uninstall.exe .\win-%version%-x64\polyn\uninstall
+move uninstall.exe .\win-%version%-x64\PolyNode\uninstall
 
-cd .\win-%version%-x64\polyn
+cd .\win-%version%-x64\PolyNode
 mkdir emb
 cd emb
 mkdir 7z
@@ -231,10 +231,10 @@ cd 7z
 mkdir win
 cd ..\..\..\..
 
-copy .\emb\7z\win\7za.exe .\win-%version%-x64\polyn\emb\7z\win
-copy .\emb\7z\win\7za.dll .\win-%version%-x64\polyn\emb\7z\win
-copy .\emb\7z\win\7zxa.dll .\win-%version%-x64\polyn\emb\7z\win
-copy .\emb\7z\win\License.txt .\win-%version%-x64\polyn\emb\7z\win
+copy .\emb\7z\win\7za.exe .\win-%version%-x64\PolyNode\emb\7z\win
+copy .\emb\7z\win\7za.dll .\win-%version%-x64\PolyNode\emb\7z\win
+copy .\emb\7z\win\7zxa.dll .\win-%version%-x64\PolyNode\emb\7z\win
+copy .\emb\7z\win\License.txt .\win-%version%-x64\PolyNode\emb\7z\win
 
 .\emb\7z\win\7za a -tzip -mx9 win-%version%-x64.zip win-%version%-x64\
 
