@@ -10,35 +10,41 @@ PolyNode is a CLI tool that helps install and switch between multiple versions o
 - macOS x64
 - Windows x64
 
+### Verified Linux distros
+
+This CLI tool is made to be compatible with Linux distros. However, there are a lot of different Linux distros, so it's likely that there are some that are not compatible. Below is a list of Linux distros that have been verified to work with this tool.
+
+- Ubuntu x64
+
 ## How to install
 
 ### For Linux
 
 #### ARM64 based CPUs
 
-1. Navigate to the [Releases](https://github.com/sionpixley/polyn/releases) section and download the linux-\<version\>-arm64.tar.xz file
-2. Extract the .tar.xz file and run the `setup` executable
+1. Navigate to the [Releases](https://github.com/sionpixley/PolyNode/releases) section and download the linux-\<version\>-arm64.tar.xz file
+2. Extract the .tar.xz file and run the `setup` executable with `sudo`
 
 #### x86-64 based CPUs
 
-1. Navigate to the [Releases](https://github.com/sionpixley/polyn/releases) section and download the linux-\<version\>-x64.tar.xz file
-2. Extract the .tar.xz file and run the `setup` executable
+1. Navigate to the [Releases](https://github.com/sionpixley/PolyNode/releases) section and download the linux-\<version\>-x64.tar.xz file
+2. Extract the .tar.xz file and run the `setup` executable with `sudo`
 
 ### For macOS
 
 #### ARM64 based CPUs
 
-1. Navigate to the [Releases](https://github.com/sionpixley/polyn/releases) section and download the darwin-\<version\>-arm64.tar.gz file
-2. Extract the .tar.gz file and run the `setup` executable
+1. Navigate to the [Releases](https://github.com/sionpixley/PolyNode/releases) section and download the darwin-\<version\>-arm64.tar.gz file
+2. Extract the .tar.gz file and run the `setup` executable with `sudo`
 
 #### x86-64 based CPUs
 
-1. Navigate to the [Releases](https://github.com/sionpixley/polyn/releases) section and download the darwin-\<version\>-x64.tar.gz file
-2. Extract the .tar.gz file and run the `setup` executable
+1. Navigate to the [Releases](https://github.com/sionpixley/PolyNode/releases) section and download the darwin-\<version\>-x64.tar.gz file
+2. Extract the .tar.gz file and run the `setup` executable with `sudo`
 
 ### For Windows
 
-1. Navigate to the [Releases](https://github.com/sionpixley/polyn/releases) section and download the win-\<version\>-x64.zip file
+1. Navigate to the [Releases](https://github.com/sionpixley/PolyNode/releases) section and download the win-\<version\>-x64.zip file
 2. Extract the .zip file and run the `setup.exe` executable
 
 ## How to use

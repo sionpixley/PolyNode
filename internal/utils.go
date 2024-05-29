@@ -99,7 +99,9 @@ func extractFile(source string, destination string, operatingSystem OperatingSys
 		return err
 	}
 
-	if operatingSystem != c_WIN {
+	if operatingSystem == c_WIN {
+		err = exec.Command(command, "x", source, "-o"+destination).Run()
+	} else {
 		err = exec.Command(command, "x", source).Run()
 		if err != nil {
 			return err
@@ -113,8 +115,6 @@ func extractFile(source string, destination string, operatingSystem OperatingSys
 			return err
 		}
 		err = deleteFileIfExists(source)
-	} else {
-		err = exec.Command(command, "x", source, "-o"+destination).Run()
 	}
 
 	return err

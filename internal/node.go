@@ -12,7 +12,7 @@ import (
 // Main function for Node.js actions.
 // The args parameter should not include the optional runtime.
 func HandleNode(args []string, operatingSystem OperatingSystem, arch Architecture) {
-	if args == nil || len(args) == 0 {
+	if len(args) == 0 {
 		PrintHelp(operatingSystem)
 		return
 	}
@@ -105,6 +105,9 @@ func addNode(version string, operatingSystem OperatingSystem, arch Architecture)
 
 	folderPath := "./node/" + version
 	err = os.RemoveAll(folderPath)
+	if err != nil {
+		return err
+	}
 
 	fmt.Println("Extracting " + fileName + "...")
 	err = extractFile(filePath, folderPath, operatingSystem, arch)
