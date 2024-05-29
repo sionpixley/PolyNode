@@ -54,6 +54,8 @@ func HandleNode(args []string, operatingSystem OperatingSystem, arch Architectur
 
 	if err != nil {
 		printError(err)
+	} else {
+		fmt.Println("\nDone.")
 	}
 }
 
@@ -100,7 +102,7 @@ func addNode(version string, operatingSystem OperatingSystem, arch Architecture)
 	if err != nil {
 		return err
 	}
-	// Calling file.Close() explicitly instead of with defer because the 7-zip command was getting a lock error on the zip file.
+	// Calling file.Close() explicitly instead of with defer because the 7-Zip command was getting a lock error on the zip file.
 	file.Close()
 
 	folderPath := "./node/" + version

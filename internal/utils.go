@@ -110,11 +110,23 @@ func extractFile(source string, destination string, operatingSystem OperatingSys
 		tarball := strings.Split(source, "/")[2]
 		tarball = tarball[:len(tarball)-3]
 
-		err = exec.Command(command, "x", tarball, "-o"+destination).Run()
+		err = exec.Command(command, "x", tarball).Run()
 		if err != nil {
 			return err
 		}
+
 		err = deleteFileIfExists(source)
+		if err != nil {
+			return err
+		}
+
+		err = deleteFileIfExists(tarball)
+		if err != nil {
+			return err
+		}
+
+		tarball = tarball[:len(tarball)-4]
+		err = exec.Command("mv", tarball, destination).Run()
 	}
 
 	return err
