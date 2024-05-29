@@ -59,6 +59,11 @@ func HandleNode(args []string, operatingSystem OperatingSystem, arch Architectur
 }
 
 func addNode(version string, operatingSystem OperatingSystem, arch Architecture) error {
+	version, err := convertToSemanticVersion(version)
+	if err != nil {
+		return err
+	}
+
 	archiveName, err := getNodeTargetArchiveName(operatingSystem, arch)
 	if err != nil {
 		return err

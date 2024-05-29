@@ -80,6 +80,16 @@ func convertToCommand(commandStr string) command {
 	}
 }
 
+func convertToSemanticVersion(version string) (string, error) {
+	if len(version) < 6 {
+		return "", errors.New("invalid version format")
+	} else if version[0] == 'v' {
+		return version, nil
+	} else {
+		return "v" + version, nil
+	}
+}
+
 func deleteFileIfExists(filePath string) error {
 	var err error
 	if doesFileExist(filePath) {
