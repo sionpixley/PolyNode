@@ -44,8 +44,8 @@ func IsSupportedOperatingSystem(operatingSystem OperatingSystem) bool {
 	return operatingSystem != c_NA_OS
 }
 
-func PrintHelp(operatingSystem OperatingSystem) {
-	help := "\n" + c_DESCRIPTION + "\n\n" + c_USAGE + "\n\n" + c_RUNTIMES + "\n\n" + c_COMMANDS
+func PrintHelp() {
+	help := "\n" + c_DESCRIPTION + "\n\n" + c_USAGE + "\n\n" + c_COMMANDS
 	fmt.Println(help)
 }
 

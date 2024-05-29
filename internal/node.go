@@ -10,10 +10,9 @@ import (
 )
 
 // Main function for Node.js actions.
-// The args parameter should not include the optional runtime.
 func HandleNode(args []string, operatingSystem OperatingSystem, arch Architecture) {
 	if len(args) == 0 {
-		PrintHelp(operatingSystem)
+		PrintHelp()
 		return
 	}
 
@@ -24,7 +23,7 @@ func HandleNode(args []string, operatingSystem OperatingSystem, arch Architectur
 		if len(args) > 1 {
 			err = addNode(args[1], operatingSystem, arch)
 		} else {
-			PrintHelp(operatingSystem)
+			PrintHelp()
 		}
 	case c_CURRENT:
 		printCurrentNode()
@@ -32,7 +31,7 @@ func HandleNode(args []string, operatingSystem OperatingSystem, arch Architectur
 		if len(args) > 1 {
 			err = installNode(args[1], operatingSystem, arch)
 		} else {
-			PrintHelp(operatingSystem)
+			PrintHelp()
 		}
 	case c_LIST:
 		listDownloadedNodes()
@@ -40,16 +39,16 @@ func HandleNode(args []string, operatingSystem OperatingSystem, arch Architectur
 		if len(args) > 1 {
 			err = removeNode(args[1])
 		} else {
-			PrintHelp(operatingSystem)
+			PrintHelp()
 		}
 	case c_USE:
 		if len(args) > 1 {
 			err = useNode(args[1])
 		} else {
-			PrintHelp(operatingSystem)
+			PrintHelp()
 		}
 	default:
-		PrintHelp(operatingSystem)
+		PrintHelp()
 	}
 
 	if err != nil {

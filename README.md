@@ -1,6 +1,6 @@
 # PolyNode
 
-PolyNode is a CLI tool that helps install and switch between multiple versions of Bun, Deno, and/or Node.js on the same device.
+PolyNode is a CLI tool that helps install and manage multiple versions of Node.js on the same device. Primarily made as a side-project to help me learn Go.
 
 ## Supported operating systems and CPU architectures
 
@@ -49,145 +49,41 @@ This CLI tool is made to be compatible with Linux distros. However, there are a 
 
 ## How to use
 
-### Downloading a new version of a runtime
-
-#### Bun
-
-`polyn bun add <version>`
-
-#### Deno
-
-`polyn deno add <version>`
-
-#### Node.js
+### Downloading a new version of Node.js
 
 `polyn add <version>`
 
-or 
-
-`polyn node add <version>`
-
-### Switching to a different downloaded version of a runtime
-
-#### Bun
-
-`polyn bun use <version>`
-
-#### Deno
-
-`polyn deno use <version>`
-
-#### Node.js
+### Switching to a different downloaded version of Node.js
 
 `polyn use <version>`
 
-or
-
-`polyn node use <version>`
-
-### Downloading and switching to a new version of a runtime
-
-#### Bun
-
-`polyn bun install <version>`
-
-#### Deno
-
-`polyn deno install <version>`
-
-#### Node.js
+### Downloading and switching to a new version of Node.js
 
 `polyn install <version>`
 
-or 
-
-`polyn node install <version>`
-
-### Printing the current version of a runtime
-
-#### Bun
-
-`polyn bun current`
-
-#### Deno
-
-`polyn deno current`
-
-#### Node.js
+### Printing the current version of Node.js
 
 `polyn current`
 
-or 
-
-`polyn node current`
-
-### Printing downloaded versions of a runtime
-
-#### Bun
-
-`polyn bun ls`
-
-or 
-
-`polyn bun list`
-
-#### Deno
-
-`polyn deno ls`
-
-or 
-
-`polyn deno list`
-
-#### Node.js
+### Printing all downloaded versions of Node.js
 
 `polyn ls`
 
 or 
 
-`polyn node ls`
-
-or 
-
 `polyn list`
 
-or
-
-`polyn node list`
-
-### Deleting a downloaded version of a runtime
-
-#### Bun
-
-`polyn bun rm <version>`
-
-or 
-
-`polyn bun remove <version>`
-
-#### Deno
-
-`polyn deno rm <version>`
-
-or 
-
-`polyn deno remove <version>`
-
-#### Node.js
+### Deleting a downloaded version of Node.js
 
 `polyn rm <version>`
 
 or 
 
-`polyn node rm <version>`
-
-or 
-
 `polyn remove <version>`
 
-or
+## Future development
 
-`polyn node remove <version>`
+The original scope of this project was to be able to install and manage multiple versions of Bun, Deno, and Node.js. It currently only supports Node.js, but I would like to open up support for Bun and Deno.
 
 ## Information
 

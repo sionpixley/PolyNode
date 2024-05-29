@@ -4,27 +4,20 @@ const (
 	// List of commands for printing to the user.
 	c_COMMANDS string = `Commands:
 	
-      add : Downloads a version of the env, but does not switch it to your current version.
-  current : Prints the current version of the env.
-  install : Downloads a version of the env and switches it to your current version.
-     list : Prints the list of downloaded versions for the env.
-       ls : Alias for list command.
-   remove : Deletes a version of the env.
-       rm : Alias for remove command.
-      use : Switches the env to a different version.
-  version : Prints the current version of PolyNode.`
+  add <version>     : Downloads a specific version of Node.js, but does not switch it to your current version.
+  current           : Prints the current version of Node.js.
+  install <version> : Downloads a version of Node.js and switches it to your current version.
+  list              : Prints the list of downloaded Node.js versions.
+  ls                : Alias for list command.
+  remove <version>  : Deletes a version of Node.js.
+  rm <version>      : Alias for remove command.
+  use <version>     : Switches Node.js to a different version.
+  version           : Prints the current version of PolyNode.`
 
 	// PolyNode description for printing to the user.
 	c_DESCRIPTION string = `Description:
 
-  PolyNode is a CLI tool that helps install and switch between multiple versions of Bun, Deno, and/or Node.js on the same device.`
-
-	// List of runtimes for printing to the user.
-	c_RUNTIMES string = `Runtimes:
-
-  bun
-  deno
-  node : Default if runtime is not provided.`
+  PolyNode is a CLI tool that helps install and manage multiple versions of Node.js on the same device.`
 
 	// Unsupported operating system error message.
 	c_UNSUPPORTED_OS string = "unsupported operating system"
@@ -32,7 +25,7 @@ const (
 	// Syntax for using the polyn CLI.
 	c_USAGE string = `Usage:
 
-  polyn [runtime] command <version>`
+  polyn command`
 
 	// PolyNode's version.
 	VERSION string = "v0.1.0"
