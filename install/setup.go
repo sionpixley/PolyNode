@@ -12,12 +12,20 @@ const c_LINUX_PROFILE_D string = `#!/bin/bash
 
 if [[ ":$PATH:" != *":/opt/PolyNode:"* ]]; then
     PATH=$PATH:/opt/PolyNode
+fi
+
+if [[ ":$PATH:" != *":/opt/nodejs:"* ]]; then
+    PATH=$PATH:/opt/nodejs
 fi`
 
 const c_MAC_PROFILE_D string = `#!/bin/zsh
 
 if [[ ":$PATH:" != *":/opt/PolyNode:"* ]]; then
     PATH=$PATH:/opt/PolyNode
+fi
+
+if [[ ":$PATH:" != *":/opt/nodejs:"* ]]; then
+    PATH=$PATH:/opt/nodejs
 fi`
 
 func main() {
