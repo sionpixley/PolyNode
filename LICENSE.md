@@ -2,7 +2,7 @@
 
 This project includes multiple licenses as part of its distribution:
 
-- The 7-zip binaries are licensed under their own respective licenses. 
+- The 7-Zip binaries are licensed under their own respective licenses. 
   - For Linux distros see `emb/7z/linux/License.txt` for more details.
   - For macOS see `emb/7z/mac/License.txt` for more details.
   - For Windows see `emb/7z/win/License.txt` for more details.
