@@ -10,11 +10,13 @@ import (
 
 const c_LINUX_TEMP string = `#!/bin/bash
 
+sudo rm -f /opt/nodejs
 sudo rm -rf /opt/PolyNode
 sudo rm -f /opt/polyn-uninstall-temp.sh`
 
 const c_MAC_TEMP string = `#!/bin/zsh
 
+sudo rm -f /opt/nodejs
 sudo rm -rf /opt/PolyNode
 sudo rm -f /opt/polyn-uninstall-temp.zsh`
 

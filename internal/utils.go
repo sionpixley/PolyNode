@@ -143,23 +143,22 @@ func extractFile(source string, destination string, operatingSystem OperatingSys
 }
 
 func get7ZipCmdLocation(operatingSystem OperatingSystem, arch Architecture) (string, error) {
-	command := ""
 	switch operatingSystem {
 	case c_LINUX:
 		if arch == c_ARM64 {
-			command = "./emb/7z/linux/arm64/7zzs"
+			return polynHomeDir + "/emb/7z/linux/arm64/7zzs", nil
 		} else if arch == c_X64 {
-			command = "./emb/7z/linux/x64/7zzs"
+			return polynHomeDir + "/emb/7z/linux/x64/7zzs", nil
+		} else {
+			return "", errors.New(c_UNSUPPORTED_ARCH)
 		}
 	case c_MAC:
-		command = "./emb/7z/mac/7zz"
+		return polynHomeDir + "/emb/7z/mac/7zz", nil
 	case c_WIN:
-		command = "./emb/7z/win/7za"
+		return polynHomeDir + "\\emb\\7z\\win\\7za", nil
 	default:
 		return "", errors.New(c_UNSUPPORTED_OS)
 	}
-
-	return command, nil
 }
 
 func printError(err error) {

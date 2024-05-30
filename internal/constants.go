@@ -19,6 +19,9 @@ const (
 
   PolyNode is a CLI tool that helps install and manage multiple versions of Node.js on the same device.`
 
+	// Unsupported CPU architecture error message.
+	c_UNSUPPORTED_ARCH string = "unsupported CPU architecture"
+
 	// Unsupported operating system error message.
 	c_UNSUPPORTED_OS string = "unsupported operating system"
 
