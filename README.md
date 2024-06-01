@@ -18,6 +18,8 @@ This CLI tool is made to be compatible with Linux distros. However, there are a 
 
 ## How to install
 
+Please uninstall all installed versions of Node.js before installing PolyNode.
+
 ### For Linux
 
 #### ARM64 based CPUs

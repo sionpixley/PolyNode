@@ -176,6 +176,14 @@ func removeNode(version string) error {
 }
 
 func useNode(version string) error {
-	err := os.Symlink(polynHomeDir+"/node/"+version, polynHomeDir+"/nodejs")
+	var err error
+	if doesFileExist(polynHomeDir + "/nodejs") {
+		err = os.Remove(polynHomeDir + "/nodejs")
+		if err != nil {
+			return err
+		}
+	}
+
+	err = os.Symlink(polynHomeDir+"/node/"+version, polynHomeDir+"/nodejs")
 	return err
 }
