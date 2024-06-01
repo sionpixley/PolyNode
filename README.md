@@ -14,7 +14,7 @@ PolyNode is a CLI tool that helps install and manage multiple versions of Node.j
 
 This CLI tool is made to be compatible with Linux distros. However, there are a lot of different Linux distros, so it's likely that there are some that are not compatible. Below is a list of Linux distros that have been verified to work with this tool.
 
-- [x] Ubuntu x64
+- :white_check_mark: Ubuntu x64
 
 ## How to install
 
