@@ -8,26 +8,6 @@ import (
 	"runtime"
 )
 
-const c_LINUX_PROFILE_D string = `#!/bin/bash
-
-if [[ ":$PATH:" != *":/opt/PolyNode:"* ]]; then
-    PATH=$PATH:/opt/PolyNode
-fi
-
-if [[ ":$PATH:" != *":/opt/nodejs:"* ]]; then
-    PATH=$PATH:/opt/nodejs
-fi`
-
-const c_MAC_PROFILE_D string = `#!/bin/zsh
-
-if [[ ":$PATH:" != *":/opt/PolyNode:"* ]]; then
-    PATH=$PATH:/opt/PolyNode
-fi
-
-if [[ ":$PATH:" != *":/opt/nodejs:"* ]]; then
-    PATH=$PATH:/opt/nodejs
-fi`
-
 func main() {
 	operatingSystem := runtime.GOOS
 
@@ -49,17 +29,26 @@ func main() {
 		fmt.Println(err.Error())
 	} else {
 		fmt.Println("The polyn command has been installed.")
-		fmt.Println("Please logout and log back in to apply your changes.")
+		fmt.Println("Please close all open terminals.")
 	}
 }
 
 func installLinux() error {
-	err := exec.Command("sudo", "cp", "-r", "PolyNode", "/opt").Run()
+	home := os.Getenv("HOME")
+	err := exec.Command("cp", "-r", "PolyNode", home+"/.PolyNode").Run()
 	if err != nil {
 		return err
 	}
 
-	err = os.WriteFile("/etc/profile.d/polyn-path.sh", []byte(c_LINUX_PROFILE_D), 0755)
+	contentData, err := os.ReadFile(home + "/.bashrc")
+	if err != nil {
+		return err
+	}
+
+	content := string(contentData)
+	content += "\nPATH=$PATH:" + home + "/.PolyNode:" + home + "/.PolyNode/nodejs/bin"
+
+	err = os.WriteFile(home+"/.bashrc", []byte(content), 0644)
 	return err
 }
 
@@ -68,8 +57,6 @@ func installMac() error {
 	if err != nil {
 		return err
 	}
-
-	err = os.WriteFile("/etc/profile.d/polyn-path.zsh", []byte(c_MAC_PROFILE_D), 0755)
 	return err
 }
 

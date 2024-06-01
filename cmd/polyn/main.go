@@ -33,7 +33,9 @@ func main() {
 		args = append(args, strings.ToLower(arg))
 	}
 
-	if internal.IsKnownCommand(args[1]) {
+	if args[1] == "version" {
+		printVersion()
+	} else if internal.IsKnownCommand(args[1]) {
 		internal.HandleNode(args[1:], operatingSystem, arch)
 	} else {
 		internal.PrintHelp()

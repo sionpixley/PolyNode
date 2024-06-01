@@ -112,15 +112,16 @@ func extractFile(source string, destination string, operatingSystem OperatingSys
 	if operatingSystem == c_WIN {
 		err = exec.Command(command, "x", source, "-o"+destination).Run()
 	} else {
-		err = exec.Command(command, "x", source).Run()
+		err = exec.Command(command, "x", source, "-o"+polynHomeDir).Run()
 		if err != nil {
 			return err
 		}
 
-		tarball := strings.Split(source, "/")[2]
-		tarball = tarball[:len(tarball)-3]
+		parts := strings.Split(source, "/")
+		tarball := parts[len(parts)-1]
+		tarball = polynHomeDir + "/" + tarball[:len(tarball)-3]
 
-		err = exec.Command(command, "x", tarball).Run()
+		err = exec.Command(command, "x", tarball, "-o"+polynHomeDir).Run()
 		if err != nil {
 			return err
 		}

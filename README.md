@@ -14,7 +14,7 @@ PolyNode is a CLI tool that helps install and manage multiple versions of Node.j
 
 This CLI tool is made to be compatible with Linux distros. However, there are a lot of different Linux distros, so it's likely that there are some that are not compatible. Below is a list of Linux distros that have been verified to work with this tool.
 
-- Ubuntu x64
+- [x] Ubuntu x64
 
 ## How to install
 
@@ -22,30 +22,30 @@ This CLI tool is made to be compatible with Linux distros. However, there are a 
 
 #### ARM64 based CPUs
 
-1. Navigate to the [Releases](https://github.com/sionpixley/PolyNode/releases) section and download the linux-\<version\>-arm64.tar.xz file
-2. Extract the .tar.xz file and run the `setup` executable with `sudo`
+1. Navigate to the [Releases](https://github.com/sionpixley/PolyNode/releases) section and download the linux-\<version\>-arm64.tar.xz file.
+2. Extract the .tar.xz file and run the `setup` executable.
 
 #### x86-64 based CPUs
 
-1. Navigate to the [Releases](https://github.com/sionpixley/PolyNode/releases) section and download the linux-\<version\>-x64.tar.xz file
-2. Extract the .tar.xz file and run the `setup` executable with `sudo`
+1. Navigate to the [Releases](https://github.com/sionpixley/PolyNode/releases) section and download the linux-\<version\>-x64.tar.xz file.
+2. Extract the .tar.xz file and run the `setup` executable.
 
 ### For macOS
 
 #### ARM64 based CPUs
 
-1. Navigate to the [Releases](https://github.com/sionpixley/PolyNode/releases) section and download the darwin-\<version\>-arm64.tar.gz file
-2. Extract the .tar.gz file and run the `setup` executable with `sudo`
+1. Navigate to the [Releases](https://github.com/sionpixley/PolyNode/releases) section and download the darwin-\<version\>-arm64.tar.gz file.
+2. Extract the .tar.gz file and run the `setup` executable.
 
 #### x86-64 based CPUs
 
-1. Navigate to the [Releases](https://github.com/sionpixley/PolyNode/releases) section and download the darwin-\<version\>-x64.tar.gz file
-2. Extract the .tar.gz file and run the `setup` executable with `sudo`
+1. Navigate to the [Releases](https://github.com/sionpixley/PolyNode/releases) section and download the darwin-\<version\>-x64.tar.gz file.
+2. Extract the .tar.gz file and run the `setup` executable.
 
 ### For Windows
 
-1. Navigate to the [Releases](https://github.com/sionpixley/PolyNode/releases) section and download the win-\<version\>-x64.zip file
-2. Extract the .zip file and run the `setup.exe` executable
+1. Navigate to the [Releases](https://github.com/sionpixley/PolyNode/releases) section and download the win-\<version\>-x64.zip file.
+2. Extract the .zip file and run the `setup.exe` executable.
 
 ## How to use
 
@@ -83,7 +83,7 @@ or
 
 ## Future development
 
-The original scope of this project was to be able to install and manage multiple versions of Bun, Deno, and Node.js. It currently only supports Node.js, but I would like to open up support for Bun and Deno.
+The original scope of this project was to be able to install and manage multiple versions of Bun, Deno, and Node.js. It currently only supports Node.js, but I would like to support Bun and Deno in the future.
 
 ## Information
 

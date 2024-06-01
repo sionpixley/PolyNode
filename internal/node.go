@@ -53,8 +53,6 @@ func HandleNode(args []string, operatingSystem OperatingSystem, arch Architectur
 
 	if err != nil {
 		printError(err)
-	} else {
-		fmt.Println("\nDone.")
 	}
 }
 
@@ -122,6 +120,7 @@ func addNode(version string, operatingSystem OperatingSystem, arch Architecture)
 	}
 
 	err = deleteFileIfExists(filePath)
+	fmt.Println("\nDone.")
 	return err
 }
 
@@ -177,6 +176,6 @@ func removeNode(version string) error {
 }
 
 func useNode(version string) error {
-	err := os.Symlink(polynHomeDir+"/node/"+version, "/opt/nodejs")
+	err := os.Symlink(polynHomeDir+"/node/"+version, polynHomeDir+"/nodejs")
 	return err
 }

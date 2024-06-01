@@ -10,9 +10,8 @@ import (
 
 const c_LINUX_TEMP string = `#!/bin/bash
 
-sudo rm -f /opt/nodejs
-sudo rm -rf /opt/PolyNode
-sudo rm -f /opt/polyn-uninstall-temp.sh`
+rm -rf $HOME/.PolyNode
+rm -f $HOME/polyn-uninstall-temp.sh`
 
 const c_MAC_TEMP string = `#!/bin/zsh
 
@@ -52,18 +51,31 @@ func printOptionalLine(operatingSystem string) {
 	}
 }
 
+func removePathFromBashrc(home string) error {
+	contentData, err := os.ReadFile(home + "/.bashrc")
+	if err != nil {
+		return err
+	}
+	content := string(contentData)
+
+	err = os.WriteFile(home+"/.bashrc", []byte(content), 0644)
+	return err
+}
+
 func uninstallLinux() error {
-	err := os.Remove("/etc/profile.d/polyn-path.sh")
+	home := os.Getenv("HOME")
+
+	err := removePathFromBashrc(home)
 	if err != nil {
 		return err
 	}
 
-	err = os.WriteFile("/opt/polyn-uninstall-temp.sh", []byte(c_LINUX_TEMP), 0700)
+	err = os.WriteFile(home+"/polyn-uninstall-temp.sh", []byte(c_LINUX_TEMP), 0700)
 	if err != nil {
 		return err
 	}
 
-	err = exec.Command("sudo", "/opt/polyn-uninstall-temp.sh").Run()
+	err = exec.Command(home + "/polyn-uninstall-temp.sh").Run()
 	return err
 }
 

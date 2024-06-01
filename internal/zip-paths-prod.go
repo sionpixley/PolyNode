@@ -2,7 +2,10 @@
 
 package internal
 
-import "runtime"
+import (
+	"os"
+	"runtime"
+)
 
 var polynHomeDir string
 
@@ -10,8 +13,7 @@ func init() {
 	if runtime.GOOS == "windows" {
 		polynHomeDir = "C:\\Program Files\\PolyNode"
 	} else {
-		polynHomeDir = "/opt/PolyNode"
+		home := os.Getenv("HOME")
+		polynHomeDir = home + "/.PolyNode"
 	}
 }
-
-const c_POLYN_HOME_DIR string = "/opt/PolyNode"
