@@ -10,8 +10,8 @@
             "request": "launch",
             "mode": "debug",
             "program": "${workspaceFolder}/cmd/polyn",
-            "args": ["install", "v20.13.1"],
-            "cwd": "${workspaceFolder}"
+            "cwd": "${workspaceFolder}",
+            "args": ["rm", "v20.14.0"]
         },
         {
             "name": "Debug setup",

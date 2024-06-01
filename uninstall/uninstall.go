@@ -1,11 +1,13 @@
 package main
 
 import (
+	"bufio"
 	"errors"
 	"fmt"
 	"os"
 	"os/exec"
 	"runtime"
+	"strings"
 )
 
 const c_LINUX_TEMP string = `#!/bin/bash
@@ -52,11 +54,24 @@ func printOptionalLine(operatingSystem string) {
 }
 
 func removePathFromBashrc(home string) error {
-	contentData, err := os.ReadFile(home + "/.bashrc")
+	bashrc, err := os.Open(home + "/.bashrc")
 	if err != nil {
 		return err
 	}
-	content := string(contentData)
+
+	scanner := bufio.NewScanner(bashrc)
+	scanner.Split(bufio.ScanLines)
+	content := ""
+	for scanner.Scan() {
+		line := scanner.Text()
+		if !strings.Contains(line, "PATH=$PATH:"+home+"/.PolyNode:"+home+"/.PolyNode/nodejs/bin") {
+			content += line + "\n"
+		}
+	}
+
+	// Explicitly calling close instead of using defer.
+	// Need to have more control before writing to the file.
+	bashrc.Close()
 
 	err = os.WriteFile(home+"/.bashrc", []byte(content), 0644)
 	return err
