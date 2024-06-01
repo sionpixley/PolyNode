@@ -172,7 +172,10 @@ func printCurrentNode() {
 }
 
 func removeNode(version string) error {
-	return nil
+	folderName := polynHomeDir + "/.PolyNode/" + version
+	err := os.RemoveAll(folderName)
+	fmt.Println("Deleted Node.js " + version + ".")
+	return err
 }
 
 func useNode(version string) error {
