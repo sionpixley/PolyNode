@@ -6,6 +6,7 @@ import (
 	"os"
 	"os/exec"
 	"runtime"
+	"strings"
 )
 
 func main() {
@@ -16,7 +17,7 @@ func main() {
 	var err error
 	switch operatingSystem {
 	case "darwin":
-		err = installMac()
+		fallthrough
 	case "linux":
 		err = installLinux()
 	case "windows":
@@ -33,13 +34,7 @@ func main() {
 	}
 }
 
-func installLinux() error {
-	home := os.Getenv("HOME")
-	err := exec.Command("cp", "-r", "PolyNode", home+"/.PolyNode").Run()
-	if err != nil {
-		return err
-	}
-
+func addToBashPath(home string) error {
 	contentData, err := os.ReadFile(home + "/.bashrc")
 	if err != nil {
 		return err
@@ -52,12 +47,34 @@ func installLinux() error {
 	return err
 }
 
-func installMac() error {
-	err := exec.Command("sudo", "cp", "-r", "PolyNode", "/opt").Run()
+func addToZshPath(home string) error {
+	contentData, err := os.ReadFile(home + "/.zshrc")
 	if err != nil {
 		return err
 	}
+
+	content := string(contentData)
+	content += "\nPATH=$PATH:" + home + "/.PolyNode:" + home + "/.PolyNode/nodejs/bin"
+
+	err = os.WriteFile(home+"/.zshrc", []byte(content), 0644)
 	return err
+}
+
+func installLinux() error {
+	home := os.Getenv("HOME")
+	err := exec.Command("cp", "-r", "PolyNode", home+"/.PolyNode").Run()
+	if err != nil {
+		return err
+	}
+
+	shell := os.Getenv("SHELL")
+	if strings.Contains(shell, "bash") {
+		return addToBashPath(home)
+	} else if strings.Contains(shell, "zsh") {
+		return addToZshPath(home)
+	} else {
+		return errors.New("unsupported shell")
+	}
 }
 
 func installWindows() error {

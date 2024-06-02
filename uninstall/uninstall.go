@@ -17,9 +17,8 @@ rm -f $HOME/polyn-uninstall-temp.sh`
 
 const c_MAC_TEMP string = `#!/bin/zsh
 
-sudo rm -f /opt/nodejs
-sudo rm -rf /opt/PolyNode
-sudo rm -f /opt/polyn-uninstall-temp.zsh`
+rm -rf $HOME/.PolyNode
+rm -f $HOME/polyn-uninstall-temp.zsh`
 
 const c_WIN_TEMP string = `del C:\\Program Files\\PolyNode /s /f /q > nul
 rmdir C:\\Program Files\\PolyNode /s /q
@@ -53,6 +52,17 @@ func printOptionalLine(operatingSystem string) {
 	}
 }
 
+func removePathLinuxAndMac(home string) error {
+	shell := os.Getenv("SHELL")
+	if strings.Contains(shell, "bash") {
+		return removePathFromBashrc(home)
+	} else if strings.Contains(shell, "zsh") {
+		return removePathFromZshrc(home)
+	} else {
+		return errors.New("unsupported shell")
+	}
+}
+
 func removePathFromBashrc(home string) error {
 	bashrc, err := os.Open(home + "/.bashrc")
 	if err != nil {
@@ -77,10 +87,33 @@ func removePathFromBashrc(home string) error {
 	return err
 }
 
+func removePathFromZshrc(home string) error {
+	zshrc, err := os.Open(home + "/.zshrc")
+	if err != nil {
+		return err
+	}
+
+	scanner := bufio.NewScanner(zshrc)
+	scanner.Split(bufio.ScanLines)
+	content := ""
+	for scanner.Scan() {
+		line := scanner.Text()
+		if !strings.Contains(line, "PATH=$PATH:"+home+"/.PolyNode:"+home+"/.PolyNode/nodejs/bin") {
+			content += line + "\n"
+		}
+	}
+
+	// Explicitly calling close instead of using defer.
+	// Need to have more control before writing to the file.
+	zshrc.Close()
+
+	err = os.WriteFile(home+"/.zshrc", []byte(content), 0644)
+	return err
+}
+
 func uninstallLinux() error {
 	home := os.Getenv("HOME")
-
-	err := removePathFromBashrc(home)
+	err := removePathLinuxAndMac(home)
 	if err != nil {
 		return err
 	}
@@ -90,23 +123,22 @@ func uninstallLinux() error {
 		return err
 	}
 
-	err = exec.Command(home + "/polyn-uninstall-temp.sh").Run()
-	return err
+	return exec.Command("/bin/bash", "-c", home+"/polyn-uninstall-temp.sh").Run()
 }
 
 func uninstallMac() error {
-	err := os.Remove("/etc/profile.d/polyn-path.zsh")
+	home := os.Getenv("HOME")
+	err := removePathLinuxAndMac(home)
 	if err != nil {
 		return err
 	}
 
-	err = os.WriteFile("/opt/polyn-uninstall-temp.zsh", []byte(c_MAC_TEMP), 0700)
+	err = os.WriteFile(home+"/polyn-uninstall-temp.zsh", []byte(c_MAC_TEMP), 0700)
 	if err != nil {
 		return err
 	}
 
-	err = exec.Command("sudo", "/opt/polyn-uninstall-temp.zsh").Run()
-	return err
+	return exec.Command("/bin/zsh", "-c", home+"/polyn-uninstall-temp.zsh").Run()
 }
 
 func uninstallWindows() error {
