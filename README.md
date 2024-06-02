@@ -32,7 +32,7 @@ This CLI tool is made to be compatible with Linux distros. However, there are a 
     - :x: Ubuntu 18.04 LTS x64
     - :x: Ubuntu 20.04 LTS x64
     - :x: Ubuntu 22.04 LTS x64
-    - :white_check_mark: Ubuntu 23.10 LTS x64
+    - :white_check_mark: Ubuntu 23.10 x64
     - :white_check_mark: Ubuntu 24.04 LTS x64
 
 ## How to install
