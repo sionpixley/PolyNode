@@ -68,7 +68,7 @@ func addNode(version string, operatingSystem OperatingSystem, arch Architecture)
 	}
 
 	fileName := "node-" + version + "-" + archiveName
-	fmt.Println("\nDownloading " + fileName + "...")
+	fmt.Printf("\nDownloading %s...", fileName)
 
 	url := "https://nodejs.org/dist/" + version + "/" + fileName
 
@@ -90,7 +90,7 @@ func addNode(version string, operatingSystem OperatingSystem, arch Architecture)
 	}
 
 	filePath := polynHomeDir + "/node/" + fileName
-	err = deleteFileIfExists(filePath)
+	err = os.RemoveAll(filePath)
 	if err != nil {
 		return err
 	}
@@ -113,15 +113,22 @@ func addNode(version string, operatingSystem OperatingSystem, arch Architecture)
 		return err
 	}
 
-	fmt.Println("Extracting " + fileName + "...")
+	fmt.Println("Done.")
+
+	fmt.Printf("Extracting %s...", fileName)
 	err = extractFile(filePath, folderPath, operatingSystem, arch)
 	if err != nil {
 		return err
 	}
 
-	err = deleteFileIfExists(filePath)
-	fmt.Println("\nDone.")
-	return err
+	err = os.RemoveAll(filePath)
+	if err != nil {
+		return err
+	}
+
+	fmt.Println("Done.")
+	fmt.Printf("Adding Node.js %s...Done.\n", version)
+	return nil
 }
 
 func getNodeTargetArchiveName(operatingSystem OperatingSystem, arch Architecture) (string, error) {
@@ -167,23 +174,44 @@ func printCurrentNode() {
 	if err != nil {
 		fmt.Println("There aren't any Node.js versions set as the current version.")
 	} else {
-		fmt.Print(string(output))
+		fmt.Printf("Node.js - %s", string(output))
 	}
 }
 
 func removeNode(version string) error {
+	version, err := convertToSemanticVersion(version)
+	if err != nil {
+		return err
+	}
+
 	folderName := polynHomeDir + "/node/" + version
-	err := os.RemoveAll(folderName)
-	fmt.Println("Deleted Node.js " + version + ".")
-	return err
+	err = os.RemoveAll(folderName)
+	if err != nil {
+		return err
+	}
+
+	fmt.Printf("Deleted Node.js %s.\n", version)
+	return nil
 }
 
 func useNode(version string) error {
-	err := os.RemoveAll(polynHomeDir + "/nodejs")
+	version, err := convertToSemanticVersion(version)
+	if err != nil {
+		return err
+	}
+
+	fmt.Printf("\nSwitching to Node.js %s...", version)
+
+	err = os.RemoveAll(polynHomeDir + "/nodejs")
 	if err != nil {
 		return err
 	}
 
 	err = os.Symlink(polynHomeDir+"/node/"+version, polynHomeDir+"/nodejs")
-	return err
+	if err != nil {
+		return err
+	}
+
+	fmt.Println("Done.")
+	return nil
 }
