@@ -10,31 +10,6 @@ PolyNode is a CLI tool that helps install and manage multiple versions of Node.j
 - macOS x64
 - Windows x64
 
-### Verified Linux distros
-
-This CLI tool is made to be compatible with Linux distros. However, there are a lot of different Linux distros, so it's likely that there are some that are not compatible. Below is a list of Linux distros that have been verified to work with this tool.
-
-- CentOS Stream
-    - :white_check_mark: CentOS Stream 9 x64
-- Debian
-    - :x: Debian 10 x64
-    - :x: Debian 11 x64
-    - :white_check_mark: Debian 12 x64
-- Fedora
-    - :x: Fedora 39 x64
-    - :white_check_mark: Fedora 40 x64
-- Raspberry Pi OS
-    - :x: Raspberry Pi OS ARM64
-    - :x: Raspberry Pi OS (Legacy) ARM64
-- Ubuntu
-    - :x: Ubuntu 14.04 LTS x64
-    - :x: Ubuntu 16.04 LTS x64
-    - :x: Ubuntu 18.04 LTS x64
-    - :x: Ubuntu 20.04 LTS x64
-    - :x: Ubuntu 22.04 LTS x64
-    - :white_check_mark: Ubuntu 23.10 x64
-    - :white_check_mark: Ubuntu 24.04 LTS x64
-
 ## How to install
 
 Please uninstall all installed versions of Node.js before installing PolyNode.
