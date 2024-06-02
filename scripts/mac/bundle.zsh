@@ -8,7 +8,7 @@ host_arch=$(go env GOARCH)
 go env -w GOOS=linux
 go env -w GOARCH=arm64
 
-go build -o polyn-linux-arm64 ./cmd/polyn
+go build -tags=prod -o polyn-linux-arm64 ./cmd/polyn
 
 cd install
 go build -o ../setup-linux-arm64
@@ -46,8 +46,8 @@ cd ../../../../..
 cp ./emb/7z/linux/arm64/7zzs ./linux-$version-arm64/PolyNode/emb/7z/linux/arm64
 cp ./emb/7z/linux/License.txt ./linux-$version-arm64/PolyNode/emb/7z/linux
 
-sudo ./emb/7z/mac/7zz a -ttar linux-$version-arm64.tar linux-$version-arm64/
-sudo ./emb/7z/mac/7zz a -txz -mx9 linux-$version-arm64.tar.xz linux-$version-arm64.tar
+./emb/7z/mac/7zz a -ttar linux-$version-arm64.tar linux-$version-arm64/
+./emb/7z/mac/7zz a -txz -mx9 linux-$version-arm64.tar.xz linux-$version-arm64.tar
 
 rm -rf linux-$version-arm64
 rm -f linux-$version-arm64.tar
@@ -56,7 +56,7 @@ rm -f linux-$version-arm64.tar
 go env -w GOOS=linux
 go env -w GOARCH=amd64
 
-go build -o polyn-linux-x64 ./cmd/polyn
+go build -tags=prod -o polyn-linux-x64 ./cmd/polyn
 
 cd install
 go build -o ../setup-linux-x64
@@ -94,8 +94,8 @@ cd ../../../../..
 cp ./emb/7z/linux/x64/7zzs ./linux-$version-x64/PolyNode/emb/7z/linux/x64
 cp ./emb/7z/linux/License.txt ./linux-$version-x64/PolyNode/emb/7z/linux
 
-sudo ./emb/7z/mac/7zz a -ttar linux-$version-x64.tar linux-$version-x64/
-sudo ./emb/7z/mac/7zz a -txz -mx9 linux-$version-x64.tar.xz linux-$version-x64.tar
+./emb/7z/mac/7zz a -ttar linux-$version-x64.tar linux-$version-x64/
+./emb/7z/mac/7zz a -txz -mx9 linux-$version-x64.tar.xz linux-$version-x64.tar
 
 rm -rf linux-$version-x64
 rm -f linux-$version-x64.tar
@@ -104,7 +104,7 @@ rm -f linux-$version-x64.tar
 go env -w GOOS=darwin
 go env -w GOARCH=arm64
 
-go build -o polyn-darwin-arm64 ./cmd/polyn
+go build -tags=prod -o polyn-darwin-arm64 ./cmd/polyn
 
 cd install
 go build -o ../setup-darwin-arm64
@@ -140,8 +140,8 @@ cd ../../../..
 cp ./emb/7z/mac/7zz ./darwin-$version-arm64/PolyNode/emb/7z/mac
 cp ./emb/7z/mac/License.txt ./darwin-$version-arm64/PolyNode/emb/7z/mac
 
-sudo ./emb/7z/mac/7zz a -ttar darwin-$version-arm64.tar darwin-$version-arm64/
-sudo ./emb/7z/mac/7zz a -tgzip -mx9 darwin-$version-arm64.tar.gz darwin-$version-arm64.tar
+./emb/7z/mac/7zz a -ttar darwin-$version-arm64.tar darwin-$version-arm64/
+./emb/7z/mac/7zz a -tgzip -mx9 darwin-$version-arm64.tar.gz darwin-$version-arm64.tar
 
 rm -rf darwin-$version-arm64
 rm -f darwin-$version-arm64.tar
@@ -150,7 +150,7 @@ rm -f darwin-$version-arm64.tar
 go env -w GOOS=darwin
 go env -w GOARCH=amd64
 
-go build -o polyn-darwin-x64 ./cmd/polyn
+go build -tags=prod -o polyn-darwin-x64 ./cmd/polyn
 
 cd install
 go build -o ../setup-darwin-x64
@@ -186,8 +186,8 @@ cd ../../../..
 cp ./emb/7z/mac/7zz ./darwin-$version-x64/PolyNode/emb/7z/mac
 cp ./emb/7z/mac/License.txt ./darwin-$version-x64/PolyNode/emb/7z/mac
 
-sudo ./emb/7z/mac/7zz a -ttar darwin-$version-x64.tar darwin-$version-x64/
-sudo ./emb/7z/mac/7zz a -tgzip -mx9 darwin-$version-x64.tar.gz darwin-$version-x64.tar
+./emb/7z/mac/7zz a -ttar darwin-$version-x64.tar darwin-$version-x64/
+./emb/7z/mac/7zz a -tgzip -mx9 darwin-$version-x64.tar.gz darwin-$version-x64.tar
 
 rm -rf darwin-$version-x64
 rm -f darwin-$version-x64.tar
@@ -196,7 +196,7 @@ rm -f darwin-$version-x64.tar
 go env -w GOOS=windows
 go env -w GOARCH=amd64
 
-go build -o polyn.exe ./cmd/polyn
+go build -tags=prod -o polyn.exe ./cmd/polyn
 
 cd install
 go build -o ../setup.exe
@@ -234,7 +234,7 @@ cp ./emb/7z/win/7za.dll ./win-$version-x64/PolyNode/emb/7z/win
 cp ./emb/7z/win/7zxa.dll ./win-$version-x64/PolyNode/emb/7z/win
 cp ./emb/7z/win/License.txt ./win-$version-x64/PolyNode/emb/7z/win
 
-sudo ./emb/7z/mac/7zz a -tzip -mx9 win-$version-x64.zip win-$version-x64/
+./emb/7z/mac/7zz a -tzip -mx9 win-$version-x64.zip win-$version-x64/
 
 rm -rf win-$version-x64
 

@@ -6,7 +6,7 @@ set version=v0.1.0
 go env -w GOOS=linux
 go env -w GOARCH=arm64
 
-go build -o polyn-linux-arm64 ./cmd/polyn
+go build -tags=prod -o polyn-linux-arm64 ./cmd/polyn
 
 cd install
 go build -o ../setup-linux-arm64
@@ -55,7 +55,7 @@ del linux-%version%-arm64.tar
 go env -w GOOS=linux
 go env -w GOARCH=amd64
 
-go build -o polyn-linux-x64 ./cmd/polyn
+go build -tags=prod -o polyn-linux-x64 ./cmd/polyn
 
 cd install
 go build -o ../setup-linux-x64
@@ -104,7 +104,7 @@ del linux-%version%-x64.tar
 go env -w GOOS=darwin
 go env -w GOARCH=arm64
 
-go build -o polyn-darwin-arm64 ./cmd/polyn
+go build -tags=prod -o polyn-darwin-arm64 ./cmd/polyn
 
 cd install
 go build -o ../setup-darwin-arm64
@@ -151,7 +151,7 @@ del darwin-%version%-arm64.tar
 go env -w GOOS=darwin
 go env -w GOARCH=amd64
 
-go build -o polyn-darwin-x64 ./cmd/polyn
+go build -tags=prod -o polyn-darwin-x64 ./cmd/polyn
 
 cd install
 go build -o ../setup-darwin-x64
@@ -198,7 +198,7 @@ del darwin-%version%-x64.tar
 go env -w GOOS=windows
 go env -w GOARCH=amd64
 
-go build -o polyn.exe ./cmd/polyn
+go build -tags=prod -o polyn.exe ./cmd/polyn
 
 cd install
 go build -o ../setup.exe

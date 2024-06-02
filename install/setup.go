@@ -47,6 +47,9 @@ func addToBashPath(home string) error {
 	return err
 }
 
+func addToWindowsPath(home string) error {
+}
+
 func addToZshPath(home string) error {
 	contentData, err := os.ReadFile(home + "/.zshrc")
 	if err != nil {
@@ -78,7 +81,13 @@ func installLinux() error {
 }
 
 func installWindows() error {
-	return nil
+	home := os.Getenv("PROGRAMFILES")
+	err := exec.Command("xcopy", "/s", "PolyNode", home+"\\PolyNode").Run()
+	if err != nil {
+		return err
+	}
+
+	return addToWindowsPath(home)
 }
 
 func printOptionalLine(operatingSystem string) {
