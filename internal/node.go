@@ -7,6 +7,7 @@ import (
 	"net/http"
 	"os"
 	"os/exec"
+	"strings"
 )
 
 // Main function for Node.js actions.
@@ -34,7 +35,7 @@ func HandleNode(args []string, operatingSystem OperatingSystem, arch Architectur
 			PrintHelp()
 		}
 	case c_LIST:
-		listDownloadedNodes()
+		err = listDownloadedNodes()
 	case c_REMOVE:
 		if len(args) > 1 {
 			err = removeNode(args[1])
@@ -165,8 +166,29 @@ func installNode(version string, operatingSystem OperatingSystem, arch Architect
 	return err
 }
 
-func listDownloadedNodes() {
+func listDownloadedNodes() error {
+	dir, err := os.ReadDir(polynHomeDir + pathSeparator + "node")
+	if err != nil {
+		return err
+	}
 
+	current := ""
+	output, err := exec.Command("node", "-v").Output()
+	if err != nil {
+		// Do nothing. This just means that there isn't a current version set.
+	} else {
+		current = strings.TrimSpace(string(output))
+	}
+
+	for _, item := range dir {
+		if item.IsDir() && current == item.Name() {
+			fmt.Printf("Node.js - %s (current)\n", item.Name())
+		} else if item.IsDir() {
+			fmt.Printf("Node.js - %s\n", item.Name())
+		}
+	}
+
+	return nil
 }
 
 func printCurrentNode() {
