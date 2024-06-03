@@ -7,8 +7,6 @@ import (
 	"os/exec"
 	"runtime"
 	"strings"
-
-	"golang.org/x/sys/windows/registry"
 )
 
 func main() {
@@ -46,23 +44,6 @@ func addToBashPath(home string) error {
 	content += "\nPATH=$PATH:" + home + "/.PolyNode:" + home + "/.PolyNode/nodejs/bin"
 
 	err = os.WriteFile(home+"/.bashrc", []byte(content), 0644)
-	return err
-}
-
-func addToWindowsPath(home string) error {
-	key, err := registry.OpenKey(registry.CURRENT_USER, "Environment", registry.ALL_ACCESS)
-	if err != nil {
-		return err
-	}
-	defer key.Close()
-
-	path, _, err := key.GetStringValue("Path")
-	if err != nil {
-		return err
-	}
-	path += ";" + home + "\\PolyNode;" + home + "\\nodejs"
-
-	err = key.SetStringValue("Path", path)
 	return err
 }
 

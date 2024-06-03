@@ -84,12 +84,12 @@ func addNode(version string, operatingSystem OperatingSystem, arch Architecture)
 	}
 	defer response.Body.Close()
 
-	err = os.MkdirAll(polynHomeDir+"/node", os.ModePerm)
+	err = os.MkdirAll(polynHomeDir+pathSeparator+"node", os.ModePerm)
 	if err != nil {
 		return err
 	}
 
-	filePath := polynHomeDir + "/node/" + fileName
+	filePath := polynHomeDir + pathSeparator + "node" + pathSeparator + fileName
 	err = os.RemoveAll(filePath)
 	if err != nil {
 		return err
@@ -107,7 +107,7 @@ func addNode(version string, operatingSystem OperatingSystem, arch Architecture)
 	// Calling file.Close() explicitly instead of with defer because the 7-Zip command was getting a lock error on the zip file.
 	file.Close()
 
-	folderPath := polynHomeDir + "/node/" + version
+	folderPath := polynHomeDir + pathSeparator + "node" + pathSeparator + version
 	err = os.RemoveAll(folderPath)
 	if err != nil {
 		return err
@@ -184,7 +184,7 @@ func removeNode(version string) error {
 		return err
 	}
 
-	folderName := polynHomeDir + "/node/" + version
+	folderName := polynHomeDir + pathSeparator + "node" + pathSeparator + version
 	err = os.RemoveAll(folderName)
 	if err != nil {
 		return err
@@ -202,12 +202,12 @@ func useNode(version string) error {
 
 	fmt.Printf("\nSwitching to Node.js %s...", version)
 
-	err = os.RemoveAll(polynHomeDir + "/nodejs")
+	err = os.RemoveAll(polynHomeDir + pathSeparator + "nodejs")
 	if err != nil {
 		return err
 	}
 
-	err = os.Symlink(polynHomeDir+"/node/"+version, polynHomeDir+"/nodejs")
+	err = os.Symlink(polynHomeDir+pathSeparator+"node"+pathSeparator+version, polynHomeDir+pathSeparator+"nodejs")
 	if err != nil {
 		return err
 	}
