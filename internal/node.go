@@ -69,7 +69,7 @@ func addNode(version string, operatingSystem OperatingSystem, arch Architecture)
 	}
 
 	fileName := "node-" + version + "-" + archiveName
-	fmt.Printf("\nDownloading %s...", fileName)
+	fmt.Printf("Downloading %s...", fileName)
 
 	url := "https://nodejs.org/dist/" + version + "/" + fileName
 
@@ -222,7 +222,7 @@ func useNode(version string) error {
 		return err
 	}
 
-	fmt.Printf("\nSwitching to Node.js %s...", version)
+	fmt.Printf("Switching to Node.js %s...", version)
 
 	err = os.RemoveAll(polynHomeDir + pathSeparator + "nodejs")
 	if err != nil {

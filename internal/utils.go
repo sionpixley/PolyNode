@@ -45,7 +45,7 @@ func IsSupportedOperatingSystem(operatingSystem OperatingSystem) bool {
 }
 
 func PrintHelp() {
-	help := "\n" + c_DESCRIPTION + "\n\n" + c_USAGE + "\n\n" + c_COMMANDS
+	help := c_DESCRIPTION + "\n\n" + c_USAGE + "\n\n" + c_COMMANDS
 	fmt.Println(help)
 }
 
