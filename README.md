@@ -81,6 +81,8 @@ or
 
 The original scope of this project was to be able to install and manage multiple versions of Bun, Deno, and Node.js. It currently only supports Node.js, but I would like to support Bun and Deno in the future.
 
+PolyNode currently cannot search for available versions of Node.js. I would like to add that soon.
+
 ## Information
 
 Go v1.22.3 <br>
