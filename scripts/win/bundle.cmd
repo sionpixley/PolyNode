@@ -3,8 +3,8 @@
 set version=v0.1.0
 
 :: Build Linux ARM64
-go env -w GOOS=linux
-go env -w GOARCH=arm64
+set GOOS=linux
+set GOARCH=arm64
 
 go build -tags=prod -o polyn-linux-arm64 ./cmd/polyn
 
@@ -52,8 +52,8 @@ rmdir linux-%version%-arm64 /s /q
 del linux-%version%-arm64.tar
 
 :: Build Linux x64
-go env -w GOOS=linux
-go env -w GOARCH=amd64
+set GOOS=linux
+set GOARCH=amd64
 
 go build -tags=prod -o polyn-linux-x64 ./cmd/polyn
 
@@ -101,8 +101,8 @@ rmdir linux-%version%-x64 /s /q
 del linux-%version%-x64.tar
 
 :: Build macOS ARM64
-go env -w GOOS=darwin
-go env -w GOARCH=arm64
+set GOOS=darwin
+set GOARCH=arm64
 
 go build -tags=prod -o polyn-darwin-arm64 ./cmd/polyn
 
@@ -148,8 +148,8 @@ rmdir darwin-%version%-arm64 /s /q
 del darwin-%version%-arm64.tar
 
 :: Build macOS x64
-go env -w GOOS=darwin
-go env -w GOARCH=amd64
+set GOOS=darwin
+set GOARCH=amd64
 
 go build -tags=prod -o polyn-darwin-x64 ./cmd/polyn
 
@@ -195,8 +195,8 @@ rmdir darwin-%version%-x64 /s /q
 del darwin-%version%-x64.tar
 
 :: Build Windows x64
-go env -w GOOS=windows
-go env -w GOARCH=amd64
+set GOOS=windows
+set GOARCH=amd64
 
 go build -tags=prod -o polyn.exe ./cmd/polyn
 

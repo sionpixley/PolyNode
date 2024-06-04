@@ -2,11 +2,9 @@
 
 version=v0.1.0
 
-host_arch=$(go env GOARCH)
-
 # Build Linux ARM64
-go env -w GOOS=linux
-go env -w GOARCH=arm64
+GOOS=linux
+GOARCH=arm64
 
 go build -tags=prod -o polyn-linux-arm64 ./cmd/polyn
 
@@ -53,8 +51,8 @@ rm -rf linux-$version-arm64
 rm -f linux-$version-arm64.tar
 
 # Build Linux x64
-go env -w GOOS=linux
-go env -w GOARCH=amd64
+GOOS=linux
+GOARCH=amd64
 
 go build -tags=prod -o polyn-linux-x64 ./cmd/polyn
 
@@ -101,8 +99,8 @@ rm -rf linux-$version-x64
 rm -f linux-$version-x64.tar
 
 # Build macOS ARM64
-go env -w GOOS=darwin
-go env -w GOARCH=arm64
+GOOS=darwin
+GOARCH=arm64
 
 go build -tags=prod -o polyn-darwin-arm64 ./cmd/polyn
 
@@ -147,8 +145,8 @@ rm -rf darwin-$version-arm64
 rm -f darwin-$version-arm64.tar
 
 # Build macOS x64
-go env -w GOOS=darwin
-go env -w GOARCH=amd64
+GOOS=darwin
+GOARCH=amd64
 
 go build -tags=prod -o polyn-darwin-x64 ./cmd/polyn
 
@@ -193,8 +191,8 @@ rm -rf darwin-$version-x64
 rm -f darwin-$version-x64.tar
 
 # Build Windows x64
-go env -w GOOS=windows
-go env -w GOARCH=amd64
+GOOS=windows
+GOARCH=amd64
 
 go build -tags=prod -o polyn.exe ./cmd/polyn
 
@@ -237,8 +235,3 @@ cp ./emb/7z/win/License.txt ./win-$version-x64/PolyNode/emb/7z/win
 ./emb/7z/mac/7zz a -tzip -mx9 win-$version-x64.zip win-$version-x64/
 
 rm -rf win-$version-x64
-
-# Set GOOS and GOARCH back to default
-
-go env -w GOOS=darwin
-go env -w GOARCH=$host_arch
