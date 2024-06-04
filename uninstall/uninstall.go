@@ -79,6 +79,11 @@ func removePathFromBashrc(home string) error {
 		}
 	}
 
+	// Removing the extra new line character.
+	if len(content) > 0 {
+		content = content[:len(content)-1]
+	}
+
 	// Explicitly calling close instead of using defer.
 	// Need to have more control before writing to the file.
 	bashrc.Close()
@@ -101,6 +106,11 @@ func removePathFromZshrc(home string) error {
 		if !strings.Contains(line, "PATH=$PATH:"+home+"/.PolyNode:"+home+"/.PolyNode/nodejs/bin") {
 			content += line + "\n"
 		}
+	}
+
+	// Removing the extra new line character.
+	if len(content) > 0 {
+		content = content[:len(content)-1]
 	}
 
 	// Explicitly calling close instead of using defer.
