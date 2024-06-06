@@ -78,8 +78,8 @@ func installLinux() error {
 }
 
 func installWindows() error {
-	home := os.Getenv("PROGRAMFILES")
-	err := exec.Command("xcopy", "/s", "PolyNode", home+"\\PolyNode").Run()
+	home := os.Getenv("LOCALAPPDATA") + "\\Programs"
+	err := exec.Command("xcopy", "/s", "/i", ".\\PolyNode\\", home+"\\PolyNode\\").Run()
 	if err != nil {
 		return err
 	}
