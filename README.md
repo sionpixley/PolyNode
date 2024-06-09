@@ -85,5 +85,5 @@ PolyNode currently cannot search for available versions of Node.js. I would like
 
 ## Information
 
-Go v1.22.3 <br>
+Go v1.22.4 <br>
 7-Zip 24.05
