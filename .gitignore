@@ -4,6 +4,7 @@
 *.tar.gz
 *.tar.xz
 *.zip
+.DS_Store
 
 # Specific files and folders
 
