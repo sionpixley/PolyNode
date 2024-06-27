@@ -90,14 +90,6 @@ func convertToSemanticVersion(version string) (string, error) {
 	}
 }
 
-func deleteFileIfExists(filePath string) error {
-	var err error
-	if doesFileExist(filePath) {
-		err = os.Remove(filePath)
-	}
-	return err
-}
-
 func doesFileExist(filePath string) bool {
 	_, err := os.Stat(filePath)
 	return !os.IsNotExist(err)
@@ -140,12 +132,12 @@ func extractFile(source string, destination string, operatingSystem OperatingSys
 			return err
 		}
 
-		err = deleteFileIfExists(source)
+		err = os.RemoveAll(source)
 		if err != nil {
 			return err
 		}
 
-		err = deleteFileIfExists(tarball)
+		err = os.RemoveAll(tarball)
 		if err != nil {
 			return err
 		}

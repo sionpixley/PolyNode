@@ -10,6 +10,10 @@ PolyNode is a CLI tool that helps install and manage multiple versions of Node.j
 - macOS x64
 - Windows x64
 
+### Linux support
+
+PolyNode only supports Bash or Zsh by default. During the install process, PolyNode edits either .bashrc or .zshrc to add two locations to the PATH: PolyNode's home directory `~/.PolyNode` and the symlink for Node.js and related commands `~/.PolyNode/nodejs`. This will probably change later to have support for more shells.
+
 ## How to install
 
 Please uninstall all installed versions of Node.js before installing PolyNode.
