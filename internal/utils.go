@@ -90,11 +90,6 @@ func convertToSemanticVersion(version string) (string, error) {
 	}
 }
 
-func doesFileExist(filePath string) bool {
-	_, err := os.Stat(filePath)
-	return !os.IsNotExist(err)
-}
-
 func extractFile(source string, destination string, operatingSystem OperatingSystem, arch Architecture) error {
 	command, err := get7ZipCmdLocation(operatingSystem, arch)
 	if err != nil {
