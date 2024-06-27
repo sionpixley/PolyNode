@@ -45,11 +45,11 @@ cp ./emb/7z/linux/arm64/7zzs ./linux-$version-arm64/PolyNode/emb/7z/linux/arm64
 cp ./emb/7z/linux/License.txt ./linux-$version-arm64/PolyNode/emb/7z/linux
 
 if [ $host_arch = 'arm64' ]; then
-    ./emb/7z/linux/arm64/7zzs a -ttar linux-$version-arm64.tar linux-$version-arm64/
-    ./emb/7z/linux/arm64/7zzs a -txz -mx9 linux-$version-arm64.tar.xz linux-$version-arm64.tar
+  ./emb/7z/linux/arm64/7zzs a -ttar linux-$version-arm64.tar linux-$version-arm64/
+  ./emb/7z/linux/arm64/7zzs a -txz -mx9 linux-$version-arm64.tar.xz linux-$version-arm64.tar
 else 
-    ./emb/7z/linux/x64/7zzs a -ttar linux-$version-arm64.tar linux-$version-arm64/
-    ./emb/7z/linux/x64/7zzs a -txz -mx9 linux-$version-arm64.tar.xz linux-$version-arm64.tar
+  ./emb/7z/linux/x64/7zzs a -ttar linux-$version-arm64.tar linux-$version-arm64/
+  ./emb/7z/linux/x64/7zzs a -txz -mx9 linux-$version-arm64.tar.xz linux-$version-arm64.tar
 fi
 
 rm -rf linux-$version-arm64
@@ -98,11 +98,11 @@ cp ./emb/7z/linux/x64/7zzs ./linux-$version-x64/PolyNode/emb/7z/linux/x64
 cp ./emb/7z/linux/License.txt ./linux-$version-x64/PolyNode/emb/7z/linux
 
 if [ $host_arch = 'arm64' ]; then
-    ./emb/7z/linux/arm64/7zzs a -ttar linux-$version-x64.tar linux-$version-x64/
-    ./emb/7z/linux/arm64/7zzs a -txz -mx9 linux-$version-x64.tar.xz linux-$version-x64.tar
+  ./emb/7z/linux/arm64/7zzs a -ttar linux-$version-x64.tar linux-$version-x64/
+  ./emb/7z/linux/arm64/7zzs a -txz -mx9 linux-$version-x64.tar.xz linux-$version-x64.tar
 else 
-    ./emb/7z/linux/x64/7zzs a -ttar linux-$version-x64.tar linux-$version-x64/
-    ./emb/7z/linux/x64/7zzs a -txz -mx9 linux-$version-x64.tar.xz linux-$version-x64.tar
+  ./emb/7z/linux/x64/7zzs a -ttar linux-$version-x64.tar linux-$version-x64/
+  ./emb/7z/linux/x64/7zzs a -txz -mx9 linux-$version-x64.tar.xz linux-$version-x64.tar
 fi
 
 rm -rf linux-$version-x64
@@ -149,11 +149,11 @@ cp ./emb/7z/mac/7zz ./darwin-$version-arm64/PolyNode/emb/7z/mac
 cp ./emb/7z/mac/License.txt ./darwin-$version-arm64/PolyNode/emb/7z/mac
 
 if [ $host_arch = 'arm64' ]; then
-    ./emb/7z/linux/arm64/7zzs a -ttar darwin-$version-arm64.tar darwin-$version-arm64/
-    ./emb/7z/linux/arm64/7zzs a -tgzip -mx9 darwin-$version-arm64.tar.gz darwin-$version-arm64.tar
+  ./emb/7z/linux/arm64/7zzs a -ttar darwin-$version-arm64.tar darwin-$version-arm64/
+  ./emb/7z/linux/arm64/7zzs a -tgzip -mx9 darwin-$version-arm64.tar.gz darwin-$version-arm64.tar
 else 
-    ./emb/7z/linux/x64/7zzs a -ttar darwin-$version-arm64.tar darwin-$version-arm64/
-    ./emb/7z/linux/x64/7zzs a -tgzip -mx9 darwin-$version-arm64.tar.gz darwin-$version-arm64.tar
+  ./emb/7z/linux/x64/7zzs a -ttar darwin-$version-arm64.tar darwin-$version-arm64/
+  ./emb/7z/linux/x64/7zzs a -tgzip -mx9 darwin-$version-arm64.tar.gz darwin-$version-arm64.tar
 fi
 
 rm -rf darwin-$version-arm64
@@ -200,11 +200,11 @@ cp ./emb/7z/mac/7zz ./darwin-$version-x64/PolyNode/emb/7z/mac
 cp ./emb/7z/mac/License.txt ./darwin-$version-x64/PolyNode/emb/7z/mac
 
 if [ $host_arch = 'arm64' ]; then
-    ./emb/7z/linux/arm64/7zzs a -ttar darwin-$version-x64.tar darwin-$version-x64/
-    ./emb/7z/linux/arm64/7zzs a -tgzip -mx9 darwin-$version-x64.tar.gz darwin-$version-x64.tar
+  ./emb/7z/linux/arm64/7zzs a -ttar darwin-$version-x64.tar darwin-$version-x64/
+  ./emb/7z/linux/arm64/7zzs a -tgzip -mx9 darwin-$version-x64.tar.gz darwin-$version-x64.tar
 else 
-    ./emb/7z/linux/x64/7zzs a -ttar darwin-$version-x64.tar darwin-$version-x64/
-    ./emb/7z/linux/x64/7zzs a -tgzip -mx9 darwin-$version-x64.tar.gz darwin-$version-x64.tar
+  ./emb/7z/linux/x64/7zzs a -ttar darwin-$version-x64.tar darwin-$version-x64/
+  ./emb/7z/linux/x64/7zzs a -tgzip -mx9 darwin-$version-x64.tar.gz darwin-$version-x64.tar
 fi
 
 rm -rf darwin-$version-x64
@@ -253,9 +253,9 @@ cp ./emb/7z/win/7zxa.dll ./win-$version-x64/PolyNode/emb/7z/win
 cp ./emb/7z/win/License.txt ./win-$version-x64/PolyNode/emb/7z/win
 
 if [ $host_arch = 'arm64' ]; then
-    ./emb/7z/linux/arm64/7zzs a -tzip -mx9 win-$version-x64.zip win-$version-x64/
+  ./emb/7z/linux/arm64/7zzs a -tzip -mx9 win-$version-x64.zip win-$version-x64/
 else 
-    ./emb/7z/linux/x64/7zzs a -tzip -mx9 win-$version-x64.zip win-$version-x64/
+  ./emb/7z/linux/x64/7zzs a -tzip -mx9 win-$version-x64.zip win-$version-x64/
 fi
 
 rm -rf win-$version-x64
