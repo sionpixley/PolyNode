@@ -110,7 +110,21 @@ func extractFile(source string, destination string, operatingSystem OperatingSys
 	}
 
 	if operatingSystem == c_WIN {
-		err = exec.Command(command, "x", source, "-o"+destination).Run()
+		err = exec.Command(command, "x", source, "-o"+polynHomeDir).Run()
+		if err != nil {
+			return err
+		}
+
+		parts := strings.Split(source, "\\")
+		folderName := parts[len(parts)-1]
+		folderName = polynHomeDir + "\\" + folderName[:len(folderName)-3]
+
+		err = exec.Command("xcopy", "/s", "/i", folderName+"\\", destination+"\\").Run()
+		if err != nil {
+			return err
+		}
+
+		err = os.RemoveAll(folderName)
 	} else {
 		err = exec.Command(command, "x", source, "-o"+polynHomeDir).Run()
 		if err != nil {

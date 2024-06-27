@@ -13,7 +13,7 @@ func addToWindowsPath(home string) error {
 	if err != nil {
 		return err
 	}
-	path += ";" + home + "\\PolyNode;" + home + "\\nodejs"
+	path += ";" + home + "\\PolyNode;" + home + "\\PolyNode\\nodejs"
 
 	err = key.SetStringValue("Path", path)
 	return err
