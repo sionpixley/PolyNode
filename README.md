@@ -20,36 +20,25 @@ The uninstall executable isn't completely finished yet.
 
 ## How to install PolyNode
 
-Please uninstall all installed versions of Node.js before installing PolyNode.
+Please uninstall all installed versions of Node.js before installing PolyNode. Please make sure Go 1.22 is already installed on your machine.
 
 ### For Linux
 
-#### ARM64 based CPUs
-
-1. Navigate to the [Releases](https://github.com/sionpixley/PolyNode/releases) section and download the linux-\<version\>-arm64.tar.xz file.
-2. Extract the .tar.xz file and run the `setup` executable.
-
-#### x86-64 based CPUs
-
-1. Navigate to the [Releases](https://github.com/sionpixley/PolyNode/releases) section and download the linux-\<version\>-x64.tar.xz file.
-2. Extract the .tar.xz file and run the `setup` executable.
+1. Clone or download this repo.
+2. In your terminal, run the bundle script located at `scripts/linux/bundle.sh`.
+3. The bundle script will create two new directories: `linux-<version>-arm64` and `linux-<version>-x64`. Run the `setup` executable found in the correct directory for your CPU architecture.
 
 ### For macOS
 
-#### ARM64 based CPUs
-
-1. Navigate to the [Releases](https://github.com/sionpixley/PolyNode/releases) section and download the darwin-\<version\>-arm64.tar.gz file.
-2. Extract the .tar.gz file and run the `setup` executable.
-
-#### x86-64 based CPUs
-
-1. Navigate to the [Releases](https://github.com/sionpixley/PolyNode/releases) section and download the darwin-\<version\>-x64.tar.gz file.
-2. Extract the .tar.gz file and run the `setup` executable.
+1. Clone or download this repo.
+2. In your terminal, run the bundle script located at `scripts/mac/bundle.zsh`.
+3. The bundle script will create two new directories: `darwin-<version>-arm64` and `darwin-<version>-x64`. Run the `setup` executable found in the correct directory for your CPU architecture.
 
 ### For Windows
 
-1. Navigate to the [Releases](https://github.com/sionpixley/PolyNode/releases) section and download the win-\<version\>-x64.zip file.
-2. Extract the .zip file and run the `setup.exe` executable.
+1. Clone or download this repo.
+2. In your terminal, run the bundle batchfile located at `scripts/win/bundle.cmd`.
+3. The bundle batchfile will create a new directory: `win-<version>-x64`. Run the `setup.exe` found in that directory.
 
 ## How to use
 
@@ -103,5 +92,5 @@ PolyNode currently cannot search for available versions of Node.js. I would like
 
 ## Information
 
-Go v1.22.4 <br>
+Go 1.22.4 <br>
 7-Zip 24.05
