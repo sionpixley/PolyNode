@@ -82,7 +82,7 @@ or
 
 ### Windows
 
-`%LOCALAPPDATA%\Programs\PolyNode\uninstall\uninstall`
+`%LOCALAPPDATA%\Programs\PolyNode\uninstall\uninstall.exe`
 
 ## Future development
 
