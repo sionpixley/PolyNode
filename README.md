@@ -1,6 +1,6 @@
 # PolyNode
 
-PolyNode is a CLI tool that helps install and manage multiple versions of Node.js on the same device. Primarily made as a side-project to help me learn Go. I do not recommend using this in production. 
+PolyNode is a CLI tool that helps install and manage multiple versions of Node.js on the same device. Primarily made as a side project to help me learn Go. I do not recommend using this in production. 
 
 ## Supported operating systems and CPU architectures
 
@@ -16,11 +16,11 @@ PolyNode only supports Bash or Zsh by default. During the install process, PolyN
 
 ### Windows support
 
-The uninstall executable isn't completely finished yet.
+The uninstall executable isn't completely finished yet. It does remove PolyNode, but does not remove it from the PATH.
 
 ## How to install PolyNode
 
-Please uninstall all installed versions of Node.js before installing PolyNode. Please make sure Go 1.22 is already installed on your machine.
+Please uninstall all installed versions of Node.js before installing PolyNode. Please make sure Go 1.22 is already installed on your machine before proceeding with the following steps.
 
 ### For Linux
 
@@ -92,5 +92,5 @@ PolyNode currently cannot search for available versions of Node.js. I would like
 
 ## Information
 
-Go 1.22.4 <br>
+Go 1.22 <br>
 7-Zip 24.05
