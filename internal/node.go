@@ -117,7 +117,7 @@ func addNode(version string, operatingSystem OperatingSystem, arch Architecture)
 	fmt.Println("Done.")
 
 	fmt.Printf("Extracting %s...", fileName)
-	err = extractFile(filePath, folderPath, operatingSystem, arch)
+	err = extractFile(filePath, folderPath, operatingSystem)
 	if err != nil {
 		return err
 	}

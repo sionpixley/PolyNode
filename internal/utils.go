@@ -90,17 +90,13 @@ func convertToSemanticVersion(version string) (string, error) {
 	}
 }
 
-func extractFile(source string, destination string, operatingSystem OperatingSystem, arch Architecture) error {
-	command, err := get7ZipCmdLocation(operatingSystem, arch)
-	if err != nil {
-		return err
-	}
-
+func extractFile(source string, destination string, operatingSystem OperatingSystem) error {
+	var err error
 	if operatingSystem == c_WIN {
-		err = exec.Command(command, "x", source, "-o"+polynHomeDir).Run()
-		if err != nil {
-			return err
-		}
+		// err = exec.Command(command, "x", source, "-o"+polynHomeDir).Run()
+		// if err != nil {
+		// 	return err
+		// }
 
 		parts := strings.Split(source, "\\")
 		folderName := parts[len(parts)-1]
@@ -113,16 +109,7 @@ func extractFile(source string, destination string, operatingSystem OperatingSys
 
 		err = os.RemoveAll(folderName)
 	} else {
-		err = exec.Command(command, "x", source, "-o"+polynHomeDir).Run()
-		if err != nil {
-			return err
-		}
-
-		parts := strings.Split(source, "/")
-		tarball := parts[len(parts)-1]
-		tarball = polynHomeDir + "/" + tarball[:len(tarball)-3]
-
-		err = exec.Command(command, "x", tarball, "-o"+polynHomeDir).Run()
+		err = exec.Command("tar", "-xf", source, "-C", destination).Run()
 		if err != nil {
 			return err
 		}
@@ -131,36 +118,9 @@ func extractFile(source string, destination string, operatingSystem OperatingSys
 		if err != nil {
 			return err
 		}
-
-		err = os.RemoveAll(tarball)
-		if err != nil {
-			return err
-		}
-
-		tarball = tarball[:len(tarball)-4]
-		err = exec.Command("mv", tarball, destination).Run()
 	}
 
 	return err
-}
-
-func get7ZipCmdLocation(operatingSystem OperatingSystem, arch Architecture) (string, error) {
-	switch operatingSystem {
-	case c_LINUX:
-		if arch == c_ARM64 {
-			return polynHomeDir + "/emb/7z/linux/arm64/7zzs", nil
-		} else if arch == c_X64 {
-			return polynHomeDir + "/emb/7z/linux/x64/7zzs", nil
-		} else {
-			return "", errors.New(c_UNSUPPORTED_ARCH)
-		}
-	case c_MAC:
-		return polynHomeDir + "/emb/7z/mac/7zz", nil
-	case c_WIN:
-		return polynHomeDir + "\\emb\\7z\\win\\7za", nil
-	default:
-		return "", errors.New(c_UNSUPPORTED_OS)
-	}
 }
 
 func printError(err error) {
