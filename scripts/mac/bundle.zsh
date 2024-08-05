@@ -12,21 +12,21 @@ cd ../uninstall
 env GOOS=darwin GOARCH=arm64 go build -o ../uninstall-darwin-arm64
 
 cd ..
-mkdir darwin-$version-arm64
-mv setup-darwin-arm64 ./darwin-$version-arm64/setup
+mkdir PolyNode-$version-darwin-arm64
+mv setup-darwin-arm64 ./PolyNode-$version-darwin-arm64/setup
 
-cd darwin-$version-arm64
+cd PolyNode-$version-darwin-arm64
 mkdir PolyNode
 cd ..
-mv polyn-darwin-arm64 ./darwin-$version-arm64/PolyNode/polyn
+mv polyn-darwin-arm64 ./PolyNode-$version-darwin-arm64/PolyNode/polyn
 
-cp README.md ./darwin-$version-arm64/PolyNode
-cp LICENSE ./darwin-$version-arm64/PolyNode
+cp README.md ./PolyNode-$version-darwin-arm64/PolyNode
+cp LICENSE ./PolyNode-$version-darwin-arm64/PolyNode
 
-cd ./darwin-$version-arm64/PolyNode
+cd ./PolyNode-$version-darwin-arm64/PolyNode
 mkdir uninstall
 cd ../..
-mv uninstall-darwin-arm64 ./darwin-$version-arm64/PolyNode/uninstall/uninstall
+mv uninstall-darwin-arm64 ./PolyNode-$version-darwin-arm64/PolyNode/uninstall/uninstall
 
 # Build macOS x64
 env GOOS=darwin GOARCH=amd64 go build -tags=prod -o polyn-darwin-x64 ./cmd/polyn
@@ -38,18 +38,18 @@ cd ../uninstall
 env GOOS=darwin GOARCH=amd64 go build -o ../uninstall-darwin-x64
 
 cd ..
-mkdir darwin-$version-x64
-mv setup-darwin-x64 ./darwin-$version-x64/setup
+mkdir PolyNode-$version-darwin-x64
+mv setup-darwin-x64 ./PolyNode-$version-darwin-x64/setup
 
-cd darwin-$version-x64
+cd PolyNode-$version-darwin-x64
 mkdir PolyNode
 cd ..
-mv polyn-darwin-x64 ./darwin-$version-x64/PolyNode/polyn
+mv polyn-darwin-x64 ./PolyNode-$version-darwin-x64/PolyNode/polyn
 
-cp README.md ./darwin-$version-x64/PolyNode
-cp LICENSE ./darwin-$version-x64/PolyNode
+cp README.md ./PolyNode-$version-darwin-x64/PolyNode
+cp LICENSE ./PolyNode-$version-darwin-x64/PolyNode
 
-cd ./darwin-$version-x64/PolyNode
+cd ./PolyNode-$version-darwin-x64/PolyNode
 mkdir uninstall
 cd ../..
-mv uninstall-darwin-x64 ./darwin-$version-x64/PolyNode/uninstall/uninstall
+mv uninstall-darwin-x64 ./PolyNode-$version-darwin-x64/PolyNode/uninstall/uninstall

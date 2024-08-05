@@ -12,21 +12,21 @@ cd ../uninstall
 env GOOS=linux GOARCH=arm64 go build -o ../uninstall-linux-arm64
 
 cd ..
-mkdir linux-$version-arm64
-mv setup-linux-arm64 ./linux-$version-arm64/setup
+mkdir PolyNode-$version-linux-arm64
+mv setup-linux-arm64 ./PolyNode-$version-linux-arm64/setup
 
-cd linux-$version-arm64
+cd PolyNode-$version-linux-arm64
 mkdir PolyNode
 cd ..
-mv polyn-linux-arm64 ./linux-$version-arm64/PolyNode/polyn
+mv polyn-linux-arm64 ./PolyNode-$version-linux-arm64/PolyNode/polyn
 
-cp README.md ./linux-$version-arm64/PolyNode
-cp LICENSE ./linux-$version-arm64/PolyNode
+cp README.md ./PolyNode-$version-linux-arm64/PolyNode
+cp LICENSE ./PolyNode-$version-linux-arm64/PolyNode
 
-cd ./linux-$version-arm64/PolyNode
+cd ./PolyNode-$version-linux-arm64/PolyNode
 mkdir uninstall
 cd ../..
-mv uninstall-linux-arm64 ./linux-$version-arm64/PolyNode/uninstall/uninstall
+mv uninstall-linux-arm64 ./PolyNode-$version-linux-arm64/PolyNode/uninstall/uninstall
 
 # Build Linux x64
 env GOOS=linux GOARCH=amd64 go build -tags=prod -o polyn-linux-x64 ./cmd/polyn
@@ -38,18 +38,18 @@ cd ../uninstall
 env GOOS=linux GOARCH=amd64 go build -o ../uninstall-linux-x64
 
 cd ..
-mkdir linux-$version-x64
-mv setup-linux-x64 ./linux-$version-x64/setup
+mkdir PolyNode-$version-linux-x64
+mv setup-linux-x64 ./PolyNode-$version-linux-x64/setup
 
-cd linux-$version-x64
+cd PolyNode-$version-linux-x64
 mkdir PolyNode
 cd ..
-mv polyn-linux-x64 ./linux-$version-x64/PolyNode/polyn
+mv polyn-linux-x64 ./PolyNode-$version-linux-x64/PolyNode/polyn
 
-cp README.md ./linux-$version-x64/PolyNode
-cp LICENSE ./linux-$version-x64/PolyNode
+cp README.md ./PolyNode-$version-linux-x64/PolyNode
+cp LICENSE ./PolyNode-$version-linux-x64/PolyNode
 
-cd ./linux-$version-x64/PolyNode
+cd ./PolyNode-$version-linux-x64/PolyNode
 mkdir uninstall
 cd ../..
-mv uninstall-linux-x64 ./linux-$version-x64/PolyNode/uninstall/uninstall
+mv uninstall-linux-x64 ./PolyNode-$version-linux-x64/PolyNode/uninstall/uninstall
