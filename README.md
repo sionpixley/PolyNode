@@ -1,6 +1,6 @@
 # PolyNode
 
-PolyNode is a CLI tool that helps install and manage multiple versions of Node.js on the same device. Primarily made as a side project to help me learn Go. I do not recommend using it in production in its current state.
+PolyNode is a CLI tool that helps install and manage multiple versions of Node.js on the same device. Primarily made as a side project to help me learn Go.
 
 ## Supported operating systems and CPU architectures
 
