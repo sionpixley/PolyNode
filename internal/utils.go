@@ -5,7 +5,6 @@ import (
 	"fmt"
 	"os"
 	"os/exec"
-	"strings"
 )
 
 func ConvertToArchitecture(archStr string) Architecture {
@@ -50,7 +49,7 @@ func PrintHelp() {
 }
 
 // Windows automatically adds a new line at the end of stdout.
-// Linux and macOS need an extra line printed to make the output look better.
+// Linux and macOS need an extra line printed to match.
 func PrintOptionalLine(operatingSystem OperatingSystem) {
 	if operatingSystem != c_WIN {
 		fmt.Println()
@@ -98,16 +97,16 @@ func extractFile(source string, destination string, operatingSystem OperatingSys
 		// 	return err
 		// }
 
-		parts := strings.Split(source, "\\")
-		folderName := parts[len(parts)-1]
-		folderName = polynHomeDir + "\\" + folderName[:len(folderName)-3]
+		// parts := strings.Split(source, "\\")
+		// folderName := parts[len(parts)-1]
+		// folderName = polynHomeDir + "\\" + folderName[:len(folderName)-3]
 
-		err = exec.Command("xcopy", "/s", "/i", folderName+"\\", destination+"\\").Run()
-		if err != nil {
-			return err
-		}
+		// err = exec.Command("xcopy", "/s", "/i", folderName+"\\", destination+"\\").Run()
+		// if err != nil {
+		// 	return err
+		// }
 
-		err = os.RemoveAll(folderName)
+		// err = os.RemoveAll(folderName)
 	} else {
 		err = os.RemoveAll(destination)
 		if err != nil {
