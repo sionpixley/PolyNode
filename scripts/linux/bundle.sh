@@ -21,7 +21,7 @@ cd ..
 mv polyn-linux-arm64 ./linux-$version-arm64/PolyNode/polyn
 
 cp README.md ./linux-$version-arm64/PolyNode
-cp LICENSE.md ./linux-$version-arm64/PolyNode
+cp LICENSE ./linux-$version-arm64/PolyNode
 
 cd ./linux-$version-arm64/PolyNode
 mkdir uninstall
@@ -47,7 +47,7 @@ cd ..
 mv polyn-linux-x64 ./linux-$version-x64/PolyNode/polyn
 
 cp README.md ./linux-$version-x64/PolyNode
-cp LICENSE.md ./linux-$version-x64/PolyNode
+cp LICENSE ./linux-$version-x64/PolyNode
 
 cd ./linux-$version-x64/PolyNode
 mkdir uninstall
