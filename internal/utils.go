@@ -109,15 +109,22 @@ func extractFile(source string, destination string, operatingSystem OperatingSys
 
 		err = os.RemoveAll(folderName)
 	} else {
-		err = exec.Command("tar", "-xf", source, "-C", destination).Run()
+		err = os.RemoveAll(destination)
+		if err != nil {
+			return err
+		}
+
+		err = os.MkdirAll(destination, os.ModePerm)
+		if err != nil {
+			return err
+		}
+
+		err = exec.Command("tar", "-xf", source, "-C", destination, "--strip-components=1").Run()
 		if err != nil {
 			return err
 		}
 
 		err = os.RemoveAll(source)
-		if err != nil {
-			return err
-		}
 	}
 
 	return err

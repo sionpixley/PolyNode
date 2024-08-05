@@ -21,7 +21,7 @@ cd ..
 mv polyn-darwin-arm64 ./darwin-$version-arm64/PolyNode/polyn
 
 cp README.md ./darwin-$version-arm64/PolyNode
-cp LICENSE.md ./darwin-$version-arm64/PolyNode
+cp LICENSE ./darwin-$version-arm64/PolyNode
 
 cd ./darwin-$version-arm64/PolyNode
 mkdir uninstall
@@ -47,7 +47,7 @@ cd ..
 mv polyn-darwin-x64 ./darwin-$version-x64/PolyNode/polyn
 
 cp README.md ./darwin-$version-x64/PolyNode
-cp LICENSE.md ./darwin-$version-x64/PolyNode
+cp LICENSE ./darwin-$version-x64/PolyNode
 
 cd ./darwin-$version-x64/PolyNode
 mkdir uninstall
