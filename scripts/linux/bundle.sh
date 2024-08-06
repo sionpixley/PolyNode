@@ -53,3 +53,11 @@ cd ./PolyNode-$version-linux-x64/PolyNode
 mkdir uninstall
 cd ../..
 mv uninstall-linux-x64 ./PolyNode-$version-linux-x64/PolyNode/uninstall/uninstall
+
+# Bundle
+
+tar -cJf PolyNode-$version-linux-arm64.tar.xz PolyNode-$version-linux-arm64
+rm -rf PolyNode-$version-linux-arm64
+
+tar -cJf PolyNode-$version-linux-x64.tar.xz PolyNode-$version-linux-x64
+rm -rf PolyNode-$version-linux-x64
