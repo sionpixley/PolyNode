@@ -53,3 +53,63 @@ cd ./PolyNode-$version-darwin-x64/PolyNode
 mkdir uninstall
 cd ../..
 mv uninstall-darwin-x64 ./PolyNode-$version-darwin-x64/PolyNode/uninstall/uninstall
+
+# Notarize
+
+cd PolyNode-$version-darwin-arm64
+codesign -v -f --timestamp --options=runtime --sign $CODESIGN_TEAM_ID setup
+zip setup.zip setup
+rm setup
+xcrun notarytool submit --apple-id $CODESIGN_APPLE_ID --team-id $CODESIGN_TEAM_ID --password $CODESIGN_PASSWD setup.zip
+unzip setup.zip
+rm setup.zip
+
+cd PolyNode
+codesign -v -f --timestamp --options=runtime --sign $CODESIGN_TEAM_ID polyn
+zip polyn.zip polyn
+rm polyn
+xcrun notarytool submit --apple-id $CODESIGN_APPLE_ID --team-id $CODESIGN_TEAM_ID --password $CODESIGN_PASSWD polyn.zip
+unzip polyn.zip
+rm polyn.zip
+
+cd uninstall
+codesign -v -f --timestamp --options=runtime --sign $CODESIGN_TEAM_ID uninstall
+zip uninstall.zip uninstall
+rm uninstall
+xcrun notarytool submit --apple-id $CODESIGN_APPLE_ID --team-id $CODESIGN_TEAM_ID --password $CODESIGN_PASSWD uninstall.zip
+unzip uninstall.zip
+rm uninstall.zip
+cd ../../..
+
+cd PolyNode-$version-darwin-x64
+codesign -v -f --timestamp --options=runtime --sign $CODESIGN_TEAM_ID setup
+zip setup.zip setup
+rm setup
+xcrun notarytool submit --apple-id $CODESIGN_APPLE_ID --team-id $CODESIGN_TEAM_ID --password $CODESIGN_PASSWD setup.zip
+unzip setup.zip
+rm setup.zip
+
+cd PolyNode
+codesign -v -f --timestamp --options=runtime --sign $CODESIGN_TEAM_ID polyn
+zip polyn.zip polyn
+rm polyn
+xcrun notarytool submit --apple-id $CODESIGN_APPLE_ID --team-id $CODESIGN_TEAM_ID --password $CODESIGN_PASSWD polyn.zip
+unzip polyn.zip
+rm polyn.zip
+
+cd uninstall
+codesign -v -f --timestamp --options=runtime --sign $CODESIGN_TEAM_ID uninstall
+zip uninstall.zip uninstall
+rm uninstall
+xcrun notarytool submit --apple-id $CODESIGN_APPLE_ID --team-id $CODESIGN_TEAM_ID --password $CODESIGN_PASSWD uninstall.zip
+unzip uninstall.zip
+rm uninstall.zip
+cd ../../..
+
+# Bundle
+
+tar -czf PolyNode-$version-darwin-arm64.tar.gz PolyNode-$version-darwin-arm64
+rm -rf PolyNode-$version-darwin-arm64
+
+tar -czf PolyNode-$version-darwin-x64.tar.gz PolyNode-$version-darwin-x64
+rm -rf PolyNode-$version-darwin-x64
