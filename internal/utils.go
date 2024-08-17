@@ -72,6 +72,8 @@ func convertToCommand(commandStr string) command {
 		fallthrough
 	case "remove":
 		return c_REMOVE
+	case "search":
+		return c_SEARCH
 	case "use":
 		return c_USE
 	default:

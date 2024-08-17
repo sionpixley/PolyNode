@@ -3,7 +3,7 @@ package internal
 const (
 	// List of commands for printing to the user.
 	c_COMMANDS string = `Commands:
-	
+
   add <version>     : Downloads a specific version of Node.js, but does not switch it to your current version.
   current           : Prints the current version of Node.js.
   install <version> : Downloads a version of Node.js and switches it to your current version.
@@ -11,6 +11,7 @@ const (
   ls                : Alias for list command.
   remove <version>  : Deletes a version of Node.js.
   rm <version>      : Alias for remove command.
+  search            : Prints out a list of the most recent Node.js versions available for download.
   use <version>     : Switches Node.js to a different version.
   version           : Prints the current version of PolyNode.`
 
@@ -31,7 +32,7 @@ const (
   polyn command`
 
 	// PolyNode's version.
-	VERSION string = "v0.1.0"
+	VERSION string = "v0.2.0"
 )
 
 // NA is for Not Applicable.
@@ -50,6 +51,7 @@ const (
 	c_INSTALL
 	c_LIST
 	c_REMOVE
+	c_SEARCH
 	c_USE
 )
 

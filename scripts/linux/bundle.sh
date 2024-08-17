@@ -1,6 +1,6 @@
 #!/bin/bash
 
-version=v0.1.0
+version=v0.2.0
 
 # Build Linux ARM64
 env GOOS=linux GOARCH=arm64 go build -tags=prod -o polyn-linux-arm64 ./cmd/polyn

@@ -1,6 +1,7 @@
 package internal
 
 import (
+	"encoding/json"
 	"errors"
 	"fmt"
 	"io"
@@ -42,6 +43,8 @@ func HandleNode(args []string, operatingSystem OperatingSystem, arch Architectur
 		} else {
 			PrintHelp()
 		}
+	case c_SEARCH:
+		err = searchAvailableNodeVersions()
 	case c_USE:
 		if len(args) > 1 {
 			err = useNode(args[1])
@@ -191,6 +194,41 @@ func listDownloadedNodes() error {
 	return nil
 }
 
+func printAvailableNodeVersions(nodeVersions []NodeVersion) {
+	majorVersions := map[string]bool{}
+	stableVersions := []string{}
+	ltsVersions := []string{}
+
+	for _, nodeVersion := range nodeVersions {
+		if len(majorVersions) == 6 {
+			break
+		}
+
+		majorVersion := strings.Split(nodeVersion.Version, ".")[0]
+		_, exists := majorVersions[majorVersion]
+		if exists {
+			continue
+		} else {
+			majorVersions[majorVersion] = true
+			if nodeVersion.Lts != "false" {
+				ltsVersions = append(ltsVersions, nodeVersion.Version)
+			} else {
+				stableVersions = append(stableVersions, nodeVersion.Version)
+			}
+		}
+	}
+
+	output := `----------------
+| Stable | LTS |
+----------------`
+
+	for i := 0; i < len(stableVersions); i += 1 {
+		output += "| " + stableVersions[i] + " | " + ltsVersions[i] + " |\n----------------"
+	}
+
+	fmt.Println(output)
+}
+
 func printCurrentNode() {
 	output, err := exec.Command("node", "-v").Output()
 	if err != nil {
@@ -213,6 +251,31 @@ func removeNode(version string) error {
 	}
 
 	fmt.Printf("Deleted Node.js %s.\n", version)
+	return nil
+}
+
+func searchAvailableNodeVersions() error {
+	url := "https://nodejs.org/dist/index.json"
+
+	client := new(http.Client)
+	request, err := http.NewRequest(http.MethodGet, url, nil)
+	if err != nil {
+		return err
+	}
+
+	response, err := client.Do(request)
+	if err != nil {
+		return err
+	}
+	defer response.Body.Close()
+
+	nodeVersions := []NodeVersion{}
+	err = json.NewDecoder(response.Body).Decode(&nodeVersions)
+	if err != nil {
+		return err
+	}
+
+	printAvailableNodeVersions(nodeVersions)
 	return nil
 }
 
