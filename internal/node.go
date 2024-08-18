@@ -200,7 +200,7 @@ func printAvailableNodeVersions(nodeVersions []NodeVersion) {
 	ltsVersions := []string{}
 
 	for _, nodeVersion := range nodeVersions {
-		if len(majorVersions) == 6 {
+		if len(stableVersions) == 3 && len(ltsVersions) == 3 {
 			break
 		}
 
@@ -210,20 +210,24 @@ func printAvailableNodeVersions(nodeVersions []NodeVersion) {
 			continue
 		} else {
 			majorVersions[majorVersion] = true
-			if nodeVersion.Lts != "false" {
+			if nodeVersion.Lts && len(ltsVersions) < 3 {
 				ltsVersions = append(ltsVersions, nodeVersion.Version)
-			} else {
+			} else if nodeVersion.Lts {
+				continue
+			} else if len(stableVersions) < 3 {
 				stableVersions = append(stableVersions, nodeVersion.Version)
+			} else {
+				continue
 			}
 		}
 	}
 
-	output := `----------------
-| Stable | LTS |
-----------------`
+	output := `----------------------
+| Stable  | LTS      |
+----------------------`
 
 	for i := 0; i < len(stableVersions); i += 1 {
-		output += "| " + stableVersions[i] + " | " + ltsVersions[i] + " |\n----------------"
+		output += "\n| " + stableVersions[i] + " | " + ltsVersions[i] + " |\n----------------------"
 	}
 
 	fmt.Println(output)

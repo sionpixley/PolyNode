@@ -33,6 +33,10 @@ PolyNode does not require sudo privileges to install. Please uninstall all insta
 
 PolyNode does not require sudo privileges to use the `polyn` command.
 
+### Printing the most recent Node.js versions available for download
+
+`polyn search`
+
 ### Downloading a new version of Node.js
 
 `polyn add <version>`
