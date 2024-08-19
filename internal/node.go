@@ -195,12 +195,14 @@ func listDownloadedNodes() error {
 }
 
 func printAvailableNodeVersions(nodeVersions []NodeVersion) {
+	maxEntries := 7
+
 	majorVersions := map[string]bool{}
 	stableVersions := []string{}
 	ltsVersions := []string{}
 
 	for _, nodeVersion := range nodeVersions {
-		if len(stableVersions) == 3 && len(ltsVersions) == 3 {
+		if len(stableVersions) == maxEntries && len(ltsVersions) == maxEntries {
 			break
 		}
 
@@ -210,11 +212,11 @@ func printAvailableNodeVersions(nodeVersions []NodeVersion) {
 			continue
 		} else {
 			majorVersions[majorVersion] = true
-			if nodeVersion.Lts && len(ltsVersions) < 3 {
+			if nodeVersion.Lts && len(ltsVersions) < maxEntries {
 				ltsVersions = append(ltsVersions, nodeVersion.Version)
 			} else if nodeVersion.Lts {
 				continue
-			} else if len(stableVersions) < 3 {
+			} else if len(stableVersions) < maxEntries {
 				stableVersions = append(stableVersions, nodeVersion.Version)
 			} else {
 				continue
@@ -222,12 +224,14 @@ func printAvailableNodeVersions(nodeVersions []NodeVersion) {
 		}
 	}
 
-	output := `----------------------
-| Stable  | LTS      |
-----------------------`
+	output := "Latest stable versions\n----------------------"
+	for _, stableVersion := range stableVersions {
+		output += "\n" + stableVersion
+	}
 
-	for i := 0; i < len(stableVersions); i += 1 {
-		output += "\n| " + stableVersions[i] + " | " + ltsVersions[i] + " |\n----------------------"
+	output += "\n\nLatest LTS versions\n----------------------"
+	for _, ltsVersion := range ltsVersions {
+		output += "\n" + ltsVersion
 	}
 
 	fmt.Println(output)
