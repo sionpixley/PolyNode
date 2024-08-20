@@ -224,12 +224,12 @@ func printAvailableNodeVersions(nodeVersions []NodeVersion) {
 		}
 	}
 
-	output := "Latest stable versions\n----------------------"
+	output := "Latest stable versions of Node.js\n---------------------------------"
 	for _, stableVersion := range stableVersions {
 		output += "\n" + stableVersion
 	}
 
-	output += "\n\nLatest LTS versions\n----------------------"
+	output += "\n\nLatest LTS versions of Node.js\n---------------------------------"
 	for _, ltsVersion := range ltsVersions {
 		output += "\n" + ltsVersion
 	}
