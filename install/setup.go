@@ -32,8 +32,8 @@ func main() {
 	}
 }
 
-func addToBashPath(home string) error {
-	contentData, err := os.ReadFile(home + "/.bashrc")
+func addToPath(home string, rcFile string) error {
+	contentData, err := os.ReadFile(home + "/" + rcFile)
 	if err != nil {
 		return err
 	}
@@ -41,34 +41,40 @@ func addToBashPath(home string) error {
 	content := string(contentData)
 	content += "\nPATH=$PATH:" + home + "/.PolyNode:" + home + "/.PolyNode/nodejs/bin"
 
-	return os.WriteFile(home+"/.bashrc", []byte(content), 0644)
+	return os.WriteFile(home+"/"+rcFile, []byte(content), 0644)
 }
 
-func addToZshPath(home string) error {
-	contentData, err := os.ReadFile(home + "/.zshrc")
-	if err != nil {
-		return err
+func checkForOldVersion(home string) error {
+	if _, err := os.Stat(home + "/.PolyNode"); os.IsNotExist(err) {
+		return nil
+	} else {
+		return uninstallOldVersion(home)
 	}
-
-	content := string(contentData)
-	content += "\nPATH=$PATH:" + home + "/.PolyNode:" + home + "/.PolyNode/nodejs/bin"
-
-	return os.WriteFile(home+"/.zshrc", []byte(content), 0644)
 }
 
 func install() error {
 	home := os.Getenv("HOME")
-	err := exec.Command("cp", "-r", "PolyNode", home+"/.PolyNode").Run()
+
+	err := checkForOldVersion(home)
+	if err != nil {
+		return err
+	}
+
+	err = exec.Command("cp", "-r", "PolyNode", home+"/.PolyNode").Run()
 	if err != nil {
 		return err
 	}
 
 	shell := os.Getenv("SHELL")
 	if strings.Contains(shell, "bash") {
-		return addToBashPath(home)
+		return addToPath(home, ".bashrc")
 	} else if strings.Contains(shell, "zsh") {
-		return addToZshPath(home)
+		return addToPath(home, ".zshrc")
 	} else {
 		return errors.New("unsupported shell")
 	}
+}
+
+func uninstallOldVersion(home string) error {
+	return exec.Command(home + "/.PolyNode/uninstall/uninstall").Run()
 }
