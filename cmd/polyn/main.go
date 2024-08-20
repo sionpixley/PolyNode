@@ -13,7 +13,7 @@ func main() {
 	operatingSystem := internal.ConvertToOperatingSystem(runtime.GOOS)
 	arch := internal.ConvertToArchitecture(runtime.GOARCH)
 
-	defer internal.PrintOptionalLine(operatingSystem)
+	defer fmt.Println()
 
 	if !internal.IsSupportedOperatingSystem(operatingSystem) {
 		fmt.Println("Not a supported operating system.")
@@ -34,14 +34,10 @@ func main() {
 	}
 
 	if args[1] == "version" {
-		printVersion()
+		fmt.Println(internal.VERSION)
 	} else if internal.IsKnownCommand(args[1]) {
 		internal.HandleNode(args[1:], operatingSystem, arch)
 	} else {
 		internal.PrintHelp()
 	}
-}
-
-func printVersion() {
-	fmt.Println(internal.VERSION)
 }

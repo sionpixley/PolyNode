@@ -24,8 +24,6 @@ func ConvertToOperatingSystem(osStr string) OperatingSystem {
 		return c_MAC
 	case "linux":
 		return c_LINUX
-	case "windows":
-		return c_WIN
 	default:
 		return c_NA_OS
 	}
@@ -48,14 +46,6 @@ func PrintHelp() {
 	fmt.Println(help)
 }
 
-// Windows automatically adds a new line at the end of stdout.
-// Linux and macOS need an extra line printed to match.
-func PrintOptionalLine(operatingSystem OperatingSystem) {
-	if operatingSystem != c_WIN {
-		fmt.Println()
-	}
-}
-
 func convertToCommand(commandStr string) command {
 	switch commandStr {
 	case "add":
@@ -72,6 +62,8 @@ func convertToCommand(commandStr string) command {
 		fallthrough
 	case "remove":
 		return c_REMOVE
+	case "search":
+		return c_SEARCH
 	case "use":
 		return c_USE
 	default:
@@ -89,46 +81,21 @@ func convertToSemanticVersion(version string) (string, error) {
 	}
 }
 
-func extractFile(source string, destination string, operatingSystem OperatingSystem) error {
-	var err error
-	if operatingSystem == c_WIN {
-		// err = exec.Command(command, "x", source, "-o"+polynHomeDir).Run()
-		// if err != nil {
-		// 	return err
-		// }
-
-		// parts := strings.Split(source, "\\")
-		// folderName := parts[len(parts)-1]
-		// folderName = polynHomeDir + "\\" + folderName[:len(folderName)-3]
-
-		// err = exec.Command("xcopy", "/s", "/i", folderName+"\\", destination+"\\").Run()
-		// if err != nil {
-		// 	return err
-		// }
-
-		// err = os.RemoveAll(folderName)
-	} else {
-		err = os.RemoveAll(destination)
-		if err != nil {
-			return err
-		}
-
-		err = os.MkdirAll(destination, os.ModePerm)
-		if err != nil {
-			return err
-		}
-
-		err = exec.Command("tar", "-xf", source, "-C", destination, "--strip-components=1").Run()
-		if err != nil {
-			return err
-		}
-
-		err = os.RemoveAll(source)
+func extractFile(source string, destination string) error {
+	err := os.RemoveAll(destination)
+	if err != nil {
+		return err
 	}
 
-	return err
-}
+	err = os.MkdirAll(destination, os.ModePerm)
+	if err != nil {
+		return err
+	}
 
-func printError(err error) {
-	fmt.Println(err.Error())
+	err = exec.Command("tar", "-xf", source, "-C", destination, "--strip-components=1").Run()
+	if err != nil {
+		return err
+	}
+
+	return os.RemoveAll(source)
 }

@@ -1,6 +1,7 @@
 package internal
 
 import (
+	"encoding/json"
 	"errors"
 	"fmt"
 	"io"
@@ -42,6 +43,8 @@ func HandleNode(args []string, operatingSystem OperatingSystem, arch Architectur
 		} else {
 			PrintHelp()
 		}
+	case c_SEARCH:
+		err = searchAvailableNodeVersions()
 	case c_USE:
 		if len(args) > 1 {
 			err = useNode(args[1])
@@ -53,7 +56,7 @@ func HandleNode(args []string, operatingSystem OperatingSystem, arch Architectur
 	}
 
 	if err != nil {
-		printError(err)
+		fmt.Println(err.Error())
 	}
 }
 
@@ -85,12 +88,12 @@ func addNode(version string, operatingSystem OperatingSystem, arch Architecture)
 	}
 	defer response.Body.Close()
 
-	err = os.MkdirAll(polynHomeDir+pathSeparator+"node", os.ModePerm)
+	err = os.MkdirAll(polynHomeDir+"/node", os.ModePerm)
 	if err != nil {
 		return err
 	}
 
-	filePath := polynHomeDir + pathSeparator + "node" + pathSeparator + fileName
+	filePath := polynHomeDir + "/node/" + fileName
 	err = os.RemoveAll(filePath)
 	if err != nil {
 		return err
@@ -108,7 +111,7 @@ func addNode(version string, operatingSystem OperatingSystem, arch Architecture)
 	// Calling file.Close() explicitly instead of with defer because the 7-Zip command was getting a lock error on the zip file.
 	file.Close()
 
-	folderPath := polynHomeDir + pathSeparator + "node" + pathSeparator + version
+	folderPath := polynHomeDir + "/node/" + version
 	err = os.RemoveAll(folderPath)
 	if err != nil {
 		return err
@@ -117,7 +120,7 @@ func addNode(version string, operatingSystem OperatingSystem, arch Architecture)
 	fmt.Println("Done.")
 
 	fmt.Printf("Extracting %s...", fileName)
-	err = extractFile(filePath, folderPath, operatingSystem)
+	err = extractFile(filePath, folderPath)
 	if err != nil {
 		return err
 	}
@@ -147,8 +150,6 @@ func getNodeTargetArchiveName(operatingSystem OperatingSystem, arch Architecture
 		} else if arch == c_X64 {
 			archiveName = "darwin-x64.tar.gz"
 		}
-	case c_WIN:
-		archiveName = "win-x64.zip"
 	default:
 		return "", errors.New(c_UNSUPPORTED_OS)
 	}
@@ -162,12 +163,11 @@ func installNode(version string, operatingSystem OperatingSystem, arch Architect
 		return err
 	}
 
-	err = useNode(version)
-	return err
+	return useNode(version)
 }
 
 func listDownloadedNodes() error {
-	dir, err := os.ReadDir(polynHomeDir + pathSeparator + "node")
+	dir, err := os.ReadDir(polynHomeDir + "/node")
 	if err != nil {
 		return err
 	}
@@ -191,6 +191,49 @@ func listDownloadedNodes() error {
 	return nil
 }
 
+func printAvailableNodeVersions(nodeVersions []NodeVersion) {
+	maxEntries := 7
+
+	majorVersions := map[string]bool{}
+	stableVersions := []string{}
+	ltsVersions := []string{}
+
+	for _, nodeVersion := range nodeVersions {
+		if len(stableVersions) == maxEntries && len(ltsVersions) == maxEntries {
+			break
+		}
+
+		majorVersion := strings.Split(nodeVersion.Version, ".")[0]
+		_, exists := majorVersions[majorVersion]
+		if exists {
+			continue
+		} else {
+			majorVersions[majorVersion] = true
+			if nodeVersion.Lts && len(ltsVersions) < maxEntries {
+				ltsVersions = append(ltsVersions, nodeVersion.Version)
+			} else if nodeVersion.Lts {
+				continue
+			} else if len(stableVersions) < maxEntries {
+				stableVersions = append(stableVersions, nodeVersion.Version)
+			} else {
+				continue
+			}
+		}
+	}
+
+	output := "Latest stable versions of Node.js\n---------------------------------"
+	for _, stableVersion := range stableVersions {
+		output += "\n" + stableVersion
+	}
+
+	output += "\n\nLatest LTS versions of Node.js\n---------------------------------"
+	for _, ltsVersion := range ltsVersions {
+		output += "\n" + ltsVersion
+	}
+
+	fmt.Println(output)
+}
+
 func printCurrentNode() {
 	output, err := exec.Command("node", "-v").Output()
 	if err != nil {
@@ -206,13 +249,38 @@ func removeNode(version string) error {
 		return err
 	}
 
-	folderName := polynHomeDir + pathSeparator + "node" + pathSeparator + version
+	folderName := polynHomeDir + "/node/" + version
 	err = os.RemoveAll(folderName)
 	if err != nil {
 		return err
 	}
 
 	fmt.Printf("Deleted Node.js %s.\n", version)
+	return nil
+}
+
+func searchAvailableNodeVersions() error {
+	url := "https://nodejs.org/dist/index.json"
+
+	client := new(http.Client)
+	request, err := http.NewRequest(http.MethodGet, url, nil)
+	if err != nil {
+		return err
+	}
+
+	response, err := client.Do(request)
+	if err != nil {
+		return err
+	}
+	defer response.Body.Close()
+
+	nodeVersions := []NodeVersion{}
+	err = json.NewDecoder(response.Body).Decode(&nodeVersions)
+	if err != nil {
+		return err
+	}
+
+	printAvailableNodeVersions(nodeVersions)
 	return nil
 }
 
@@ -224,12 +292,12 @@ func useNode(version string) error {
 
 	fmt.Printf("Switching to Node.js %s...", version)
 
-	err = os.RemoveAll(polynHomeDir + pathSeparator + "nodejs")
+	err = os.RemoveAll(polynHomeDir + "/nodejs")
 	if err != nil {
 		return err
 	}
 
-	err = os.Symlink(polynHomeDir+pathSeparator+"node"+pathSeparator+version, polynHomeDir+pathSeparator+"nodejs")
+	err = os.Symlink(polynHomeDir+"/node/"+version, polynHomeDir+"/nodejs")
 	if err != nil {
 		return err
 	}

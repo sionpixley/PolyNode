@@ -1,5 +1,3 @@
 module install
 
-go 1.22.2
-
-require golang.org/x/sys v0.20.0
+go 1.23.0
