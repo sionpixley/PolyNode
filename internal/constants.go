@@ -57,5 +57,4 @@ const (
 	c_NA_OS OperatingSystem = iota
 	c_LINUX
 	c_MAC
-	c_WIN
 )

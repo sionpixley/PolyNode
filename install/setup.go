@@ -12,16 +12,14 @@ import (
 func main() {
 	operatingSystem := runtime.GOOS
 
-	defer printOptionalLine(operatingSystem)
+	defer fmt.Println()
 
 	var err error
 	switch operatingSystem {
 	case "darwin":
 		fallthrough
 	case "linux":
-		err = installLinux()
-	case "windows":
-		err = installWindows()
+		err = install()
 	default:
 		err = errors.New("unsupported operating system")
 	}
@@ -43,8 +41,7 @@ func addToBashPath(home string) error {
 	content := string(contentData)
 	content += "\nPATH=$PATH:" + home + "/.PolyNode:" + home + "/.PolyNode/nodejs/bin"
 
-	err = os.WriteFile(home+"/.bashrc", []byte(content), 0644)
-	return err
+	return os.WriteFile(home+"/.bashrc", []byte(content), 0644)
 }
 
 func addToZshPath(home string) error {
@@ -56,11 +53,10 @@ func addToZshPath(home string) error {
 	content := string(contentData)
 	content += "\nPATH=$PATH:" + home + "/.PolyNode:" + home + "/.PolyNode/nodejs/bin"
 
-	err = os.WriteFile(home+"/.zshrc", []byte(content), 0644)
-	return err
+	return os.WriteFile(home+"/.zshrc", []byte(content), 0644)
 }
 
-func installLinux() error {
+func install() error {
 	home := os.Getenv("HOME")
 	err := exec.Command("cp", "-r", "PolyNode", home+"/.PolyNode").Run()
 	if err != nil {
@@ -74,21 +70,5 @@ func installLinux() error {
 		return addToZshPath(home)
 	} else {
 		return errors.New("unsupported shell")
-	}
-}
-
-func installWindows() error {
-	home := os.Getenv("LOCALAPPDATA") + "\\Programs"
-	err := exec.Command("xcopy", "/s", "/i", ".\\PolyNode\\", home+"\\PolyNode\\").Run()
-	if err != nil {
-		return err
-	}
-
-	return addToWindowsPath(home)
-}
-
-func printOptionalLine(operatingSystem string) {
-	if operatingSystem != "windows" {
-		fmt.Println()
 	}
 }

@@ -20,14 +20,10 @@ const c_MAC_TEMP string = `#!/bin/zsh
 rm -rf $HOME/.PolyNode
 rm -f $HOME/polyn-uninstall-temp.zsh`
 
-const c_WIN_TEMP string = `del C:\\Program Files\\PolyNode /s /f /q > nul
-rmdir C:\\Program Files\\PolyNode /s /q
-del C:\\polyn-uninstall-temp.cmd`
-
 func main() {
 	operatingSystem := runtime.GOOS
 
-	defer printOptionalLine(operatingSystem)
+	defer fmt.Println()
 
 	var err error
 	switch operatingSystem {
@@ -35,20 +31,12 @@ func main() {
 		err = uninstallMac()
 	case "linux":
 		err = uninstallLinux()
-	case "windows":
-		err = uninstallWindows()
 	default:
 		err = errors.New("unsupported operating system")
 	}
 
 	if err != nil {
 		fmt.Println(err.Error())
-	}
-}
-
-func printOptionalLine(operatingSystem string) {
-	if operatingSystem != "windows" {
-		fmt.Println()
 	}
 }
 
@@ -88,8 +76,7 @@ func removePathFromBashrc(home string) error {
 	// Need to have more control before writing to the file.
 	bashrc.Close()
 
-	err = os.WriteFile(home+"/.bashrc", []byte(content), 0644)
-	return err
+	return os.WriteFile(home+"/.bashrc", []byte(content), 0644)
 }
 
 func removePathFromZshrc(home string) error {
@@ -117,8 +104,7 @@ func removePathFromZshrc(home string) error {
 	// Need to have more control before writing to the file.
 	zshrc.Close()
 
-	err = os.WriteFile(home+"/.zshrc", []byte(content), 0644)
-	return err
+	return os.WriteFile(home+"/.zshrc", []byte(content), 0644)
 }
 
 func uninstallLinux() error {
@@ -149,14 +135,4 @@ func uninstallMac() error {
 	}
 
 	return exec.Command("/bin/zsh", "-c", home+"/polyn-uninstall-temp.zsh").Run()
-}
-
-func uninstallWindows() error {
-	err := os.WriteFile("C:\\polyn-uninstall-temp.cmd", []byte(c_WIN_TEMP), 0700)
-	if err != nil {
-		return err
-	}
-
-	err = exec.Command("C:\\polyn-uninstall-temp").Run()
-	return err
 }
