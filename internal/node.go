@@ -14,7 +14,7 @@ import (
 // Main function for Node.js actions.
 func HandleNode(args []string, operatingSystem OperatingSystem, arch Architecture) {
 	if len(args) == 0 {
-		PrintHelp()
+		fmt.Println(HELP)
 		return
 	}
 
@@ -25,7 +25,7 @@ func HandleNode(args []string, operatingSystem OperatingSystem, arch Architectur
 		if len(args) > 1 {
 			err = addNode(args[1], operatingSystem, arch)
 		} else {
-			PrintHelp()
+			fmt.Println(HELP)
 		}
 	case c_CURRENT:
 		printCurrentNode()
@@ -33,7 +33,7 @@ func HandleNode(args []string, operatingSystem OperatingSystem, arch Architectur
 		if len(args) > 1 {
 			err = installNode(args[1], operatingSystem, arch)
 		} else {
-			PrintHelp()
+			fmt.Println(HELP)
 		}
 	case c_LIST:
 		err = listDownloadedNodes()
@@ -41,7 +41,7 @@ func HandleNode(args []string, operatingSystem OperatingSystem, arch Architectur
 		if len(args) > 1 {
 			err = removeNode(args[1])
 		} else {
-			PrintHelp()
+			fmt.Println(HELP)
 		}
 	case c_SEARCH:
 		err = searchAvailableNodeVersions()
@@ -49,10 +49,10 @@ func HandleNode(args []string, operatingSystem OperatingSystem, arch Architectur
 		if len(args) > 1 {
 			err = useNode(args[1])
 		} else {
-			PrintHelp()
+			fmt.Println(HELP)
 		}
 	default:
-		PrintHelp()
+		fmt.Println(HELP)
 	}
 
 	if err != nil {
@@ -108,7 +108,7 @@ func addNode(version string, operatingSystem OperatingSystem, arch Architecture)
 	if err != nil {
 		return err
 	}
-	// Calling file.Close() explicitly instead of with defer because the 7-Zip command was getting a lock error on the zip file.
+	// Calling file.Close() explicitly instead of with defer to prevent lock errors.
 	file.Close()
 
 	folderPath := polynHomeDir + "/node/" + version

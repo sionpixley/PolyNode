@@ -24,7 +24,7 @@ func main() {
 	}
 
 	if len(os.Args) == 1 {
-		internal.PrintHelp()
+		fmt.Println(internal.HELP)
 		return
 	}
 
@@ -38,6 +38,6 @@ func main() {
 	} else if internal.IsKnownCommand(args[1]) {
 		internal.HandleNode(args[1:], operatingSystem, arch)
 	} else {
-		internal.PrintHelp()
+		fmt.Println(internal.HELP)
 	}
 }

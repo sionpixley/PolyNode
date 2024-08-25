@@ -38,7 +38,7 @@ func addToPath(home string, rcFile string) error {
 	if err != nil {
 		return err
 	}
-	// Calling close directly instead of with defer.
+	// Calling close directly instead of with defer. Will be reopening the file soon.
 	f.Close()
 
 	contentData, err := os.ReadFile(home + "/" + rcFile)
