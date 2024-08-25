@@ -16,7 +16,8 @@ const (
   version           : Prints the current version of PolyNode.`
 
 	// PolyNode description for printing to the user.
-	c_DESCRIPTION string = `Description:
+	c_DESCRIPTION string = `
+Description:
 
   PolyNode is a CLI tool that helps install and manage multiple versions of Node.js on the same device.`
 

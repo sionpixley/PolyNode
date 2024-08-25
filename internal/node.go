@@ -221,7 +221,7 @@ func printAvailableNodeVersions(nodeVersions []NodeVersion) {
 		}
 	}
 
-	output := "Latest stable versions of Node.js\n---------------------------------"
+	output := "\nLatest stable versions of Node.js\n---------------------------------"
 	for _, stableVersion := range stableVersions {
 		output += "\n" + stableVersion
 	}
@@ -253,6 +253,21 @@ func removeNode(version string) error {
 	err = os.RemoveAll(folderName)
 	if err != nil {
 		return err
+	}
+
+	current := ""
+	output, err := exec.Command("node", "-v").Output()
+	if err != nil {
+		// Do nothing. This just means that there isn't a current version set.
+	} else {
+		current = strings.TrimSpace(string(output))
+	}
+
+	if current == version {
+		err = os.RemoveAll(folderName)
+		if err != nil {
+			return err
+		}
 	}
 
 	fmt.Printf("Deleted Node.js %s.\n", version)

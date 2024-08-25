@@ -10,12 +10,12 @@ import (
 	"strings"
 )
 
-const c_LINUX_TEMP string = `#!/bin/bash
+const linuxTemp string = `#!/bin/bash
 
 rm -rf $HOME/.PolyNode
 rm -f $HOME/polyn-uninstall-temp.sh`
 
-const c_MAC_TEMP string = `#!/bin/zsh
+const macTemp string = `#!/bin/zsh
 
 rm -rf $HOME/.PolyNode
 rm -f $HOME/polyn-uninstall-temp.zsh`
@@ -40,71 +40,43 @@ func main() {
 	}
 }
 
+func removePath(home string, rcFile string) error {
+	rc, err := os.Open(home + "/" + rcFile)
+	if err != nil {
+		return err
+	}
+
+	scanner := bufio.NewScanner(rc)
+	scanner.Split(bufio.ScanLines)
+	content := ""
+	for scanner.Scan() {
+		line := scanner.Text()
+		if !strings.Contains(line, "PATH=$PATH:"+home+"/.PolyNode:"+home+"/.PolyNode/nodejs/bin") {
+			content += line + "\n"
+		}
+	}
+
+	// Removing the extra new line character.
+	if len(content) > 0 {
+		content = content[:len(content)-1]
+	}
+
+	// Explicitly calling close instead of using defer.
+	// Need to have more control before writing to the file.
+	rc.Close()
+
+	return os.WriteFile(home+"/"+rcFile, []byte(content), 0644)
+}
+
 func removePathLinuxAndMac(home string) error {
 	shell := os.Getenv("SHELL")
 	if strings.Contains(shell, "bash") {
-		return removePathFromBashrc(home)
+		return removePath(home, ".bashrc")
 	} else if strings.Contains(shell, "zsh") {
-		return removePathFromZshrc(home)
+		return removePath(home, ".zshrc")
 	} else {
 		return errors.New("unsupported shell")
 	}
-}
-
-func removePathFromBashrc(home string) error {
-	bashrc, err := os.Open(home + "/.bashrc")
-	if err != nil {
-		return err
-	}
-
-	scanner := bufio.NewScanner(bashrc)
-	scanner.Split(bufio.ScanLines)
-	content := ""
-	for scanner.Scan() {
-		line := scanner.Text()
-		if !strings.Contains(line, "PATH=$PATH:"+home+"/.PolyNode:"+home+"/.PolyNode/nodejs/bin") {
-			content += line + "\n"
-		}
-	}
-
-	// Removing the extra new line character.
-	if len(content) > 0 {
-		content = content[:len(content)-1]
-	}
-
-	// Explicitly calling close instead of using defer.
-	// Need to have more control before writing to the file.
-	bashrc.Close()
-
-	return os.WriteFile(home+"/.bashrc", []byte(content), 0644)
-}
-
-func removePathFromZshrc(home string) error {
-	zshrc, err := os.Open(home + "/.zshrc")
-	if err != nil {
-		return err
-	}
-
-	scanner := bufio.NewScanner(zshrc)
-	scanner.Split(bufio.ScanLines)
-	content := ""
-	for scanner.Scan() {
-		line := scanner.Text()
-		if !strings.Contains(line, "PATH=$PATH:"+home+"/.PolyNode:"+home+"/.PolyNode/nodejs/bin") {
-			content += line + "\n"
-		}
-	}
-
-	// Removing the extra new line character.
-	if len(content) > 0 {
-		content = content[:len(content)-1]
-	}
-
-	// Explicitly calling close instead of using defer.
-	// Need to have more control before writing to the file.
-	zshrc.Close()
-
-	return os.WriteFile(home+"/.zshrc", []byte(content), 0644)
 }
 
 func uninstallLinux() error {
@@ -114,7 +86,7 @@ func uninstallLinux() error {
 		return err
 	}
 
-	err = os.WriteFile(home+"/polyn-uninstall-temp.sh", []byte(c_LINUX_TEMP), 0700)
+	err = os.WriteFile(home+"/polyn-uninstall-temp.sh", []byte(linuxTemp), 0700)
 	if err != nil {
 		return err
 	}
@@ -129,7 +101,7 @@ func uninstallMac() error {
 		return err
 	}
 
-	err = os.WriteFile(home+"/polyn-uninstall-temp.zsh", []byte(c_MAC_TEMP), 0700)
+	err = os.WriteFile(home+"/polyn-uninstall-temp.zsh", []byte(macTemp), 0700)
 	if err != nil {
 		return err
 	}
