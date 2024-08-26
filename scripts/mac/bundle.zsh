@@ -1,6 +1,6 @@
 #!/bin/zsh
 
-version=v0.2.0
+version=v0.2.1
 
 # Build macOS ARM64
 env GOOS=darwin GOARCH=arm64 go build -tags=prod -o polyn-darwin-arm64 ./cmd/polyn
