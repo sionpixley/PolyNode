@@ -2,7 +2,6 @@ package internal
 
 import (
 	"errors"
-	"fmt"
 	"os"
 	"os/exec"
 )
@@ -39,11 +38,6 @@ func IsSupportedArchitecture(arch Architecture) bool {
 
 func IsSupportedOperatingSystem(operatingSystem OperatingSystem) bool {
 	return operatingSystem != c_NA_OS
-}
-
-func PrintHelp() {
-	help := c_DESCRIPTION + "\n\n" + c_USAGE + "\n\n" + c_COMMANDS
-	fmt.Println(help)
 }
 
 func convertToCommand(commandStr string) command {

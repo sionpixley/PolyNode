@@ -33,6 +33,14 @@ func main() {
 }
 
 func addToPath(home string, rcFile string) error {
+	// Creating the file if it doesn't exist.
+	f, err := os.OpenFile(home+"/"+rcFile, os.O_RDONLY|os.O_CREATE, 0644)
+	if err != nil {
+		return err
+	}
+	// Calling close directly instead of with defer. Will be reopening the file soon.
+	f.Close()
+
 	contentData, err := os.ReadFile(home + "/" + rcFile)
 	if err != nil {
 		return err

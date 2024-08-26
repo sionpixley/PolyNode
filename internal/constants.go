@@ -1,12 +1,20 @@
 package internal
 
 const (
-	// List of commands for printing to the user.
-	c_COMMANDS string = `Commands:
+	HELP string = `
+Description:
+
+  PolyNode is a CLI tool that helps install and manage multiple versions of Node.js on the same device.
+
+Usage:
+
+  polyn command
+
+Commands:
 
   add <version>     : Downloads a specific version of Node.js, but does not switch it to your current version.
   current           : Prints the current version of Node.js.
-  install <version> : Downloads a version of Node.js and switches it to your current version.
+  install <version> : Equivalent to the add command followed by the use command.
   list              : Prints the list of downloaded Node.js versions.
   ls                : Alias for list command.
   remove <version>  : Deletes a version of Node.js.
@@ -15,21 +23,11 @@ const (
   use <version>     : Switches Node.js to a different version.
   version           : Prints the current version of PolyNode.`
 
-	// PolyNode description for printing to the user.
-	c_DESCRIPTION string = `Description:
-
-  PolyNode is a CLI tool that helps install and manage multiple versions of Node.js on the same device.`
+	// PolyNode's version.
+	VERSION string = "v0.2.0"
 
 	// Unsupported operating system error message.
 	c_UNSUPPORTED_OS string = "unsupported operating system"
-
-	// Syntax for using the polyn CLI.
-	c_USAGE string = `Usage:
-
-  polyn command`
-
-	// PolyNode's version.
-	VERSION string = "v0.2.0"
 )
 
 // NA is for Not Applicable.
