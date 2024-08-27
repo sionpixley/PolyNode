@@ -1,6 +1,6 @@
 #!/bin/bash
 
-version=v0.2.0
+version=v0.2.2
 
 # Build Linux ARM64
 env GOOS=linux GOARCH=arm64 go build -tags=prod -o polyn-linux-arm64 ./cmd/polyn
@@ -22,6 +22,7 @@ mv polyn-linux-arm64 ./PolyNode-$version-linux-arm64/PolyNode/polyn
 
 cp README.md ./PolyNode-$version-linux-arm64/PolyNode
 cp LICENSE ./PolyNode-$version-linux-arm64/PolyNode
+cp SECURITY.md ./PolyNode-$version-linux-arm64/PolyNode
 
 cd ./PolyNode-$version-linux-arm64/PolyNode
 mkdir uninstall
@@ -48,6 +49,7 @@ mv polyn-linux-x64 ./PolyNode-$version-linux-x64/PolyNode/polyn
 
 cp README.md ./PolyNode-$version-linux-x64/PolyNode
 cp LICENSE ./PolyNode-$version-linux-x64/PolyNode
+cp SECURITY.md ./PolyNode-$version-linux-x64/PolyNode
 
 cd ./PolyNode-$version-linux-x64/PolyNode
 mkdir uninstall
