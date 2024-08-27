@@ -1,6 +1,6 @@
 #!/bin/zsh
 
-version=v0.2.1
+version=v0.3.0
 
 # Build macOS ARM64
 env GOOS=darwin GOARCH=arm64 go build -tags=prod -o polyn-darwin-arm64 ./cmd/polyn
@@ -22,6 +22,8 @@ mv polyn-darwin-arm64 ./PolyNode-$version-darwin-arm64/PolyNode/polyn
 
 cp README.md ./PolyNode-$version-darwin-arm64/PolyNode
 cp LICENSE ./PolyNode-$version-darwin-arm64/PolyNode
+cp SECURITY.md ./PolyNode-$version-darwin-arm64/PolyNode
+cp CODE_OF_CONDUCT.md ./PolyNode-$version-darwin-arm64/PolyNode
 
 cd ./PolyNode-$version-darwin-arm64/PolyNode
 mkdir uninstall
@@ -48,6 +50,8 @@ mv polyn-darwin-x64 ./PolyNode-$version-darwin-x64/PolyNode/polyn
 
 cp README.md ./PolyNode-$version-darwin-x64/PolyNode
 cp LICENSE ./PolyNode-$version-darwin-x64/PolyNode
+cp SECURITY.md ./PolyNode-$version-darwin-x64/PolyNode
+cp CODE_OF_CONDUCT.md ./PolyNode-$version-darwin-x64/PolyNode
 
 cd ./PolyNode-$version-darwin-x64/PolyNode
 mkdir uninstall

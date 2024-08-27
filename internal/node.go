@@ -36,7 +36,7 @@ func HandleNode(args []string, operatingSystem OperatingSystem, arch Architectur
 			fmt.Println(HELP)
 		}
 	case c_LIST:
-		err = listDownloadedNodes()
+		listDownloadedNodes()
 	case c_REMOVE:
 		if len(args) > 1 {
 			err = removeNode(args[1])
@@ -166,10 +166,12 @@ func installNode(version string, operatingSystem OperatingSystem, arch Architect
 	return useNode(version)
 }
 
-func listDownloadedNodes() error {
+func listDownloadedNodes() {
 	dir, err := os.ReadDir(polynHomeDir + "/node")
 	if err != nil {
-		return err
+		// This means that the node folder doesn't exist. So, there are no Node.js versions downloaded.
+		fmt.Println("There are no Node.js versions downloaded.")
+		fmt.Println("To download a Node.js version, use the 'add' or 'install' command.")
 	}
 
 	current := ""
@@ -187,8 +189,6 @@ func listDownloadedNodes() error {
 			fmt.Printf("Node.js - %s\n", item.Name())
 		}
 	}
-
-	return nil
 }
 
 func printAvailableNodeVersions(nodeVersions []NodeVersion) {

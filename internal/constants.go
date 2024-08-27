@@ -24,7 +24,7 @@ Commands:
   version           : Prints the current version of PolyNode.`
 
 	// PolyNode's version.
-	VERSION string = "v0.2.1"
+	VERSION string = "v0.3.0"
 
 	// Unsupported operating system error message.
 	c_UNSUPPORTED_OS string = "unsupported operating system"
@@ -55,4 +55,5 @@ const (
 	c_NA_OS OperatingSystem = iota
 	c_LINUX
 	c_MAC
+	c_WINDOWS
 )
