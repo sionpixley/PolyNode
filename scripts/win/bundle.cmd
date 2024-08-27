@@ -26,7 +26,6 @@ move polyn.exe .\PolyNode-%version%-win-x64\PolyNode
 copy README.md .\PolyNode-%version%-win-x64\PolyNode
 copy LICENSE .\PolyNode-%version%-win-x64\PolyNode
 copy SECURITY.md .\PolyNode-%version%-win-x64\PolyNode
-copy CODE_OF_CONDUCT.md .\PolyNode-%version%-win-x64\PolyNode
 
 cd .\PolyNode-%version%-win-x64\PolyNode
 mkdir uninstall
