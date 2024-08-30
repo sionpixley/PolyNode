@@ -23,7 +23,6 @@ Commands:
   use <version>     : Switches Node.js to a different version.
   version           : Prints the current version of PolyNode.`
 
-	// PolyNode's version.
 	VERSION string = "v0.2.2"
 
 	// Unsupported operating system error message.
@@ -55,4 +54,5 @@ const (
 	c_NA_OS OperatingSystem = iota
 	c_LINUX
 	c_MAC
+	c_WINDOWS
 )

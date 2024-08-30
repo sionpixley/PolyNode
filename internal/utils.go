@@ -23,6 +23,8 @@ func ConvertToOperatingSystem(osStr string) OperatingSystem {
 		return c_MAC
 	case "linux":
 		return c_LINUX
+	case "windows":
+		return c_WINDOWS
 	default:
 		return c_NA_OS
 	}
