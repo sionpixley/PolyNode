@@ -25,6 +25,13 @@ func addToPath(home string) error {
 	}
 	defer key.Close()
 
+	path, _, err := key.GetStringValue("Path")
+	if err != nil {
+		return err
+	}
+
+	path += ";" + home + "\\PolyNode;" + home + "\\PolyNode\\nodejs"
+	return key.SetStringValue("Path", path)
 }
 
 func checkForOldVersion(home string) error {
@@ -43,5 +50,10 @@ func install() error {
 		return err
 	}
 
-	err = exec.Command()
+	err = exec.Command("xcopy", "/s", "/i", ".\\PolyNode\\", home+"\\PolyNode\\").Run()
+	if err != nil {
+		return err
+	}
+
+	return addToPath(home)
 }
