@@ -4,6 +4,7 @@ import (
 	"fmt"
 	"os"
 	"os/exec"
+	"strings"
 
 	"golang.org/x/sys/windows/registry"
 )
@@ -27,6 +28,24 @@ func removePath(home string) error {
 		return err
 	}
 	defer key.Close()
+
+	path, _, err := key.GetStringValue("Path")
+	if err != nil {
+		return err
+	}
+
+	updatedPath := ""
+	parts := strings.Split(path, ";")
+	for _, part := range parts {
+		if part == home+"\\PolyNode" || part == home+"\\PolyNode\\nodejs" {
+			continue
+		} else {
+			updatedPath += part + ";"
+		}
+	}
+	updatedPath = strings.TrimSuffix(updatedPath, ";")
+
+	return key.SetStringValue("Path", updatedPath)
 }
 
 func uninstall() error {
