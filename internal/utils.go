@@ -20,13 +20,13 @@ func ConvertToArchitecture(archStr string) Architecture {
 func ConvertToOperatingSystem(osStr string) OperatingSystem {
 	switch osStr {
 	case "darwin":
-		return c_MAC
+		return MAC
 	case "linux":
-		return c_LINUX
+		return LINUX
 	case "windows":
-		return c_WINDOWS
+		return WINDOWS
 	default:
-		return c_NA_OS
+		return NA_OS
 	}
 }
 
@@ -39,7 +39,7 @@ func IsSupportedArchitecture(arch Architecture) bool {
 }
 
 func IsSupportedOperatingSystem(operatingSystem OperatingSystem) bool {
-	return operatingSystem != c_NA_OS
+	return operatingSystem != NA_OS
 }
 
 func convertToCommand(commandStr string) command {

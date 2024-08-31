@@ -32,6 +32,14 @@ Commands:
 
 // NA is for Not Applicable.
 const (
+	NA_OS OperatingSystem = iota
+	LINUX
+	MAC
+	WINDOWS
+)
+
+// NA is for Not Applicable.
+const (
 	c_NA_ARCH Architecture = iota
 	c_ARM64
 	c_X64
@@ -48,12 +56,4 @@ const (
 	c_REMOVE
 	c_SEARCH
 	c_USE
-)
-
-// NA is for Not Applicable.
-const (
-	c_NA_OS OperatingSystem = iota
-	c_LINUX
-	c_MAC
-	c_WINDOWS
 )

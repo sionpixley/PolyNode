@@ -13,11 +13,9 @@ var polynHomeDir string
 func init() {
 	if runtime.GOOS == "windows" {
 		pathSeparator = "\\"
-		home := os.Getenv("LOCALAPPDATA")
-		polynHomeDir = home + "\\Programs\\PolyNode"
+		polynHomeDir = os.Getenv("LOCALAPPDATA") + "\\Programs\\PolyNode"
 	} else {
 		pathSeparator = "/"
-		home := os.Getenv("HOME")
-		polynHomeDir = home + "/.PolyNode"
+		polynHomeDir = os.Getenv("HOME") + "/.PolyNode"
 	}
 }
