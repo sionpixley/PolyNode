@@ -12,12 +12,12 @@ import (
 	"strings"
 )
 
-const linuxTemp string = `#!/bin/bash
+const linuxUninstallScript string = `#!/bin/bash
 
 rm -rf $HOME/.PolyNode
 rm -f $HOME/polyn-uninstall-temp.sh`
 
-const macTemp string = `#!/bin/zsh
+const macUninstallScript string = `#!/bin/zsh
 
 rm -rf $HOME/.PolyNode
 rm -f $HOME/polyn-uninstall-temp.zsh`
@@ -88,7 +88,7 @@ func uninstallLinux() error {
 		return err
 	}
 
-	err = os.WriteFile(home+"/polyn-uninstall-temp.sh", []byte(linuxTemp), 0700)
+	err = os.WriteFile(home+"/polyn-uninstall-temp.sh", []byte(linuxUninstallScript), 0700)
 	if err != nil {
 		return err
 	}
@@ -103,7 +103,7 @@ func uninstallMac() error {
 		return err
 	}
 
-	err = os.WriteFile(home+"/polyn-uninstall-temp.zsh", []byte(macTemp), 0700)
+	err = os.WriteFile(home+"/polyn-uninstall-temp.zsh", []byte(macUninstallScript), 0700)
 	if err != nil {
 		return err
 	}
