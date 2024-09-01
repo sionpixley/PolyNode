@@ -34,3 +34,5 @@ move uninstall.exe .\PolyNode-%version%-win-x64\PolyNode\uninstall\uninstall.exe
 
 :: Bundle
 powershell -Command "Compress-Archive -Path PolyNode-%version%-win-x64 -DestinationPath PolyNode-%version%-win-x64.zip"
+del PolyNode-%version%-win-x64 /s /f /q > nul
+rmdir PolyNode-%version%-win-x64 /s /q

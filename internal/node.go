@@ -309,13 +309,13 @@ func useNode(version string, operatingSystem OperatingSystem) error {
 
 	fmt.Printf("Switching to Node.js %s...", version)
 
-	err = os.RemoveAll(polynHomeDir + "/nodejs")
+	err = os.RemoveAll(polynHomeDir + pathSeparator + "nodejs")
 	if err != nil {
 		return err
 	}
 
 	if operatingSystem == WINDOWS {
-		err = exec.Command("mklink", "/j", polynHomeDir+"\\nodejs", polynHomeDir+"\\node\\"+version).Run()
+		err = exec.Command("cmd", "/c", "mklink", "/j", polynHomeDir+"\\nodejs", polynHomeDir+"\\node\\"+version).Run()
 		if err != nil {
 			return err
 		}
