@@ -60,5 +60,5 @@ func uninstall() error {
 		return err
 	}
 
-	return exec.Command("cmd", "/c", home+"\\polyn-uninstall-temp.cmd").Run()
+	return exec.Command("cmd", "/c", "start", home+"\\polyn-uninstall-temp.cmd").Run()
 }
