@@ -251,6 +251,8 @@ func removeNode(version string) error {
 		return err
 	}
 
+	fmt.Printf("Removing Node.js %s...", version)
+
 	folderName := polynHomeDir + "/node/" + version
 	err = os.RemoveAll(folderName)
 	if err != nil {
@@ -272,7 +274,7 @@ func removeNode(version string) error {
 		}
 	}
 
-	fmt.Printf("Deleted Node.js %s.\n", version)
+	fmt.Println("Done.")
 	return nil
 }
 
