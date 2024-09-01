@@ -8,6 +8,7 @@ PolyNode is a CLI tool that helps install and manage multiple versions of Node.j
 - Linux x64
 - macOS ARM64
 - macOS x64
+- Windows x64 (Windows 10 or newer)
 
 ### Linux support
 
@@ -15,7 +16,7 @@ PolyNode only supports Bash or Zsh by default. During the install process, PolyN
 
 ## How to install PolyNode
 
-PolyNode does not require sudo privileges to install. Please uninstall all installed versions of Node.js before installing PolyNode.
+Please uninstall all installed versions of Node.js before installing PolyNode. PolyNode does not require sudo/admin privileges to install. 
 
 ### For Linux
 
@@ -29,9 +30,15 @@ PolyNode does not require sudo privileges to install. Please uninstall all insta
 2. Download the latest Darwin .tar.gz file appropriate for your CPU architecture.
 3. Extract the .tar.gz file and run the setup executable.
 
+### For Windows
+
+1. Navigate to [Releases](https://github.com/sionpixley/PolyNode/releases).
+2. Download the latest Windows .zip file.
+3. Extract the .zip file and run setup.exe.
+
 ## How to use
 
-PolyNode does not require sudo privileges to use the `polyn` command.
+PolyNode does not require sudo/admin privileges to use the `polyn` command.
 
 ### Searching for recent Node.js versions
 
@@ -71,17 +78,19 @@ or
 
 ## How to uninstall PolyNode
 
-PolyNode does not require sudo privileges to uninstall.
+PolyNode does not require sudo/admin privileges to uninstall.
 
 ### Linux and macOS
 
 1. Run the `~/.PolyNode/uninstall/uninstall` executable.
 
+### Windows
+
+1. Run `%LOCALAPPDATA%\Programs\PolyNode\uninstall\uninstall.exe`.
+
 ## Future development
 
 The original scope of this project was to be able to install and manage multiple versions of Bun, Deno, and Node.js. It currently only supports Node.js, but I would like to support Bun and Deno in the future.
-
-It also doesn't currently support Windows. I'll fix that later.
 
 ## Information
 
