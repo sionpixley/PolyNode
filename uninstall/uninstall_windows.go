@@ -13,7 +13,7 @@ const windowsUninstallScript string = `@echo off
 
 del %LOCALAPPDATA%\Programs\PolyNode /s /f /q > nul
 rmdir %LOCALAPPDATA%\Programs\PolyNode /s /q
-del %LOCALAPPDATA%\Programs\polyn-uninstall-temp.cmd`
+del %0`
 
 func main() {
 	err := uninstall()
