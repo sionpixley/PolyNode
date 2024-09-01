@@ -21,31 +21,31 @@ func HandleNode(args []string, operatingSystem OperatingSystem, arch Architectur
 	var err error
 	command := convertToCommand(args[0])
 	switch command {
-	case c_ADD:
+	case _ADD:
 		if len(args) > 1 {
 			err = addNode(args[1], operatingSystem, arch)
 		} else {
 			fmt.Println(HELP)
 		}
-	case c_CURRENT:
+	case _CURRENT:
 		printCurrentNode()
-	case c_INSTALL:
+	case _INSTALL:
 		if len(args) > 1 {
 			err = installNode(args[1], operatingSystem, arch)
 		} else {
 			fmt.Println(HELP)
 		}
-	case c_LIST:
+	case _LIST:
 		listDownloadedNodes()
-	case c_REMOVE:
+	case _REMOVE:
 		if len(args) > 1 {
 			err = removeNode(args[1])
 		} else {
 			fmt.Println(HELP)
 		}
-	case c_SEARCH:
+	case _SEARCH:
 		err = searchAvailableNodeVersions()
-	case c_USE:
+	case _USE:
 		if len(args) > 1 {
 			err = useNode(args[1], operatingSystem)
 		} else {
@@ -139,21 +139,21 @@ func getNodeTargetArchiveName(operatingSystem OperatingSystem, arch Architecture
 	archiveName := ""
 	switch operatingSystem {
 	case LINUX:
-		if arch == c_ARM64 {
+		if arch == _ARM64 {
 			archiveName = "linux-arm64.tar.xz"
-		} else if arch == c_X64 {
+		} else if arch == _X64 {
 			archiveName = "linux-x64.tar.xz"
 		}
 	case MAC:
-		if arch == c_ARM64 {
+		if arch == _ARM64 {
 			archiveName = "darwin-arm64.tar.gz"
-		} else if arch == c_X64 {
+		} else if arch == _X64 {
 			archiveName = "darwin-x64.tar.gz"
 		}
 	case WINDOWS:
 		archiveName = "win-x64.zip"
 	default:
-		return "", errors.New(c_UNSUPPORTED_OS)
+		return "", errors.New("unsupported operating system")
 	}
 
 	return archiveName, nil
