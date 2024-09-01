@@ -4,6 +4,7 @@ import (
 	"errors"
 	"os"
 	"os/exec"
+	"strings"
 )
 
 func ConvertToArchitecture(archStr string) Architecture {
@@ -68,7 +69,8 @@ func convertToCommand(commandStr string) command {
 }
 
 func convertToSemanticVersion(version string) (string, error) {
-	if len(version) < 6 {
+	parts := strings.Split(version, ".")
+	if len(parts) != 3 {
 		return "", errors.New("invalid version format")
 	} else if version[0] == 'v' {
 		return version, nil
