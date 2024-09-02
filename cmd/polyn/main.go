@@ -50,6 +50,7 @@ func optionallyPrintExtraLine(operatingSystem internal.OperatingSystem) {
 	if operatingSystem == internal.WINDOWS && os.Getenv("PSModulePath") != "" {
 		// Command Prompt already adds an extra line to the output, so do nothing.
 	} else {
+		// Print an extra line for all other shells (i.e. Bash, Zsh, PowerShell)
 		fmt.Println()
 	}
 }
