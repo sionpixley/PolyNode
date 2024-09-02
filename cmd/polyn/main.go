@@ -42,9 +42,14 @@ func main() {
 	}
 }
 
-// Windows automatically adds an extra line to the output.
+// Command Prompt on Windows automatically adds an extra line to the output.
+// Adding an extra line to the output for all shells except Command Prompt.
 func optionallyPrintExtraLine(operatingSystem internal.OperatingSystem) {
-	if operatingSystem != internal.WINDOWS {
+	// The PSModulePath environment variable is only set in PowerShell.
+	// If the OS is Windows, and the variable is not set, then it's running in Command Prompt.
+	if operatingSystem == internal.WINDOWS && os.Getenv("PSModulePath") != "" {
+		// Command Prompt already adds an extra line to the output, so do nothing.
+	} else {
 		fmt.Println()
 	}
 }
