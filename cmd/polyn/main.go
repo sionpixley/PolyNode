@@ -47,7 +47,7 @@ func main() {
 func optionallyPrintExtraLine(operatingSystem internal.OperatingSystem) {
 	// The PSModulePath environment variable is only set in PowerShell.
 	// If the OS is Windows, and the variable is not set, then it's running in Command Prompt.
-	if operatingSystem == internal.WINDOWS && os.Getenv("PSModulePath") != "" {
+	if operatingSystem == internal.WINDOWS && os.Getenv("PSModulePath") == "" {
 		// Command Prompt already adds an extra line to the output, so do nothing.
 	} else {
 		// Print an extra line for all other shells (i.e. Bash, Zsh, PowerShell)
