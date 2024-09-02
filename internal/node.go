@@ -21,33 +21,33 @@ func HandleNode(args []string, operatingSystem OperatingSystem, arch Architectur
 	var err error
 	command := convertToCommand(args[0])
 	switch command {
-	case c_ADD:
+	case _ADD:
 		if len(args) > 1 {
 			err = addNode(args[1], operatingSystem, arch)
 		} else {
 			fmt.Println(HELP)
 		}
-	case c_CURRENT:
+	case _CURRENT:
 		printCurrentNode()
-	case c_INSTALL:
+	case _INSTALL:
 		if len(args) > 1 {
 			err = installNode(args[1], operatingSystem, arch)
 		} else {
 			fmt.Println(HELP)
 		}
-	case c_LIST:
-		err = listDownloadedNodes()
-	case c_REMOVE:
+	case _LIST:
+		listDownloadedNodes()
+	case _REMOVE:
 		if len(args) > 1 {
 			err = removeNode(args[1])
 		} else {
 			fmt.Println(HELP)
 		}
-	case c_SEARCH:
+	case _SEARCH:
 		err = searchAvailableNodeVersions()
-	case c_USE:
+	case _USE:
 		if len(args) > 1 {
-			err = useNode(args[1])
+			err = useNode(args[1], operatingSystem)
 		} else {
 			fmt.Println(HELP)
 		}
@@ -88,12 +88,12 @@ func addNode(version string, operatingSystem OperatingSystem, arch Architecture)
 	}
 	defer response.Body.Close()
 
-	err = os.MkdirAll(polynHomeDir+"/node", os.ModePerm)
+	err = os.MkdirAll(polynHomeDir+pathSeparator+"node", os.ModePerm)
 	if err != nil {
 		return err
 	}
 
-	filePath := polynHomeDir + "/node/" + fileName
+	filePath := polynHomeDir + pathSeparator + "node" + pathSeparator + fileName
 	err = os.RemoveAll(filePath)
 	if err != nil {
 		return err
@@ -111,7 +111,7 @@ func addNode(version string, operatingSystem OperatingSystem, arch Architecture)
 	// Calling file.Close() explicitly instead of with defer to prevent lock errors.
 	file.Close()
 
-	folderPath := polynHomeDir + "/node/" + version
+	folderPath := polynHomeDir + pathSeparator + "node" + pathSeparator + version
 	err = os.RemoveAll(folderPath)
 	if err != nil {
 		return err
@@ -138,20 +138,22 @@ func addNode(version string, operatingSystem OperatingSystem, arch Architecture)
 func getNodeTargetArchiveName(operatingSystem OperatingSystem, arch Architecture) (string, error) {
 	archiveName := ""
 	switch operatingSystem {
-	case c_LINUX:
-		if arch == c_ARM64 {
+	case LINUX:
+		if arch == _ARM64 {
 			archiveName = "linux-arm64.tar.xz"
-		} else if arch == c_X64 {
+		} else if arch == _X64 {
 			archiveName = "linux-x64.tar.xz"
 		}
-	case c_MAC:
-		if arch == c_ARM64 {
+	case MAC:
+		if arch == _ARM64 {
 			archiveName = "darwin-arm64.tar.gz"
-		} else if arch == c_X64 {
+		} else if arch == _X64 {
 			archiveName = "darwin-x64.tar.gz"
 		}
+	case WINDOWS:
+		archiveName = "win-x64.zip"
 	default:
-		return "", errors.New(c_UNSUPPORTED_OS)
+		return "", errors.New("unsupported operating system")
 	}
 
 	return archiveName, nil
@@ -163,13 +165,15 @@ func installNode(version string, operatingSystem OperatingSystem, arch Architect
 		return err
 	}
 
-	return useNode(version)
+	return useNode(version, operatingSystem)
 }
 
-func listDownloadedNodes() error {
+func listDownloadedNodes() {
 	dir, err := os.ReadDir(polynHomeDir + "/node")
 	if err != nil {
-		return err
+		// This means that the node folder doesn't exist. So, there are no Node.js versions downloaded.
+		fmt.Println("There are no Node.js versions downloaded.")
+		fmt.Println("To download a Node.js version, use the 'add' or 'install' command.")
 	}
 
 	current := ""
@@ -187,8 +191,6 @@ func listDownloadedNodes() error {
 			fmt.Printf("Node.js - %s\n", item.Name())
 		}
 	}
-
-	return nil
 }
 
 func printAvailableNodeVersions(nodeVersions []NodeVersion) {
@@ -249,6 +251,8 @@ func removeNode(version string) error {
 		return err
 	}
 
+	fmt.Printf("Removing Node.js %s...", version)
+
 	folderName := polynHomeDir + "/node/" + version
 	err = os.RemoveAll(folderName)
 	if err != nil {
@@ -270,7 +274,7 @@ func removeNode(version string) error {
 		}
 	}
 
-	fmt.Printf("Deleted Node.js %s.\n", version)
+	fmt.Println("Done.")
 	return nil
 }
 
@@ -299,7 +303,7 @@ func searchAvailableNodeVersions() error {
 	return nil
 }
 
-func useNode(version string) error {
+func useNode(version string, operatingSystem OperatingSystem) error {
 	version, err := convertToSemanticVersion(version)
 	if err != nil {
 		return err
@@ -307,14 +311,21 @@ func useNode(version string) error {
 
 	fmt.Printf("Switching to Node.js %s...", version)
 
-	err = os.RemoveAll(polynHomeDir + "/nodejs")
+	err = os.RemoveAll(polynHomeDir + pathSeparator + "nodejs")
 	if err != nil {
 		return err
 	}
 
-	err = os.Symlink(polynHomeDir+"/node/"+version, polynHomeDir+"/nodejs")
-	if err != nil {
-		return err
+	if operatingSystem == WINDOWS {
+		err = exec.Command("cmd", "/c", "mklink", "/j", polynHomeDir+"\\nodejs", polynHomeDir+"\\node\\"+version).Run()
+		if err != nil {
+			return err
+		}
+	} else {
+		err = os.Symlink(polynHomeDir+"/node/"+version, polynHomeDir+"/nodejs")
+		if err != nil {
+			return err
+		}
 	}
 
 	fmt.Println("Done.")

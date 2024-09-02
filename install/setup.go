@@ -1,3 +1,5 @@
+//go:build !windows
+
 package main
 
 import (
@@ -56,7 +58,7 @@ func checkForOldVersion(home string) error {
 	if _, err := os.Stat(home + "/.PolyNode"); os.IsNotExist(err) {
 		return nil
 	} else {
-		return uninstallOldVersion(home)
+		return exec.Command(home + "/.PolyNode/uninstall/uninstall").Run()
 	}
 }
 
@@ -81,8 +83,4 @@ func install() error {
 	} else {
 		return errors.New("unsupported shell")
 	}
-}
-
-func uninstallOldVersion(home string) error {
-	return exec.Command(home + "/.PolyNode/uninstall/uninstall").Run()
 }

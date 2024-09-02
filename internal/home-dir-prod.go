@@ -4,11 +4,18 @@ package internal
 
 import (
 	"os"
+	"runtime"
 )
 
+var pathSeparator string
 var polynHomeDir string
 
 func init() {
-	home := os.Getenv("HOME")
-	polynHomeDir = home + "/.PolyNode"
+	if runtime.GOOS == "windows" {
+		pathSeparator = "\\"
+		polynHomeDir = os.Getenv("LOCALAPPDATA") + "\\Programs\\PolyNode"
+	} else {
+		pathSeparator = "/"
+		polynHomeDir = os.Getenv("HOME") + "/.PolyNode"
+	}
 }
