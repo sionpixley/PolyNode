@@ -13,7 +13,7 @@ func main() {
 	operatingSystem := internal.ConvertToOperatingSystem(runtime.GOOS)
 	arch := internal.ConvertToArchitecture(runtime.GOARCH)
 
-	defer optionallyPrintExtraLine(operatingSystem)
+	defer fmt.Println()
 
 	if !internal.IsSupportedOperatingSystem(operatingSystem) {
 		fmt.Println("Not a supported operating system.")
@@ -39,18 +39,5 @@ func main() {
 		internal.HandleNode(args[1:], operatingSystem, arch)
 	} else {
 		fmt.Println(internal.HELP)
-	}
-}
-
-// Command Prompt on Windows automatically adds an extra line to the output.
-// Adding an extra line to the output for all shells except Command Prompt.
-func optionallyPrintExtraLine(operatingSystem internal.OperatingSystem) {
-	// The PSModulePath environment variable is only set in PowerShell.
-	// If the OS is Windows, and the variable is not set, then it's running in Command Prompt.
-	if operatingSystem == internal.WINDOWS && os.Getenv("PSModulePath") == "" {
-		// Command Prompt already adds an extra line to the output, so do nothing.
-	} else {
-		// Print an extra line for all other shells (i.e. Bash, Zsh, PowerShell)
-		fmt.Println()
 	}
 }
