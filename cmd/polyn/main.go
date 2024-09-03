@@ -13,7 +13,7 @@ func main() {
 	operatingSystem := internal.ConvertToOperatingSystem(runtime.GOOS)
 	arch := internal.ConvertToArchitecture(runtime.GOARCH)
 
-	defer optionallyPrintExtraLine(operatingSystem)
+	defer fmt.Println()
 
 	if !internal.IsSupportedOperatingSystem(operatingSystem) {
 		fmt.Println("Not a supported operating system.")
@@ -39,12 +39,5 @@ func main() {
 		internal.HandleNode(args[1:], operatingSystem, arch)
 	} else {
 		fmt.Println(internal.HELP)
-	}
-}
-
-// Windows automatically adds an extra line to the output.
-func optionallyPrintExtraLine(operatingSystem internal.OperatingSystem) {
-	if operatingSystem != internal.WINDOWS {
-		fmt.Println()
 	}
 }

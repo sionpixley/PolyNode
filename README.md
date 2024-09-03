@@ -8,6 +8,7 @@ PolyNode is a CLI tool that helps install and manage multiple versions of Node.j
 - Linux x64
 - macOS ARM64
 - macOS x64
+- Windows ARM64 (Windows 10 or newer)
 - Windows x64 (Windows 10 or newer)
 
 ### Linux support
@@ -33,7 +34,7 @@ Please uninstall all installed versions of Node.js before installing PolyNode. P
 ### For Windows
 
 1. Navigate to [Releases](https://github.com/sionpixley/PolyNode/releases).
-2. Download the latest Windows .zip file.
+2. Download the latest Windows .zip file appropriate for your CPU architecture.
 3. Extract the .zip file and run setup.exe.
 
 ## How to use
@@ -53,6 +54,8 @@ PolyNode does not require sudo/admin privileges to use the `polyn` command.
 `polyn use <version>`
 
 ### Downloading and switching to a new version of Node.js
+
+The `install` command is equivalent to the `add` command followed by the `use` command.
 
 `polyn install <version>`
 

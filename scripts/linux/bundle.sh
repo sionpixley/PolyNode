@@ -1,8 +1,9 @@
 #!/bin/bash
 
-version=v0.3.0
+version=v0.4.0
 
 # Build Linux ARM64
+
 env GOOS=linux GOARCH=arm64 go build -tags=prod -o polyn-linux-arm64 ./cmd/polyn
 
 cd install
@@ -30,6 +31,7 @@ cd ../..
 mv uninstall-linux-arm64 ./PolyNode-$version-linux-arm64/PolyNode/uninstall/uninstall
 
 # Build Linux x64
+
 env GOOS=linux GOARCH=amd64 go build -tags=prod -o polyn-linux-x64 ./cmd/polyn
 
 cd install

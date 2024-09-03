@@ -151,7 +151,11 @@ func getNodeTargetArchiveName(operatingSystem OperatingSystem, arch Architecture
 			archiveName = "darwin-x64.tar.gz"
 		}
 	case WINDOWS:
-		archiveName = "win-x64.zip"
+		if arch == _ARM64 {
+			archiveName = "win-arm64.zip"
+		} else if arch == _X64 {
+			archiveName = "win-x64.zip"
+		}
 	default:
 		return "", errors.New("unsupported operating system")
 	}
@@ -208,16 +212,19 @@ func printAvailableNodeVersions(nodeVersions []NodeVersion) {
 		majorVersion := strings.Split(nodeVersion.Version, ".")[0]
 		_, exists := majorVersions[majorVersion]
 		if exists {
+			// Skip, because we already have the latest version of this major version.
 			continue
 		} else {
 			majorVersions[majorVersion] = true
 			if nodeVersion.Lts && len(ltsVersions) < maxEntries {
 				ltsVersions = append(ltsVersions, nodeVersion.Version)
 			} else if nodeVersion.Lts {
+				// We have already reached the max entries for LTS versions.
 				continue
 			} else if len(stableVersions) < maxEntries {
 				stableVersions = append(stableVersions, nodeVersion.Version)
 			} else {
+				// We have already reached the max entries for stable versions.
 				continue
 			}
 		}
