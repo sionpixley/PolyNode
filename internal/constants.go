@@ -20,11 +20,14 @@ Commands:
   remove <version>  : Deletes a version of Node.js.
   rm <version>      : Alias for remove command.
   search            : Prints out a list of the most recent Node.js versions available for download.
+  search <prefix>   : Prints out a list of Node.js versions that have this prefix.
   use <version>     : Switches Node.js to a different version.
   version           : Prints the current version of PolyNode.`
 
 	// PolyNode's version.
-	VERSION string = "v0.3.0"
+	VERSION string = "v0.5.0"
+
+	_INVALID_VERSION_FORMAT_ERROR string = "invalid version format"
 )
 
 // NA is for Not Applicable.

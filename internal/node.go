@@ -44,7 +44,11 @@ func HandleNode(args []string, operatingSystem OperatingSystem, arch Architectur
 			fmt.Println(HELP)
 		}
 	case _SEARCH:
-		err = searchAvailableNodeVersions()
+		if len(args) > 1 {
+			err = searchForSpecificNodeVersion(args[1])
+		} else {
+			err = searchAvailableNodeVersions()
+		}
 	case _USE:
 		if len(args) > 1 {
 			err = useNode(args[1], operatingSystem)
@@ -61,10 +65,11 @@ func HandleNode(args []string, operatingSystem OperatingSystem, arch Architectur
 }
 
 func addNode(version string, operatingSystem OperatingSystem, arch Architecture) error {
-	version, err := convertToSemanticVersion(version)
-	if err != nil {
-		return err
+	if !isValidVersionFormat(version) {
+		return errors.New(_INVALID_VERSION_FORMAT_ERROR)
 	}
+
+	version = convertToSemanticVersion(version)
 
 	archiveName, err := getNodeTargetArchiveName(operatingSystem, arch)
 	if err != nil {
@@ -135,6 +140,26 @@ func addNode(version string, operatingSystem OperatingSystem, arch Architecture)
 	return nil
 }
 
+func getAllNodeVersions() ([]NodeVersion, error) {
+	url := "https://nodejs.org/dist/index.json"
+
+	client := new(http.Client)
+	request, err := http.NewRequest(http.MethodGet, url, nil)
+	if err != nil {
+		return nil, err
+	}
+
+	response, err := client.Do(request)
+	if err != nil {
+		return nil, err
+	}
+	defer response.Body.Close()
+
+	var nodeVersions []NodeVersion
+	err = json.NewDecoder(response.Body).Decode(&nodeVersions)
+	return nodeVersions, err
+}
+
 func getNodeTargetArchiveName(operatingSystem OperatingSystem, arch Architecture) (string, error) {
 	archiveName := ""
 	switch operatingSystem {
@@ -197,10 +222,58 @@ func listDownloadedNodes() {
 	}
 }
 
-func printAvailableNodeVersions(nodeVersions []NodeVersion) {
+func printCurrentNode() {
+	output, err := exec.Command("node", "-v").Output()
+	if err != nil {
+		fmt.Println("There aren't any Node.js versions set as the current version.")
+	} else {
+		fmt.Printf("Node.js - %s", string(output))
+	}
+}
+
+func removeNode(version string) error {
+	if !isValidVersionFormat(version) {
+		return errors.New(_INVALID_VERSION_FORMAT_ERROR)
+	}
+
+	version = convertToSemanticVersion(version)
+
+	fmt.Printf("Removing Node.js %s...", version)
+
+	folderName := polynHomeDir + "/node/" + version
+	err := os.RemoveAll(folderName)
+	if err != nil {
+		return err
+	}
+
+	current := ""
+	output, err := exec.Command("node", "-v").Output()
+	if err != nil {
+		// Do nothing. This just means that there isn't a current version set.
+	} else {
+		current = strings.TrimSpace(string(output))
+	}
+
+	if current == version {
+		err = os.RemoveAll(folderName)
+		if err != nil {
+			return err
+		}
+	}
+
+	fmt.Println("Done.")
+	return nil
+}
+
+func searchAvailableNodeVersions() error {
+	nodeVersions, err := getAllNodeVersions()
+	if err != nil {
+		return err
+	}
+
 	maxEntries := 7
 
-	majorVersions := map[string]bool{}
+	majorVersions := map[string]struct{}{}
 	stableVersions := []string{}
 	ltsVersions := []string{}
 
@@ -210,12 +283,11 @@ func printAvailableNodeVersions(nodeVersions []NodeVersion) {
 		}
 
 		majorVersion := strings.Split(nodeVersion.Version, ".")[0]
-		_, exists := majorVersions[majorVersion]
-		if exists {
+		if _, exists := majorVersions[majorVersion]; exists {
 			// Skip, because we already have the latest version of this major version.
 			continue
 		} else {
-			majorVersions[majorVersion] = true
+			majorVersions[majorVersion] = struct{}{}
 			if nodeVersion.Lts && len(ltsVersions) < maxEntries {
 				ltsVersions = append(ltsVersions, nodeVersion.Version)
 			} else if nodeVersion.Lts {
@@ -241,84 +313,38 @@ func printAvailableNodeVersions(nodeVersions []NodeVersion) {
 	}
 
 	fmt.Println(output)
-}
-
-func printCurrentNode() {
-	output, err := exec.Command("node", "-v").Output()
-	if err != nil {
-		fmt.Println("There aren't any Node.js versions set as the current version.")
-	} else {
-		fmt.Printf("Node.js - %s", string(output))
-	}
-}
-
-func removeNode(version string) error {
-	version, err := convertToSemanticVersion(version)
-	if err != nil {
-		return err
-	}
-
-	fmt.Printf("Removing Node.js %s...", version)
-
-	folderName := polynHomeDir + "/node/" + version
-	err = os.RemoveAll(folderName)
-	if err != nil {
-		return err
-	}
-
-	current := ""
-	output, err := exec.Command("node", "-v").Output()
-	if err != nil {
-		// Do nothing. This just means that there isn't a current version set.
-	} else {
-		current = strings.TrimSpace(string(output))
-	}
-
-	if current == version {
-		err = os.RemoveAll(folderName)
-		if err != nil {
-			return err
-		}
-	}
-
-	fmt.Println("Done.")
 	return nil
 }
 
-func searchAvailableNodeVersions() error {
-	url := "https://nodejs.org/dist/index.json"
+func searchForSpecificNodeVersion(prefix string) error {
+	prefix = convertToSemanticVersion(prefix)
 
-	client := new(http.Client)
-	request, err := http.NewRequest(http.MethodGet, url, nil)
+	allVersions, err := getAllNodeVersions()
 	if err != nil {
 		return err
 	}
 
-	response, err := client.Do(request)
-	if err != nil {
-		return err
-	}
-	defer response.Body.Close()
-
-	nodeVersions := []NodeVersion{}
-	err = json.NewDecoder(response.Body).Decode(&nodeVersions)
-	if err != nil {
-		return err
+	output := "\nNode.js\n--------------------------"
+	for _, nodeVersion := range allVersions {
+		if strings.HasPrefix(nodeVersion.Version, prefix) {
+			output += "\n" + nodeVersion.Version
+		}
 	}
 
-	printAvailableNodeVersions(nodeVersions)
+	fmt.Println(output)
 	return nil
 }
 
 func useNode(version string, operatingSystem OperatingSystem) error {
-	version, err := convertToSemanticVersion(version)
-	if err != nil {
-		return err
+	if !isValidVersionFormat(version) {
+		return errors.New(_INVALID_VERSION_FORMAT_ERROR)
 	}
+
+	version = convertToSemanticVersion(version)
 
 	fmt.Printf("Switching to Node.js %s...", version)
 
-	err = os.RemoveAll(polynHomeDir + pathSeparator + "nodejs")
+	err := os.RemoveAll(polynHomeDir + pathSeparator + "nodejs")
 	if err != nil {
 		return err
 	}

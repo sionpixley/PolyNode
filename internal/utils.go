@@ -1,7 +1,6 @@
 package internal
 
 import (
-	"errors"
 	"os"
 	"os/exec"
 	"strings"
@@ -68,14 +67,11 @@ func convertToCommand(commandStr string) command {
 	}
 }
 
-func convertToSemanticVersion(version string) (string, error) {
-	parts := strings.Split(version, ".")
-	if len(parts) != 3 {
-		return "", errors.New("invalid version format")
-	} else if version[0] == 'v' {
-		return version, nil
+func convertToSemanticVersion(version string) string {
+	if version[0] == 'v' {
+		return version
 	} else {
-		return "v" + version, nil
+		return "v" + version
 	}
 }
 
@@ -96,4 +92,38 @@ func extractFile(source string, destination string) error {
 	}
 
 	return os.RemoveAll(source)
+}
+
+func isValidVersionFormat(version string) bool {
+	version = version[1:]
+
+	parts := strings.Split(version, ".")
+	if len(parts) != 3 {
+		return false
+	}
+
+	validChars := map[rune]struct{}{
+		'0': {},
+		'1': {},
+		'2': {},
+		'3': {},
+		'4': {},
+		'5': {},
+		'6': {},
+		'7': {},
+		'8': {},
+		'9': {},
+	}
+	for _, part := range parts {
+		for _, char := range part {
+			if _, exists := validChars[char]; exists {
+				// char exists in the validChars map, so it's a valid character.
+				continue
+			} else {
+				return false
+			}
+		}
+	}
+
+	return true
 }
