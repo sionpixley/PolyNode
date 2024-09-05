@@ -49,6 +49,8 @@ PolyNode does not require sudo/admin privileges to use the `polyn` command.
 
 Using a prefix will match anything with this prefix. So `polyn search 1` will match with any Node.js version that starts with "1".
 
+If you want to search for a specific major version, add a "." at the end of your prefix. `polyn search 18.` will print all Node.js v18 releases.
+
 `polyn search <prefix>`
 
 ### Downloading a new version of Node.js
