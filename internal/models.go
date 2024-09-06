@@ -44,10 +44,10 @@ func (config *PolyNodeConfig) UnmarshalJSON(b []byte) error {
 
 	var exists bool
 	config.NodeMirror, exists = temp["nodeMirror"]
-	if !exists {
-		config.NodeMirror = _DEFAULT_NODE_MIRROR
-	} else {
+	if exists {
 		config.NodeMirror = strings.ToLower(strings.TrimSuffix(strings.TrimSpace(config.NodeMirror), "/"))
+	} else {
+		config.NodeMirror = _DEFAULT_NODE_MIRROR
 	}
 
 	return nil
