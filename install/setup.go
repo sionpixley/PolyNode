@@ -49,7 +49,7 @@ func addToPath(home string, rcFile string) error {
 	}
 
 	content := string(contentData)
-	content += "\nPATH=$PATH:" + home + "/.PolyNode:" + home + "/.PolyNode/nodejs/bin"
+	content += "\nexport PATH=$PATH:" + home + "/.PolyNode:" + home + "/.PolyNode/nodejs/bin"
 
 	return os.WriteFile(home+"/"+rcFile, []byte(content), 0644)
 }
