@@ -5,10 +5,25 @@ PolyNode is a CLI tool that helps install and manage multiple versions of Node.j
 ## Table of contents
 
 1. [Supported operating systems and CPU architectures](#supported-operating-systems-and-cpu-architectures)
+    1. [Linux support information](#linux-support-information)
 2. [How to install](#how-to-install-polynode)
+    1. [Linux](#for-linux)
+    2. [macOS](#for-macos)
+    3. [Windows](#for-windows)
 3. [How to use](#how-to-use)
+    1. [Searching for available Node.js versions](#searching-for-available-nodejs-versions)
+    2. [Searching for a specific Node.js version](#searching-for-a-specific-nodejs-version)
+    3. [Downloading a new version of Node.js](#downloading-a-new-version-of-nodejs)
+    4. [Switching to a different downloaded version of Node.js](#switching-to-a-different-downloaded-version-of-nodejs)
+    5. [Downloading and switching to a new version of Node.js](#downloading-and-switching-to-a-new-version-of-nodejs)
+    6. [Printing your current version of Node.js](#printing-your-current-version-of-nodejs)
+    7. [Printing all downloaded versions of Node.js](#printing-all-downloaded-versions-of-nodejs)
+    8. [Deleting a downloaded version of Node.js](#deleting-a-downloaded-version-of-nodejs)
 4. [How to configure](#how-to-configure-polynode)
+    1. [Configuration fields](#configuration-fields)
 5. [How to uninstall](#how-to-uninstall-polynode)
+    1. [Linux and macOS](#linux-and-macos)
+    2. [Windows](#windows)
 6. [Future development](#future-development)
 7. [Information](#information)
 
@@ -21,7 +36,7 @@ PolyNode is a CLI tool that helps install and manage multiple versions of Node.j
 - Windows ARM64 (Windows 10 or newer)
 - Windows x64 (Windows 10 or newer)
 
-### Linux support
+### Linux support information
 
 PolyNode only supports Bash or Zsh by default. During the install process, PolyNode edits either .bashrc or .zshrc to add two locations to the PATH: PolyNode's home directory `~/.PolyNode` and the symlink for Node.js `~/.PolyNode/nodejs`. This will probably change later to have support for more shells.
 
@@ -51,7 +66,7 @@ Please uninstall all installed versions of Node.js before installing PolyNode. P
 
 PolyNode does not require sudo/admin privileges to use the `polyn` command.
 
-### Searching for recent Node.js versions
+### Searching for available Node.js versions
 
 `polyn search`
 
@@ -77,7 +92,7 @@ The `install` command is equivalent to the `add` command followed by the `use` c
 
 `polyn install <version>`
 
-### Printing the current version of Node.js
+### Printing your current version of Node.js
 
 `polyn current`
 
