@@ -15,11 +15,13 @@ func main() {
 
 	defer fmt.Println()
 
+	config := internal.LoadPolyNodeConfig()
+
 	if !internal.IsSupportedOperatingSystem(operatingSystem) {
-		fmt.Println("Not a supported operating system.")
+		fmt.Println(internal.UNSUPPORTED_OS_ERROR)
 		return
 	} else if !internal.IsSupportedArchitecture(arch) {
-		fmt.Println("Not a supported CPU architecture.")
+		fmt.Println("unsupported CPU architecture")
 		return
 	}
 
@@ -36,7 +38,7 @@ func main() {
 	if args[1] == "version" {
 		fmt.Println(internal.VERSION)
 	} else if internal.IsKnownCommand(args[1]) {
-		internal.HandleNode(args[1:], operatingSystem, arch)
+		internal.HandleNode(args[1:], operatingSystem, arch, config)
 	} else {
 		fmt.Println(internal.HELP)
 	}

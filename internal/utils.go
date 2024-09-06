@@ -1,6 +1,7 @@
 package internal
 
 import (
+	"fmt"
 	"os"
 	"os/exec"
 	"strings"
@@ -40,6 +41,29 @@ func IsSupportedArchitecture(arch Architecture) bool {
 
 func IsSupportedOperatingSystem(operatingSystem OperatingSystem) bool {
 	return operatingSystem != NA_OS
+}
+
+func LoadPolyNodeConfig() PolyNodeConfig {
+	if _, err := os.Stat(polynHomeDir + pathSeparator + ".polynrc"); os.IsNotExist(err) {
+		// Default config
+		return PolyNodeConfig{NodeMirror: _DEFAULT_NODE_MIRROR}
+	} else {
+		content, err := os.ReadFile(polynHomeDir + pathSeparator + ".polynrc")
+		if err != nil {
+			// Default config
+			fmt.Println(err.Error())
+			return PolyNodeConfig{NodeMirror: _DEFAULT_NODE_MIRROR}
+		}
+
+		config := PolyNodeConfig{}
+		err = config.UnmarshalJSON(content)
+		if err != nil {
+			// Default config
+			fmt.Println(err.Error())
+			return PolyNodeConfig{NodeMirror: _DEFAULT_NODE_MIRROR}
+		}
+		return config
+	}
 }
 
 func convertToCommand(commandStr string) command {

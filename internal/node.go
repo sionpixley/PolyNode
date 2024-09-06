@@ -12,7 +12,7 @@ import (
 )
 
 // Main function for Node.js actions.
-func HandleNode(args []string, operatingSystem OperatingSystem, arch Architecture) {
+func HandleNode(args []string, operatingSystem OperatingSystem, arch Architecture, config PolyNodeConfig) {
 	if len(args) == 0 {
 		fmt.Println(HELP)
 		return
@@ -23,7 +23,7 @@ func HandleNode(args []string, operatingSystem OperatingSystem, arch Architectur
 	switch command {
 	case _ADD:
 		if len(args) > 1 {
-			err = addNode(args[1], operatingSystem, arch)
+			err = addNode(args[1], operatingSystem, arch, config)
 		} else {
 			fmt.Println(HELP)
 		}
@@ -31,7 +31,7 @@ func HandleNode(args []string, operatingSystem OperatingSystem, arch Architectur
 		printCurrentNode()
 	case _INSTALL:
 		if len(args) > 1 {
-			err = installNode(args[1], operatingSystem, arch)
+			err = installNode(args[1], operatingSystem, arch, config)
 		} else {
 			fmt.Println(HELP)
 		}
@@ -45,9 +45,9 @@ func HandleNode(args []string, operatingSystem OperatingSystem, arch Architectur
 		}
 	case _SEARCH:
 		if len(args) > 1 {
-			err = searchForSpecificNodeVersion(args[1])
+			err = searchForSpecificNodeVersion(args[1], config)
 		} else {
-			err = searchAvailableNodeVersions()
+			err = searchAvailableNodeVersions(config)
 		}
 	case _USE:
 		if len(args) > 1 {
@@ -64,7 +64,7 @@ func HandleNode(args []string, operatingSystem OperatingSystem, arch Architectur
 	}
 }
 
-func addNode(version string, operatingSystem OperatingSystem, arch Architecture) error {
+func addNode(version string, operatingSystem OperatingSystem, arch Architecture, config PolyNodeConfig) error {
 	if !isValidVersionFormat(version) {
 		return errors.New(_INVALID_VERSION_FORMAT_ERROR)
 	}
@@ -79,7 +79,7 @@ func addNode(version string, operatingSystem OperatingSystem, arch Architecture)
 	fileName := "node-" + version + "-" + archiveName
 	fmt.Printf("Downloading %s...", fileName)
 
-	url := "https://nodejs.org/dist/" + version + "/" + fileName
+	url := config.NodeMirror + version + "/" + fileName
 
 	client := new(http.Client)
 	request, err := http.NewRequest(http.MethodGet, url, nil)
@@ -140,8 +140,8 @@ func addNode(version string, operatingSystem OperatingSystem, arch Architecture)
 	return nil
 }
 
-func getAllNodeVersions() ([]NodeVersion, error) {
-	url := "https://nodejs.org/dist/index.json"
+func getAllNodeVersions(config PolyNodeConfig) ([]NodeVersion, error) {
+	url := config.NodeMirror + "/index.json"
 
 	client := new(http.Client)
 	request, err := http.NewRequest(http.MethodGet, url, nil)
@@ -182,14 +182,14 @@ func getNodeTargetArchiveName(operatingSystem OperatingSystem, arch Architecture
 			archiveName = "win-x64.zip"
 		}
 	default:
-		return "", errors.New("unsupported operating system")
+		return "", errors.New(UNSUPPORTED_OS_ERROR)
 	}
 
 	return archiveName, nil
 }
 
-func installNode(version string, operatingSystem OperatingSystem, arch Architecture) error {
-	err := addNode(version, operatingSystem, arch)
+func installNode(version string, operatingSystem OperatingSystem, arch Architecture, config PolyNodeConfig) error {
+	err := addNode(version, operatingSystem, arch, config)
 	if err != nil {
 		return err
 	}
@@ -265,8 +265,8 @@ func removeNode(version string) error {
 	return nil
 }
 
-func searchAvailableNodeVersions() error {
-	nodeVersions, err := getAllNodeVersions()
+func searchAvailableNodeVersions(config PolyNodeConfig) error {
+	nodeVersions, err := getAllNodeVersions(config)
 	if err != nil {
 		return err
 	}
@@ -316,10 +316,10 @@ func searchAvailableNodeVersions() error {
 	return nil
 }
 
-func searchForSpecificNodeVersion(prefix string) error {
+func searchForSpecificNodeVersion(prefix string, config PolyNodeConfig) error {
 	prefix = convertToSemanticVersion(prefix)
 
-	allVersions, err := getAllNodeVersions()
+	allVersions, err := getAllNodeVersions(config)
 	if err != nil {
 		return err
 	}

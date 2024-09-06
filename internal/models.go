@@ -3,13 +3,13 @@ package internal
 import (
 	"encoding/json"
 	"reflect"
+	"strings"
 )
 
 type Architecture int
 
 type NodeVersion struct {
 	Version string `json:"version"`
-	Date    string `json:"date"`
 	Lts     bool   `json:"lts"`
 }
 
@@ -21,13 +21,33 @@ func (nodeVersion *NodeVersion) UnmarshalJSON(b []byte) error {
 	}
 
 	nodeVersion.Version = temp["version"].(string)
-	nodeVersion.Date = temp["date"].(string)
 
 	if reflect.TypeOf(temp["lts"]).String() == "bool" {
 		nodeVersion.Lts = false
 	} else {
 		nodeVersion.Lts = true
 	}
+
+	return nil
+}
+
+type PolyNodeConfig struct {
+	NodeMirror string `json:"nodeMirror"`
+}
+
+func (config *PolyNodeConfig) UnmarshalJSON(b []byte) error {
+	var temp map[string]string
+	err := json.Unmarshal(b, &temp)
+	if err != nil {
+		return err
+	}
+
+	var exists bool
+	config.NodeMirror, exists = temp["nodeMirror"]
+	if !exists {
+		config.NodeMirror = _DEFAULT_NODE_MIRROR
+	}
+	config.NodeMirror = strings.ToLower(strings.TrimSuffix(strings.TrimSpace(config.NodeMirror), "/"))
 
 	return nil
 }
