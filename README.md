@@ -2,6 +2,16 @@
 
 PolyNode is a CLI tool that helps install and manage multiple versions of Node.js on the same device.
 
+## Table of contents
+
+1. [Supported operating systems and CPU architectures](#supported-operating-systems-and-cpu-architectures)
+2. [How to install](#how-to-install-polynode)
+3. [How to use](#how-to-use)
+4. [How to configure](#how-to-configure-polynode)
+5. [How to uninstall](#how-to-uninstall-polynode)
+6. [Future development](#future-development)
+7. [Information](#information)
+
 ## Supported operating systems and CPU architectures
 
 - Linux ARM64
@@ -86,6 +96,24 @@ or
 or 
 
 `polyn remove <version>`
+
+## How to configure PolyNode
+
+PolyNode's configuration is handled through a JSON file named `.polynrc` located in PolyNode's home directory (`~/.PolyNode` for Linux/macOS and `%LOCALAPPDATA%\Programs\PolyNode` for Windows). Please see below for the default configuration for `.polynrc`:
+
+```
+{
+  "nodeMirror": "https://nodejs.org/dist"
+}
+```
+
+This configuration file is limited at the moment. I hope to expand its capabilities over time.
+
+### Configuration fields
+
+#### nodeMirror
+
+This field is a `string` that represents the URL to download Node.js.
 
 ## How to uninstall PolyNode
 

@@ -164,21 +164,21 @@ func getNodeTargetArchiveName(operatingSystem OperatingSystem, arch Architecture
 	archiveName := ""
 	switch operatingSystem {
 	case LINUX:
-		if arch == _ARM64 {
+		if arch == ARM64 {
 			archiveName = "linux-arm64.tar.xz"
-		} else if arch == _X64 {
+		} else if arch == X64 {
 			archiveName = "linux-x64.tar.xz"
 		}
 	case MAC:
-		if arch == _ARM64 {
+		if arch == ARM64 {
 			archiveName = "darwin-arm64.tar.gz"
-		} else if arch == _X64 {
+		} else if arch == X64 {
 			archiveName = "darwin-x64.tar.gz"
 		}
 	case WINDOWS:
-		if arch == _ARM64 {
+		if arch == ARM64 {
 			archiveName = "win-arm64.zip"
-		} else if arch == _X64 {
+		} else if arch == X64 {
 			archiveName = "win-x64.zip"
 		}
 	default:

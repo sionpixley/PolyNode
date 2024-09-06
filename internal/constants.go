@@ -43,9 +43,9 @@ const (
 
 // NA is for Not Applicable.
 const (
-	_NA_ARCH Architecture = iota
-	_ARM64
-	_X64
+	NA_ARCH Architecture = iota
+	ARM64
+	X64
 )
 
 // NA is for Not Applicable.

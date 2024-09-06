@@ -10,15 +10,15 @@ import (
 )
 
 func main() {
-	operatingSystem := internal.ConvertToOperatingSystem(runtime.GOOS)
-	arch := internal.ConvertToArchitecture(runtime.GOARCH)
+	operatingSystem := convertToOperatingSystem(runtime.GOOS)
+	arch := convertToArchitecture(runtime.GOARCH)
 
 	defer fmt.Println()
 
-	if !internal.IsSupportedOperatingSystem(operatingSystem) {
+	if !isSupportedOperatingSystem(operatingSystem) {
 		fmt.Println(internal.UNSUPPORTED_OS_ERROR)
 		return
-	} else if !internal.IsSupportedArchitecture(arch) {
+	} else if !isSupportedArchitecture(arch) {
 		fmt.Println("unsupported CPU architecture")
 		return
 	}
@@ -42,4 +42,36 @@ func main() {
 	} else {
 		fmt.Println(internal.HELP)
 	}
+}
+
+func convertToArchitecture(archStr string) internal.Architecture {
+	switch archStr {
+	case "amd64":
+		return internal.X64
+	case "arm64":
+		return internal.ARM64
+	default:
+		return internal.NA_ARCH
+	}
+}
+
+func convertToOperatingSystem(osStr string) internal.OperatingSystem {
+	switch osStr {
+	case "darwin":
+		return internal.MAC
+	case "linux":
+		return internal.LINUX
+	case "windows":
+		return internal.WINDOWS
+	default:
+		return internal.NA_OS
+	}
+}
+
+func isSupportedArchitecture(arch internal.Architecture) bool {
+	return arch != internal.NA_ARCH
+}
+
+func isSupportedOperatingSystem(operatingSystem internal.OperatingSystem) bool {
+	return operatingSystem != internal.NA_OS
 }
