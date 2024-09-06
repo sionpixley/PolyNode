@@ -15,8 +15,6 @@ func main() {
 
 	defer fmt.Println()
 
-	config := internal.LoadPolyNodeConfig()
-
 	if !internal.IsSupportedOperatingSystem(operatingSystem) {
 		fmt.Println(internal.UNSUPPORTED_OS_ERROR)
 		return
@@ -29,6 +27,8 @@ func main() {
 		fmt.Println(internal.HELP)
 		return
 	}
+
+	config := internal.LoadPolyNodeConfig()
 
 	args := []string{}
 	for _, arg := range os.Args {
