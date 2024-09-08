@@ -87,7 +87,9 @@ func extractFile(source string, destination string) error {
 }
 
 func isValidVersionFormat(version string) bool {
-	version = version[1:]
+	if version[0] == 'v' {
+		version = version[1:]
+	}
 
 	parts := strings.Split(version, ".")
 	if len(parts) != 3 {
