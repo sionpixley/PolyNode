@@ -38,7 +38,7 @@ PolyNode is a CLI tool that helps install and manage multiple versions of Node.j
 
 ### Linux support information
 
-PolyNode only supports Bash or Zsh by default. During the install process, PolyNode edits either .bashrc or .zshrc to add two locations to the PATH: PolyNode's home directory `~/.PolyNode` and the symlink for Node.js `~/.PolyNode/nodejs`. This will probably change later to have support for more shells.
+PolyNode only supports Bash or Zsh by default. During the install process, PolyNode edits either .bashrc or .zshrc to add two locations to the PATH: PolyNode's home directory `~/.PolyNode` and the symlink for Node.js `~/.PolyNode/nodejs`. You can get PolyNode to work for other shells by adding these directories to your PATH environment variable.
 
 ## How to install PolyNode
 
@@ -112,6 +112,10 @@ or
 
 `polyn remove <version>`
 
+### Printing your current version of PolyNode
+
+`polyn version`
+
 ## How to configure PolyNode
 
 PolyNode's configuration is handled through a JSON file named `.polynrc` located in PolyNode's home directory (`~/.PolyNode` for Linux/macOS and `%LOCALAPPDATA%\Programs\PolyNode` for Windows). Please see below for the default configuration for `.polynrc`:
@@ -128,7 +132,7 @@ This configuration file is limited at the moment. I hope to expand its capabilit
 
 #### nodeMirror
 
-This field is a `string` that represents the URL to download Node.js.
+This field is a `string` that represents the URL to download Node.js. Default value is `"https://nodejs.org/dist"`.
 
 ## How to uninstall PolyNode
 
