@@ -42,7 +42,7 @@ PolyNode only supports Bash or Zsh by default. During the install process, PolyN
 
 ## How to install PolyNode
 
-Please uninstall all installed versions of Node.js before installing PolyNode. PolyNode does not require sudo/admin privileges to install. 
+If you have a previous version of PolyNode installed, you **do not** have to uninstall it or any Node.js version installed with it before installing the new version of PolyNode. Please uninstall all versions of Node.js that weren't installed by PolyNode before installing PolyNode. PolyNode does not require sudo/admin privileges to install. 
 
 ### For Linux
 
