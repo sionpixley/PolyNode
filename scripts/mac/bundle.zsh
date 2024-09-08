@@ -1,6 +1,6 @@
 #!/bin/zsh
 
-version=v0.6.0
+version=v0.6.1
 
 # Build macOS ARM64
 

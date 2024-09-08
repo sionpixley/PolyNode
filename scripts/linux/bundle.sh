@@ -1,6 +1,6 @@
 #!/bin/bash
 
-version=v0.6.0
+version=v0.6.1
 
 # Build Linux ARM64
 
