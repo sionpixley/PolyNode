@@ -21,7 +21,12 @@ func main() {
 	case "darwin":
 		fallthrough
 	case "linux":
-		err = install()
+		home := os.Getenv("HOME")
+		if oldVersionExists(home) {
+			err = upgrade(home)
+		} else {
+			err = install(home)
+		}
 	default:
 		err = errors.New("unsupported operating system")
 	}
@@ -54,14 +59,6 @@ func addToPath(home string, rcFile string) error {
 	return os.WriteFile(home+"/"+rcFile, []byte(content), 0644)
 }
 
-func checkForOldVersion(home string) error {
-	if _, err := os.Stat(home + "/.PolyNode"); os.IsNotExist(err) {
-		return nil
-	} else {
-		return exec.Command(home + "/.PolyNode/uninstall/uninstall").Run()
-	}
-}
-
 func createPolynConfig(home string) error {
 	defaultConfig := `{
   "nodeMirror": "https://nodejs.org/dist"
@@ -70,15 +67,8 @@ func createPolynConfig(home string) error {
 	return os.WriteFile(home+"/.PolyNode/.polynrc", []byte(defaultConfig), 0644)
 }
 
-func install() error {
-	home := os.Getenv("HOME")
-
-	err := checkForOldVersion(home)
-	if err != nil {
-		return err
-	}
-
-	err = exec.Command("cp", "-r", "PolyNode", home+"/.PolyNode").Run()
+func install(home string) error {
+	err := exec.Command("cp", "-r", "PolyNode", home+"/.PolyNode").Run()
 	if err != nil {
 		return err
 	}
@@ -96,4 +86,28 @@ func install() error {
 	} else {
 		return errors.New("unsupported shell")
 	}
+}
+
+func oldVersionExists(home string) bool {
+	_, err := os.Stat(home + "/.PolyNode")
+	return !os.IsNotExist(err)
+}
+
+func upgrade(home string) error {
+	err := os.RemoveAll(home + "/.PolyNode/polyn")
+	if err != nil {
+		return err
+	}
+
+	err = os.RemoveAll(home + "/.PolyNode/uninstall/uninstall")
+	if err != nil {
+		return err
+	}
+
+	err = exec.Command("cp", "./PolyNode/polyn", home+"/.PolyNode/polyn").Run()
+	if err != nil {
+		return err
+	}
+
+	return exec.Command("cp", "./PolyNode/uninstall/uninstall", home+"/.PolyNode/uninstall/uninstall").Run()
 }
