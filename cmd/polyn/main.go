@@ -10,16 +10,16 @@ import (
 )
 
 func main() {
-	operatingSystem := internal.ConvertToOperatingSystem(runtime.GOOS)
-	arch := internal.ConvertToArchitecture(runtime.GOARCH)
+	operatingSystem := convertToOperatingSystem(runtime.GOOS)
+	arch := convertToArchitecture(runtime.GOARCH)
 
 	defer fmt.Println()
 
-	if !internal.IsSupportedOperatingSystem(operatingSystem) {
-		fmt.Println("Not a supported operating system.")
+	if !isSupportedOperatingSystem(operatingSystem) {
+		fmt.Println(internal.UNSUPPORTED_OS_ERROR)
 		return
-	} else if !internal.IsSupportedArchitecture(arch) {
-		fmt.Println("Not a supported CPU architecture.")
+	} else if !isSupportedArchitecture(arch) {
+		fmt.Println("unsupported CPU architecture")
 		return
 	}
 
@@ -27,6 +27,8 @@ func main() {
 		fmt.Println(internal.HELP)
 		return
 	}
+
+	config := internal.LoadPolyNodeConfig()
 
 	args := []string{}
 	for _, arg := range os.Args {
@@ -36,8 +38,40 @@ func main() {
 	if args[1] == "version" {
 		fmt.Println(internal.VERSION)
 	} else if internal.IsKnownCommand(args[1]) {
-		internal.HandleNode(args[1:], operatingSystem, arch)
+		internal.HandleNode(args[1:], operatingSystem, arch, config)
 	} else {
 		fmt.Println(internal.HELP)
 	}
+}
+
+func convertToArchitecture(archStr string) internal.Architecture {
+	switch archStr {
+	case "amd64":
+		return internal.X64
+	case "arm64":
+		return internal.ARM64
+	default:
+		return internal.NA_ARCH
+	}
+}
+
+func convertToOperatingSystem(osStr string) internal.OperatingSystem {
+	switch osStr {
+	case "darwin":
+		return internal.MAC
+	case "linux":
+		return internal.LINUX
+	case "windows":
+		return internal.WINDOWS
+	default:
+		return internal.NA_OS
+	}
+}
+
+func isSupportedArchitecture(arch internal.Architecture) bool {
+	return arch != internal.NA_ARCH
+}
+
+func isSupportedOperatingSystem(operatingSystem internal.OperatingSystem) bool {
+	return operatingSystem != internal.NA_OS
 }

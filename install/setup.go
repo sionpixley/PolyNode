@@ -49,7 +49,7 @@ func addToPath(home string, rcFile string) error {
 	}
 
 	content := string(contentData)
-	content += "\nPATH=$PATH:" + home + "/.PolyNode:" + home + "/.PolyNode/nodejs/bin"
+	content += "\nexport PATH=$PATH:" + home + "/.PolyNode:" + home + "/.PolyNode/nodejs/bin"
 
 	return os.WriteFile(home+"/"+rcFile, []byte(content), 0644)
 }
@@ -62,6 +62,14 @@ func checkForOldVersion(home string) error {
 	}
 }
 
+func createPolynConfig(home string) error {
+	defaultConfig := `{
+  "nodeMirror": "https://nodejs.org/dist"
+}`
+
+	return os.WriteFile(home+"/.PolyNode/.polynrc", []byte(defaultConfig), 0644)
+}
+
 func install() error {
 	home := os.Getenv("HOME")
 
@@ -71,6 +79,11 @@ func install() error {
 	}
 
 	err = exec.Command("cp", "-r", "PolyNode", home+"/.PolyNode").Run()
+	if err != nil {
+		return err
+	}
+
+	err = createPolynConfig(home)
 	if err != nil {
 		return err
 	}

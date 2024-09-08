@@ -24,9 +24,12 @@ Commands:
   use <version>     : Switches Node.js to a different version.
   version           : Prints the current version of PolyNode.`
 
+	UNSUPPORTED_OS_ERROR string = "unsupported operating system"
+
 	// PolyNode's version.
 	VERSION string = "v0.5.0"
 
+	_DEFAULT_NODE_MIRROR          string = "https://nodejs.org/dist"
 	_INVALID_VERSION_FORMAT_ERROR string = "invalid version format"
 )
 
@@ -40,9 +43,9 @@ const (
 
 // NA is for Not Applicable.
 const (
-	_NA_ARCH Architecture = iota
-	_ARM64
-	_X64
+	NA_ARCH Architecture = iota
+	ARM64
+	X64
 )
 
 // NA is for Not Applicable.

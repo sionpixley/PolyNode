@@ -2,6 +2,31 @@
 
 PolyNode is a CLI tool that helps install and manage multiple versions of Node.js on the same device.
 
+## Table of contents
+
+1. [Supported operating systems and CPU architectures](#supported-operating-systems-and-cpu-architectures)
+    1. [Linux support information](#linux-support-information)
+2. [How to install](#how-to-install-polynode)
+    1. [Linux](#for-linux)
+    2. [macOS](#for-macos)
+    3. [Windows](#for-windows)
+3. [How to use](#how-to-use)
+    1. [Searching for available Node.js versions](#searching-for-available-nodejs-versions)
+    2. [Searching for a specific Node.js version](#searching-for-a-specific-nodejs-version)
+    3. [Downloading a new version of Node.js](#downloading-a-new-version-of-nodejs)
+    4. [Switching to a different downloaded version of Node.js](#switching-to-a-different-downloaded-version-of-nodejs)
+    5. [Downloading and switching to a new version of Node.js](#downloading-and-switching-to-a-new-version-of-nodejs)
+    6. [Printing your current version of Node.js](#printing-your-current-version-of-nodejs)
+    7. [Printing all downloaded versions of Node.js](#printing-all-downloaded-versions-of-nodejs)
+    8. [Deleting a downloaded version of Node.js](#deleting-a-downloaded-version-of-nodejs)
+4. [How to configure](#how-to-configure-polynode)
+    1. [Configuration fields](#configuration-fields)
+5. [How to uninstall](#how-to-uninstall-polynode)
+    1. [Linux and macOS](#linux-and-macos)
+    2. [Windows](#windows)
+6. [Future development](#future-development)
+7. [Information](#information)
+
 ## Supported operating systems and CPU architectures
 
 - Linux ARM64
@@ -11,13 +36,13 @@ PolyNode is a CLI tool that helps install and manage multiple versions of Node.j
 - Windows ARM64 (Windows 10 or newer)
 - Windows x64 (Windows 10 or newer)
 
-### Linux support
+### Linux support information
 
-PolyNode only supports Bash or Zsh by default. During the install process, PolyNode edits either .bashrc or .zshrc to add two locations to the PATH: PolyNode's home directory `~/.PolyNode` and the symlink for Node.js `~/.PolyNode/nodejs`. This will probably change later to have support for more shells.
+PolyNode only supports Bash or Zsh by default. During the install process, PolyNode edits either .bashrc or .zshrc to add two locations to the PATH: PolyNode's home directory `~/.PolyNode` and the symlink for Node.js `~/.PolyNode/nodejs`. You can get PolyNode to work for other shells by adding these directories to your PATH environment variable.
 
 ## How to install PolyNode
 
-Please uninstall all installed versions of Node.js before installing PolyNode. PolyNode does not require sudo/admin privileges to install. 
+If you have a previous version of PolyNode installed, you **do not** have to uninstall it or any Node.js version installed with it before installing the new version of PolyNode. Please uninstall all versions of Node.js that weren't installed by PolyNode before installing PolyNode. PolyNode does not require sudo/admin privileges to install. 
 
 ### For Linux
 
@@ -41,7 +66,7 @@ Please uninstall all installed versions of Node.js before installing PolyNode. P
 
 PolyNode does not require sudo/admin privileges to use the `polyn` command.
 
-### Searching for recent Node.js versions
+### Searching for available Node.js versions
 
 `polyn search`
 
@@ -67,7 +92,7 @@ The `install` command is equivalent to the `add` command followed by the `use` c
 
 `polyn install <version>`
 
-### Printing the current version of Node.js
+### Printing your current version of Node.js
 
 `polyn current`
 
@@ -86,6 +111,28 @@ or
 or 
 
 `polyn remove <version>`
+
+### Printing your current version of PolyNode
+
+`polyn version`
+
+## How to configure PolyNode
+
+PolyNode's configuration is handled through a JSON file named `.polynrc` located in PolyNode's home directory (`~/.PolyNode` for Linux/macOS and `%LOCALAPPDATA%\Programs\PolyNode` for Windows). Please see below for the default configuration for `.polynrc`:
+
+```
+{
+  "nodeMirror": "https://nodejs.org/dist"
+}
+```
+
+This configuration file is limited at the moment. I hope to expand its capabilities over time.
+
+### Configuration fields
+
+#### nodeMirror
+
+This field is a `string` that represents the URL to download Node.js. Default value is `"https://nodejs.org/dist"`.
 
 ## How to uninstall PolyNode
 

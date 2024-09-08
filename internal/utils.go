@@ -1,45 +1,37 @@
 package internal
 
 import (
+	"fmt"
 	"os"
 	"os/exec"
 	"strings"
 )
 
-func ConvertToArchitecture(archStr string) Architecture {
-	switch archStr {
-	case "amd64":
-		return _X64
-	case "arm64":
-		return _ARM64
-	default:
-		return _NA_ARCH
-	}
-}
-
-func ConvertToOperatingSystem(osStr string) OperatingSystem {
-	switch osStr {
-	case "darwin":
-		return MAC
-	case "linux":
-		return LINUX
-	case "windows":
-		return WINDOWS
-	default:
-		return NA_OS
-	}
-}
-
 func IsKnownCommand(command string) bool {
 	return convertToCommand(command) != _NA_COMM
 }
 
-func IsSupportedArchitecture(arch Architecture) bool {
-	return arch != _NA_ARCH
-}
+func LoadPolyNodeConfig() PolyNodeConfig {
+	if _, err := os.Stat(polynHomeDir + pathSeparator + ".polynrc"); os.IsNotExist(err) {
+		// Default config
+		return PolyNodeConfig{NodeMirror: _DEFAULT_NODE_MIRROR}
+	} else {
+		content, err := os.ReadFile(polynHomeDir + pathSeparator + ".polynrc")
+		if err != nil {
+			// Default config
+			fmt.Println(err.Error())
+			return PolyNodeConfig{NodeMirror: _DEFAULT_NODE_MIRROR}
+		}
 
-func IsSupportedOperatingSystem(operatingSystem OperatingSystem) bool {
-	return operatingSystem != NA_OS
+		config := PolyNodeConfig{}
+		err = config.UnmarshalJSON(content)
+		if err != nil {
+			// Default config
+			fmt.Println(err.Error())
+			return PolyNodeConfig{NodeMirror: _DEFAULT_NODE_MIRROR}
+		}
+		return config
+	}
 }
 
 func convertToCommand(commandStr string) command {
