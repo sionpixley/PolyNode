@@ -79,7 +79,7 @@ func addNode(version string, operatingSystem OperatingSystem, arch Architecture,
 	fileName := "node-" + version + "-" + archiveName
 	fmt.Printf("Downloading %s...", fileName)
 
-	url := config.NodeMirror + version + "/" + fileName
+	url := config.NodeMirror + "/" + version + "/" + fileName
 
 	client := new(http.Client)
 	request, err := http.NewRequest(http.MethodGet, url, nil)
