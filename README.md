@@ -19,6 +19,7 @@ PolyNode is a CLI tool that helps install and manage multiple versions of Node.j
     6. [Printing your current version of Node.js](#printing-your-current-version-of-nodejs)
     7. [Printing all downloaded versions of Node.js](#printing-all-downloaded-versions-of-nodejs)
     8. [Deleting a downloaded version of Node.js](#deleting-a-downloaded-version-of-nodejs)
+    9. [Printing your current version of PolyNode](#printing-your-current-version-of-polynode)
 4. [How to configure](#how-to-configure-polynode)
     1. [Configuration fields](#configuration-fields)
 5. [How to uninstall](#how-to-uninstall-polynode)

@@ -62,7 +62,8 @@ func addToPath(home string, rcFile string) error {
 func createPolynConfig(home string) error {
 	defaultConfig := `{
   "nodeMirror": "https://nodejs.org/dist"
-}`
+}
+`
 
 	return os.WriteFile(home+"/.PolyNode/.polynrc", []byte(defaultConfig), 0644)
 }
