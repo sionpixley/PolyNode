@@ -47,19 +47,19 @@ If you have a previous version of PolyNode installed, you **do not** have to uni
 
 ### For Linux
 
-1. Navigate to [Releases](https://github.com/sionpixley/PolyNode/releases).
+1. Navigate to [Releases](https://github.com/sionpixley/PolyNode/releases/latest).
 2. Download the latest Linux .tar.xz file appropriate for your CPU architecture.
 3. Extract the .tar.xz file and run the setup executable.
 
 ### For macOS
 
-1. Navigate to [Releases](https://github.com/sionpixley/PolyNode/releases).
+1. Navigate to [Releases](https://github.com/sionpixley/PolyNode/releases/latest).
 2. Download the latest Darwin .tar.gz file appropriate for your CPU architecture.
 3. Extract the .tar.gz file and run the setup executable.
 
 ### For Windows
 
-1. Navigate to [Releases](https://github.com/sionpixley/PolyNode/releases).
+1. Navigate to [Releases](https://github.com/sionpixley/PolyNode/releases/latest).
 2. Download the latest Windows .zip file appropriate for your CPU architecture.
 3. Extract the .zip file and run setup.exe.
 
