@@ -30,12 +30,9 @@ PolyNode is a CLI tool that helps install and manage multiple versions of Node.j
 
 ## Supported operating systems and CPU architectures
 
-- Linux ARM64
-- Linux x64
-- macOS ARM64
-- macOS x64
-- Windows ARM64 (Windows 10 or newer)
-- Windows x64 (Windows 10 or newer)
+- Linux (x64 and ARM64)
+- macOS (x64 and ARM64)
+- Windows 10 and newer (x64 and ARM64)
 
 ### Linux support information
 

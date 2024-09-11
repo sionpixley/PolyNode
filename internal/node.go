@@ -283,21 +283,12 @@ func searchAvailableNodeVersions(config PolyNodeConfig) error {
 		}
 
 		majorVersion := strings.Split(nodeVersion.Version, ".")[0]
-		if _, exists := majorVersions[majorVersion]; exists {
-			// Skip, because we already have the latest version of this major version.
-			continue
-		} else {
+		if _, exists := majorVersions[majorVersion]; !exists {
 			majorVersions[majorVersion] = struct{}{}
 			if nodeVersion.Lts && len(ltsVersions) < maxEntries {
 				ltsVersions = append(ltsVersions, nodeVersion.Version)
-			} else if nodeVersion.Lts {
-				// We have already reached the max entries for LTS versions.
-				continue
-			} else if len(stableVersions) < maxEntries {
+			} else if !nodeVersion.Lts && len(stableVersions) < maxEntries {
 				stableVersions = append(stableVersions, nodeVersion.Version)
-			} else {
-				// We have already reached the max entries for stable versions.
-				continue
 			}
 		}
 	}

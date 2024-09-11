@@ -110,10 +110,7 @@ func isValidVersionFormat(version string) bool {
 	}
 	for _, part := range parts {
 		for _, char := range part {
-			if _, exists := validChars[char]; exists {
-				// char exists in the validChars map, so it's a valid character.
-				continue
-			} else {
+			if _, exists := validChars[char]; !exists {
 				return false
 			}
 		}
