@@ -1,13 +1,13 @@
 #!/bin/zsh
 
-version=v0.6.1
+version=v0.6.2
 
 # Build macOS ARM64
 
 env GOOS=darwin GOARCH=arm64 go build -tags=prod -o polyn-darwin-arm64 ./cmd/polyn
 
 cd install
-env GOOS=darwin GOARCH=arm64 go build -o ../setup-darwin-arm64
+env GOOS=darwin GOARCH=arm64 go build -o ../setup-darwin-arm64 ./cmd/setup
 
 cd ../uninstall
 env GOOS=darwin GOARCH=arm64 go build -o ../uninstall-darwin-arm64
@@ -35,7 +35,7 @@ mv uninstall-darwin-arm64 ./PolyNode-$version-darwin-arm64/PolyNode/uninstall/un
 env GOOS=darwin GOARCH=amd64 go build -tags=prod -o polyn-darwin-x64 ./cmd/polyn
 
 cd install
-env GOOS=darwin GOARCH=amd64 go build -o ../setup-darwin-x64
+env GOOS=darwin GOARCH=amd64 go build -o ../setup-darwin-x64 ./cmd/setup
 
 cd ../uninstall
 env GOOS=darwin GOARCH=amd64 go build -o ../uninstall-darwin-x64
