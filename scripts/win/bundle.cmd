@@ -10,7 +10,7 @@ set GOARCH=arm64
 go build -tags=prod -o polyn-arm64.exe ./cmd/polyn
 
 cd install
-go build -o ../setup-arm64.exe
+go build -o ../setup-arm64.exe ./cmd/setup
 
 cd ..\uninstall
 go build -o ../uninstall-arm64.exe
@@ -41,7 +41,7 @@ set GOARCH=amd64
 go build -tags=prod -o polyn-x64.exe ./cmd/polyn
 
 cd install
-go build -o ../setup-x64.exe
+go build -o ../setup-x64.exe ./cmd/setup
 
 cd ..\uninstall
 go build -o ../uninstall-x64.exe

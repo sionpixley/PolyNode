@@ -13,9 +13,9 @@ PolyNode is a CLI tool that helps install and manage multiple versions of Node.j
 3. [How to use](#how-to-use)
     1. [Searching for available Node.js versions](#searching-for-available-nodejs-versions)
     2. [Searching for a specific Node.js version](#searching-for-a-specific-nodejs-version)
-    3. [Downloading a new version of Node.js](#downloading-a-new-version-of-nodejs)
-    4. [Switching to a different downloaded version of Node.js](#switching-to-a-different-downloaded-version-of-nodejs)
-    5. [Downloading and switching to a new version of Node.js](#downloading-and-switching-to-a-new-version-of-nodejs)
+    3. [Downloading and switching to a new version of Node.js](#downloading-and-switching-to-a-new-version-of-nodejs)
+    4. [Downloading a new version of Node.js](#downloading-a-new-version-of-nodejs)
+    5. [Switching to a different downloaded version of Node.js](#switching-to-a-different-downloaded-version-of-nodejs)
     6. [Printing your current version of Node.js](#printing-your-current-version-of-nodejs)
     7. [Printing all downloaded versions of Node.js](#printing-all-downloaded-versions-of-nodejs)
     8. [Deleting a downloaded version of Node.js](#deleting-a-downloaded-version-of-nodejs)
@@ -40,7 +40,11 @@ PolyNode only supports Bash or Zsh by default. During the install process, PolyN
 
 ## How to install PolyNode
 
-If you have a previous version of PolyNode installed, you **do not** have to uninstall it or any Node.js version installed with it before installing the new version of PolyNode. Please uninstall all versions of Node.js that weren't installed by PolyNode before installing PolyNode. PolyNode does not require sudo/admin privileges to install. 
+PolyNode does not require sudo/admin privileges to install.
+
+If you have a previous version of PolyNode installed, you do not have to uninstall it before installing the new version.
+
+Please uninstall all Node.js downloads that weren't installed by PolyNode before running the setup executable.
 
 ### For Linux
 
@@ -76,6 +80,12 @@ If you want to search for a specific major version, add a "." at the end of your
 
 `polyn search <prefix>`
 
+### Downloading and switching to a new version of Node.js
+
+The `install` command is equivalent to the `add` command followed by the `use` command.
+
+`polyn install <version>`
+
 ### Downloading a new version of Node.js
 
 `polyn add <version>`
@@ -83,12 +93,6 @@ If you want to search for a specific major version, add a "." at the end of your
 ### Switching to a different downloaded version of Node.js
 
 `polyn use <version>`
-
-### Downloading and switching to a new version of Node.js
-
-The `install` command is equivalent to the `add` command followed by the `use` command.
-
-`polyn install <version>`
 
 ### Printing your current version of Node.js
 
