@@ -12,15 +12,15 @@ import (
 	"strings"
 )
 
-const _LINUX_UNINSTALL_SCRIPT string = `#!/bin/bash
+const _LINUX_UNINSTALL_SCRIPT string = `#!/bin/dash
 
 rm -rf $HOME/.PolyNode
-rm -f $HOME/polyn-uninstall-temp.sh`
+rm -f $HOME/polyn-uninstall-temp`
 
 const _MAC_UNINSTALL_SCRIPT string = `#!/bin/zsh
 
 rm -rf $HOME/.PolyNode
-rm -f $HOME/polyn-uninstall-temp.zsh`
+rm -f $HOME/polyn-uninstall-temp`
 
 func main() {
 	operatingSystem := runtime.GOOS
@@ -88,12 +88,12 @@ func uninstallLinux() error {
 		return err
 	}
 
-	err = os.WriteFile(home+"/polyn-uninstall-temp.sh", []byte(_LINUX_UNINSTALL_SCRIPT), 0700)
+	err = os.WriteFile(home+"/polyn-uninstall-temp", []byte(_LINUX_UNINSTALL_SCRIPT), 0700)
 	if err != nil {
 		return err
 	}
 
-	return exec.Command("/bin/bash", "-c", home+"/polyn-uninstall-temp.sh").Run()
+	return exec.Command(home + "/polyn-uninstall-temp").Run()
 }
 
 func uninstallMac() error {
@@ -103,10 +103,10 @@ func uninstallMac() error {
 		return err
 	}
 
-	err = os.WriteFile(home+"/polyn-uninstall-temp.zsh", []byte(_MAC_UNINSTALL_SCRIPT), 0700)
+	err = os.WriteFile(home+"/polyn-uninstall-temp", []byte(_MAC_UNINSTALL_SCRIPT), 0700)
 	if err != nil {
 		return err
 	}
 
-	return exec.Command("/bin/zsh", "-c", home+"/polyn-uninstall-temp.zsh").Run()
+	return exec.Command(home + "/polyn-uninstall-temp").Run()
 }

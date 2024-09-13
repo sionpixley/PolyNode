@@ -77,10 +77,10 @@ func upgrade(home string) error {
 		return err
 	}
 
-	err = exec.Command("copy", ".\\PolyNode\\polyn.exe", home+"\\PolyNode\\polyn.exe").Run()
+	err = exec.Command("cmd", "/c", "copy", ".\\PolyNode\\polyn.exe", home+"\\PolyNode\\polyn.exe").Run()
 	if err != nil {
 		return err
 	}
 
-	return exec.Command("copy", ".\\PolyNode\\uninstall\\uninstall.exe", home+"\\PolyNode\\uninstall\\uninstall.exe").Run()
+	return exec.Command("cmd", "/c", "copy", ".\\PolyNode\\uninstall\\uninstall.exe", home+"\\PolyNode\\uninstall\\uninstall.exe").Run()
 }
