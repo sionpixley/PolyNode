@@ -86,9 +86,21 @@ The `install` command is equivalent to the `add` command followed by the `use` c
 
 `polyn install <version>`
 
+You can also use the `lts` keyword to download the latest LTS release without providing a specific version. 
+
+`polyn install lts`
+
+The `latest` keyword will download the latest release of Node.js, regardless if it's an LTS version or not.
+
+`polyn install latest`
+
 ### Downloading a new version of Node.js
 
 `polyn add <version>`
+
+`polyn add lts`
+
+`polyn add latest`
 
 ### Switching to a different downloaded version of Node.js
 
@@ -153,5 +165,7 @@ PolyNode does not require sudo/admin privileges to uninstall.
 The original scope of this project was to be able to install and manage multiple versions of Bun, Deno, and Node.js. It currently only supports Node.js, but I would like to support Bun and Deno in the future.
 
 ## Information
+
+PolyNode draws a lot of inspiration, especially in regards to syntax, from other, more well-known projects, like: [nvm](https://github.com/nvm-sh/nvm), [nvm-windows](https://github.com/coreybutler/nvm-windows), and [nvs](https://github.com/jasongin/nvs).
 
 Go 1.23

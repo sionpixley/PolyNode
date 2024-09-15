@@ -23,7 +23,7 @@ func HandleNode(args []string, operatingSystem OperatingSystem, arch Architectur
 	switch command {
 	case _ADD:
 		if len(args) > 1 {
-			err = addNode(args[1], operatingSystem, arch, config)
+			err = addNode(convertKeywordToNodeVersionStr(args[1], config), operatingSystem, arch, config)
 		} else {
 			fmt.Println(HELP)
 		}
@@ -31,7 +31,7 @@ func HandleNode(args []string, operatingSystem OperatingSystem, arch Architectur
 		printCurrentNode()
 	case _INSTALL:
 		if len(args) > 1 {
-			err = installNode(args[1], operatingSystem, arch, config)
+			err = installNode(convertKeywordToNodeVersionStr(args[1], config), operatingSystem, arch, config)
 		} else {
 			fmt.Println(HELP)
 		}
@@ -138,6 +138,31 @@ func addNode(version string, operatingSystem OperatingSystem, arch Architecture,
 	fmt.Println("Done.")
 	fmt.Printf("Adding Node.js %s...Done.\n", version)
 	return nil
+}
+
+func convertKeywordToNodeVersionStr(keyword string, config PolyNodeConfig) string {
+	if keyword == "lts" {
+		nodeVersions, err := getAllNodeVersions(config)
+		if err != nil {
+			return keyword
+		}
+
+		for _, nodeVersion := range nodeVersions {
+			if nodeVersion.Lts {
+				return nodeVersion.Version
+			}
+		}
+		return keyword
+	} else if keyword == "latest" {
+		nodeVersions, err := getAllNodeVersions(config)
+		if err != nil {
+			return keyword
+		}
+
+		return nodeVersions[0].Version
+	} else {
+		return keyword
+	}
 }
 
 func getAllNodeVersions(config PolyNodeConfig) ([]NodeVersion, error) {
