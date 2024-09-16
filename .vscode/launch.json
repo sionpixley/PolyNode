@@ -18,7 +18,7 @@
       "type": "go",
       "request": "launch",
       "mode": "debug",
-      "program": "${workspaceFolder}/install"
+      "program": "${workspaceFolder}/install/cmd/setup"
     },
     {
       "name": "Debug uninstall",
@@ -26,6 +26,13 @@
       "request": "launch",
       "mode": "debug",
       "program": "${workspaceFolder}/uninstall"
+    },
+    {
+      "name": "Debug serve",
+      "type": "go",
+      "request": "launch",
+      "mode": "debug",
+      "program": "${workspaceFolder}/web/cmd/serve"
     }
   ]
 }

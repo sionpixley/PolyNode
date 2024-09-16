@@ -5,6 +5,9 @@
 *.tar.xz
 *.zip
 .DS_Store
+node_modules/
+dist/
+.angular/
 
 # Specific files and folders
 

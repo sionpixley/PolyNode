@@ -1,0 +1,9 @@
+@use '@angular/material' as mat;
+@use './theme.scss' as theme;
+
+html, body { height: 100%; font-size: 100%; }
+body {
+  margin: 0;
+  font-family: Roboto, 'Helvetica Neue', sans-serif;
+  background: mat.get-theme-color(theme.$gui-theme, surface);
+}
