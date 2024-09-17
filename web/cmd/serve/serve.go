@@ -34,8 +34,11 @@ func mapEndpoints(apiRouter *mux.Router) {
 }
 
 func serveGui(w http.ResponseWriter, r *http.Request) {
-	trimmedPath := strings.TrimPrefix(r.URL.Path, "/")
-	filePath := internal.PolyNodeHomeDir + "/gui/" + trimmedPath
+	trimmedPath := strings.TrimPrefix(r.URL.Path, "/gui")
+	if trimmedPath == "" || trimmedPath == "/" {
+		trimmedPath = "index.html"
+	}
+	filePath := internal.PolyNodeHomeDir + "/gui/dist/gui/browser" + trimmedPath
 	if _, err := os.Stat(filePath); os.IsNotExist(err) {
 		http.ServeFile(w, r, internal.PolyNodeHomeDir+"/gui/dist/gui/browser/index.html")
 	} else {

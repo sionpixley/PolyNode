@@ -13,3 +13,4 @@ dist/
 
 /node
 /nodejs
+/web/cmd/serve/gui
