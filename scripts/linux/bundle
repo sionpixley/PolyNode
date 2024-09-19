@@ -1,6 +1,6 @@
 #!/bin/dash
 
-version=v0.7.0
+version=v0.8.0
 
 # Build Linux ARM64
 
@@ -12,7 +12,14 @@ env GOOS=linux GOARCH=arm64 go build -o ../setup-linux-arm64 ./cmd/setup
 cd ../uninstall
 env GOOS=linux GOARCH=arm64 go build -o ../uninstall-linux-arm64
 
-cd ..
+cd ../web
+env GOOS=linux GOARCH=arm64 go build -tags=prod -o ../PolyNode-linux-arm64 ./cmd/serve
+
+cd gui
+pnpm install
+pnpm run build
+
+cd ../..
 mkdir PolyNode-$version-linux-arm64
 mv setup-linux-arm64 ./PolyNode-$version-linux-arm64/setup
 
@@ -20,6 +27,7 @@ cd PolyNode-$version-linux-arm64
 mkdir PolyNode
 cd ..
 mv polyn-linux-arm64 ./PolyNode-$version-linux-arm64/PolyNode/polyn
+mv PolyNode-linux-arm64 ./PolyNode-$version-linux-arm64/PolyNode/PolyNode
 
 cp README.md ./PolyNode-$version-linux-arm64/PolyNode
 cp LICENSE ./PolyNode-$version-linux-arm64/PolyNode
@@ -27,8 +35,10 @@ cp SECURITY.md ./PolyNode-$version-linux-arm64/PolyNode
 
 cd ./PolyNode-$version-linux-arm64/PolyNode
 mkdir uninstall
+mkdir gui
 cd ../..
 mv uninstall-linux-arm64 ./PolyNode-$version-linux-arm64/PolyNode/uninstall/uninstall
+cp -r ./web/gui/dist ./PolyNode-$version-linux-arm64/PolyNode/gui/dist
 
 # Build Linux x64
 
@@ -40,6 +50,9 @@ env GOOS=linux GOARCH=amd64 go build -o ../setup-linux-x64 ./cmd/setup
 cd ../uninstall
 env GOOS=linux GOARCH=amd64 go build -o ../uninstall-linux-x64
 
+cd ../web
+env GOOS=linux GOARCH=amd64 go build -tags=prod -o ../PolyNode-linux-x64 ./cmd/serve
+
 cd ..
 mkdir PolyNode-$version-linux-x64
 mv setup-linux-x64 ./PolyNode-$version-linux-x64/setup
@@ -48,6 +61,7 @@ cd PolyNode-$version-linux-x64
 mkdir PolyNode
 cd ..
 mv polyn-linux-x64 ./PolyNode-$version-linux-x64/PolyNode/polyn
+mv PolyNode-linux-x64 ./PolyNode-$version-linux-x64/PolyNode/PolyNode
 
 cp README.md ./PolyNode-$version-linux-x64/PolyNode
 cp LICENSE ./PolyNode-$version-linux-x64/PolyNode
@@ -55,8 +69,10 @@ cp SECURITY.md ./PolyNode-$version-linux-x64/PolyNode
 
 cd ./PolyNode-$version-linux-x64/PolyNode
 mkdir uninstall
+mkdir gui
 cd ../..
 mv uninstall-linux-x64 ./PolyNode-$version-linux-x64/PolyNode/uninstall/uninstall
+cp -r ./web/gui/dist ./PolyNode-$version-linux-x64/PolyNode/gui/dist
 
 # Bundle
 

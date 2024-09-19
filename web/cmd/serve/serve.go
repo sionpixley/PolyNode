@@ -8,6 +8,8 @@ import (
 	"os/exec"
 	"strings"
 	"web/internal"
+	"web/internal/middleware"
+	"web/internal/services"
 
 	"github.com/gorilla/mux"
 )
@@ -30,7 +32,12 @@ func main() {
 }
 
 func mapEndpoints(apiRouter *mux.Router) {
-	apiRouter.HandleFunc("/list", internal.List).Methods(http.MethodGet)
+	apiRouter.HandleFunc("/list", services.List).Methods(http.MethodGet)
+	apiRouter.HandleFunc("/version", services.Version).Methods(http.MethodGet)
+
+	apiRouter.Use(middleware.SetCacheControlHeader)
+	apiRouter.Use(middleware.SetContentTypeHeaders)
+	apiRouter.Use(middleware.SetFrameHeaders)
 }
 
 func serveGui(w http.ResponseWriter, r *http.Request) {

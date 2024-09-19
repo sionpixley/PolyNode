@@ -1,0 +1,18 @@
+@use '../theme.scss' as theme;
+
+.app-title-container {
+  top: 0;
+  left: 0;
+  width: 100%;
+  color: theme.$on-surface;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.app-version {
+  right: 1rem;
+  bottom: 0.25rem;
+  position: fixed;
+  color: theme.$on-surface;
+}

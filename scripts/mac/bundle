@@ -1,6 +1,6 @@
 #!/bin/zsh
 
-version=v0.7.0
+version=v0.8.0
 
 # Build macOS ARM64
 
@@ -12,7 +12,14 @@ env GOOS=darwin GOARCH=arm64 go build -o ../setup-darwin-arm64 ./cmd/setup
 cd ../uninstall
 env GOOS=darwin GOARCH=arm64 go build -o ../uninstall-darwin-arm64
 
-cd ..
+cd ../web
+env GOOS=darwin GOARCH=arm64 go build -tags=prod -o ../PolyNode-darwin-arm64 ./cmd/serve
+
+cd gui
+pnpm install
+pnpm run build
+
+cd ../..
 mkdir PolyNode-$version-darwin-arm64
 mv setup-darwin-arm64 ./PolyNode-$version-darwin-arm64/setup
 
@@ -20,6 +27,7 @@ cd PolyNode-$version-darwin-arm64
 mkdir PolyNode
 cd ..
 mv polyn-darwin-arm64 ./PolyNode-$version-darwin-arm64/PolyNode/polyn
+mv PolyNode-darwin-arm64 ./PolyNode-$version-darwin-arm64/PolyNode/PolyNode
 
 cp README.md ./PolyNode-$version-darwin-arm64/PolyNode
 cp LICENSE ./PolyNode-$version-darwin-arm64/PolyNode
@@ -27,8 +35,10 @@ cp SECURITY.md ./PolyNode-$version-darwin-arm64/PolyNode
 
 cd ./PolyNode-$version-darwin-arm64/PolyNode
 mkdir uninstall
+mkdir gui
 cd ../..
 mv uninstall-darwin-arm64 ./PolyNode-$version-darwin-arm64/PolyNode/uninstall/uninstall
+cp -r ./web/gui/dist ./PolyNode-$version-darwin-arm64/PolyNode/gui/dist
 
 # Build macOS x64
 
@@ -40,6 +50,9 @@ env GOOS=darwin GOARCH=amd64 go build -o ../setup-darwin-x64 ./cmd/setup
 cd ../uninstall
 env GOOS=darwin GOARCH=amd64 go build -o ../uninstall-darwin-x64
 
+cd ../web
+env GOOS=darwin GOARCH=amd64 go build -tags=prod -o ../PolyNode-darwin-x64 ./cmd/serve
+
 cd ..
 mkdir PolyNode-$version-darwin-x64
 mv setup-darwin-x64 ./PolyNode-$version-darwin-x64/setup
@@ -48,6 +61,7 @@ cd PolyNode-$version-darwin-x64
 mkdir PolyNode
 cd ..
 mv polyn-darwin-x64 ./PolyNode-$version-darwin-x64/PolyNode/polyn
+mv PolyNode-darwin-x64 ./PolyNode-$version-darwin-x64/PolyNode/PolyNode
 
 cp README.md ./PolyNode-$version-darwin-x64/PolyNode
 cp LICENSE ./PolyNode-$version-darwin-x64/PolyNode
@@ -55,8 +69,10 @@ cp SECURITY.md ./PolyNode-$version-darwin-x64/PolyNode
 
 cd ./PolyNode-$version-darwin-x64/PolyNode
 mkdir uninstall
+mkdir gui
 cd ../..
 mv uninstall-darwin-x64 ./PolyNode-$version-darwin-x64/PolyNode/uninstall/uninstall
+cp -r ./web/gui/dist ./PolyNode-$version-darwin-x64/PolyNode/gui/dist
 
 # Notarize
 

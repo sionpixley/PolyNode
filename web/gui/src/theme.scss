@@ -145,6 +145,12 @@ $gui-theme: mat.define-theme((
   )
 ));
 
+$primary: mat.get-theme-color($gui-theme, primary);
+$secondary: mat.get-theme-color($gui-theme, secondary);
+$tertiary: mat.get-theme-color($gui-theme, tertiary);
+$surface: mat.get-theme-color($gui-theme, surface);
+$on-surface: mat.get-theme-color($gui-theme, on-surface);
+
 :root {
   @include mat.all-component-themes($gui-theme);
 }
