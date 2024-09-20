@@ -2,9 +2,10 @@ import { Component, HostListener, OnDestroy, OnInit } from '@angular/core';
 import { RouterOutlet } from '@angular/router';
 import { MatIconRegistry } from '@angular/material/icon';
 import { GuiService } from './core/services/gui.service';
-import { Subscription } from 'rxjs';
+import { forkJoin, Observable, Subscription } from 'rxjs';
 import { DownloadedComponent } from './core/components/downloaded/downloaded.component';
 import { AvailableComponent } from './core/components/available/available.component';
+import { NodeVersion } from './core/services/gui.service.models';
 
 @Component({
   selector: 'app-root',
@@ -14,6 +15,10 @@ import { AvailableComponent } from './core/components/available/available.compon
   styleUrl: './app.component.scss'
 })
 export class AppComponent implements OnInit, OnDestroy {
+  // public availableVersions: string[] = [];
+  // public downloadedVersions: string[] = ['v18.19.1'];
+  public availableVersions: NodeVersion[] = [];
+  public downloadedVersions: NodeVersion[] = [{ version: 'v18.19.1', lts: true }];
   public version: string = 'v0.0.0';
 
   private readonly _sub: Subscription = new Subscription();
@@ -23,10 +28,18 @@ export class AppComponent implements OnInit, OnDestroy {
   public ngOnInit(): void {
     this._iconRegistry.setDefaultFontSetClass('material-symbols-sharp');
 
+    let taskList: Observable<any>[] = [];
+    taskList.push(this._api.version());
+    taskList.push(this._api.list());
+    taskList.push(this._api.search());
     this._sub.add(
-      this._api.version().subscribe(
+      forkJoin(taskList).subscribe(
         {
-          next: v => this.version = v,
+          next: responses => {
+            this.version = responses[0].toString();
+            // this.downloadedVersions = responses[1] as string[];
+            // this.availableVersions = responses[2] as string[];
+          },
           error: (err: Error) => console.log(err.message)
         }
       )

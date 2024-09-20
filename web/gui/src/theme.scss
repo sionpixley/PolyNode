@@ -149,6 +149,7 @@ $primary: mat.get-theme-color($gui-theme, primary);
 $secondary: mat.get-theme-color($gui-theme, secondary);
 $tertiary: mat.get-theme-color($gui-theme, tertiary);
 $surface: mat.get-theme-color($gui-theme, surface);
+$surface-dim: mat.get-theme-color($gui-theme, surface-dim);
 $on-surface: mat.get-theme-color($gui-theme, on-surface);
 
 :root {

@@ -1,0 +1,10 @@
+@use '../../../../theme.scss' as theme;
+
+.app-downloaded-container {
+  border: 1px solid theme.$on-surface;
+  color: theme.$on-surface;
+}
+
+.app-downloaded-header-row {
+  background: theme.$surface-dim;
+}

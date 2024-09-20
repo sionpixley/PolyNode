@@ -1,8 +1,15 @@
 @use '../theme.scss' as theme;
 
+.app-window {
+  height: 100%;
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
+  align-items: center;
+}
+
 .app-title-container {
-  top: 0;
-  left: 0;
   width: 100%;
   color: theme.$on-surface;
   display: flex;
