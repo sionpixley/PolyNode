@@ -1,0 +1,49 @@
+@use '../../../../theme.scss' as theme;
+
+.app-downloaded-container {
+  border: 1px solid theme.$on-surface;
+  color: theme.$on-surface;
+  padding-top: 3rem;
+  padding-right: 3rem;
+  padding-bottom: 1rem;
+  padding-left: 3rem;
+  border-radius: 0.3rem;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
+  align-items: center;
+}
+
+.app-downloaded-table {
+  border: 1px solid theme.$on-surface
+}
+
+.app-downloaded-header-row {
+  background: theme.$primary-container;
+  color: theme.$on-primary-container;
+}
+
+.app-downloaded-buttons-container {
+  width: 100%;
+  display: flex;
+  flex-direction: row-reverse;
+  margin-top: 1rem;
+}
+
+.app-downloaded-remove-button {
+  background: theme.$error !important;
+  color: theme.$on-error !important;
+  border: 1px solid theme.$on-surface;
+}
+
+.app-downloaded-use-button {
+  background: theme.$primary-container !important;
+  color: theme.$on-primary-container !important;
+  border: 1px solid theme.$on-surface;
+  margin-right: 0.3rem;
+}
+
+.mdc-button-disabled {
+  background: rgba(37, 25, 22, 0.12) !important;
+  color: rgba(37, 25, 22, 0.38) !important;
+}

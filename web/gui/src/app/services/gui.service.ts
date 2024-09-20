@@ -1,7 +1,6 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
-import { NodeVersion } from './gui.service.models';
 
 @Injectable({
   providedIn: 'root'
@@ -21,20 +20,20 @@ export class GuiService {
     return this._http.post<boolean>(`http://localhost:2334/api/install/${version}`, null);
   }
 
-  public list(): Observable<NodeVersion[]> {
-    return this._http.get<NodeVersion[]>('http://localhost:2334/api/list');
+  public list(): Observable<string[]> {
+    return this._http.get<string[]>('http://localhost:2334/api/list');
   }
 
   public remove(version: string): Observable<boolean> {
     return this._http.delete<boolean>(`http://localhost:2334/api/remove/${version}`);
   }
 
-  public search(prefix: string | null = null): Observable<NodeVersion[]> {
+  public search(prefix: string | null = null): Observable<string[]> {
     if(prefix) {
-      return this._http.get<NodeVersion[]>(`http://localhost:2334/api/search/${prefix!}`);
+      return this._http.get<string[]>(`http://localhost:2334/api/search/${prefix!}`);
     }
     else {
-      return this._http.get<NodeVersion[]>(`http://localhost:2334/api/search`);
+      return this._http.get<string[]>(`http://localhost:2334/api/search`);
     }
   }
 

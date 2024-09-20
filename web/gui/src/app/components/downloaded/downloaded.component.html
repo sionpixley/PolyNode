@@ -1,0 +1,30 @@
+<div class="app-downloaded-container">
+  <table mat-table [dataSource]="downloadedVersions" class="app-downloaded-table">
+    <ng-container matColumnDef="select">
+      <th mat-header-cell *matHeaderCellDef>
+        <mat-checkbox [checked]="allDownloadedAreSelected" (change)="selectAllDownloadedVersions()"></mat-checkbox>
+      </th>
+      <td mat-cell *matCellDef="let v">
+        <mat-checkbox [checked]="isDownloadedSelected(v)" (change)="selectDownloadedVersion(v)"></mat-checkbox>
+      </td>
+    </ng-container>
+
+    <ng-container matColumnDef="version">
+      <th mat-header-cell *matHeaderCellDef>Node.js Version</th>
+      <td mat-cell *matCellDef="let v">{{ v }}</td>
+    </ng-container>
+
+    <ng-container matColumnDef="isCurrent">
+      <th mat-header-cell *matHeaderCellDef>Is Current</th>
+      <td mat-cell *matCellDef style="color: green;"><mat-icon>task_alt</mat-icon></td>
+    </ng-container>
+
+    <tr mat-header-row *matHeaderRowDef="columns" class="app-downloaded-header-row"></tr>
+    <tr mat-row *matRowDef="let row; columns: columns;"></tr>
+  </table>
+
+  <div class="app-downloaded-buttons-container">
+    <button mat-flat-button [disabled]="removeButtonIsDisabled()" class="app-downloaded-remove-button">Remove</button>
+    <button mat-flat-button [disabled]="useButtonIsDisabled()" class="app-downloaded-use-button">Use</button>
+  </div>
+</div>

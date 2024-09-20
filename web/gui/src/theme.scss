@@ -146,11 +146,18 @@ $gui-theme: mat.define-theme((
 ));
 
 $primary: mat.get-theme-color($gui-theme, primary);
+$on-primary: mat.get-theme-color($gui-theme, on-primary);
+$primary-container: mat.get-theme-color($gui-theme, primary-container);
+$on-primary-container: mat.get-theme-color($gui-theme, on-primary-container);
 $secondary: mat.get-theme-color($gui-theme, secondary);
+$on-secondary: mat.get-theme-color($gui-theme, on-secondary);
 $tertiary: mat.get-theme-color($gui-theme, tertiary);
+$on-tertiary: mat.get-theme-color($gui-theme, on-tertiary);
 $surface: mat.get-theme-color($gui-theme, surface);
 $surface-dim: mat.get-theme-color($gui-theme, surface-dim);
 $on-surface: mat.get-theme-color($gui-theme, on-surface);
+$error: mat.get-theme-color($gui-theme, error);
+$on-error: mat.get-theme-color($gui-theme, on-error);
 
 :root {
   @include mat.all-component-themes($gui-theme);

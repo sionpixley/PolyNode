@@ -1,11 +1,11 @@
 import { Component, HostListener, OnDestroy, OnInit } from '@angular/core';
 import { RouterOutlet } from '@angular/router';
 import { MatIconRegistry } from '@angular/material/icon';
-import { GuiService } from './core/services/gui.service';
+import { GuiService } from './services/gui.service';
 import { forkJoin, Observable, Subscription } from 'rxjs';
-import { DownloadedComponent } from './core/components/downloaded/downloaded.component';
-import { AvailableComponent } from './core/components/available/available.component';
-import { NodeVersion } from './core/services/gui.service.models';
+import { DownloadedComponent } from './components/downloaded/downloaded.component';
+import { AvailableComponent } from './components/available/available.component';
+import { NodeVersion } from './services/gui.service.models';
 
 @Component({
   selector: 'app-root',
@@ -18,7 +18,7 @@ export class AppComponent implements OnInit, OnDestroy {
   // public availableVersions: string[] = [];
   // public downloadedVersions: string[] = ['v18.19.1'];
   public availableVersions: NodeVersion[] = [];
-  public downloadedVersions: NodeVersion[] = [{ version: 'v18.19.1', lts: true }];
+  public downloadedVersions: string[] = ['v18.19.1']
   public version: string = 'v0.0.0';
 
   private readonly _sub: Subscription = new Subscription();
