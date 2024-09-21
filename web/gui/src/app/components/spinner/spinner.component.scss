@@ -1,0 +1,19 @@
+@use '../../../theme.scss' as theme;
+
+.app-spinner-container {
+  top: 0;
+  right: 0;
+  bottom: 0;
+  left: 0;
+  position: absolute;
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  align-items: center;
+  background: theme.$surface;
+  z-index: 999;
+}
+
+.app-spinner {
+  width: clamp(300px, 80%, 3000px);
+}

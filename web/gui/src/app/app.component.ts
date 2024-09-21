@@ -1,15 +1,21 @@
-import { Component, HostListener, OnDestroy, OnInit } from '@angular/core';
+import { Component, HostListener, OnDestroy, OnInit, signal, WritableSignal } from '@angular/core';
 import { RouterOutlet } from '@angular/router';
 import { MatIconRegistry } from '@angular/material/icon';
 import { GuiService } from './services/gui.service';
 import { forkJoin, Observable, Subscription } from 'rxjs';
 import { DownloadedComponent } from './components/downloaded/downloaded.component';
 import { AvailableComponent } from './components/available/available.component';
+import { SpinnerComponent } from './components/spinner/spinner.component';
 
 @Component({
   selector: 'app-root',
   standalone: true,
-  imports: [RouterOutlet, DownloadedComponent, AvailableComponent],
+  imports: [
+    RouterOutlet,
+    DownloadedComponent,
+    AvailableComponent,
+    SpinnerComponent
+  ],
   templateUrl: './app.component.html',
   styleUrl: './app.component.scss'
 })
@@ -17,10 +23,11 @@ export class AppComponent implements OnInit, OnDestroy {
   public availableVersions: string[] = [];
   public currentVersion: string = '';
   public downloadedVersions: string[] = [];
+  public isLoading: WritableSignal<boolean> = signal(true);
   public version: string = 'v0.0.0';
 
-  private readonly _sub: Subscription = new Subscription();
   private _listSub: Subscription | null = null;
+  private readonly _sub: Subscription = new Subscription();
   private _useSub: Subscription | null = null;
 
   constructor(private readonly _iconRegistry: MatIconRegistry, private readonly _api: GuiService) { }
@@ -80,6 +87,7 @@ export class AppComponent implements OnInit, OnDestroy {
   }
 
   public useButtonClick(selectedVersion: string): void {
+    this.isLoading.set(true);
     this._useSub?.unsubscribe();
     this._useSub = this._api.use(selectedVersion).subscribe(
       {

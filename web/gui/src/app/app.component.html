@@ -6,3 +6,7 @@
   <app-available></app-available>
 </div>
 <p class="app-version">{{ version }}</p>
+
+@if(isLoading()) {
+  <app-spinner></app-spinner>
+}
