@@ -5,7 +5,6 @@ import { GuiService } from './services/gui.service';
 import { forkJoin, Observable, Subscription } from 'rxjs';
 import { DownloadedComponent } from './components/downloaded/downloaded.component';
 import { AvailableComponent } from './components/available/available.component';
-import { NodeVersion } from './services/gui.service.models';
 
 @Component({
   selector: 'app-root',
@@ -15,10 +14,9 @@ import { NodeVersion } from './services/gui.service.models';
   styleUrl: './app.component.scss'
 })
 export class AppComponent implements OnInit, OnDestroy {
-  // public availableVersions: string[] = [];
-  // public downloadedVersions: string[] = ['v18.19.1'];
-  public availableVersions: NodeVersion[] = [];
-  public downloadedVersions: string[] = ['v18.19.1']
+  public availableVersions: string[] = [];
+  public currentVersion: string = '';
+  public downloadedVersions: string[] = [];
   public version: string = 'v0.0.0';
 
   private readonly _sub: Subscription = new Subscription();
@@ -31,13 +29,22 @@ export class AppComponent implements OnInit, OnDestroy {
     let taskList: Observable<any>[] = [];
     taskList.push(this._api.version());
     taskList.push(this._api.list());
-    taskList.push(this._api.search());
+    // taskList.push(this._api.search());
     this._sub.add(
       forkJoin(taskList).subscribe(
         {
           next: responses => {
             this.version = responses[0].toString();
-            // this.downloadedVersions = responses[1] as string[];
+
+            let temp: string[] = responses[1] as string[];
+            for(let i = 0; i < temp.length; i += 1) {
+              if(temp[i].includes('(current)')) {
+                temp[i] = temp[i].replace(' (current)', '');
+                this.currentVersion = temp[i];
+              }
+            }
+            this.downloadedVersions = temp;
+
             // this.availableVersions = responses[2] as string[];
           },
           error: (err: Error) => console.log(err.message)

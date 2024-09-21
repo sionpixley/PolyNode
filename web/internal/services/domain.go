@@ -19,7 +19,26 @@ func Install(w http.ResponseWriter, r *http.Request) {
 }
 
 func List(w http.ResponseWriter, r *http.Request) {
+	l, err := list()
+	if err != nil {
+		w.WriteHeader(http.StatusInternalServerError)
+		return
+	}
 
+	versions := []string{}
+	temp := strings.Split(l, "Node.js - ")
+	for i := 0; i < len(temp); i += 1 {
+		temp[i] = strings.TrimSpace(temp[i])
+		if temp[i] != "" {
+			versions = append(versions, temp[i])
+		}
+	}
+
+	err = json.NewEncoder(w).Encode(versions)
+	if err != nil {
+		w.WriteHeader(http.StatusInternalServerError)
+		return
+	}
 }
 
 func Remove(w http.ResponseWriter, r *http.Request) {

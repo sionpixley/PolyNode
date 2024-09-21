@@ -1,17 +1,22 @@
-@use '../../../../theme.scss' as theme;
+@use '../../../theme.scss' as theme;
 
 .app-downloaded-container {
-  border: 1px solid theme.$on-surface;
+  border: 0.125rem solid theme.$on-surface;
   color: theme.$on-surface;
-  padding-top: 3rem;
+  padding-top: 0.3rem;
   padding-right: 3rem;
   padding-bottom: 1rem;
   padding-left: 3rem;
-  border-radius: 0.3rem;
+  border-radius: 0.8rem;
   display: flex;
   flex-direction: column;
   justify-content: flex-start;
   align-items: center;
+}
+
+.app-downloaded-table-title {
+  font-weight: normal;
+  color: theme.$on-surface;
 }
 
 .app-downloaded-table {

@@ -1,11 +1,11 @@
-//go:build !windows
-
 package main
 
 import (
+	"errors"
 	"net/http"
 	"os"
 	"os/exec"
+	"runtime"
 	"strings"
 	"web/internal"
 	"web/internal/middleware"
@@ -15,6 +15,7 @@ import (
 )
 
 func main() {
+	operatingSystem := runtime.GOOS
 	router := mux.NewRouter()
 
 	apiRouter := router.PathPrefix("/api").Subrouter()
@@ -23,7 +24,14 @@ func main() {
 	guiRouter := router.PathPrefix("/gui").Subrouter()
 	guiRouter.PathPrefix("").HandlerFunc(serveGui)
 
-	err := exec.Command("open", "http://localhost:2334/gui").Run()
+	var err error
+	if operatingSystem == "darwin" || operatingSystem == "linux" {
+		err = exec.Command("open", "http://localhost:2334/gui").Run()
+	} else if operatingSystem == "windows" {
+		err = exec.Command("start", "http://localhost:2334/gui").Run()
+	} else {
+		err = errors.New("unsupported operating system")
+	}
 	if err != nil {
 		panic(err)
 	}

@@ -11,10 +11,14 @@
 
 .app-title-container {
   width: 100%;
-  color: theme.$on-surface;
   display: flex;
   justify-content: center;
   align-items: center;
+}
+
+.app-title {
+  color: theme.$on-surface;
+  font-weight: 500;
 }
 
 .app-version {

@@ -7,6 +7,11 @@ func current() (string, error) {
 	return string(content), err
 }
 
+func list() (string, error) {
+	content, err := exec.Command("polyn", "list").Output()
+	return string(content), err
+}
+
 func version() (string, error) {
 	content, err := exec.Command("polyn", "version").Output()
 	return string(content), err
