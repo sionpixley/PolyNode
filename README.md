@@ -133,7 +133,7 @@ or
 
 ### Launching the GUI
 
-There is a GUI app made available if you wish to use that instead of the CLI tool. Just type this command into your terminal:
+If you'd rather work with a GUI instead of using the CLI, type this command into your terminal:
 
 `PolyNode`
 
@@ -176,3 +176,5 @@ The original scope of this project was to be able to install and manage multiple
 PolyNode draws a lot of inspiration, especially in regards to syntax, from other, more well-known projects, like: [nvm](https://github.com/nvm-sh/nvm), [nvm-windows](https://github.com/coreybutler/nvm-windows), and [nvs](https://github.com/jasongin/nvs).
 
 Go 1.23
+Angular 18
+pnpm 9.10.0

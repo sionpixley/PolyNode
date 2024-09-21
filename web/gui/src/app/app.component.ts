@@ -23,7 +23,7 @@ export class AppComponent implements OnInit, OnDestroy {
   public availableVersions: string[] = [];
   public currentVersion: string = '';
   public downloadedVersions: string[] = [];
-  public isLoading: WritableSignal<boolean> = signal(true);
+  public isLoading: boolean = true;
   public version: string = 'v0.0.0';
 
   private _listSub: Subscription | null = null;
@@ -80,6 +80,7 @@ export class AppComponent implements OnInit, OnDestroy {
             }
           }
           this.downloadedVersions = vs;
+          this.isLoading = false;
         },
         error: (err: Error) => console.log(err.message)
       }
@@ -87,7 +88,7 @@ export class AppComponent implements OnInit, OnDestroy {
   }
 
   public useButtonClick(selectedVersion: string): void {
-    this.isLoading.set(true);
+    this.isLoading = true;
     this._useSub?.unsubscribe();
     this._useSub = this._api.use(selectedVersion).subscribe(
       {
