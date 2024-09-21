@@ -27,6 +27,7 @@ export class AppComponent implements OnInit, OnDestroy {
   public version: string = 'v0.0.0';
 
   private _listSub: Subscription | null = null;
+  private _removeSub: Subscription | null = null;
   private readonly _sub: Subscription = new Subscription();
   private _useSub: Subscription | null = null;
 
@@ -87,6 +88,23 @@ export class AppComponent implements OnInit, OnDestroy {
     );
   }
 
+  public removeButtonClick(versions: string[]): void {
+    this.isLoading = true;
+
+    let taskList: Observable<boolean>[] = [];
+    for(let version of versions) {
+      taskList.push(this._api.remove(version));
+    }
+
+    this._removeSub?.unsubscribe();
+    this._removeSub = forkJoin(taskList).subscribe(
+      {
+        next: () => this.reloadDownloadedVersions(),
+        error: (err: Error) => console.log(err.message)
+      }
+    );
+  }
+
   public useButtonClick(selectedVersion: string): void {
     this.isLoading = true;
     this._useSub?.unsubscribe();
@@ -107,6 +125,8 @@ export class AppComponent implements OnInit, OnDestroy {
     this._sub.unsubscribe();
     this._listSub?.unsubscribe();
     this._listSub = null;
+    this._removeSub?.unsubscribe();
+    this._removeSub = null;
     this._useSub?.unsubscribe();
     this._useSub = null;
   }

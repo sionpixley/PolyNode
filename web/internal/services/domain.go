@@ -44,7 +44,28 @@ func List(w http.ResponseWriter, r *http.Request) {
 }
 
 func Remove(w http.ResponseWriter, r *http.Request) {
+	params := mux.Vars(r)
+	v, exists := params["version"]
+	if !exists {
+		w.WriteHeader(http.StatusBadRequest)
+		return
+	}
 
+	output, err := remove(v)
+	if err != nil {
+		w.WriteHeader(http.StatusInternalServerError)
+		return
+	}
+
+	if strings.Contains(output, "error") {
+		err = json.NewEncoder(w).Encode(false)
+	} else {
+		err = json.NewEncoder(w).Encode(true)
+	}
+	if err != nil {
+		w.WriteHeader(http.StatusInternalServerError)
+		return
+	}
 }
 
 func Search(w http.ResponseWriter, r *http.Request) {
@@ -59,13 +80,17 @@ func Use(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	_, err := use(v)
+	output, err := use(v)
 	if err != nil {
 		w.WriteHeader(http.StatusInternalServerError)
 		return
 	}
 
-	err = json.NewEncoder(w).Encode(true)
+	if strings.Contains(output, "error") {
+		err = json.NewEncoder(w).Encode(false)
+	} else {
+		err = json.NewEncoder(w).Encode(true)
+	}
 	if err != nil {
 		w.WriteHeader(http.StatusInternalServerError)
 		return

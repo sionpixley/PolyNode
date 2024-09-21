@@ -22,6 +22,7 @@ export class DownloadedComponent {
   @Input({ required: true }) public downloadedVersions: string[] = [];
   @Input({ required: true }) public currentVersion: string = '';
 
+  @Output() public removeButtonEmitter: EventEmitter<string[]> = new EventEmitter();
   @Output() public useButtonEmitter: EventEmitter<string> = new EventEmitter();
 
   public allAreSelected: boolean = false;
@@ -31,6 +32,11 @@ export class DownloadedComponent {
 
   public isSelected(v: string): boolean {
     return this.selectedVersions.includes(v);
+  }
+
+  public removeButtonClick(): void {
+    this.removeButtonEmitter.emit(this.selectedVersions);
+    this.selectedVersions = [];
   }
 
   public removeButtonIsDisabled(): boolean {
@@ -65,6 +71,7 @@ export class DownloadedComponent {
 
   public useButtonClick(): void {
     this.useButtonEmitter.emit(this.selectedVersions[0] ?? '');
+    this.selectedVersions = [];
   }
 
   public useButtonIsDisabled(): boolean {

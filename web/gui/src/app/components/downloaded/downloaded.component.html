@@ -40,7 +40,9 @@
       </span>
     }
     @else {
-      <button mat-flat-button class="app-downloaded-remove-button">Remove</button>
+      <button mat-flat-button class="app-downloaded-remove-button" (click)="removeButtonClick()" (keyup.enter)="removeButtonClick()">
+        Remove
+      </button>
     }
 
     @if(useButtonIsDisabled()) {
@@ -51,10 +53,7 @@
       </span>
     }
     @else {
-      <button mat-flat-button
-        class="app-downloaded-use-button"
-        (click)="useButtonClick()"
-        (keyup.enter)="useButtonClick()">
+      <button mat-flat-button class="app-downloaded-use-button" (click)="useButtonClick()" (keyup.enter)="useButtonClick()">
         Use
       </button>
     }
