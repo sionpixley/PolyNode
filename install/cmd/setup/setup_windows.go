@@ -77,7 +77,22 @@ func upgrade(home string) error {
 		return err
 	}
 
+	err = os.RemoveAll(home + "\\PolyNode\\PolyNode.exe")
+	if err != nil {
+		return err
+	}
+
+	err = os.RemoveAll(home + "\\PolyNode\\gui")
+	if err != nil {
+		return err
+	}
+
 	err = exec.Command("cmd", "/c", "copy", ".\\PolyNode\\polyn.exe", home+"\\PolyNode\\polyn.exe").Run()
+	if err != nil {
+		return err
+	}
+
+	err = exec.Command("cmd", "/c", "xcopy", "/s", "/i", ".\\PolyNode\\gui\\", home+"\\PolyNode\\gui\\").Run()
 	if err != nil {
 		return err
 	}
