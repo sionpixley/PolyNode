@@ -3,15 +3,15 @@
   <table mat-table [dataSource]="downloadedVersions" class="app-downloaded-table">
     <ng-container matColumnDef="select">
       <th mat-header-cell *matHeaderCellDef>
-        <mat-checkbox [checked]="allDownloadedAreSelected"
-          [matTooltip]="selectAllDownloadedTooltip()"
+        <mat-checkbox [checked]="allAreSelected"
+          [matTooltip]="selectAllTooltip()"
           matTooltipPosition="above"
           matTooltipShowDelay="1000"
-          (change)="selectAllDownloadedVersions()">
+          (change)="selectAllVersions()">
         </mat-checkbox>
       </th>
       <td mat-cell *matCellDef="let v">
-        <mat-checkbox [checked]="isDownloadedSelected(v)" (change)="selectDownloadedVersion(v)"></mat-checkbox>
+        <mat-checkbox [checked]="isSelected(v)" (change)="selectVersion(v)"></mat-checkbox>
       </td>
     </ng-container>
 
@@ -47,11 +47,16 @@
       <span [matTooltip]="useButtonTooltip()"
         matTooltipPosition="below"
         matTooltipShowDelay="1000">
-        <button mat-flat-button disabled style="margin-right: 0.3rem;" matTooltip="">Use</button>
+        <button mat-flat-button disabled style="margin-right: 0.3rem;">Use</button>
       </span>
     }
     @else {
-      <button mat-flat-button class="app-downloaded-use-button">Use</button>
+      <button mat-flat-button
+        class="app-downloaded-use-button"
+        (click)="useButtonClick()"
+        (keyup.enter)="useButtonClick()">
+        Use
+      </button>
     }
   </div>
 </div>

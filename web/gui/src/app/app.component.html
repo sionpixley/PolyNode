@@ -2,7 +2,7 @@
   <div class="app-title-container">
     <h1 class="app-title">PolyNode</h1>
   </div>
-  <app-downloaded [downloadedVersions]="downloadedVersions" [currentVersion]="currentVersion"></app-downloaded>
+  <app-downloaded [downloadedVersions]="downloadedVersions" [currentVersion]="currentVersion" (useButtonEmitter)="useButtonClick($event)"></app-downloaded>
   <app-available></app-available>
 </div>
 <p class="app-version">{{ version }}</p>

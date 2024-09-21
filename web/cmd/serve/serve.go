@@ -41,6 +41,7 @@ func main() {
 
 func mapEndpoints(apiRouter *mux.Router) {
 	apiRouter.HandleFunc("/list", services.List).Methods(http.MethodGet)
+	apiRouter.HandleFunc("/use/{version}", services.Use).Methods(http.MethodPatch)
 	apiRouter.HandleFunc("/version", services.Version).Methods(http.MethodGet)
 
 	apiRouter.Use(middleware.SetCacheControlHeader)

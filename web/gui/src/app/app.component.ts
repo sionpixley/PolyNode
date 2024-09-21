@@ -20,6 +20,8 @@ export class AppComponent implements OnInit, OnDestroy {
   public version: string = 'v0.0.0';
 
   private readonly _sub: Subscription = new Subscription();
+  private _listSub: Subscription | null = null;
+  private _useSub: Subscription | null = null;
 
   constructor(private readonly _iconRegistry: MatIconRegistry, private readonly _api: GuiService) { }
 
@@ -28,7 +30,7 @@ export class AppComponent implements OnInit, OnDestroy {
 
     let taskList: Observable<any>[] = [];
     taskList.push(this._api.version());
-    taskList.push(this._api.list());
+    // taskList.push(this._api.list());
     // taskList.push(this._api.search());
     this._sub.add(
       forkJoin(taskList).subscribe(
@@ -36,14 +38,14 @@ export class AppComponent implements OnInit, OnDestroy {
           next: responses => {
             this.version = responses[0].toString();
 
-            let temp: string[] = responses[1] as string[];
-            for(let i = 0; i < temp.length; i += 1) {
-              if(temp[i].includes('(current)')) {
-                temp[i] = temp[i].replace(' (current)', '');
-                this.currentVersion = temp[i];
-              }
-            }
-            this.downloadedVersions = temp;
+            // let temp: string[] = responses[1] as string[];
+            // for(let i = 0; i < temp.length; i += 1) {
+            //   if(temp[i].includes('(current)')) {
+            //     temp[i] = temp[i].replace(' (current)', '');
+            //     this.currentVersion = temp[i];
+            //   }
+            // }
+            // this.downloadedVersions = temp;
 
             // this.availableVersions = responses[2] as string[];
           },
@@ -51,10 +53,40 @@ export class AppComponent implements OnInit, OnDestroy {
         }
       )
     );
+
+    this.reloadDownloadedVersions();
   }
 
   public ngOnDestroy(): void {
     this._cleanup();
+  }
+
+  public reloadDownloadedVersions(): void {
+    this._listSub?.unsubscribe();
+    this._listSub = this._api.list().subscribe(
+      {
+        next: vs => {
+          for(let i = 0; i < vs.length; i += 1) {
+            if(vs[i].includes('(current)')) {
+              vs[i] = vs[i].replace(' (current)', '');
+              this.currentVersion = vs[i];
+            }
+          }
+          this.downloadedVersions = vs;
+        },
+        error: (err: Error) => console.log(err.message)
+      }
+    );
+  }
+
+  public useButtonClick(selectedVersion: string): void {
+    this._useSub?.unsubscribe();
+    this._useSub = this._api.use(selectedVersion).subscribe(
+      {
+        next: () => this.reloadDownloadedVersions(),
+        error: (err: Error) => console.log(err.message)
+      }
+    );
   }
 
   @HostListener('window:beforeunload')
@@ -64,5 +96,9 @@ export class AppComponent implements OnInit, OnDestroy {
 
   private _cleanup(): void {
     this._sub.unsubscribe();
+    this._listSub?.unsubscribe();
+    this._listSub = null;
+    this._useSub?.unsubscribe();
+    this._useSub = null;
   }
 }

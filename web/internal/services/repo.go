@@ -12,6 +12,11 @@ func list() (string, error) {
 	return string(content), err
 }
 
+func use(version string) (string, error) {
+	content, err := exec.Command("polyn", "use", version).Output()
+	return string(content), err
+}
+
 func version() (string, error) {
 	content, err := exec.Command("polyn", "version").Output()
 	return string(content), err

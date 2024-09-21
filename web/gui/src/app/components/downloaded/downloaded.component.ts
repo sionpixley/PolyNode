@@ -1,4 +1,4 @@
-import { Component, Input } from '@angular/core';
+import { Component, EventEmitter, Input, Output } from '@angular/core';
 import { MatCheckboxModule } from '@angular/material/checkbox';
 import { MatTableModule } from '@angular/material/table';
 import { MatIconModule } from '@angular/material/icon';
@@ -22,57 +22,63 @@ export class DownloadedComponent {
   @Input({ required: true }) public downloadedVersions: string[] = [];
   @Input({ required: true }) public currentVersion: string = '';
 
-  public allDownloadedAreSelected: boolean = false;
+  @Output() public useButtonEmitter: EventEmitter<string> = new EventEmitter();
+
+  public allAreSelected: boolean = false;
   public readonly columns: string[] = ['select', 'version', 'current'];
 
-  private selectedDownloadedVersions: string[] = [];
+  private selectedVersions: string[] = [];
 
-  public isDownloadedSelected(v: string): boolean {
-    return this.selectedDownloadedVersions.includes(v);
+  public isSelected(v: string): boolean {
+    return this.selectedVersions.includes(v);
   }
 
   public removeButtonIsDisabled(): boolean {
-    return this.selectedDownloadedVersions.length === 0;
+    return this.selectedVersions.length === 0;
   }
 
-  public selectAllDownloadedTooltip(): string {
-    return this.allDownloadedAreSelected ? 'Deselect all' : 'Select all';
+  public selectAllTooltip(): string {
+    return this.allAreSelected ? 'Deselect all' : 'Select all';
   }
 
-  public selectAllDownloadedVersions(): void {
-    if(this.allDownloadedAreSelected) {
-      this.selectedDownloadedVersions = [];
-      this.allDownloadedAreSelected = false;
+  public selectAllVersions(): void {
+    if(this.allAreSelected) {
+      this.selectedVersions = [];
+      this.allAreSelected = false;
     }
     else {
-      this.selectedDownloadedVersions = Array.from(this.downloadedVersions);
-      this.allDownloadedAreSelected = true;
+      this.selectedVersions = Array.from(this.downloadedVersions);
+      this.allAreSelected = true;
     }
   }
 
-  public selectDownloadedVersion(v: string): void {
-    if(this.selectedDownloadedVersions.includes(v)) {
-      this.selectedDownloadedVersions = this.selectedDownloadedVersions.filter(ver => ver !== v);
-      this.allDownloadedAreSelected = false;
+  public selectVersion(v: string): void {
+    if(this.selectedVersions.includes(v)) {
+      this.selectedVersions = this.selectedVersions.filter(ver => ver !== v);
+      this.allAreSelected = false;
     }
     else {
-      this.selectedDownloadedVersions.push(v);
-      this.allDownloadedAreSelected = this.downloadedVersions.length === this.selectedDownloadedVersions.length;
+      this.selectedVersions.push(v);
+      this.allAreSelected = this.downloadedVersions.length === this.selectedVersions.length;
     }
+  }
+
+  public useButtonClick(): void {
+    this.useButtonEmitter.emit(this.selectedVersions[0] ?? '');
   }
 
   public useButtonIsDisabled(): boolean {
-    return this.selectedDownloadedVersions.length !== 1 || this.selectedDownloadedVersions[0] === this.currentVersion;
+    return this.selectedVersions.length !== 1 || this.selectedVersions[0] === this.currentVersion;
   }
 
   public useButtonTooltip(): string {
-    if(this.selectedDownloadedVersions.length == 0) {
+    if(this.selectedVersions.length == 0) {
       return 'Select one row to enable the use button.';
     }
-    else if(this.selectedDownloadedVersions.length > 1) {
+    else if(this.selectedVersions.length > 1) {
       return 'Select only one row to enable the use button.';
     }
-    else if(this.selectedDownloadedVersions[0] === this.currentVersion) {
+    else if(this.selectedVersions[0] === this.currentVersion) {
       return 'Select a Node.js version other than your current one to enable the use button.';
     }
     else {
