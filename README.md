@@ -26,8 +26,13 @@ PolyNode is a CLI tool that helps install and manage multiple versions of Node.j
 5. [How to uninstall](#how-to-uninstall-polynode)
     1. [Linux and macOS](#linux-and-macos)
     2. [Windows](#windows)
-6. [Future development](#future-development)
-7. [Information](#information)
+6. [Building from source](#building-from-source)
+    1. [Required technologies](#required-technologies)
+    2. [Linux](#building-on-linux)
+    3. [macOS](#building-on-macos)
+    4. [Windows](#building-on-windows)
+7. [Future development](#future-development)
+8. [Information](#information)
 
 ## Supported operating systems and CPU architectures
 
@@ -167,6 +172,26 @@ PolyNode does not require sudo/admin privileges to uninstall.
 
 1. Run `%LOCALAPPDATA%\Programs\PolyNode\uninstall\uninstall.exe`.
 
+## Building from source
+
+### Required technologies
+
+- Go 1.23.1
+- Angular 18.2.4
+- pnpm 9.10.0
+
+### Building on Linux
+
+Run the Dash script `./scripts/linux/bundle`. This will build PolyNode's source code for x64 and ARM64, and bundle them as separate .tar.xz files.
+
+### Building on macOS
+
+macOS has a Zsh script to build and bundle the source code, but this script also contains some commands to sign and notarize PolyNode's executables with Apple. If you don't need to distribute the executables, then I would comment out or delete these lines before running `./scripts/mac/bundle`. This will build PolyNode's source code for x64 and ARM64, and bundle them as separate .tar.gz files.
+
+### Building on Windows
+
+Run the batchfile `.\scripts\win\bundle.cmd`. This will build PolyNode's source code for x64 and ARM64, and bundle them as separate .zip files.
+
 ## Future development
 
 The original scope of this project was to be able to install and manage multiple versions of Bun, Deno, and Node.js. It currently only supports Node.js, but I would like to support Bun and Deno in the future.
@@ -174,7 +199,3 @@ The original scope of this project was to be able to install and manage multiple
 ## Information
 
 PolyNode draws a lot of inspiration, especially in regards to syntax, from other, more well-known projects, like: [nvm](https://github.com/nvm-sh/nvm), [nvm-windows](https://github.com/coreybutler/nvm-windows), and [nvs](https://github.com/jasongin/nvs).
-
-Go 1.23
-Angular 18
-pnpm 9.10.0
