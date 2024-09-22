@@ -92,6 +92,11 @@ func upgrade(home string) error {
 		return err
 	}
 
+	err = exec.Command("cmd", "/c", "copy", ".\\PolyNode\\PolyNode.exe", home+"\\PolyNode\\PolyNode.exe").Run()
+	if err != nil {
+		return err
+	}
+
 	err = exec.Command("cmd", "/c", "xcopy", "/s", "/i", ".\\PolyNode\\gui\\", home+"\\PolyNode\\gui\\").Run()
 	if err != nil {
 		return err

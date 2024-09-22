@@ -116,6 +116,11 @@ func upgrade(home string) error {
 		return err
 	}
 
+	err = exec.Command("cp", "./PolyNode/PolyNode", home+"/.PolyNode/PolyNode").Run()
+	if err != nil {
+		return err
+	}
+
 	err = exec.Command("cp", "-r", "./PolyNode/gui", home+"/.PolyNode/gui").Run()
 	if err != nil {
 		return err
