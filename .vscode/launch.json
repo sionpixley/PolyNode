@@ -33,6 +33,14 @@
       "request": "launch",
       "mode": "debug",
       "program": "${workspaceFolder}/web/cmd/serve"
+    },
+    {
+      "name": "Debug gui",
+      "type": "chrome",
+      "request": "launch",
+      "url": "http://localhost:4200",
+      "webRoot": "${workspaceFolder}/web/gui",
+      "preLaunchTask": "start"
     }
   ]
 }
