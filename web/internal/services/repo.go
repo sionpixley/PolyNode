@@ -2,8 +2,8 @@ package services
 
 import "os/exec"
 
-func current() (string, error) {
-	content, err := exec.Command("polyn", "current").Output()
+func add(version string) (string, error) {
+	content, err := exec.Command("polyn", "add", version).Output()
 	return string(content), err
 }
 

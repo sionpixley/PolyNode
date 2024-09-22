@@ -1,5 +1,4 @@
-import { Component, HostListener, OnDestroy, OnInit, signal, WritableSignal } from '@angular/core';
-import { RouterOutlet } from '@angular/router';
+import { Component, HostListener, OnDestroy, OnInit } from '@angular/core';
 import { MatIconRegistry } from '@angular/material/icon';
 import { GuiService } from './services/gui.service';
 import { forkJoin, Observable, Subscription } from 'rxjs';
@@ -11,7 +10,6 @@ import { SpinnerComponent } from './components/spinner/spinner.component';
   selector: 'app-root',
   standalone: true,
   imports: [
-    RouterOutlet,
     DownloadedComponent,
     AvailableComponent,
     SpinnerComponent
@@ -26,6 +24,7 @@ export class AppComponent implements OnInit, OnDestroy {
   public isLoading: boolean = true;
   public version: string = 'v0.0.0';
 
+  private _addSub: Subscription | null = null;
   private _listSub: Subscription | null = null;
   private _removeSub: Subscription | null = null;
   private readonly _sub: Subscription = new Subscription();
@@ -56,6 +55,23 @@ export class AppComponent implements OnInit, OnDestroy {
 
   public ngOnDestroy(): void {
     this._cleanup();
+  }
+
+  public addButtonClick(versions: string[]): void {
+    this.isLoading = true;
+
+    let taskList: Observable<boolean>[] = [];
+    for(let version of versions) {
+      taskList.push(this._api.add(version));
+    }
+
+    this._addSub?.unsubscribe();
+    this._addSub = forkJoin(taskList).subscribe(
+      {
+        next: () => this.reloadDownloadedVersions(),
+        error: (err: Error) => console.log(err.message)
+      }
+    );
   }
 
   public reloadDownloadedVersions(): void {
@@ -111,6 +127,8 @@ export class AppComponent implements OnInit, OnDestroy {
   }
 
   private _cleanup(): void {
+    this._addSub?.unsubscribe();
+    this._addSub = null;
     this._listSub?.unsubscribe();
     this._listSub = null;
     this._removeSub?.unsubscribe();

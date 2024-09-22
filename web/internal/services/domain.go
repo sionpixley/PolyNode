@@ -9,18 +9,39 @@ import (
 )
 
 func Add(w http.ResponseWriter, r *http.Request) {
+	if r.Method == http.MethodOptions {
+		return
+	}
 
-}
+	params := mux.Vars(r)
+	v, exists := params["version"]
+	if !exists {
+		w.WriteHeader(http.StatusBadRequest)
+		return
+	}
 
-func Current(w http.ResponseWriter, r *http.Request) {
+	output, err := add(v)
+	if err != nil {
+		w.WriteHeader(http.StatusInternalServerError)
+		return
+	}
 
-}
-
-func Install(w http.ResponseWriter, r *http.Request) {
-
+	if strings.Contains(output, "error") {
+		err = json.NewEncoder(w).Encode(false)
+	} else {
+		err = json.NewEncoder(w).Encode(true)
+	}
+	if err != nil {
+		w.WriteHeader(http.StatusInternalServerError)
+		return
+	}
 }
 
 func List(w http.ResponseWriter, r *http.Request) {
+	if r.Method == http.MethodOptions {
+		return
+	}
+
 	l, err := list()
 	if err != nil {
 		w.WriteHeader(http.StatusInternalServerError)
@@ -44,6 +65,10 @@ func List(w http.ResponseWriter, r *http.Request) {
 }
 
 func Remove(w http.ResponseWriter, r *http.Request) {
+	if r.Method == http.MethodOptions {
+		return
+	}
+
 	params := mux.Vars(r)
 	v, exists := params["version"]
 	if !exists {
@@ -69,6 +94,10 @@ func Remove(w http.ResponseWriter, r *http.Request) {
 }
 
 func Search(w http.ResponseWriter, r *http.Request) {
+	if r.Method == http.MethodOptions {
+		return
+	}
+
 	output, err := search()
 	if err != nil {
 		w.WriteHeader(http.StatusInternalServerError)
@@ -91,6 +120,10 @@ func Search(w http.ResponseWriter, r *http.Request) {
 }
 
 func Use(w http.ResponseWriter, r *http.Request) {
+	if r.Method == http.MethodOptions {
+		return
+	}
+
 	params := mux.Vars(r)
 	v, exists := params["version"]
 	if !exists {
@@ -116,6 +149,10 @@ func Use(w http.ResponseWriter, r *http.Request) {
 }
 
 func Version(w http.ResponseWriter, r *http.Request) {
+	if r.Method == http.MethodOptions {
+		return
+	}
+
 	v, err := version()
 	if err != nil {
 		w.WriteHeader(http.StatusInternalServerError)

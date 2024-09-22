@@ -7,19 +7,27 @@
   flex-direction: column;
   justify-content: flex-start;
   align-items: center;
-  gap: 0.8rem;
 }
 
 .app-title-container {
   width: 100%;
   display: flex;
   justify-content: center;
-  align-items: center;
+  align-items: flex-end;
 }
 
 .app-title {
   color: theme.$on-surface;
   font-weight: 500;
+}
+
+.app-tables-container {
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  align-items: center;
+  gap: 2rem;
+  flex-wrap: wrap;
 }
 
 .app-version {

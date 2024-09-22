@@ -31,7 +31,7 @@
         </td>
       </ng-container>
 
-      <tr mat-header-row *matHeaderRowDef="columns" class="table-header-row"></tr>
+      <tr mat-header-row *matHeaderRowDef="columns; sticky: true;" class="table-header-row"></tr>
       <tr mat-row *matRowDef="let row; columns: columns;"></tr>
     </table>
   </div>

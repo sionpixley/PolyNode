@@ -12,14 +12,6 @@ export class GuiService {
     return this._http.post<boolean>(`http://localhost:2334/api/add/${version}`, null);
   }
 
-  public current(): Observable<string> {
-    return this._http.get<string>('http://localhost:2334/api/current');
-  }
-
-  public install(version: string): Observable<boolean> {
-    return this._http.post<boolean>(`http://localhost:2334/api/install/${version}`, null);
-  }
-
   public list(): Observable<string[]> {
     return this._http.get<string[]>('http://localhost:2334/api/list');
   }
