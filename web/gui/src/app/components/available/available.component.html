@@ -1,1 +1,34 @@
-<p>available works!</p>
+<div class="table-container">
+  <h2 class="table-title">Available Node.js Versions</h2>
+  <table mat-table [dataSource]="availableVersions" class="table">
+    <ng-container matColumnDef="select">
+      <th mat-header-cell *matHeaderCellDef>
+        <mat-checkbox></mat-checkbox>
+      </th>
+      <td mat-cell *matCellDef>
+        <mat-checkbox></mat-checkbox>
+      </td>
+    </ng-container>
+
+    <ng-container matColumnDef="version">
+      <th mat-header-cell *matHeaderCellDef>Node.js Version</th>
+      <td mat-cell *matCellDef="let v">{{ v }}</td>
+    </ng-container>
+
+    <ng-container matColumnDef="lts">
+      <th mat-header-cell *matHeaderCellDef>LTS</th>
+      <td mat-cell *matCellDef="let v" style="color: green;">
+        @if(isLts(v)) {
+          <mat-icon matTooltip="This is an LTS version." matTooltipPosition="right" matTooltipShowDelay="1000">task_alt</mat-icon>
+        }
+      </td>
+    </ng-container>
+
+    <tr mat-header-row *matHeaderRowDef="columns" class="table-header-row"></tr>
+    <tr mat-row *matRowDef="let row; columns: columns;"></tr>
+  </table>
+
+  <div class="table-buttons-container">
+    <button mat-flat-button class="primary-button">Add</button>
+  </div>
+</div>

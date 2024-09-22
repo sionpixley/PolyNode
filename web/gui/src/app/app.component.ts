@@ -20,7 +20,7 @@ import { SpinnerComponent } from './components/spinner/spinner.component';
   styleUrl: './app.component.scss'
 })
 export class AppComponent implements OnInit, OnDestroy {
-  public availableVersions: string[] = [];
+  public availableVersions: string[] = ['v18.19.1'];
   public currentVersion: string = '';
   public downloadedVersions: string[] = [];
   public isLoading: boolean = true;

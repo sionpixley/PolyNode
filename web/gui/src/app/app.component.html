@@ -8,6 +8,6 @@
     (useButtonEmitter)="useButtonClick($event)"
     (removeButtonEmitter)="removeButtonClick($event)">
   </app-downloaded>
-  <app-available></app-available>
+  <app-available [availableVersions]="availableVersions"></app-available>
 </div>
 <p class="app-version">{{ version }}</p>

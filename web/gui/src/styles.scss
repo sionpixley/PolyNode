@@ -6,3 +6,46 @@ body {
   font-family: Roboto, 'Helvetica Neue', sans-serif;
   background: theme.$surface;
 }
+
+.table-container {
+  border: 0.125rem solid theme.$on-surface;
+  color: theme.$on-surface;
+  padding-top: 0.3rem;
+  padding-right: 3rem;
+  padding-bottom: 1rem;
+  padding-left: 3rem;
+  border-radius: 0.8rem;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
+  align-items: center;
+}
+
+.table-title {
+  font-weight: normal;
+  color: theme.$on-surface;
+}
+
+.table {
+  border: 1px solid theme.$on-surface !important;
+}
+
+.table-header-row {
+  background: theme.$primary-container !important;
+  color: theme.$on-primary-container !important;
+}
+
+.table-buttons-container {
+  width: 100%;
+  display: flex;
+  flex-direction: row;
+  justify-content: flex-end;
+  margin-top: 1rem;
+  gap: 0.3rem;
+}
+
+.primary-button {
+  background: theme.$primary-container !important;
+  color: theme.$on-primary-container !important;
+  border: 1px solid theme.$on-surface !important;
+}

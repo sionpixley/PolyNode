@@ -1,6 +1,6 @@
-<div class="app-downloaded-container">
-  <h2 class="app-downloaded-table-title">Downloaded Node.js Versions</h2>
-  <table mat-table [dataSource]="downloadedVersions" class="app-downloaded-table">
+<div class="table-container">
+  <h2 class="table-title">Downloaded Node.js Versions</h2>
+  <table mat-table [dataSource]="downloadedVersions" class="table">
     <ng-container matColumnDef="select">
       <th mat-header-cell *matHeaderCellDef>
         <mat-checkbox [checked]="allAreSelected"
@@ -29,22 +29,11 @@
       </td>
     </ng-container>
 
-    <tr mat-header-row *matHeaderRowDef="columns" class="app-downloaded-header-row"></tr>
+    <tr mat-header-row *matHeaderRowDef="columns" class="table-header-row"></tr>
     <tr mat-row *matRowDef="let row; columns: columns;"></tr>
   </table>
 
-  <div class="app-downloaded-buttons-container">
-    @if(removeButtonIsDisabled()) {
-      <span matTooltip="Select at least one row to enable the remove button." matTooltipPosition="below" matTooltipShowDelay="1000">
-        <button mat-flat-button disabled>Remove</button>
-      </span>
-    }
-    @else {
-      <button mat-flat-button class="app-downloaded-remove-button" (click)="removeButtonClick()" (keyup.enter)="removeButtonClick()">
-        Remove
-      </button>
-    }
-
+  <div class="table-buttons-container">
     @if(useButtonIsDisabled()) {
       <span [matTooltip]="useButtonTooltip()"
         matTooltipPosition="below"
@@ -53,8 +42,19 @@
       </span>
     }
     @else {
-      <button mat-flat-button class="app-downloaded-use-button" (click)="useButtonClick()" (keyup.enter)="useButtonClick()">
+      <button mat-flat-button class="primary-button" (click)="useButtonClick()" (keyup.enter)="useButtonClick()">
         Use
+      </button>
+    }
+
+    @if(removeButtonIsDisabled()) {
+      <span matTooltip="Select at least one row to enable the remove button." matTooltipPosition="below" matTooltipShowDelay="1000">
+        <button mat-flat-button disabled>Remove</button>
+      </span>
+    }
+    @else {
+      <button mat-flat-button class="app-downloaded-remove-button" (click)="removeButtonClick()" (keyup.enter)="removeButtonClick()">
+        Remove
       </button>
     }
   </div>
