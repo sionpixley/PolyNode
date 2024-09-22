@@ -17,6 +17,11 @@ func remove(version string) (string, error) {
 	return string(content), err
 }
 
+func search() (string, error) {
+	content, err := exec.Command("polyn", "search").Output()
+	return string(content), err
+}
+
 func use(version string) (string, error) {
 	content, err := exec.Command("polyn", "use", version).Output()
 	return string(content), err

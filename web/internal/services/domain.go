@@ -69,7 +69,25 @@ func Remove(w http.ResponseWriter, r *http.Request) {
 }
 
 func Search(w http.ResponseWriter, r *http.Request) {
+	output, err := search()
+	if err != nil {
+		w.WriteHeader(http.StatusInternalServerError)
+		return
+	}
 
+	parts := strings.Split(output, "\n")
+	versions := []string{}
+	for _, part := range parts {
+		if part != "" && part[0] == 'v' {
+			versions = append(versions, part)
+		}
+	}
+
+	err = json.NewEncoder(w).Encode(versions)
+	if err != nil {
+		w.WriteHeader(http.StatusInternalServerError)
+		return
+	}
 }
 
 func Use(w http.ResponseWriter, r *http.Request) {

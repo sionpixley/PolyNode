@@ -20,7 +20,7 @@ import { SpinnerComponent } from './components/spinner/spinner.component';
   styleUrl: './app.component.scss'
 })
 export class AppComponent implements OnInit, OnDestroy {
-  public availableVersions: string[] = ['v18.19.1'];
+  public availableVersions: string[] = [];
   public currentVersion: string = '';
   public downloadedVersions: string[] = [];
   public isLoading: boolean = true;
@@ -38,24 +38,13 @@ export class AppComponent implements OnInit, OnDestroy {
 
     let taskList: Observable<any>[] = [];
     taskList.push(this._api.version());
-    // taskList.push(this._api.list());
-    // taskList.push(this._api.search());
+    taskList.push(this._api.search());
     this._sub.add(
       forkJoin(taskList).subscribe(
         {
           next: responses => {
             this.version = responses[0].toString();
-
-            // let temp: string[] = responses[1] as string[];
-            // for(let i = 0; i < temp.length; i += 1) {
-            //   if(temp[i].includes('(current)')) {
-            //     temp[i] = temp[i].replace(' (current)', '');
-            //     this.currentVersion = temp[i];
-            //   }
-            // }
-            // this.downloadedVersions = temp;
-
-            // this.availableVersions = responses[2] as string[];
+            this.availableVersions = responses[1] as string[];
           },
           error: (err: Error) => console.log(err.message)
         }
@@ -122,11 +111,11 @@ export class AppComponent implements OnInit, OnDestroy {
   }
 
   private _cleanup(): void {
-    this._sub.unsubscribe();
     this._listSub?.unsubscribe();
     this._listSub = null;
     this._removeSub?.unsubscribe();
     this._removeSub = null;
+    this._sub.unsubscribe();
     this._useSub?.unsubscribe();
     this._useSub = null;
   }

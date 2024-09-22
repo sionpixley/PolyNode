@@ -26,8 +26,10 @@ body {
   color: theme.$on-surface;
 }
 
-.table {
-  border: 1px solid theme.$on-surface !important;
+.table-scroll {
+  max-height: 200px;
+  overflow: auto;
+  border: 1px solid theme.$on-surface;
 }
 
 .table-header-row {

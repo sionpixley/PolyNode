@@ -1,4 +1,4 @@
-import { Component, Input } from '@angular/core';
+import { Component, Input, OnInit } from '@angular/core';
 import { MatButtonModule } from '@angular/material/button';
 import { MatCheckboxModule } from '@angular/material/checkbox';
 import { MatIconModule } from '@angular/material/icon';
@@ -15,15 +15,20 @@ import { MatTooltipModule } from '@angular/material/tooltip';
     MatTooltipModule,
     MatIconModule
   ],
-  templateUrl: './available.component.html',
-  styleUrl: './available.component.scss'
+  templateUrl: './available.component.html'
 })
-export class AvailableComponent {
+export class AvailableComponent implements OnInit {
   @Input({ required: true }) public availableVersions: string[] = [];
 
   public readonly columns: string[] = ['select', 'version', 'lts'];
 
-  private _ltsVersions: string[] = ['v18.19.1'];
+  private _ltsVersions: string[] = [];
+
+  public ngOnInit(): void {
+    if(this.availableVersions.length === 14) {
+      this._ltsVersions = this.availableVersions.slice(7);
+    }
+  }
 
   public isLts(version: string): boolean {
     return this._ltsVersions.includes(version);
