@@ -1,4 +1,4 @@
-import { Component, Input, OnChanges } from '@angular/core';
+import { Component, EventEmitter, Input, OnChanges, Output } from '@angular/core';
 import { MatProgressBarModule } from '@angular/material/progress-bar';
 
 @Component({
@@ -12,11 +12,12 @@ export class SpinnerComponent implements OnChanges {
   @Input({ required: true }) public isLoading: boolean = false;
   @Input() public minAnimationTime: number = 300;
 
+  @Output() public stopLoadingEmitter: EventEmitter<void> = new EventEmitter();
+
   private _timeoutId: number | null = null;
 
   public ngOnChanges(): void {
     if(this.isLoading) {
-      (document.getElementById('app-spinner-container') as HTMLElement).style.display = 'flex';
       if(!this._timeoutId) {
         this._timeoutId = window.setTimeout(
           () => {
@@ -25,7 +26,7 @@ export class SpinnerComponent implements OnChanges {
             }
             else {
               this._timeoutId = null;
-              (document.getElementById('app-spinner-container') as HTMLElement).style.display = 'none';
+              this.stopLoadingEmitter.emit();
             }
           },
           this.minAnimationTime
@@ -33,7 +34,7 @@ export class SpinnerComponent implements OnChanges {
       }
     }
     else if(!this._timeoutId) {
-      (document.getElementById('app-spinner-container') as HTMLElement).style.display = 'none';
+      this.stopLoadingEmitter.emit();
     }
   }
 }

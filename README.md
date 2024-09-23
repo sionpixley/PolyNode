@@ -154,8 +154,6 @@ PolyNode's configuration is handled through a JSON file named `.polynrc` located
 }
 ```
 
-This configuration file is limited at the moment. I hope to expand its capabilities over time.
-
 ### Configuration fields
 
 #### nodeMirror

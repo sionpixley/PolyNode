@@ -1,15 +1,19 @@
-<app-spinner [isLoading]="isLoading"></app-spinner>
-<div class="app-window">
-  <div class="app-title-container">
-    <h1 class="app-title">PolyNode</h1>
+@if(showSpinner()) {
+  <app-spinner [isLoading]="isLoading" (stopLoadingEmitter)="stopLoading()"></app-spinner>
+}
+@else {
+  <div class="app-window">
+    <div class="app-title-container">
+      <h1 class="app-title">PolyNode</h1>
+    </div>
+    <div class="app-tables-container">
+      <app-available [availableVersions]="availableVersions" (addButtonEmitter)="addButtonClick($event)"></app-available>
+      <app-downloaded [downloadedVersions]="downloadedVersions"
+        [currentVersion]="currentVersion"
+        (useButtonEmitter)="useButtonClick($event)"
+        (removeButtonEmitter)="removeButtonClick($event)">
+      </app-downloaded>
+    </div>
   </div>
-  <div class="app-tables-container">
-    <app-available [availableVersions]="availableVersions" (addButtonEmitter)="addButtonClick($event)"></app-available>
-    <app-downloaded [downloadedVersions]="downloadedVersions"
-      [currentVersion]="currentVersion"
-      (useButtonEmitter)="useButtonClick($event)"
-      (removeButtonEmitter)="removeButtonClick($event)">
-    </app-downloaded>
-  </div>
-</div>
-<p class="app-version">{{ version }}</p>
+  <p class="app-version">{{ version }}</p>
+}

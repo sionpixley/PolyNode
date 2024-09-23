@@ -1,4 +1,4 @@
-import { Component, HostListener, OnDestroy, OnInit } from '@angular/core';
+import { Component, HostListener, OnDestroy, OnInit, signal, WritableSignal } from '@angular/core';
 import { MatIconRegistry } from '@angular/material/icon';
 import { GuiService } from './services/gui.service';
 import { forkJoin, Observable, Subscription } from 'rxjs';
@@ -22,6 +22,7 @@ export class AppComponent implements OnInit, OnDestroy {
   public currentVersion: string = '';
   public downloadedVersions: string[] = [];
   public isLoading: boolean = true;
+  public readonly showSpinner: WritableSignal<boolean> = signal(true);
   public version: string = 'v0.0.0';
 
   private _addSub: Subscription | null = null;
@@ -57,7 +58,13 @@ export class AppComponent implements OnInit, OnDestroy {
     this._cleanup();
   }
 
+  @HostListener('window:beforeunload')
+  public onRefresh(): void {
+    this._cleanup();
+  }
+
   public addButtonClick(versions: string[]): void {
+    this.showSpinner.set(true);
     this.isLoading = true;
 
     let taskList: Observable<boolean>[] = [];
@@ -94,6 +101,7 @@ export class AppComponent implements OnInit, OnDestroy {
   }
 
   public removeButtonClick(versions: string[]): void {
+    this.showSpinner.set(true);
     this.isLoading = true;
 
     let taskList: Observable<boolean>[] = [];
@@ -110,7 +118,12 @@ export class AppComponent implements OnInit, OnDestroy {
     );
   }
 
+  public stopLoading(): void {
+    this.showSpinner.set(false);
+  }
+
   public useButtonClick(selectedVersion: string): void {
+    this.showSpinner.set(true);
     this.isLoading = true;
     this._useSub?.unsubscribe();
     this._useSub = this._api.use(selectedVersion).subscribe(
@@ -119,11 +132,6 @@ export class AppComponent implements OnInit, OnDestroy {
         error: (err: Error) => console.log(err.message)
       }
     );
-  }
-
-  @HostListener('window:beforeunload')
-  public onRefresh(): void {
-    this._cleanup();
   }
 
   private _cleanup(): void {

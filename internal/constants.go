@@ -31,7 +31,7 @@ Commands:
 	UNSUPPORTED_OS_ERROR string = "unsupported operating system"
 
 	// PolyNode's version.
-	VERSION string = "v0.8.0-rc.1"
+	VERSION string = "v0.8.0-rc.2"
 
 	_DEFAULT_NODE_MIRROR          string = "https://nodejs.org/dist"
 	_INVALID_VERSION_FORMAT_ERROR string = "invalid version format"
