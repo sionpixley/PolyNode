@@ -6,7 +6,10 @@ import (
 	"runtime"
 	"strings"
 
-	"github.com/sionpixley/PolyNode/internal"
+	"github.com/sionpixley/PolyNode/internal/constants"
+	"github.com/sionpixley/PolyNode/internal/models"
+	"github.com/sionpixley/PolyNode/internal/node"
+	"github.com/sionpixley/PolyNode/internal/utilities"
 )
 
 func main() {
@@ -16,7 +19,7 @@ func main() {
 	defer fmt.Println()
 
 	if !isSupportedOperatingSystem(operatingSystem) {
-		fmt.Println(internal.UNSUPPORTED_OS_ERROR)
+		fmt.Println(constants.UNSUPPORTED_OS_ERROR)
 		return
 	} else if !isSupportedArchitecture(arch) {
 		fmt.Println("unsupported CPU architecture")
@@ -24,11 +27,11 @@ func main() {
 	}
 
 	if len(os.Args) == 1 {
-		fmt.Println(internal.HELP)
+		fmt.Println(constants.HELP)
 		return
 	}
 
-	config := internal.LoadPolyNodeConfig()
+	config := utilities.LoadPolyNodeConfig()
 
 	args := []string{}
 	for _, arg := range os.Args {
@@ -36,42 +39,42 @@ func main() {
 	}
 
 	if args[1] == "version" {
-		fmt.Println(internal.VERSION)
-	} else if internal.IsKnownCommand(args[1]) {
-		internal.HandleNode(args[1:], operatingSystem, arch, config)
+		fmt.Println(constants.VERSION)
+	} else if utilities.IsKnownCommand(args[1]) {
+		node.Handle(args[1:], operatingSystem, arch, config)
 	} else {
-		fmt.Println(internal.HELP)
+		fmt.Println(constants.HELP)
 	}
 }
 
-func convertToArchitecture(archStr string) internal.Architecture {
+func convertToArchitecture(archStr string) models.Architecture {
 	switch archStr {
 	case "amd64":
-		return internal.X64
+		return constants.X64
 	case "arm64":
-		return internal.ARM64
+		return constants.ARM64
 	default:
-		return internal.NA_ARCH
+		return constants.NA_ARCH
 	}
 }
 
-func convertToOperatingSystem(osStr string) internal.OperatingSystem {
+func convertToOperatingSystem(osStr string) models.OperatingSystem {
 	switch osStr {
 	case "darwin":
-		return internal.MAC
+		return constants.MAC
 	case "linux":
-		return internal.LINUX
+		return constants.LINUX
 	case "windows":
-		return internal.WINDOWS
+		return constants.WINDOWS
 	default:
-		return internal.NA_OS
+		return constants.NA_OS
 	}
 }
 
-func isSupportedArchitecture(arch internal.Architecture) bool {
-	return arch != internal.NA_ARCH
+func isSupportedArchitecture(arch models.Architecture) bool {
+	return arch != constants.NA_ARCH
 }
 
-func isSupportedOperatingSystem(operatingSystem internal.OperatingSystem) bool {
-	return operatingSystem != internal.NA_OS
+func isSupportedOperatingSystem(operatingSystem models.OperatingSystem) bool {
+	return operatingSystem != constants.NA_OS
 }

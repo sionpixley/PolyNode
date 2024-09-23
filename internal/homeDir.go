@@ -4,13 +4,13 @@ package internal
 
 import "runtime"
 
-var pathSeparator string
-var polynHomeDir string = "."
+var PathSeparator string
+var PolynHomeDir string = "."
 
 func init() {
 	if runtime.GOOS == "windows" {
-		pathSeparator = "\\"
+		PathSeparator = "\\"
 	} else {
-		pathSeparator = "/"
+		PathSeparator = "/"
 	}
 }

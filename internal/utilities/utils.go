@@ -1,0 +1,124 @@
+package utilities
+
+import (
+	"fmt"
+	"os"
+	"os/exec"
+	"strings"
+
+	"github.com/sionpixley/PolyNode/internal"
+	"github.com/sionpixley/PolyNode/internal/constants"
+	"github.com/sionpixley/PolyNode/internal/models"
+)
+
+func ConvertToCommand(commandStr string) models.Command {
+	switch commandStr {
+	case "add":
+		return constants.ADD
+	case "current":
+		return constants.CURRENT
+	case "install":
+		return constants.INSTALL
+	case "ls":
+		fallthrough
+	case "list":
+		return constants.LIST
+	case "rm":
+		fallthrough
+	case "remove":
+		return constants.REMOVE
+	case "search":
+		return constants.SEARCH
+	case "use":
+		return constants.USE
+	default:
+		return constants.NA_COMM
+	}
+}
+
+func ConvertToSemanticVersion(version string) string {
+	if version[0] == 'v' {
+		return version
+	} else {
+		return "v" + version
+	}
+}
+
+func ExtractFile(source string, destination string) error {
+	err := os.RemoveAll(destination)
+	if err != nil {
+		return err
+	}
+
+	err = os.MkdirAll(destination, os.ModePerm)
+	if err != nil {
+		return err
+	}
+
+	err = exec.Command("tar", "-xf", source, "-C", destination, "--strip-components=1").Run()
+	if err != nil {
+		return err
+	}
+
+	return os.RemoveAll(source)
+}
+
+func IsKnownCommand(command string) bool {
+	return ConvertToCommand(command) != constants.NA_COMM
+}
+
+func IsValidVersionFormat(version string) bool {
+	if version[0] == 'v' {
+		version = version[1:]
+	}
+
+	parts := strings.Split(version, ".")
+	if len(parts) != 3 {
+		return false
+	}
+
+	validChars := map[rune]struct{}{
+		'0': {},
+		'1': {},
+		'2': {},
+		'3': {},
+		'4': {},
+		'5': {},
+		'6': {},
+		'7': {},
+		'8': {},
+		'9': {},
+	}
+	for _, part := range parts {
+		for _, char := range part {
+			if _, exists := validChars[char]; !exists {
+				return false
+			}
+		}
+	}
+
+	return true
+}
+
+func LoadPolyNodeConfig() models.PolyNodeConfig {
+	if _, err := os.Stat(internal.PolynHomeDir + internal.PathSeparator + ".polynrc"); os.IsNotExist(err) {
+		// Default config
+		return models.PolyNodeConfig{NodeMirror: internal.DEFAULT_NODE_MIRROR}
+	} else {
+		content, err := os.ReadFile(internal.PolynHomeDir + internal.PathSeparator + ".polynrc")
+		if err != nil {
+			// Default config
+			fmt.Println(err.Error())
+			return models.PolyNodeConfig{NodeMirror: internal.DEFAULT_NODE_MIRROR}
+		}
+
+		config := models.PolyNodeConfig{}
+		err = config.UnmarshalJSON(content)
+		if err != nil {
+			// Default config
+			fmt.Println(err.Error())
+			return models.PolyNodeConfig{NodeMirror: internal.DEFAULT_NODE_MIRROR}
+		}
+		return config
+	}
+}

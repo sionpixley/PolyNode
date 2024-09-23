@@ -137,11 +137,15 @@ export class AppComponent implements OnInit, OnDestroy {
   private _cleanup(): void {
     this._addSub?.unsubscribe();
     this._addSub = null;
+
     this._listSub?.unsubscribe();
     this._listSub = null;
+
     this._removeSub?.unsubscribe();
     this._removeSub = null;
+
     this._sub.unsubscribe();
+
     this._useSub?.unsubscribe();
     this._useSub = null;
   }
