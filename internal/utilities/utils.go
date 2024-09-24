@@ -1,7 +1,6 @@
 package utilities
 
 import (
-	"fmt"
 	"os"
 	"os/exec"
 	"strings"
@@ -108,7 +107,6 @@ func LoadPolyNodeConfig() models.PolyNodeConfig {
 		content, err := os.ReadFile(internal.PolynHomeDir + internal.PathSeparator + ".polynrc")
 		if err != nil {
 			// Default config
-			fmt.Println(err.Error())
 			return models.PolyNodeConfig{NodeMirror: internal.DEFAULT_NODE_MIRROR}
 		}
 
@@ -116,7 +114,6 @@ func LoadPolyNodeConfig() models.PolyNodeConfig {
 		err = config.UnmarshalJSON(content)
 		if err != nil {
 			// Default config
-			fmt.Println(err.Error())
 			return models.PolyNodeConfig{NodeMirror: internal.DEFAULT_NODE_MIRROR}
 		}
 		return config

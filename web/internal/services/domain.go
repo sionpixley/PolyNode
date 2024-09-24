@@ -26,7 +26,7 @@ func Add(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	if strings.Contains(output, "error") {
+	if strings.Contains(output, "exit status") {
 		err = json.NewEncoder(w).Encode(false)
 	} else {
 		err = json.NewEncoder(w).Encode(true)
@@ -82,7 +82,7 @@ func Remove(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	if strings.Contains(output, "error") {
+	if strings.Contains(output, "exit status") {
 		err = json.NewEncoder(w).Encode(false)
 	} else {
 		err = json.NewEncoder(w).Encode(true)
@@ -137,7 +137,7 @@ func Use(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	if strings.Contains(output, "error") {
+	if strings.Contains(output, "exit status") {
 		err = json.NewEncoder(w).Encode(false)
 	} else {
 		err = json.NewEncoder(w).Encode(true)

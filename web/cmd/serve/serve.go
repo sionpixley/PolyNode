@@ -2,6 +2,7 @@ package main
 
 import (
 	"errors"
+	"log"
 	"net/http"
 	"os"
 	"os/exec"
@@ -33,7 +34,7 @@ func main() {
 		err = errors.New("unsupported operating system")
 	}
 	if err != nil {
-		panic(err)
+		log.Fatal(err.Error())
 	}
 
 	http.ListenAndServe(":2334", router)

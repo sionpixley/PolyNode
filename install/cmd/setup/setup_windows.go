@@ -3,6 +3,7 @@ package main
 import (
 	"fmt"
 	"install/internal"
+	"log"
 	"os"
 	"os/exec"
 
@@ -10,6 +11,8 @@ import (
 )
 
 func main() {
+	defer fmt.Println()
+
 	home := os.Getenv("LOCALAPPDATA") + "\\Programs"
 
 	var err error
@@ -20,7 +23,7 @@ func main() {
 	}
 
 	if err != nil {
-		fmt.Println(err.Error())
+		log.Fatal(err.Error())
 	} else {
 		fmt.Println("The polyn command has been installed.")
 		fmt.Println("Please close all open terminals.")

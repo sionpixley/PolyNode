@@ -6,6 +6,7 @@ import (
 	"errors"
 	"fmt"
 	"install/internal"
+	"log"
 	"os"
 	"os/exec"
 	"runtime"
@@ -33,7 +34,7 @@ func main() {
 	}
 
 	if err != nil {
-		fmt.Println(err.Error())
+		log.Fatal(err.Error())
 	} else {
 		fmt.Println("The polyn command has been installed.")
 		fmt.Println("Please close all open terminals.")

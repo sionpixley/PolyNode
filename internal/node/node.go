@@ -2,6 +2,7 @@ package node
 
 import (
 	"fmt"
+	"log"
 
 	"github.com/sionpixley/PolyNode/internal/constants"
 	"github.com/sionpixley/PolyNode/internal/models"
@@ -57,6 +58,6 @@ func Handle(args []string, operatingSystem models.OperatingSystem, arch models.A
 	}
 
 	if err != nil {
-		fmt.Println(err.Error())
+		log.Fatal(err.Error())
 	}
 }
