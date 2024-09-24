@@ -1,6 +1,6 @@
 #!/bin/dash
 
-version=v0.8.0-rc.2
+version=v0.8.0-rc.3
 
 # Build Linux ARM64
 

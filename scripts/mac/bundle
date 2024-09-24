@@ -1,6 +1,6 @@
 #!/bin/zsh
 
-version=v0.8.0-rc.2
+version=v0.8.0-rc.3
 
 # Build macOS ARM64
 
@@ -76,69 +76,69 @@ cp -r ./web/gui/dist ./PolyNode-$version-darwin-x64/PolyNode/gui/dist
 
 # Notarize
 
-# cd PolyNode-$version-darwin-arm64
-# codesign -v -f --timestamp --options=runtime --sign $CODESIGN_TEAM_ID setup
-# zip setup.zip setup
-# rm setup
-# xcrun notarytool submit --apple-id $CODESIGN_APPLE_ID --team-id $CODESIGN_TEAM_ID --password $CODESIGN_PASSWD setup.zip
-# unzip setup.zip
-# rm setup.zip
+cd PolyNode-$version-darwin-arm64
+codesign -v -f --timestamp --options=runtime --sign $CODESIGN_TEAM_ID setup
+zip setup.zip setup
+rm setup
+xcrun notarytool submit --apple-id $CODESIGN_APPLE_ID --team-id $CODESIGN_TEAM_ID --password $CODESIGN_PASSWD setup.zip
+unzip setup.zip
+rm setup.zip
 
-# cd PolyNode
-# codesign -v -f --timestamp --options=runtime --sign $CODESIGN_TEAM_ID polyn
-# zip polyn.zip polyn
-# rm polyn
-# xcrun notarytool submit --apple-id $CODESIGN_APPLE_ID --team-id $CODESIGN_TEAM_ID --password $CODESIGN_PASSWD polyn.zip
-# unzip polyn.zip
-# rm polyn.zip
+cd PolyNode
+codesign -v -f --timestamp --options=runtime --sign $CODESIGN_TEAM_ID polyn
+zip polyn.zip polyn
+rm polyn
+xcrun notarytool submit --apple-id $CODESIGN_APPLE_ID --team-id $CODESIGN_TEAM_ID --password $CODESIGN_PASSWD polyn.zip
+unzip polyn.zip
+rm polyn.zip
 
-# codesign -v -f --timestamp --options=runtime --sign $CODESIGN_TEAM_ID PolyNode
-# zip PolyNode.zip PolyNode
-# rm PolyNode
-# xcrun notarytool submit --apple-id $CODESIGN_APPLE_ID --team-id $CODESIGN_TEAM_ID --password $CODESIGN_PASSWD PolyNode.zip
-# unzip PolyNode.zip
-# rm PolyNode.zip
+codesign -v -f --timestamp --options=runtime --sign $CODESIGN_TEAM_ID PolyNode
+zip PolyNode.zip PolyNode
+rm PolyNode
+xcrun notarytool submit --apple-id $CODESIGN_APPLE_ID --team-id $CODESIGN_TEAM_ID --password $CODESIGN_PASSWD PolyNode.zip
+unzip PolyNode.zip
+rm PolyNode.zip
 
-# cd uninstall
-# codesign -v -f --timestamp --options=runtime --sign $CODESIGN_TEAM_ID uninstall
-# zip uninstall.zip uninstall
-# rm uninstall
-# xcrun notarytool submit --apple-id $CODESIGN_APPLE_ID --team-id $CODESIGN_TEAM_ID --password $CODESIGN_PASSWD uninstall.zip
-# unzip uninstall.zip
-# rm uninstall.zip
-# cd ../../..
+cd uninstall
+codesign -v -f --timestamp --options=runtime --sign $CODESIGN_TEAM_ID uninstall
+zip uninstall.zip uninstall
+rm uninstall
+xcrun notarytool submit --apple-id $CODESIGN_APPLE_ID --team-id $CODESIGN_TEAM_ID --password $CODESIGN_PASSWD uninstall.zip
+unzip uninstall.zip
+rm uninstall.zip
+cd ../../..
 
-# cd PolyNode-$version-darwin-x64
-# codesign -v -f --timestamp --options=runtime --sign $CODESIGN_TEAM_ID setup
-# zip setup.zip setup
-# rm setup
-# xcrun notarytool submit --apple-id $CODESIGN_APPLE_ID --team-id $CODESIGN_TEAM_ID --password $CODESIGN_PASSWD setup.zip
-# unzip setup.zip
-# rm setup.zip
+cd PolyNode-$version-darwin-x64
+codesign -v -f --timestamp --options=runtime --sign $CODESIGN_TEAM_ID setup
+zip setup.zip setup
+rm setup
+xcrun notarytool submit --apple-id $CODESIGN_APPLE_ID --team-id $CODESIGN_TEAM_ID --password $CODESIGN_PASSWD setup.zip
+unzip setup.zip
+rm setup.zip
 
-# cd PolyNode
-# codesign -v -f --timestamp --options=runtime --sign $CODESIGN_TEAM_ID polyn
-# zip polyn.zip polyn
-# rm polyn
-# xcrun notarytool submit --apple-id $CODESIGN_APPLE_ID --team-id $CODESIGN_TEAM_ID --password $CODESIGN_PASSWD polyn.zip
-# unzip polyn.zip
-# rm polyn.zip
+cd PolyNode
+codesign -v -f --timestamp --options=runtime --sign $CODESIGN_TEAM_ID polyn
+zip polyn.zip polyn
+rm polyn
+xcrun notarytool submit --apple-id $CODESIGN_APPLE_ID --team-id $CODESIGN_TEAM_ID --password $CODESIGN_PASSWD polyn.zip
+unzip polyn.zip
+rm polyn.zip
 
-# codesign -v -f --timestamp --options=runtime --sign $CODESIGN_TEAM_ID PolyNode
-# zip PolyNode.zip PolyNode
-# rm PolyNode
-# xcrun notarytool submit --apple-id $CODESIGN_APPLE_ID --team-id $CODESIGN_TEAM_ID --password $CODESIGN_PASSWD PolyNode.zip
-# unzip PolyNode.zip
-# rm PolyNode.zip
+codesign -v -f --timestamp --options=runtime --sign $CODESIGN_TEAM_ID PolyNode
+zip PolyNode.zip PolyNode
+rm PolyNode
+xcrun notarytool submit --apple-id $CODESIGN_APPLE_ID --team-id $CODESIGN_TEAM_ID --password $CODESIGN_PASSWD PolyNode.zip
+unzip PolyNode.zip
+rm PolyNode.zip
 
-# cd uninstall
-# codesign -v -f --timestamp --options=runtime --sign $CODESIGN_TEAM_ID uninstall
-# zip uninstall.zip uninstall
-# rm uninstall
-# xcrun notarytool submit --apple-id $CODESIGN_APPLE_ID --team-id $CODESIGN_TEAM_ID --password $CODESIGN_PASSWD uninstall.zip
-# unzip uninstall.zip
-# rm uninstall.zip
-# cd ../../..
+cd uninstall
+codesign -v -f --timestamp --options=runtime --sign $CODESIGN_TEAM_ID uninstall
+zip uninstall.zip uninstall
+rm uninstall
+xcrun notarytool submit --apple-id $CODESIGN_APPLE_ID --team-id $CODESIGN_TEAM_ID --password $CODESIGN_PASSWD uninstall.zip
+unzip uninstall.zip
+rm uninstall.zip
+cd ../../..
 
 # Bundle
 
