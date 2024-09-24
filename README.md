@@ -182,15 +182,15 @@ PolyNode does not require sudo/admin privileges to uninstall.
 
 ### Building on Linux
 
-Run the Dash script `./scripts/linux/bundle`. This will build PolyNode's source code for x64 and ARM64, and bundle them as separate .tar.xz files.
+Run the Dash script `./scripts/linux/bundle`. This script will build PolyNode's source code for x64 and ARM64, and bundle them as separate .tar.xz files.
 
 ### Building on macOS
 
-macOS has a Zsh script to build and bundle the source code, but this script also contains some commands to sign and notarize PolyNode's executables with Apple. If you don't need to distribute the executables, then I would comment out or delete these lines before running `./scripts/mac/bundle`. This will build PolyNode's source code for x64 and ARM64, and bundle them as separate .tar.gz files.
+macOS has a zsh script to build and bundle the source code, but this script also contains some commands to sign and notarize PolyNode's executables with Apple. If you don't need to distribute the executables, then I would comment out or delete these lines before running `./scripts/mac/bundle`. This script will build PolyNode's source code for x64 and ARM64, and bundle them as separate .tar.gz files.
 
 ### Building on Windows
 
-Run the batchfile `.\scripts\win\bundle.cmd`. This will build PolyNode's source code for x64 and ARM64, and bundle them as separate .zip files.
+Run the batchfile `.\scripts\win\bundle.cmd`. This batchfile will build PolyNode's source code for x64 and ARM64, and bundle them as separate .zip files.
 
 ## Future development
 

@@ -19,16 +19,16 @@ import { SpinnerComponent } from './components/spinner/spinner.component';
 })
 export class AppComponent implements OnInit, OnDestroy {
   public availableVersions: string[] = [];
-  public currentVersion: string = '';
+  public currentVersion = '';
   public downloadedVersions: string[] = [];
-  public isLoading: boolean = true;
+  public isLoading = true;
   public readonly showSpinner: WritableSignal<boolean> = signal(true);
-  public version: string = 'v0.0.0';
+  public version = 'v0.0.0';
 
   private _addSub: Subscription | null = null;
   private _listSub: Subscription | null = null;
   private _removeSub: Subscription | null = null;
-  private readonly _sub: Subscription = new Subscription();
+  private readonly _sub = new Subscription();
   private _useSub: Subscription | null = null;
 
   constructor(private readonly _iconRegistry: MatIconRegistry, private readonly _api: GuiService) { }
@@ -43,6 +43,7 @@ export class AppComponent implements OnInit, OnDestroy {
       forkJoin(taskList).subscribe(
         {
           next: responses => {
+            this.reloadDownloadedVersions();
             this.version = responses[0].toString();
             this.availableVersions = responses[1] as string[];
           },
@@ -50,8 +51,6 @@ export class AppComponent implements OnInit, OnDestroy {
         }
       )
     );
-
-    this.reloadDownloadedVersions();
   }
 
   public ngOnDestroy(): void {

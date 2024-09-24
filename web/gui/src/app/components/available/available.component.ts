@@ -1,7 +1,6 @@
 import { Component, EventEmitter, Input, OnChanges, Output } from '@angular/core';
 import { MatButtonModule } from '@angular/material/button';
 import { MatCheckboxModule } from '@angular/material/checkbox';
-import { MatIconModule } from '@angular/material/icon';
 import { MatTableModule } from '@angular/material/table';
 import { MatTooltipModule } from '@angular/material/tooltip';
 
@@ -12,8 +11,7 @@ import { MatTooltipModule } from '@angular/material/tooltip';
     MatTableModule,
     MatCheckboxModule,
     MatButtonModule,
-    MatTooltipModule,
-    MatIconModule
+    MatTooltipModule
   ],
   templateUrl: './available.component.html'
 })

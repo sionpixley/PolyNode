@@ -9,8 +9,8 @@ import { MatProgressBarModule } from '@angular/material/progress-bar';
   styleUrl: './spinner.component.scss'
 })
 export class SpinnerComponent implements OnChanges {
-  @Input({ required: true }) public isLoading: boolean = false;
-  @Input() public minAnimationTime: number = 300;
+  @Input({ required: true }) public isLoading = false;
+  @Input() public minAnimationTime = 300;
 
   @Output() public stopLoadingEmitter: EventEmitter<void> = new EventEmitter();
 
