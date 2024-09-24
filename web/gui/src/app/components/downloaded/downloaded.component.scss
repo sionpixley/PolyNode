@@ -1,7 +1,7 @@
-@use '../../../theme.scss' as theme;
+@use '../../../colors';
 
 .app-downloaded-remove-button {
-  background: theme.$error !important;
-  color: theme.$on-error !important;
-  border: 1px solid theme.$on-surface;
+  background: colors.$error !important;
+  color: colors.$on-error !important;
+  border: 1px solid colors.$on-surface;
 }

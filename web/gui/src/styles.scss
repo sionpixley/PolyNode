@@ -1,15 +1,15 @@
-@use './theme.scss' as theme;
+@use 'colors';
 
 html, body { height: 100%; font-size: 100%; }
 body {
   margin: 0;
   font-family: Roboto, 'Helvetica Neue', sans-serif;
-  background: theme.$surface;
+  background: colors.$surface;
 }
 
 .table-container {
-  border: 0.125rem solid theme.$on-surface;
-  color: theme.$on-surface;
+  border: 0.125rem solid colors.$on-surface;
+  color: colors.$on-surface;
   padding-top: 0.3rem;
   padding-right: 3rem;
   padding-bottom: 1rem;
@@ -23,18 +23,18 @@ body {
 
 .table-title {
   font-weight: normal;
-  color: theme.$on-surface;
+  color: colors.$on-surface;
 }
 
 .table-scroll {
   max-height: 500px;
   overflow: auto;
-  border: 1px solid theme.$on-surface;
+  border: 1px solid colors.$on-surface;
 }
 
 .table-header-row {
-  background: theme.$primary-container !important;
-  color: theme.$on-primary-container !important;
+  background: colors.$primary-container !important;
+  color: colors.$on-primary-container !important;
 }
 
 .table-buttons-container {
@@ -47,7 +47,7 @@ body {
 }
 
 .primary-button {
-  background: theme.$primary-container !important;
-  color: theme.$on-primary-container !important;
-  border: 1px solid theme.$on-surface !important;
+  background: colors.$primary-container !important;
+  color: colors.$on-primary-container !important;
+  border: 1px solid colors.$on-surface !important;
 }

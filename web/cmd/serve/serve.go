@@ -29,7 +29,7 @@ func main() {
 	if operatingSystem == "darwin" || operatingSystem == "linux" {
 		err = exec.Command("open", "http://localhost:2334/gui").Run()
 	} else if operatingSystem == "windows" {
-		err = exec.Command("start", "http://localhost:2334/gui").Run()
+		err = exec.Command("cmd", "/c", "start", "http://localhost:2334/gui").Run()
 	} else {
 		err = errors.New("unsupported operating system")
 	}

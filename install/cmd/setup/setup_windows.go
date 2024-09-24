@@ -51,7 +51,7 @@ func createPolynConfig(home string) error {
 }
 
 func install(home string) error {
-	err := exec.Command("xcopy", "/s", "/i", ".\\PolyNode\\", home+"\\PolyNode\\").Run()
+	err := exec.Command("cmd", "/c", "xcopy", "/s", "/i", ".\\PolyNode\\", home+"\\PolyNode\\").Run()
 	if err != nil {
 		return err
 	}
@@ -85,6 +85,21 @@ func upgrade(home string) error {
 		return err
 	}
 
+	err = os.RemoveAll(home + "\\PolyNode\\LICENSE")
+	if err != nil {
+		return err
+	}
+
+	err = os.RemoveAll(home + "\\PolyNode\\README.md")
+	if err != nil {
+		return err
+	}
+
+	err = os.RemoveAll(home + "\\PolyNode\\SECURITY.md")
+	if err != nil {
+		return err
+	}
+
 	err = os.RemoveAll(home + "\\PolyNode\\gui")
 	if err != nil {
 		return err
@@ -96,6 +111,21 @@ func upgrade(home string) error {
 	}
 
 	err = exec.Command("cmd", "/c", "copy", ".\\PolyNode\\PolyNode.exe", home+"\\PolyNode\\PolyNode.exe").Run()
+	if err != nil {
+		return err
+	}
+
+	err = exec.Command("cmd", "/c", "copy", ".\\PolyNode\\LICENSE", home+"\\PolyNode\\LICENSE").Run()
+	if err != nil {
+		return err
+	}
+
+	err = exec.Command("cmd", "/c", "copy", ".\\PolyNode\\README.md", home+"\\PolyNode\\README.md").Run()
+	if err != nil {
+		return err
+	}
+
+	err = exec.Command("cmd", "/c", "copy", ".\\PolyNode\\SECURITY.md", home+"\\PolyNode\\SECURITY.md").Run()
 	if err != nil {
 		return err
 	}

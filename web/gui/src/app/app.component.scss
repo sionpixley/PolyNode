@@ -1,4 +1,4 @@
-@use '../theme.scss' as theme;
+@use '../colors';
 
 .app-window {
   height: 100%;
@@ -17,7 +17,7 @@
 }
 
 .app-title {
-  color: theme.$on-surface;
+  color: colors.$on-surface;
   font-weight: 500;
 }
 
@@ -34,5 +34,5 @@
   right: 1rem;
   bottom: 0.25rem;
   position: fixed;
-  color: theme.$on-surface;
+  color: colors.$on-surface;
 }

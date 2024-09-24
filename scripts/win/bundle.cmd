@@ -19,8 +19,8 @@ cd ..\web
 go build -tags=prod -o ../PolyNode-arm64.exe ./cmd/serve
 
 cd gui
-pnpm install
-pnpm run build
+call pnpm install
+call pnpm run build
 
 cd ..\..
 mkdir PolyNode-%version%-win-arm64

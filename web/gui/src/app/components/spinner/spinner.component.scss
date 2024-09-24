@@ -1,4 +1,4 @@
-@use '../../../theme.scss' as theme;
+@use '../../../colors';
 
 .app-spinner-container {
   top: 0;
@@ -10,10 +10,10 @@
   flex-direction: row;
   justify-content: center;
   align-items: center;
-  background: theme.$surface;
+  background: colors.$surface;
   z-index: 999;
 }
 
 .app-spinner {
-  width: clamp(300px, 80%, 3000px);
+  width: clamp(200px, 80%, 3000px);
 }
