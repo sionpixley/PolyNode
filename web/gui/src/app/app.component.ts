@@ -22,6 +22,7 @@ export class AppComponent implements OnInit, OnDestroy {
   public currentVersion = '';
   public downloadedVersions: string[] = [];
   public isLoading = true;
+  public ltsVersions: string[] = [];
   public readonly showSpinner: WritableSignal<boolean> = signal(true);
   public version = 'v0.0.0';
 
@@ -46,6 +47,9 @@ export class AppComponent implements OnInit, OnDestroy {
             this.reloadDownloadedVersions();
             this.version = responses[0].toString();
             this.availableVersions = responses[1] as string[];
+            if(this.availableVersions.length === 14) {
+              this.ltsVersions = this.availableVersions.slice(7);
+            }
           },
           error: (err: Error) => console.log(err.message)
         }

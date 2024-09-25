@@ -17,20 +17,16 @@ import { MatTooltipModule } from '@angular/material/tooltip';
 })
 export class AvailableComponent implements OnChanges {
   @Input({ required: true }) public availableVersions: string[] = [];
+  @Input({ required: true }) public ltsVersions: string[] = [];
 
   @Output() public addButtonEmitter: EventEmitter<string[]> = new EventEmitter();
 
   public allAreSelected = false;
   public readonly columns = ['select', 'version', 'lts'];
 
-  private _ltsVersions: string[] = [];
   private _selectedVersions: string[] = [];
 
   public ngOnChanges(): void {
-    if(this.availableVersions.length === 14) {
-      this._ltsVersions = this.availableVersions.slice(7);
-    }
-
     this.availableVersions.sort((a, b) => {
       a = a.replace('v', '');
       b = b.replace('v', '');
@@ -51,7 +47,7 @@ export class AvailableComponent implements OnChanges {
   }
 
   public isLts(version: string): boolean {
-    return this._ltsVersions.includes(version);
+    return this.ltsVersions.includes(version);
   }
 
   public isSelected(version: string): boolean {
