@@ -1,6 +1,9 @@
 import { Component, EventEmitter, Input, OnChanges, Output } from '@angular/core';
 import { MatButtonModule } from '@angular/material/button';
 import { MatCheckboxModule } from '@angular/material/checkbox';
+import { MatFormFieldModule } from '@angular/material/form-field';
+import { MatIconModule } from '@angular/material/icon';
+import { MatInputModule } from '@angular/material/input';
 import { MatTableModule } from '@angular/material/table';
 import { MatTooltipModule } from '@angular/material/tooltip';
 
@@ -11,9 +14,14 @@ import { MatTooltipModule } from '@angular/material/tooltip';
     MatTableModule,
     MatCheckboxModule,
     MatButtonModule,
-    MatTooltipModule
+    MatTooltipModule,
+    MatInputModule,
+    MatFormFieldModule,
+    MatButtonModule,
+    MatIconModule
   ],
-  templateUrl: './available.component.html'
+  templateUrl: './available.component.html',
+  styleUrl: './available.component.scss'
 })
 export class AvailableComponent implements OnChanges {
   @Input({ required: true }) public availableVersions: string[] = [];

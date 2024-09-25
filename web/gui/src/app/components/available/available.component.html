@@ -1,6 +1,14 @@
 <div class="table-container">
   <h2 class="table-title">Available Node.js Versions</h2>
 
+  <div class="app-available-search-container">
+    <mat-form-field>
+      <mat-label>Search</mat-label>
+      <input matInput>
+    </mat-form-field>
+    <button mat-icon-button><mat-icon>search</mat-icon></button>
+  </div>
+
   <div class="table-scroll">
     <table mat-table [dataSource]="availableVersions">
       <ng-container matColumnDef="select">
