@@ -2,7 +2,8 @@ package main
 
 import (
 	"fmt"
-	"install/internal"
+	"install/internal/constants"
+	"install/internal/utilities"
 	"log"
 	"os"
 	"os/exec"
@@ -47,7 +48,7 @@ func addToPath(home string) error {
 }
 
 func createPolynConfig(home string) error {
-	return os.WriteFile(home+"\\PolyNode\\.polynrc", []byte(internal.DEFAULT_POLYNRC), 0644)
+	return os.WriteFile(home+"\\PolyNode\\.polynrc", []byte(constants.DEFAULT_POLYNRC), 0644)
 }
 
 func install(home string) error {
@@ -70,70 +71,10 @@ func oldVersionExists(home string) bool {
 }
 
 func upgrade(home string) error {
-	err := os.RemoveAll(home + "\\PolyNode\\polyn.exe")
+	err := utilities.RemoveUpgradableFiles(home)
 	if err != nil {
 		return err
 	}
 
-	err = os.RemoveAll(home + "\\PolyNode\\uninstall\\uninstall.exe")
-	if err != nil {
-		return err
-	}
-
-	err = os.RemoveAll(home + "\\PolyNode\\PolyNode.exe")
-	if err != nil {
-		return err
-	}
-
-	err = os.RemoveAll(home + "\\PolyNode\\LICENSE")
-	if err != nil {
-		return err
-	}
-
-	err = os.RemoveAll(home + "\\PolyNode\\README.md")
-	if err != nil {
-		return err
-	}
-
-	err = os.RemoveAll(home + "\\PolyNode\\SECURITY.md")
-	if err != nil {
-		return err
-	}
-
-	err = os.RemoveAll(home + "\\PolyNode\\gui")
-	if err != nil {
-		return err
-	}
-
-	err = exec.Command("cmd", "/c", "copy", ".\\PolyNode\\polyn.exe", home+"\\PolyNode\\polyn.exe").Run()
-	if err != nil {
-		return err
-	}
-
-	err = exec.Command("cmd", "/c", "copy", ".\\PolyNode\\PolyNode.exe", home+"\\PolyNode\\PolyNode.exe").Run()
-	if err != nil {
-		return err
-	}
-
-	err = exec.Command("cmd", "/c", "copy", ".\\PolyNode\\LICENSE", home+"\\PolyNode\\LICENSE").Run()
-	if err != nil {
-		return err
-	}
-
-	err = exec.Command("cmd", "/c", "copy", ".\\PolyNode\\README.md", home+"\\PolyNode\\README.md").Run()
-	if err != nil {
-		return err
-	}
-
-	err = exec.Command("cmd", "/c", "copy", ".\\PolyNode\\SECURITY.md", home+"\\PolyNode\\SECURITY.md").Run()
-	if err != nil {
-		return err
-	}
-
-	err = exec.Command("cmd", "/c", "xcopy", "/s", "/i", ".\\PolyNode\\gui\\", home+"\\PolyNode\\gui\\").Run()
-	if err != nil {
-		return err
-	}
-
-	return exec.Command("cmd", "/c", "copy", ".\\PolyNode\\uninstall\\uninstall.exe", home+"\\PolyNode\\uninstall\\uninstall.exe").Run()
+	return utilities.CopyUpgradableFiles(home)
 }

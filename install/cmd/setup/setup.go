@@ -5,7 +5,8 @@ package main
 import (
 	"errors"
 	"fmt"
-	"install/internal"
+	"install/internal/constants"
+	"install/internal/utilities"
 	"log"
 	"os"
 	"os/exec"
@@ -61,42 +62,8 @@ func addToPath(home string, rcFile string) error {
 	return os.WriteFile(home+"/"+rcFile, []byte(content), 0644)
 }
 
-func copyUpgradableFiles(home string) error {
-	err := exec.Command("cp", "./PolyNode/polyn", home+"/.PolyNode/polyn").Run()
-	if err != nil {
-		return err
-	}
-
-	err = exec.Command("cp", "./PolyNode/PolyNode", home+"/.PolyNode/PolyNode").Run()
-	if err != nil {
-		return err
-	}
-
-	err = exec.Command("cp", "./PolyNode/LICENSE", home+"/.PolyNode/LICENSE").Run()
-	if err != nil {
-		return err
-	}
-
-	err = exec.Command("cp", "./PolyNode/README.md", home+"/.PolyNode/README.md").Run()
-	if err != nil {
-		return err
-	}
-
-	err = exec.Command("cp", "./PolyNode/SECURITY.md", home+"/.PolyNode/SECURITY.md").Run()
-	if err != nil {
-		return err
-	}
-
-	err = exec.Command("cp", "-r", "./PolyNode/gui", home+"/.PolyNode/gui").Run()
-	if err != nil {
-		return err
-	}
-
-	return exec.Command("cp", "./PolyNode/uninstall/uninstall", home+"/.PolyNode/uninstall/uninstall").Run()
-}
-
 func createPolynConfig(home string) error {
-	return os.WriteFile(home+"/.PolyNode/.polynrc", []byte(internal.DEFAULT_POLYNRC), 0644)
+	return os.WriteFile(home+"/.PolyNode/.polynrc", []byte(constants.DEFAULT_POLYNRC), 0644)
 }
 
 func install(home string) error {
@@ -125,45 +92,11 @@ func oldVersionExists(home string) bool {
 	return !os.IsNotExist(err)
 }
 
-func removeUpgradableFiles(home string) error {
-	err := os.RemoveAll(home + "/.PolyNode/polyn")
-	if err != nil {
-		return err
-	}
-
-	err = os.RemoveAll(home + "/.PolyNode/PolyNode")
-	if err != nil {
-		return err
-	}
-
-	err = os.RemoveAll(home + "/.PolyNode/LICENSE")
-	if err != nil {
-		return err
-	}
-
-	err = os.RemoveAll(home + "/.PolyNode/README.md")
-	if err != nil {
-		return err
-	}
-
-	err = os.RemoveAll(home + "/.PolyNode/SECURITY.md")
-	if err != nil {
-		return err
-	}
-
-	err = os.RemoveAll(home + "/.PolyNode/gui")
-	if err != nil {
-		return err
-	}
-
-	return os.RemoveAll(home + "/.PolyNode/uninstall/uninstall")
-}
-
 func upgrade(home string) error {
-	err := removeUpgradableFiles(home)
+	err := utilities.RemoveUpgradableFiles(home)
 	if err != nil {
 		return err
 	}
 
-	return copyUpgradableFiles(home)
+	return utilities.CopyUpgradableFiles(home)
 }

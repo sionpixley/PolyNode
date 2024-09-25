@@ -1,11 +1,10 @@
 # PolyNode
 
-PolyNode is a CLI tool that helps install and manage multiple versions of Node.js on the same device. It also comes with a GUI app that you can use instead.
+PolyNode is a CLI tool that helps install and manage multiple versions of Node.js on the same device. There is a GUI app that you can optionally install.
 
 ## Table of contents
 
 1. [Supported operating systems and CPU architectures](#supported-operating-systems-and-cpu-architectures)
-    1. [Linux support information](#linux-support-information)
 2. [How to install](#how-to-install-polynode)
     1. [Linux](#for-linux)
     2. [macOS](#for-macos)
@@ -40,10 +39,6 @@ PolyNode is a CLI tool that helps install and manage multiple versions of Node.j
 - macOS (x64 and ARM64)
 - Windows 10 and newer (x64 and ARM64)
 
-### Linux support information
-
-PolyNode only supports Bash or Zsh by default. During the install process, PolyNode edits either .bashrc or .zshrc to add two locations to the PATH: PolyNode's home directory `~/.PolyNode` and the symlink for Node.js `~/.PolyNode/nodejs`. You can get PolyNode to work for other shells by adding these directories to your PATH environment variable.
-
 ## How to install PolyNode
 
 PolyNode does not require sudo/admin privileges to install.
@@ -53,6 +48,8 @@ If you have a previous version of PolyNode installed, you do not have to uninsta
 Please uninstall all Node.js downloads that weren't installed by PolyNode before running the setup executable.
 
 ### For Linux
+
+PolyNode only supports Bash or zsh by default. During the install process, PolyNode edits either .bashrc or .zshrc to add two locations to the PATH: PolyNode's home directory `~/.PolyNode` and the symlink for Node.js `~/.PolyNode/nodejs`. You can get PolyNode to work for other shells by adding these directories to your PATH environment variable.
 
 1. Navigate to [Releases](https://github.com/sionpixley/PolyNode/releases/latest).
 2. Download the latest Linux .tar.xz file appropriate for your CPU architecture.
