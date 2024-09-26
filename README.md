@@ -75,7 +75,7 @@ PolyNode does not require sudo/admin privileges to use the `polyn` nor the `Poly
 
 > The GUI is limited compared to the CLI (at the moment).
 
-If you'd rather work with a GUI instead of using the CLI, type this command into your terminal:
+If you installed PolyNode's GUI, type this command into your terminal:
 
 `PolyNode`
 
