@@ -41,7 +41,8 @@
 
   <div class="table-buttons-container">
     @if(useButtonIsDisabled()) {
-      <span [matTooltip]="useButtonTooltip()"
+      <span class="disabled"
+        [matTooltip]="useButtonTooltip()"
         matTooltipPosition="below"
         matTooltipShowDelay="1000">
         <button mat-flat-button disabled style="margin-right: 0.3rem;">Use</button>
@@ -54,7 +55,7 @@
     }
 
     @if(removeButtonIsDisabled()) {
-      <span matTooltip="Select at least one row to enable the remove button." matTooltipPosition="below" matTooltipShowDelay="1000">
+      <span class="disabled" matTooltip="Select at least one row to enable the remove button." matTooltipPosition="below" matTooltipShowDelay="1000">
         <button mat-flat-button disabled>Remove</button>
       </span>
     }
