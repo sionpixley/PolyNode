@@ -183,7 +183,7 @@ Run the Dash script `./scripts/linux/bundle`. This script will build PolyNode's 
 
 ### Building on macOS
 
-macOS has a zsh script to build and bundle the source code, but this script also contains some commands to sign and notarize PolyNode's executables with Apple. If you don't need to distribute the executables, then I would comment out or delete these lines before running `./scripts/mac/bundle`. This script will build PolyNode's source code for x64 and ARM64, and bundle them as separate .tar.gz files.
+macOS has two zsh scripts. One builds and bundles the code (`./scripts/mac/bundle`). The other builds, notarizes, and then bundles the code (`./scripts/mac/bundle-and-sign`). If you don't need to distribute the executables, then I would recommend just running the `./scripts/mac/bundle` script.
 
 ### Building on Windows
 
