@@ -104,21 +104,23 @@ export class AppComponent implements OnInit, OnDestroy {
   }
 
   public removeButtonClick(versions: string[]): void {
-    this.showSpinner.set(true);
-    this.isLoading = true;
+    if(window.confirm('Are you sure you want to remove this Node.js version? It will delete all its data.')) {
+      this.showSpinner.set(true);
+      this.isLoading = true;
 
-    let taskList: Observable<boolean>[] = [];
-    for(let version of versions) {
-      taskList.push(this._api.remove(version));
-    }
-
-    this._removeSub?.unsubscribe();
-    this._removeSub = forkJoin(taskList).subscribe(
-      {
-        next: () => this.reloadDownloadedVersions(),
-        error: (err: Error) => console.log(err.message)
+      let taskList: Observable<boolean>[] = [];
+      for(let version of versions) {
+        taskList.push(this._api.remove(version));
       }
-    );
+
+      this._removeSub?.unsubscribe();
+      this._removeSub = forkJoin(taskList).subscribe(
+        {
+          next: () => this.reloadDownloadedVersions(),
+          error: (err: Error) => console.log(err.message)
+        }
+      );
+    }
   }
 
   public stopLoading(): void {

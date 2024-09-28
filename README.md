@@ -49,7 +49,7 @@ Please uninstall all Node.js downloads that weren't installed by PolyNode before
 
 ### For Linux
 
-PolyNode only supports Bash or zsh by default. During the install process, PolyNode edits either .bashrc or .zshrc to add two locations to the PATH: PolyNode's home directory `~/.PolyNode` and the symlink for Node.js `~/.PolyNode/nodejs`. You can get PolyNode to work for other shells by adding these directories to your PATH environment variable.
+PolyNode only supports Bash or Zsh by default. During the install process, PolyNode edits either .bashrc or .zshrc to add two locations to the PATH: PolyNode's home directory `~/.PolyNode` and the symlink for Node.js `~/.PolyNode/nodejs`. You can get PolyNode to work for other shells by adding these directories to your PATH environment variable.
 
 1. Navigate to [Releases](https://github.com/sionpixley/PolyNode/releases/latest).
 2. Download the latest Linux .tar.xz file appropriate for your CPU architecture.
@@ -179,15 +179,15 @@ PolyNode does not require sudo/admin privileges to uninstall.
 
 ### Building on Linux
 
-Run the Dash script `./scripts/linux/bundle`. This script will build PolyNode's source code for x64 and ARM64, and bundle them as separate .tar.xz files.
+Run the Dash script `./scripts/linux/bundle`. This script will build PolyNode's source code for x64 and ARM64 (with and without the GUI), and bundle them as separate .tar.xz files.
 
 ### Building on macOS
 
-macOS has two zsh scripts. One builds and bundles the code (`./scripts/mac/bundle`). The other builds, notarizes, and then bundles the code (`./scripts/mac/bundle-and-sign`). If you don't need to distribute the executables, then I would recommend just running the `./scripts/mac/bundle` script.
+macOS has a Zsh script (`./scripts/mac/bundle`) that builds and notarizes PolyNode's source code for x64 and ARM64 (with and without the GUI), and bundles them as separate .tar.gz files. If you don't need to distribute the executables, then you don't need the notarization step. Just edit the bundle script and set the `sign` variable to `0`.
 
 ### Building on Windows
 
-Run the batchfile `.\scripts\win\bundle.cmd`. This batchfile will build PolyNode's source code for x64 and ARM64, and bundle them as separate .zip files.
+Run the batchfile `.\scripts\win\bundle.cmd`. This batchfile will build PolyNode's source code for x64 and ARM64 (with and without the GUI), and bundle them as separate .zip files.
 
 ## Future development
 
