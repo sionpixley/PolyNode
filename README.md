@@ -179,7 +179,7 @@ PolyNode does not require sudo/admin privileges to uninstall.
 
 ### Building on Linux
 
-Run the Dash script `./scripts/linux/bundle`. This script will build PolyNode's source code for x64 and ARM64 (with and without the GUI), and bundle them as separate .tar.xz files.
+Run the POSIX shell script `./scripts/linux/bundle`. This script will build PolyNode's source code for x64 and ARM64 (with and without the GUI), and bundle them as separate .tar.xz files.
 
 ### Building on macOS
 
