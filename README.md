@@ -147,11 +147,16 @@ PolyNode's configuration is handled through a JSON file named `.polynrc` located
 
 ```
 {
+  "guiPort": 2334,
   "nodeMirror": "https://nodejs.org/dist"
 }
 ```
 
 ### Configuration fields
+
+#### guiPort
+
+This field is an `int` that represents the port number the GUI binds to when launched. Default value is `2334`. Only change it if you have another process using that port.
 
 #### nodeMirror
 

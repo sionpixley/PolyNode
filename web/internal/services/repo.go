@@ -22,6 +22,11 @@ func search() (string, error) {
 	return string(content), err
 }
 
+func searchPrefix(prefix string) (string, error) {
+	content, err := exec.Command("polyn", "search", prefix).Output()
+	return string(content), err
+}
+
 func use(version string) (string, error) {
 	content, err := exec.Command("polyn", "use", version).Output()
 	return string(content), err

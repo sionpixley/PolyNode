@@ -5,7 +5,6 @@ import (
 	"os/exec"
 	"strings"
 
-	"github.com/sionpixley/PolyNode/internal"
 	"github.com/sionpixley/PolyNode/internal/constants"
 	"github.com/sionpixley/PolyNode/internal/models"
 )
@@ -97,25 +96,4 @@ func IsValidVersionFormat(version string) bool {
 	}
 
 	return true
-}
-
-func LoadPolyNodeConfig() models.PolyNodeConfig {
-	if _, err := os.Stat(internal.PolynHomeDir + internal.PathSeparator + ".polynrc"); os.IsNotExist(err) {
-		// Default config
-		return models.PolyNodeConfig{NodeMirror: internal.DEFAULT_NODE_MIRROR}
-	} else {
-		content, err := os.ReadFile(internal.PolynHomeDir + internal.PathSeparator + ".polynrc")
-		if err != nil {
-			// Default config
-			return models.PolyNodeConfig{NodeMirror: internal.DEFAULT_NODE_MIRROR}
-		}
-
-		config := models.PolyNodeConfig{}
-		err = config.UnmarshalJSON(content)
-		if err != nil {
-			// Default config
-			return models.PolyNodeConfig{NodeMirror: internal.DEFAULT_NODE_MIRROR}
-		}
-		return config
-	}
 }

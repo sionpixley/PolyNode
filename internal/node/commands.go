@@ -13,9 +13,10 @@ import (
 	"github.com/sionpixley/PolyNode/internal/constants"
 	"github.com/sionpixley/PolyNode/internal/models"
 	"github.com/sionpixley/PolyNode/internal/utilities"
+	"github.com/sionpixley/PolyNode/pkg/polynconfig"
 )
 
-func add(version string, operatingSystem models.OperatingSystem, arch models.Architecture, config models.PolyNodeConfig) error {
+func add(version string, operatingSystem models.OperatingSystem, arch models.Architecture, config polynconfig.PolyNodeConfig) error {
 	if !utilities.IsValidVersionFormat(version) {
 		return errors.New(constants.INVALID_VERSION_FORMAT_ERROR)
 	}
@@ -100,7 +101,7 @@ func current() {
 	}
 }
 
-func install(version string, operatingSystem models.OperatingSystem, arch models.Architecture, config models.PolyNodeConfig) error {
+func install(version string, operatingSystem models.OperatingSystem, arch models.Architecture, config polynconfig.PolyNodeConfig) error {
 	err := add(version, operatingSystem, arch, config)
 	if err != nil {
 		return err
@@ -168,7 +169,7 @@ func remove(version string) error {
 	return nil
 }
 
-func search(prefix string, config models.PolyNodeConfig) error {
+func search(prefix string, config polynconfig.PolyNodeConfig) error {
 	prefix = utilities.ConvertToSemanticVersion(prefix)
 
 	allVersions, err := getAllNodeVersions(config)
@@ -187,7 +188,7 @@ func search(prefix string, config models.PolyNodeConfig) error {
 	return nil
 }
 
-func searchDefault(config models.PolyNodeConfig) error {
+func searchDefault(config polynconfig.PolyNodeConfig) error {
 	nodeVersions, err := getAllNodeVersions(config)
 	if err != nil {
 		return err

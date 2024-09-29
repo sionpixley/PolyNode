@@ -44,6 +44,7 @@ func mapEndpoints(apiRouter *mux.Router) {
 	apiRouter.HandleFunc("/add/{version}", services.Add).Methods(http.MethodPost, http.MethodOptions)
 	apiRouter.HandleFunc("/list", services.List).Methods(http.MethodGet, http.MethodOptions)
 	apiRouter.HandleFunc("/remove/{version}", services.Remove).Methods(http.MethodDelete, http.MethodOptions)
+	apiRouter.HandleFunc("/search/{prefix}", services.SearchPrefix).Methods(http.MethodGet, http.MethodOptions)
 	apiRouter.HandleFunc("/search", services.Search).Methods(http.MethodGet, http.MethodOptions)
 	apiRouter.HandleFunc("/use/{version}", services.Use).Methods(http.MethodPatch, http.MethodOptions)
 	apiRouter.HandleFunc("/version", services.Version).Methods(http.MethodGet, http.MethodOptions)

@@ -119,6 +119,26 @@ func Search(w http.ResponseWriter, r *http.Request) {
 	}
 }
 
+func SearchPrefix(w http.ResponseWriter, r *http.Request) {
+	if r.Method == http.MethodOptions {
+		return
+	}
+
+	params := mux.Vars(r)
+	prefix, exists := params["prefix"]
+	if !exists {
+		w.WriteHeader(http.StatusBadRequest)
+		return
+	}
+
+	output, err := searchPrefix(prefix)
+	if err != nil {
+		w.WriteHeader(http.StatusInternalServerError)
+		return
+	}
+	json.NewEncoder(w).Encode(output)
+}
+
 func Use(w http.ResponseWriter, r *http.Request) {
 	if r.Method == http.MethodOptions {
 		return

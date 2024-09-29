@@ -10,6 +10,7 @@ import (
 	"github.com/sionpixley/PolyNode/internal/models"
 	"github.com/sionpixley/PolyNode/internal/node"
 	"github.com/sionpixley/PolyNode/internal/utilities"
+	"github.com/sionpixley/PolyNode/pkg/polynconfig"
 )
 
 func main() {
@@ -31,7 +32,7 @@ func main() {
 		return
 	}
 
-	config := utilities.LoadPolyNodeConfig()
+	config := polynconfig.LoadPolyNodeConfig()
 
 	args := []string{}
 	for _, arg := range os.Args {
