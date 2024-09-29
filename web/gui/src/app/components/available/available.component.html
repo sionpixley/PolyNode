@@ -4,9 +4,11 @@
   <div class="app-available-search-container">
     <mat-form-field class="app-available-search">
       <mat-label>Search</mat-label>
-      <input matInput>
+      <input matInput [formControl]="searchControl" (keyup.enter)="search()">
     </mat-form-field>
-    <button mat-icon-button class="app-available-search-button"><mat-icon>search</mat-icon></button>
+    <button mat-icon-button class="app-available-search-button" (click)="search()" (keyup.enter)="search()">
+      <mat-icon>search</mat-icon>
+    </button>
   </div>
 
   <div class="table-scroll">

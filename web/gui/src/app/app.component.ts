@@ -1,7 +1,7 @@
 import { Component, HostListener, OnDestroy, OnInit, signal, WritableSignal } from '@angular/core';
 import { MatIconRegistry } from '@angular/material/icon';
 import { GuiService } from './services/gui.service';
-import { forkJoin, Observable, Subscription } from 'rxjs';
+import { forkJoin, lastValueFrom, Observable, Subscription } from 'rxjs';
 import { DownloadedComponent } from './components/downloaded/downloaded.component';
 import { AvailableComponent } from './components/available/available.component';
 import { SpinnerComponent } from './components/spinner/spinner.component';
@@ -29,6 +29,7 @@ export class AppComponent implements OnInit, OnDestroy {
   private _addSub: Subscription | null = null;
   private _listSub: Subscription | null = null;
   private _removeSub: Subscription | null = null;
+  private _searchSub: Subscription | null = null;
   private readonly _sub = new Subscription();
   private _useSub: Subscription | null = null;
 
@@ -39,17 +40,17 @@ export class AppComponent implements OnInit, OnDestroy {
 
     let taskList: Observable<any>[] = [];
     taskList.push(this._api.version());
-    taskList.push(this._api.search());
     this._sub.add(
       forkJoin(taskList).subscribe(
         {
-          next: responses => {
-            this.reloadDownloadedVersions();
-            this.version = responses[0].toString();
-            this.availableVersions = responses[1] as string[];
+          next: async responses => {
+            this.availableVersions = await lastValueFrom(this._api.search());
             if(this.availableVersions.length === 14) {
               this.ltsVersions = this.availableVersions.slice(7);
             }
+
+            this.reloadDownloadedVersions();
+            this.version = responses[0].toString();
           },
           error: (err: Error) => console.log(err.message)
         }
@@ -123,6 +124,49 @@ export class AppComponent implements OnInit, OnDestroy {
     }
   }
 
+  public searchButtonClick(prefix: string): void {
+    this.showSpinner.set(true);
+    this.isLoading = true;
+
+    if(prefix.trim() === '') {
+      lastValueFrom(this._api.search()).then(
+        versions => {
+          this.availableVersions = versions;
+          if(this.availableVersions.length === 14) {
+            this.ltsVersions = this.availableVersions.slice(7);
+          }
+          this.isLoading = false;
+        }
+      ).catch((err: Error) => console.log(err.message));
+    }
+    else {
+      this._searchSub?.unsubscribe();
+      this._searchSub = this._api.searchPrefix(prefix).subscribe(
+        {
+          next: versions => {
+            let av: string[] = [];
+            let lv: string[] = [];
+            for(let version of versions) {
+              if(version.includes("(lts)")) {
+                let parts = version.split(" ");
+                av.push(parts[0]);
+                lv.push(parts[0]);
+              }
+              else {
+                av.push(version);
+              }
+            }
+
+            this.availableVersions = av;
+            this.ltsVersions = lv;
+            this.isLoading = false;
+          },
+          error: (err: Error) => console.log(err.message)
+        }
+      );
+    }
+  }
+
   public stopLoading(): void {
     this.showSpinner.set(false);
   }
@@ -148,6 +192,9 @@ export class AppComponent implements OnInit, OnDestroy {
 
     this._removeSub?.unsubscribe();
     this._removeSub = null;
+
+    this._searchSub?.unsubscribe();
+    this._searchSub = null;
 
     this._sub.unsubscribe();
 

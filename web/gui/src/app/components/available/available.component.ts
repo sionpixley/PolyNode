@@ -1,4 +1,5 @@
 import { Component, EventEmitter, Input, OnChanges, Output } from '@angular/core';
+import { FormControl, ReactiveFormsModule } from '@angular/forms';
 import { MatButtonModule } from '@angular/material/button';
 import { MatCheckboxModule } from '@angular/material/checkbox';
 import { MatFormFieldModule } from '@angular/material/form-field';
@@ -18,7 +19,8 @@ import { MatTooltipModule } from '@angular/material/tooltip';
     MatInputModule,
     MatFormFieldModule,
     MatButtonModule,
-    MatIconModule
+    MatIconModule,
+    ReactiveFormsModule
   ],
   templateUrl: './available.component.html',
   styleUrl: './available.component.scss'
@@ -28,9 +30,11 @@ export class AvailableComponent implements OnChanges {
   @Input({ required: true }) public ltsVersions: string[] = [];
 
   @Output() public addButtonEmitter: EventEmitter<string[]> = new EventEmitter();
+  @Output() public searchButtonEmitter: EventEmitter<string> = new EventEmitter();
 
   public allAreSelected = false;
   public readonly columns = ['select', 'version', 'lts'];
+  public readonly searchControl: FormControl<string | null> = new FormControl('');
 
   private _selectedVersions: string[] = [];
 
@@ -60,6 +64,10 @@ export class AvailableComponent implements OnChanges {
 
   public isSelected(version: string): boolean {
     return this._selectedVersions.includes(version);
+  }
+
+  public search(): void {
+    this.searchButtonEmitter.emit(this.searchControl.value ?? '');
   }
 
   public selectAllTooltip(): string {
