@@ -39,18 +39,19 @@ export class AppComponent implements OnInit, OnDestroy {
     this._iconRegistry.setDefaultFontSetClass('material-symbols-sharp');
 
     let taskList: Observable<any>[] = [];
+    taskList.push(this._api.search());
     taskList.push(this._api.version());
     this._sub.add(
       forkJoin(taskList).subscribe(
         {
-          next: async responses => {
-            this.availableVersions = await lastValueFrom(this._api.search());
+          next: responses => {
+            this.availableVersions = responses[0] as string[];
             if(this.availableVersions.length === 14) {
               this.ltsVersions = this.availableVersions.slice(7);
             }
 
+            this.version = responses[1].toString();
             this.reloadDownloadedVersions();
-            this.version = responses[0].toString();
           },
           error: (err: Error) => console.log(err.message)
         }
