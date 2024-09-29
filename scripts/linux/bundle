@@ -1,6 +1,6 @@
 #!/bin/sh
 
-version=v0.8.0-rc.6
+version=v0.8.0-rc.7
 
 # Build Linux ARM64
 
