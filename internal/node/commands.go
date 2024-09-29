@@ -179,7 +179,9 @@ func search(prefix string, config polynconfig.PolyNodeConfig) error {
 
 	output := "\nNode.js\n--------------------------"
 	for _, nodeVersion := range allVersions {
-		if strings.HasPrefix(nodeVersion.Version, prefix) {
+		if nodeVersion.Lts && strings.HasPrefix(nodeVersion.Version, prefix) {
+			output += "\n" + nodeVersion.Version + " (lts)"
+		} else if strings.HasPrefix(nodeVersion.Version, prefix) {
 			output += "\n" + nodeVersion.Version
 		}
 	}
