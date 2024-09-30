@@ -34,7 +34,7 @@ Commands:
 	UNSUPPORTED_OS_ERROR         string = "unsupported operating system"
 
 	// PolyNode's version.
-	VERSION string = "v0.8.0"
+	VERSION string = "v0.9.0"
 )
 
 // NA is for Not Applicable.
@@ -43,6 +43,7 @@ const (
 	LINUX
 	MAC
 	WINDOWS
+	AIX
 )
 
 // NA is for Not Applicable.
@@ -50,6 +51,7 @@ const (
 	NA_ARCH models.Architecture = iota
 	ARM64
 	X64
+	PPC64
 )
 
 // NA is for Not Applicable.
