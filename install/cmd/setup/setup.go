@@ -21,6 +21,8 @@ func main() {
 
 	var err error
 	switch operatingSystem {
+	case "aix":
+		fallthrough
 	case "darwin":
 		fallthrough
 	case "linux":
@@ -78,10 +80,12 @@ func install(home string) error {
 	}
 
 	shell := os.Getenv("SHELL")
-	if strings.Contains(shell, "bash") {
+	if strings.HasSuffix(shell, "/bash") {
 		return addToPath(home, ".bashrc")
-	} else if strings.Contains(shell, "zsh") {
+	} else if strings.HasSuffix(shell, "/zsh") {
 		return addToPath(home, ".zshrc")
+	} else if strings.HasSuffix(shell, "/ksh") {
+		return addToPath(home, ".kshrc")
 	} else {
 		return errors.New("unsupported shell")
 	}

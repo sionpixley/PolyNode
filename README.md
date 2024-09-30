@@ -6,9 +6,10 @@ PolyNode is a CLI tool that helps install and manage multiple versions of Node.j
 
 1. [Supported operating systems and CPU architectures](#supported-operating-systems-and-cpu-architectures)
 2. [How to install](#how-to-install-polynode)
-    1. [Linux](#for-linux)
-    2. [macOS](#for-macos)
-    3. [Windows](#for-windows)
+    1. [AIX](#for-aix)
+    2. [Linux](#for-linux)
+    3. [macOS](#for-macos)
+    4. [Windows](#for-windows)
 3. [How to use](#how-to-use)
     1. [Launching the GUI](#launching-the-gui)
     2. [Searching for available Node.js versions](#searching-for-available-nodejs-versions)
@@ -23,18 +24,20 @@ PolyNode is a CLI tool that helps install and manage multiple versions of Node.j
 4. [How to configure](#how-to-configure-polynode)
     1. [Configuration fields](#configuration-fields)
 5. [How to uninstall](#how-to-uninstall-polynode)
-    1. [Linux and macOS](#linux-and-macos)
+    1. [AIX, Linux, and macOS](#aix-linux-and-macos)
     2. [Windows](#windows)
 6. [Building from source](#building-from-source)
     1. [Required technologies](#required-technologies)
-    2. [Linux](#building-on-linux)
-    3. [macOS](#building-on-macos)
-    4. [Windows](#building-on-windows)
+    2. [AIX](#building-on-aix)
+    3. [Linux](#building-on-linux)
+    4. [macOS](#building-on-macos)
+    5. [Windows](#building-on-windows)
 7. [Future development](#future-development)
 8. [Information](#information)
 
 ## Supported operating systems and CPU architectures
 
+- AIX (Power ISA 64-bit)
 - Linux (x64 and ARM64)
 - macOS (x64 and ARM64)
 - Windows 10 and newer (x64 and ARM64)
@@ -45,21 +48,27 @@ PolyNode does not require sudo/admin privileges to install.
 
 If you have a previous version of PolyNode installed, you do not have to uninstall it before installing the new version.
 
-Please uninstall all Node.js downloads that weren't installed by PolyNode before running the setup executable.
+Please uninstall all Node.js downloads that weren't installed by PolyNode before running the setup binary.
+
+### For AIX
+
+1. Navigate to [Releases](https://github.com/sionpixley/PolyNode/releases/latest).
+2. Download the latest AIX .tar.gz file.
+3. Extract the .tar.gz file and run the setup binary.
 
 ### For Linux
 
-PolyNode only supports Bash or Zsh by default. During the install process, PolyNode edits either .bashrc or .zshrc to add two locations to the PATH: PolyNode's home directory `~/.PolyNode` and the symlink for Node.js `~/.PolyNode/nodejs`. You can get PolyNode to work for other shells by adding these directories to your PATH environment variable.
+PolyNode only supports Bash, Zsh, or KornShell by default. During the install process, PolyNode edits either .bashrc, .zshrc, or .kshrc to add two locations to the PATH: PolyNode's home directory `~/.PolyNode` and the symlink for Node.js `~/.PolyNode/nodejs/bin`. You can get PolyNode to work for other shells by adding these directories to your PATH environment variable.
 
 1. Navigate to [Releases](https://github.com/sionpixley/PolyNode/releases/latest).
 2. Download the latest Linux .tar.xz file appropriate for your CPU architecture.
-3. Extract the .tar.xz file and run the setup executable.
+3. Extract the .tar.xz file and run the setup binary.
 
 ### For macOS
 
 1. Navigate to [Releases](https://github.com/sionpixley/PolyNode/releases/latest).
 2. Download the latest Darwin .tar.gz file appropriate for your CPU architecture.
-3. Extract the .tar.gz file and run the setup executable.
+3. Extract the .tar.gz file and run the setup binary.
 
 ### For Windows
 
@@ -161,9 +170,9 @@ This field is a `string` that represents the URL to download Node.js. Default va
 
 PolyNode does not require sudo/admin privileges to uninstall.
 
-### Linux and macOS
+### AIX, Linux, and macOS
 
-1. Run the `~/.PolyNode/uninstall/uninstall` executable.
+1. Run the `~/.PolyNode/uninstall/uninstall` binary.
 
 ### Windows
 
@@ -177,17 +186,21 @@ PolyNode does not require sudo/admin privileges to uninstall.
 - Angular 18.2.4
 - pnpm 9.10.0
 
+### Building on AIX
+
+Run the POSIX shell script `./scripts/aix/bundle`. This script will build PolyNode's source code for Power ISA 64-bit (with and without the GUI), and bundle the artifacts as separate .tar.gz files.
+
 ### Building on Linux
 
-Run the POSIX shell script `./scripts/linux/bundle`. This script will build PolyNode's source code for x64 and ARM64 (with and without the GUI), and bundle them as separate .tar.xz files.
+Run the POSIX shell script `./scripts/linux/bundle`. This script will build PolyNode's source code for x64 and ARM64 (with and without the GUI), and bundle the artifacts as separate .tar.xz files.
 
 ### Building on macOS
 
-macOS has a Zsh script (`./scripts/mac/bundle`) that builds and notarizes PolyNode's source code for x64 and ARM64 (with and without the GUI), and bundles them as separate .tar.gz files. If you don't need to distribute the executables, then you don't need the notarization step. Just edit the bundle script and set the `sign` variable to `0`.
+macOS has a Zsh script (`./scripts/mac/bundle`) that builds and notarizes PolyNode's source code for x64 and ARM64 (with and without the GUI), and bundles the artifacts as separate .tar.gz files. If you don't need to distribute the binaries, then you don't need the notarization step. Just edit the bundle script and set the `sign` variable to `0`.
 
 ### Building on Windows
 
-Run the batchfile `.\scripts\win\bundle.cmd`. This batchfile will build PolyNode's source code for x64 and ARM64 (with and without the GUI), and bundle them as separate .zip files.
+Run the batchfile `.\scripts\win\bundle.cmd`. This batchfile will build PolyNode's source code for x64 and ARM64 (with and without the GUI), and bundle the artifacts as separate .zip files.
 
 ## Future development
 

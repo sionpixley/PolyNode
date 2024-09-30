@@ -2,6 +2,7 @@ package main
 
 import (
 	"fmt"
+	"log"
 	"os"
 	"runtime"
 	"strings"
@@ -19,10 +20,10 @@ func main() {
 	defer fmt.Println()
 
 	if !isSupportedOperatingSystem(operatingSystem) {
-		fmt.Println(constants.UNSUPPORTED_OS_ERROR)
+		log.Fatal(constants.UNSUPPORTED_OS_ERROR)
 		return
 	} else if !isSupportedArchitecture(arch) {
-		fmt.Println("unsupported CPU architecture")
+		log.Fatal("unsupported CPU architecture")
 		return
 	}
 
@@ -53,6 +54,8 @@ func convertToArchitecture(archStr string) models.Architecture {
 		return constants.X64
 	case "arm64":
 		return constants.ARM64
+	case "ppc64":
+		return constants.PPC64
 	default:
 		return constants.NA_ARCH
 	}
@@ -60,6 +63,8 @@ func convertToArchitecture(archStr string) models.Architecture {
 
 func convertToOperatingSystem(osStr string) models.OperatingSystem {
 	switch osStr {
+	case "aix":
+		return constants.AIX
 	case "darwin":
 		return constants.MAC
 	case "linux":
