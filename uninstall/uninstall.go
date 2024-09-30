@@ -13,15 +13,10 @@ import (
 	"strings"
 )
 
-const _LINUX_UNINSTALL_SCRIPT string = `#!/bin/dash
+const _UNINSTALL_SCRIPT string = `#!/bin/sh
 
 rm -rf $HOME/.PolyNode
-rm -f $HOME/polyn-uninstall-temp`
-
-const _MAC_UNINSTALL_SCRIPT string = `#!/bin/zsh
-
-rm -rf $HOME/.PolyNode
-rm -f $HOME/polyn-uninstall-temp`
+rm $HOME/polyn-uninstall-temp`
 
 func main() {
 	operatingSystem := runtime.GOOS
@@ -30,10 +25,12 @@ func main() {
 
 	var err error
 	switch operatingSystem {
+	case "aix":
+		fallthrough
 	case "darwin":
-		err = uninstallMac()
+		fallthrough
 	case "linux":
-		err = uninstallLinux()
+		err = uninstall()
 	default:
 		err = errors.New("unsupported operating system")
 	}
@@ -73,38 +70,25 @@ func removePath(home string, rcFile string) error {
 
 func removePathLinuxAndMac(home string) error {
 	shell := os.Getenv("SHELL")
-	if strings.Contains(shell, "bash") {
+	if strings.HasSuffix(shell, "/bash") {
 		return removePath(home, ".bashrc")
-	} else if strings.Contains(shell, "zsh") {
+	} else if strings.HasSuffix(shell, "/zsh") {
 		return removePath(home, ".zshrc")
+	} else if strings.HasSuffix(shell, "/ksh") {
+		return removePath(home, ".kshrc")
 	} else {
 		return errors.New("unsupported shell")
 	}
 }
 
-func uninstallLinux() error {
+func uninstall() error {
 	home := os.Getenv("HOME")
 	err := removePathLinuxAndMac(home)
 	if err != nil {
 		return err
 	}
 
-	err = os.WriteFile(home+"/polyn-uninstall-temp", []byte(_LINUX_UNINSTALL_SCRIPT), 0700)
-	if err != nil {
-		return err
-	}
-
-	return exec.Command(home + "/polyn-uninstall-temp").Run()
-}
-
-func uninstallMac() error {
-	home := os.Getenv("HOME")
-	err := removePathLinuxAndMac(home)
-	if err != nil {
-		return err
-	}
-
-	err = os.WriteFile(home+"/polyn-uninstall-temp", []byte(_MAC_UNINSTALL_SCRIPT), 0700)
+	err = os.WriteFile(home+"/polyn-uninstall-temp", []byte(_UNINSTALL_SCRIPT), 0700)
 	if err != nil {
 		return err
 	}
