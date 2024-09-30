@@ -1,4 +1,6 @@
-package internal
+package constants
+
+import "github.com/sionpixley/PolyNode/internal/models"
 
 const (
 	HELP string = `
@@ -28,18 +30,16 @@ Commands:
   use <version>     : Switches Node.js to a different version.
   version           : Prints the current version of PolyNode.`
 
-	UNSUPPORTED_OS_ERROR string = "unsupported operating system"
+	INVALID_VERSION_FORMAT_ERROR string = "invalid version format"
+	UNSUPPORTED_OS_ERROR         string = "unsupported operating system"
 
 	// PolyNode's version.
-	VERSION string = "v0.7.0"
-
-	_DEFAULT_NODE_MIRROR          string = "https://nodejs.org/dist"
-	_INVALID_VERSION_FORMAT_ERROR string = "invalid version format"
+	VERSION string = "v0.8.0"
 )
 
 // NA is for Not Applicable.
 const (
-	NA_OS OperatingSystem = iota
+	NA_OS models.OperatingSystem = iota
 	LINUX
 	MAC
 	WINDOWS
@@ -47,7 +47,7 @@ const (
 
 // NA is for Not Applicable.
 const (
-	NA_ARCH Architecture = iota
+	NA_ARCH models.Architecture = iota
 	ARM64
 	X64
 )
@@ -55,12 +55,12 @@ const (
 // NA is for Not Applicable.
 // We don't include the version command in this. The version command is handled in main().
 const (
-	_NA_COMM command = iota
-	_ADD
-	_CURRENT
-	_INSTALL
-	_LIST
-	_REMOVE
-	_SEARCH
-	_USE
+	NA_COMM models.Command = iota
+	ADD
+	CURRENT
+	INSTALL
+	LIST
+	REMOVE
+	SEARCH
+	USE
 )

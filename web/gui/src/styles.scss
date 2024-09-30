@@ -1,0 +1,57 @@
+@use 'colors';
+
+html, body { height: 100%; font-size: 100%; }
+body {
+  margin: 0;
+  font-family: Roboto, 'Helvetica Neue', sans-serif;
+  background: colors.$surface;
+}
+
+.table-container {
+  border: 0.125rem solid colors.$on-surface;
+  color: colors.$on-surface;
+  padding-top: 0.3rem;
+  padding-right: 3rem;
+  padding-bottom: 1rem;
+  padding-left: 3rem;
+  border-radius: 0.8rem;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
+  align-items: center;
+}
+
+.table-title {
+  font-weight: normal;
+  color: colors.$on-surface;
+}
+
+.table-scroll {
+  max-height: 350px;
+  overflow: auto;
+  border: 1px solid colors.$on-surface;
+}
+
+.table-header-row {
+  background: colors.$primary-container !important;
+  color: colors.$on-primary-container !important;
+}
+
+.table-buttons-container {
+  width: 100%;
+  display: flex;
+  flex-direction: row;
+  justify-content: flex-end;
+  margin-top: 1rem;
+  gap: 0.3rem;
+}
+
+.primary-button {
+  background: colors.$primary-container !important;
+  color: colors.$on-primary-container !important;
+  border: 1px solid colors.$on-surface !important;
+}
+
+.disabled {
+  cursor: not-allowed;
+}

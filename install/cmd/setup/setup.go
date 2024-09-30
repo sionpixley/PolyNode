@@ -5,7 +5,9 @@ package main
 import (
 	"errors"
 	"fmt"
-	"install/internal"
+	"install/internal/constants"
+	"install/internal/utilities"
+	"log"
 	"os"
 	"os/exec"
 	"runtime"
@@ -33,7 +35,7 @@ func main() {
 	}
 
 	if err != nil {
-		fmt.Println(err.Error())
+		log.Fatal(err.Error())
 	} else {
 		fmt.Println("The polyn command has been installed.")
 		fmt.Println("Please close all open terminals.")
@@ -61,7 +63,7 @@ func addToPath(home string, rcFile string) error {
 }
 
 func createPolynConfig(home string) error {
-	return os.WriteFile(home+"/.PolyNode/.polynrc", []byte(internal.DEFAULT_POLYNRC), 0644)
+	return os.WriteFile(home+"/.PolyNode/.polynrc", []byte(constants.DEFAULT_POLYNRC), 0644)
 }
 
 func install(home string) error {
@@ -91,20 +93,10 @@ func oldVersionExists(home string) bool {
 }
 
 func upgrade(home string) error {
-	err := os.RemoveAll(home + "/.PolyNode/polyn")
+	err := utilities.RemoveUpgradableFiles(home)
 	if err != nil {
 		return err
 	}
 
-	err = os.RemoveAll(home + "/.PolyNode/uninstall/uninstall")
-	if err != nil {
-		return err
-	}
-
-	err = exec.Command("cp", "./PolyNode/polyn", home+"/.PolyNode/polyn").Run()
-	if err != nil {
-		return err
-	}
-
-	return exec.Command("cp", "./PolyNode/uninstall/uninstall", home+"/.PolyNode/uninstall/uninstall").Run()
+	return utilities.CopyUpgradableFiles(home)
 }

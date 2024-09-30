@@ -1,25 +1,54 @@
 #!/bin/zsh
 
-version=v0.7.0
+version=v0.8.0
+sign=1
 
 # Build macOS ARM64
 
-env GOOS=darwin GOARCH=arm64 go build -tags=prod -o polyn-darwin-arm64 ./cmd/polyn
+env GOOS=darwin GOARCH=arm64 go build -tags=prod -o polyn ./cmd/polyn
+
+if [ $sign -eq 1 ]; then
+  codesign -v -f --timestamp --options=runtime --sign $CODESIGN_TEAM_ID polyn
+  zip polyn.zip polyn
+  rm polyn
+  xcrun notarytool submit --apple-id $CODESIGN_APPLE_ID --team-id $CODESIGN_TEAM_ID --password $CODESIGN_PASSWD polyn.zip
+  unzip polyn.zip
+  rm polyn.zip
+fi
 
 cd install
-env GOOS=darwin GOARCH=arm64 go build -o ../setup-darwin-arm64 ./cmd/setup
-
-cd ../uninstall
-env GOOS=darwin GOARCH=arm64 go build -o ../uninstall-darwin-arm64
-
+env GOOS=darwin GOARCH=arm64 go build -o ../setup ./cmd/setup
 cd ..
+
+if [ $sign -eq 1 ]; then
+  codesign -v -f --timestamp --options=runtime --sign $CODESIGN_TEAM_ID setup
+  zip setup.zip setup
+  rm setup
+  xcrun notarytool submit --apple-id $CODESIGN_APPLE_ID --team-id $CODESIGN_TEAM_ID --password $CODESIGN_PASSWD setup.zip
+  unzip setup.zip
+  rm setup.zip
+fi
+
+cd uninstall
+env GOOS=darwin GOARCH=arm64 go build -o ../uninstall-arm64
+cd ..
+
+if [ $sign -eq 1 ]; then
+  codesign -v -f --timestamp --options=runtime --sign $CODESIGN_TEAM_ID uninstall-arm64
+  zip uninstall.zip uninstall-arm64
+  rm uninstall-arm64
+  xcrun notarytool submit --apple-id $CODESIGN_APPLE_ID --team-id $CODESIGN_TEAM_ID --password $CODESIGN_PASSWD uninstall.zip
+  unzip uninstall.zip
+  rm uninstall.zip
+fi
+
 mkdir PolyNode-$version-darwin-arm64
-mv setup-darwin-arm64 ./PolyNode-$version-darwin-arm64/setup
+mv setup ./PolyNode-$version-darwin-arm64/setup
 
 cd PolyNode-$version-darwin-arm64
 mkdir PolyNode
 cd ..
-mv polyn-darwin-arm64 ./PolyNode-$version-darwin-arm64/PolyNode/polyn
+cp polyn ./PolyNode-$version-darwin-arm64/PolyNode
 
 cp README.md ./PolyNode-$version-darwin-arm64/PolyNode
 cp LICENSE ./PolyNode-$version-darwin-arm64/PolyNode
@@ -28,26 +57,112 @@ cp SECURITY.md ./PolyNode-$version-darwin-arm64/PolyNode
 cd ./PolyNode-$version-darwin-arm64/PolyNode
 mkdir uninstall
 cd ../..
-mv uninstall-darwin-arm64 ./PolyNode-$version-darwin-arm64/PolyNode/uninstall/uninstall
+cp uninstall-arm64 ./PolyNode-$version-darwin-arm64/PolyNode/uninstall
+cd ./PolyNode-$version-darwin-arm64/PolyNode/uninstall
+mv uninstall-arm64 uninstall
+cd ../../..
+
+# Build macOS ARM64 gui
+
+cd install
+env GOOS=darwin GOARCH=arm64 go build -tags=gui -o ../setup ./cmd/setup
+cd ..
+
+if [ $sign -eq 1 ]; then
+  codesign -v -f --timestamp --options=runtime --sign $CODESIGN_TEAM_ID setup
+  zip setup.zip setup
+  rm setup
+  xcrun notarytool submit --apple-id $CODESIGN_APPLE_ID --team-id $CODESIGN_TEAM_ID --password $CODESIGN_PASSWD setup.zip
+  unzip setup.zip
+  rm setup.zip
+fi
+
+cd web
+env GOOS=darwin GOARCH=arm64 go build -tags=prod -o ../PolyNode ./cmd/serve
+cd ..
+
+if [ $sign -eq 1 ]; then
+  codesign -v -f --timestamp --options=runtime --sign $CODESIGN_TEAM_ID PolyNode
+  zip PolyNode.zip PolyNode
+  rm PolyNode
+  xcrun notarytool submit --apple-id $CODESIGN_APPLE_ID --team-id $CODESIGN_TEAM_ID --password $CODESIGN_PASSWD PolyNode.zip
+  unzip PolyNode.zip
+  rm PolyNode.zip
+fi
+
+cd ./web/gui
+pnpm install
+pnpm run build
+
+cd ../..
+mkdir PolyNode-GUI-$version-darwin-arm64
+mv setup ./PolyNode-GUI-$version-darwin-arm64/setup
+
+cd PolyNode-GUI-$version-darwin-arm64
+mkdir PolyNode
+cd ..
+mv polyn ./PolyNode-GUI-$version-darwin-arm64/PolyNode/polyn
+mv PolyNode ./PolyNode-GUI-$version-darwin-arm64/PolyNode/PolyNode
+
+cp README.md ./PolyNode-GUI-$version-darwin-arm64/PolyNode
+cp LICENSE ./PolyNode-GUI-$version-darwin-arm64/PolyNode
+cp SECURITY.md ./PolyNode-GUI-$version-darwin-arm64/PolyNode
+
+cd ./PolyNode-GUI-$version-darwin-arm64/PolyNode
+mkdir uninstall
+mkdir gui
+cd gui
+mkdir dist
+cd ../../..
+mv uninstall-arm64 ./PolyNode-GUI-$version-darwin-arm64/PolyNode/uninstall/uninstall
+cp -r ./web/gui/dist/gui ./PolyNode-GUI-$version-darwin-arm64/PolyNode/gui/dist/gui
 
 # Build macOS x64
 
-env GOOS=darwin GOARCH=amd64 go build -tags=prod -o polyn-darwin-x64 ./cmd/polyn
+env GOOS=darwin GOARCH=amd64 go build -tags=prod -o polyn ./cmd/polyn
+
+if [ $sign -eq 1 ]; then
+  codesign -v -f --timestamp --options=runtime --sign $CODESIGN_TEAM_ID polyn
+  zip polyn.zip polyn
+  rm polyn
+  xcrun notarytool submit --apple-id $CODESIGN_APPLE_ID --team-id $CODESIGN_TEAM_ID --password $CODESIGN_PASSWD polyn.zip
+  unzip polyn.zip
+  rm polyn.zip
+fi
 
 cd install
-env GOOS=darwin GOARCH=amd64 go build -o ../setup-darwin-x64 ./cmd/setup
-
-cd ../uninstall
-env GOOS=darwin GOARCH=amd64 go build -o ../uninstall-darwin-x64
-
+env GOOS=darwin GOARCH=amd64 go build -o ../setup ./cmd/setup
 cd ..
+
+if [ $sign -eq 1 ]; then
+  codesign -v -f --timestamp --options=runtime --sign $CODESIGN_TEAM_ID setup
+  zip setup.zip setup
+  rm setup
+  xcrun notarytool submit --apple-id $CODESIGN_APPLE_ID --team-id $CODESIGN_TEAM_ID --password $CODESIGN_PASSWD setup.zip
+  unzip setup.zip
+  rm setup.zip
+fi
+
+cd uninstall
+env GOOS=darwin GOARCH=amd64 go build -o ../uninstall-x64
+cd ..
+
+if [ $sign -eq 1 ]; then
+  codesign -v -f --timestamp --options=runtime --sign $CODESIGN_TEAM_ID uninstall-x64
+  zip uninstall.zip uninstall-x64
+  rm uninstall-x64
+  xcrun notarytool submit --apple-id $CODESIGN_APPLE_ID --team-id $CODESIGN_TEAM_ID --password $CODESIGN_PASSWD uninstall.zip
+  unzip uninstall.zip
+  rm uninstall.zip
+fi
+
 mkdir PolyNode-$version-darwin-x64
-mv setup-darwin-x64 ./PolyNode-$version-darwin-x64/setup
+mv setup ./PolyNode-$version-darwin-x64/setup
 
 cd PolyNode-$version-darwin-x64
 mkdir PolyNode
 cd ..
-mv polyn-darwin-x64 ./PolyNode-$version-darwin-x64/PolyNode/polyn
+cp polyn ./PolyNode-$version-darwin-x64/PolyNode
 
 cp README.md ./PolyNode-$version-darwin-x64/PolyNode
 cp LICENSE ./PolyNode-$version-darwin-x64/PolyNode
@@ -56,64 +171,71 @@ cp SECURITY.md ./PolyNode-$version-darwin-x64/PolyNode
 cd ./PolyNode-$version-darwin-x64/PolyNode
 mkdir uninstall
 cd ../..
-mv uninstall-darwin-x64 ./PolyNode-$version-darwin-x64/PolyNode/uninstall/uninstall
-
-# Notarize
-
-cd PolyNode-$version-darwin-arm64
-codesign -v -f --timestamp --options=runtime --sign $CODESIGN_TEAM_ID setup
-zip setup.zip setup
-rm setup
-xcrun notarytool submit --apple-id $CODESIGN_APPLE_ID --team-id $CODESIGN_TEAM_ID --password $CODESIGN_PASSWD setup.zip
-unzip setup.zip
-rm setup.zip
-
-cd PolyNode
-codesign -v -f --timestamp --options=runtime --sign $CODESIGN_TEAM_ID polyn
-zip polyn.zip polyn
-rm polyn
-xcrun notarytool submit --apple-id $CODESIGN_APPLE_ID --team-id $CODESIGN_TEAM_ID --password $CODESIGN_PASSWD polyn.zip
-unzip polyn.zip
-rm polyn.zip
-
-cd uninstall
-codesign -v -f --timestamp --options=runtime --sign $CODESIGN_TEAM_ID uninstall
-zip uninstall.zip uninstall
-rm uninstall
-xcrun notarytool submit --apple-id $CODESIGN_APPLE_ID --team-id $CODESIGN_TEAM_ID --password $CODESIGN_PASSWD uninstall.zip
-unzip uninstall.zip
-rm uninstall.zip
+cp uninstall-x64 ./PolyNode-$version-darwin-x64/PolyNode/uninstall
+cd ./PolyNode-$version-darwin-x64/PolyNode/uninstall
+mv uninstall-x64 uninstall
 cd ../../..
 
-cd PolyNode-$version-darwin-x64
-codesign -v -f --timestamp --options=runtime --sign $CODESIGN_TEAM_ID setup
-zip setup.zip setup
-rm setup
-xcrun notarytool submit --apple-id $CODESIGN_APPLE_ID --team-id $CODESIGN_TEAM_ID --password $CODESIGN_PASSWD setup.zip
-unzip setup.zip
-rm setup.zip
+# Build macOS x64 gui
 
-cd PolyNode
-codesign -v -f --timestamp --options=runtime --sign $CODESIGN_TEAM_ID polyn
-zip polyn.zip polyn
-rm polyn
-xcrun notarytool submit --apple-id $CODESIGN_APPLE_ID --team-id $CODESIGN_TEAM_ID --password $CODESIGN_PASSWD polyn.zip
-unzip polyn.zip
-rm polyn.zip
+cd install
+env GOOS=darwin GOARCH=amd64 go build -tags=gui -o ../setup ./cmd/setup
+cd ..
 
-cd uninstall
-codesign -v -f --timestamp --options=runtime --sign $CODESIGN_TEAM_ID uninstall
-zip uninstall.zip uninstall
-rm uninstall
-xcrun notarytool submit --apple-id $CODESIGN_APPLE_ID --team-id $CODESIGN_TEAM_ID --password $CODESIGN_PASSWD uninstall.zip
-unzip uninstall.zip
-rm uninstall.zip
+if [ $sign -eq 1 ]; then
+  codesign -v -f --timestamp --options=runtime --sign $CODESIGN_TEAM_ID setup
+  zip setup.zip setup
+  rm setup
+  xcrun notarytool submit --apple-id $CODESIGN_APPLE_ID --team-id $CODESIGN_TEAM_ID --password $CODESIGN_PASSWD setup.zip
+  unzip setup.zip
+  rm setup.zip
+fi
+
+cd web
+env GOOS=darwin GOARCH=amd64 go build -tags=prod -o ../PolyNode ./cmd/serve
+cd ..
+
+if [ $sign -eq 1 ]; then
+  codesign -v -f --timestamp --options=runtime --sign $CODESIGN_TEAM_ID PolyNode
+  zip PolyNode.zip PolyNode
+  rm PolyNode
+  xcrun notarytool submit --apple-id $CODESIGN_APPLE_ID --team-id $CODESIGN_TEAM_ID --password $CODESIGN_PASSWD PolyNode.zip
+  unzip PolyNode.zip
+  rm PolyNode.zip
+fi
+
+mkdir PolyNode-GUI-$version-darwin-x64
+mv setup ./PolyNode-GUI-$version-darwin-x64/setup
+
+cd PolyNode-GUI-$version-darwin-x64
+mkdir PolyNode
+cd ..
+mv polyn ./PolyNode-GUI-$version-darwin-x64/PolyNode/polyn
+mv PolyNode ./PolyNode-GUI-$version-darwin-x64/PolyNode/PolyNode
+
+cp README.md ./PolyNode-GUI-$version-darwin-x64/PolyNode
+cp LICENSE ./PolyNode-GUI-$version-darwin-x64/PolyNode
+cp SECURITY.md ./PolyNode-GUI-$version-darwin-x64/PolyNode
+
+cd ./PolyNode-GUI-$version-darwin-x64/PolyNode
+mkdir uninstall
+mkdir gui
+cd gui
+mkdir dist
 cd ../../..
+mv uninstall-x64 ./PolyNode-GUI-$version-darwin-x64/PolyNode/uninstall/uninstall
+cp -r ./web/gui/dist/gui ./PolyNode-GUI-$version-darwin-x64/PolyNode/gui/dist/gui
 
 # Bundle
 
 tar -czf PolyNode-$version-darwin-arm64.tar.gz PolyNode-$version-darwin-arm64
 rm -rf PolyNode-$version-darwin-arm64
 
+tar -czf PolyNode-GUI-$version-darwin-arm64.tar.gz PolyNode-GUI-$version-darwin-arm64
+rm -rf PolyNode-GUI-$version-darwin-arm64
+
 tar -czf PolyNode-$version-darwin-x64.tar.gz PolyNode-$version-darwin-x64
 rm -rf PolyNode-$version-darwin-x64
+
+tar -czf PolyNode-GUI-$version-darwin-x64.tar.gz PolyNode-GUI-$version-darwin-x64
+rm -rf PolyNode-GUI-$version-darwin-x64

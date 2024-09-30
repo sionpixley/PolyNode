@@ -1,0 +1,16 @@
+@use '../../../colors';
+
+.app-available-search-container {
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  align-items: baseline;
+}
+
+.app-available-search {
+  --mdc-filled-text-field-container-color: transparent;
+}
+
+.app-available-search-button {
+  color: colors.$on-surface;
+}

@@ -1,7 +1,7 @@
 package main
 
 import (
-	"fmt"
+	"log"
 	"os"
 	"os/exec"
 	"strings"
@@ -18,7 +18,7 @@ del %0`
 func main() {
 	err := uninstall()
 	if err != nil {
-		fmt.Println(err.Error())
+		log.Fatal(err.Error())
 	}
 }
 
