@@ -7,9 +7,10 @@ import (
 
 	"github.com/sionpixley/PolyNode/internal/constants"
 	"github.com/sionpixley/PolyNode/internal/models"
+	"github.com/sionpixley/PolyNode/pkg/polynrc"
 )
 
-func convertKeywordToVersion(keyword string, config models.PolyNodeConfig) string {
+func convertKeywordToVersion(keyword string, config polynrc.PolyNodeConfig) string {
 	if keyword == "lts" {
 		nodeVersions, err := getAllNodeVersions(config)
 		if err != nil {
@@ -34,7 +35,7 @@ func convertKeywordToVersion(keyword string, config models.PolyNodeConfig) strin
 	}
 }
 
-func getAllNodeVersions(config models.PolyNodeConfig) ([]models.NodeVersion, error) {
+func getAllNodeVersions(config polynrc.PolyNodeConfig) ([]models.NodeVersion, error) {
 	url := config.NodeMirror + "/index.json"
 
 	client := new(http.Client)
