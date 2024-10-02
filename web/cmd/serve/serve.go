@@ -1,22 +1,32 @@
 package main
 
 import (
+	"encoding/json"
 	"errors"
 	"log"
 	"net/http"
 	"os"
 	"os/exec"
 	"runtime"
+	"strconv"
 	"strings"
 	"web/internal"
 	"web/internal/middleware"
 	"web/internal/services"
 
 	"github.com/gorilla/mux"
+	"github.com/sionpixley/PolyNode/pkg/polynrc"
 )
 
 func main() {
 	operatingSystem := runtime.GOOS
+
+	polyNodeConfig := polynrc.LoadPolyNodeConfig()
+	err := overwriteGuiConfig(polyNodeConfig)
+	if err != nil {
+		log.Fatal(err.Error())
+	}
+
 	router := mux.NewRouter()
 
 	apiRouter := router.PathPrefix("/api").Subrouter()
@@ -25,11 +35,10 @@ func main() {
 	guiRouter := router.PathPrefix("/gui").Subrouter()
 	guiRouter.PathPrefix("").HandlerFunc(serveGui)
 
-	var err error
 	if operatingSystem == "darwin" || operatingSystem == "linux" {
-		err = exec.Command("open", "http://localhost:2334/gui").Run()
+		err = exec.Command("open", "http://localhost:"+strconv.Itoa(polyNodeConfig.GuiPort)+"/gui").Run()
 	} else if operatingSystem == "windows" {
-		err = exec.Command("cmd", "/c", "start", "http://localhost:2334/gui").Run()
+		err = exec.Command("cmd", "/c", "start", "http://localhost:"+strconv.Itoa(polyNodeConfig.GuiPort)+"/gui").Run()
 	} else {
 		err = errors.New("unsupported operating system")
 	}
@@ -37,7 +46,7 @@ func main() {
 		log.Fatal(err.Error())
 	}
 
-	http.ListenAndServe(":2334", router)
+	http.ListenAndServe(":"+strconv.Itoa(polyNodeConfig.GuiPort), router)
 }
 
 func mapEndpoints(apiRouter *mux.Router) {
@@ -54,6 +63,14 @@ func mapEndpoints(apiRouter *mux.Router) {
 	apiRouter.Use(middleware.SetCacheControlHeader)
 	apiRouter.Use(middleware.SetContentTypeHeaders)
 	apiRouter.Use(middleware.SetFrameHeaders)
+}
+
+func overwriteGuiConfig(polyNodeConfig polynrc.PolyNodeConfig) error {
+	jsonData, err := json.Marshal(polyNodeConfig)
+	if err != nil {
+		return err
+	}
+	return os.WriteFile(internal.PolyNodeHomeDir+"/gui/dist/gui/browser/config/.polynrc", jsonData, 0644)
 }
 
 func serveGui(w http.ResponseWriter, r *http.Request) {

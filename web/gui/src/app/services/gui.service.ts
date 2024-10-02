@@ -6,35 +6,35 @@ import { Observable } from 'rxjs';
   providedIn: 'root'
 })
 export class GuiService {
-  private readonly _url = 'http://localhost:2334/api';
+  public guiPort: number = 2334;
 
   constructor(private readonly _http: HttpClient) { }
 
   public add(version: string): Observable<boolean> {
-    return this._http.post<boolean>(`${this._url}/add/${version}`, null);
+    return this._http.post<boolean>(`http://localhost:${this.guiPort}/api/add/${version}`, null);
   }
 
   public list(): Observable<string[]> {
-    return this._http.get<string[]>(`${this._url}/list`);
+    return this._http.get<string[]>(`http://localhost:${this.guiPort}/api/list`);
   }
 
   public remove(version: string): Observable<boolean> {
-    return this._http.delete<boolean>(`${this._url}/remove/${version}`);
+    return this._http.delete<boolean>(`http://localhost:${this.guiPort}/api/remove/${version}`);
   }
 
   public search(): Observable<string[]> {
-    return this._http.get<string[]>(`${this._url}/search`);
+    return this._http.get<string[]>(`http://localhost:${this.guiPort}/api/search`);
   }
 
   public searchPrefix(prefix: string): Observable<string[]> {
-    return this._http.get<string[]>(`${this._url}/search/${prefix}`);
+    return this._http.get<string[]>(`http://localhost:${this.guiPort}/api/search/${prefix}`);
   }
 
   public use(version: string): Observable<boolean> {
-    return this._http.patch<boolean>(`${this._url}/use/${version}`, null);
+    return this._http.patch<boolean>(`http://localhost:${this.guiPort}/api/use/${version}`, null);
   }
 
   public version(): Observable<string> {
-    return this._http.get<string>(`${this._url}/version`);
+    return this._http.get<string>(`http://localhost:${this.guiPort}/api/version`);
   }
 }

@@ -1,2 +1,4 @@
 github.com/gorilla/mux v1.8.1 h1:TuBL49tXwgrFYWhqrNgrUNEY92u81SPhu7sTdzQEiWY=
 github.com/gorilla/mux v1.8.1/go.mod h1:AKf9I4AEqPTmMytcMc0KkNouC66V3BtZ4qD5fmWSiMQ=
+github.com/sionpixley/PolyNode v0.9.2-0.20241002005145-9c02a3f6f856 h1:ZqcAWrq32S14ZAx+txLCU4a9lnsfb4Eu9MAJH1KU6O0=
+github.com/sionpixley/PolyNode v0.9.2-0.20241002005145-9c02a3f6f856/go.mod h1:4amztYEQChGivYeXbV1Zy0/nrA6bIm7esi8+TBhS7IQ=

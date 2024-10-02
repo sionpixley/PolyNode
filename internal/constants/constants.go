@@ -34,7 +34,7 @@ Commands:
 	UNSUPPORTED_OS_ERROR         string = "unsupported operating system"
 
 	// PolyNode's version.
-	VERSION string = "v0.9.1"
+	VERSION string = "v0.10.0"
 )
 
 // NA is for Not Applicable.

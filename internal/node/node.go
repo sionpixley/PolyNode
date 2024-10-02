@@ -7,10 +7,11 @@ import (
 	"github.com/sionpixley/PolyNode/internal/constants"
 	"github.com/sionpixley/PolyNode/internal/models"
 	"github.com/sionpixley/PolyNode/internal/utilities"
+	"github.com/sionpixley/PolyNode/pkg/polynrc"
 )
 
 // Main function for Node.js actions.
-func Handle(args []string, operatingSystem models.OperatingSystem, arch models.Architecture, config models.PolyNodeConfig) {
+func Handle(args []string, operatingSystem models.OperatingSystem, arch models.Architecture, config polynrc.PolyNodeConfig) {
 	if len(args) == 0 {
 		fmt.Println(constants.HELP)
 		return

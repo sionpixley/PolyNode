@@ -11,7 +11,7 @@ type NodeVersion struct {
 }
 
 func (nodeVersion *NodeVersion) UnmarshalJSON(b []byte) error {
-	var temp map[string]interface{}
+	var temp map[string]any
 	err := json.Unmarshal(b, &temp)
 	if err != nil {
 		return err
