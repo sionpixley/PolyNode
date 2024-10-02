@@ -27,7 +27,7 @@ func (config *PolyNodeConfig) UnmarshalJSON(b []byte) error {
 
 	port, exists := temp["guiPort"]
 	if exists {
-		config.GuiPort = port.(int)
+		config.GuiPort = int(port.(float64))
 	} else {
 		config.GuiPort = DEFAULT_GUI_PORT
 	}
