@@ -1,6 +1,6 @@
 @echo off
 
-set version=v0.9.2-rc.1
+set version=v0.10.0
 
 :: Build Windows ARM64
 
