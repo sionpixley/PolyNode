@@ -1,5 +1,5 @@
 module uninstall
 
-go 1.23.1
+go 1.23.2
 
 require golang.org/x/sys v0.24.0

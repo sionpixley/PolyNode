@@ -187,9 +187,9 @@ PolyNode does not require sudo/admin privileges to uninstall.
 
 ### Required technologies
 
-- Go 1.23.1
-- Angular 18.2.4
-- pnpm 9.10.0
+- Go 1.23.2
+- Angular 18.2.7
+- pnpm 9.12.0
 
 ### Building on AIX
 
@@ -201,7 +201,7 @@ Run the POSIX shell script `./scripts/linux/bundle`. This script will build Poly
 
 ### Building on macOS
 
-macOS has a Zsh script (`./scripts/mac/bundle`) that builds and notarizes PolyNode's source code for x64 and ARM64 (with and without the GUI), and bundles the artifacts as separate .tar.gz files. If you don't need to distribute the binaries, then you don't need the notarization step. Just edit the bundle script and set the `sign` variable to `0`.
+macOS has a POSIX shell script (`./scripts/mac/bundle`) that builds and notarizes PolyNode's source code for x64 and ARM64 (with and without the GUI), and bundles the artifacts as separate .tar.gz files. If you don't need to distribute the binaries, then you don't need the notarization step. Just edit the bundle script and set the `sign` variable to `0`.
 
 ### Building on Windows
 
