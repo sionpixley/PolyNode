@@ -116,7 +116,7 @@ export class AppComponent implements OnInit, OnDestroy {
   }
 
   public removeButtonClick(versions: string[]): void {
-    if(window.confirm('Are you sure you want to remove this Node.js version? It will delete all its data.')) {
+    if(window.confirm('Are you sure you want to remove this Node.js version(s)? It will delete all its data.')) {
       this.showSpinner.set(true);
       this.isLoading = true;
 
