@@ -188,8 +188,8 @@ PolyNode does not require sudo/admin privileges to uninstall.
 ### Required technologies
 
 - Go 1.23.2
-- Angular 18.2.7
-- pnpm 9.12.0
+- Angular 18.2.8
+- pnpm 9.12.1
 
 ### Building on AIX
 
