@@ -52,28 +52,28 @@ Please uninstall all Node.js downloads that weren't installed by PolyNode before
 
 ### For AIX
 
-1. Navigate to [Releases](https://github.com/sionpixley/PolyNode/releases/latest).
-2. Download the latest AIX .tar.gz file.
+1. Navigate to the [latest release](https://github.com/sionpixley/PolyNode/releases/latest).
+2. Download the AIX .tar.gz file.
 3. Extract the .tar.gz file and run the setup binary.
 
 ### For Linux
 
 PolyNode only supports Bash, Zsh, or KornShell by default. During the install process, PolyNode edits either .bashrc, .zshrc, or .kshrc to add two locations to the PATH: PolyNode's home directory `~/.PolyNode` and the symlink for Node.js `~/.PolyNode/nodejs/bin`. You can get PolyNode to work for other shells by adding these directories to your PATH environment variable.
 
-1. Navigate to [Releases](https://github.com/sionpixley/PolyNode/releases/latest).
-2. Download the latest Linux .tar.xz file appropriate for your CPU architecture.
+1. Navigate to the [latest release](https://github.com/sionpixley/PolyNode/releases/latest).
+2. Download the Linux .tar.xz file appropriate for your CPU architecture.
 3. Extract the .tar.xz file and run the setup binary.
 
 ### For macOS
 
-1. Navigate to [Releases](https://github.com/sionpixley/PolyNode/releases/latest).
-2. Download the latest Darwin .tar.gz file appropriate for your CPU architecture.
+1. Navigate to the [latest release](https://github.com/sionpixley/PolyNode/releases/latest).
+2. Download the Darwin .tar.gz file appropriate for your CPU architecture.
 3. Extract the .tar.gz file and run the setup binary.
 
 ### For Windows
 
-1. Navigate to [Releases](https://github.com/sionpixley/PolyNode/releases/latest).
-2. Download the latest Windows .zip file appropriate for your CPU architecture.
+1. Navigate to the [latest release](https://github.com/sionpixley/PolyNode/releases/latest).
+2. Download the Windows .zip file appropriate for your CPU architecture.
 3. Extract the .zip file and run setup.exe.
 
 ## How to use
@@ -188,8 +188,8 @@ PolyNode does not require sudo/admin privileges to uninstall.
 ### Required technologies
 
 - Go 1.23.2
-- Angular 18.2.7
-- pnpm 9.12.0
+- Angular 18.2.8
+- pnpm 9.12.1
 
 ### Building on AIX
 

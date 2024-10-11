@@ -1,11 +1,10 @@
 import { Component, HostListener, OnDestroy, OnInit, signal, WritableSignal } from '@angular/core';
 import { MatIconRegistry } from '@angular/material/icon';
 import { GuiService } from './services/gui.service';
-import { concatMap, forkJoin, lastValueFrom, Observable, Subscription } from 'rxjs';
+import { forkJoin, lastValueFrom, Observable, Subscription } from 'rxjs';
 import { DownloadedComponent } from './components/downloaded/downloaded.component';
 import { AvailableComponent } from './components/available/available.component';
 import { SpinnerComponent } from './components/spinner/spinner.component';
-import { ConfigService } from './services/config/config.service';
 
 @Component({
   selector: 'app-root',
@@ -34,25 +33,16 @@ export class AppComponent implements OnInit, OnDestroy {
   private readonly _sub = new Subscription();
   private _useSub: Subscription | null = null;
 
-  constructor(
-    private readonly _iconRegistry: MatIconRegistry,
-    private readonly _api: GuiService,
-    private readonly _configService: ConfigService
-  ) { }
+  constructor(private readonly _iconRegistry: MatIconRegistry, private readonly _api: GuiService) { }
 
   public ngOnInit(): void {
     this._iconRegistry.setDefaultFontSetClass('material-symbols-sharp');
 
+    let taskList: Observable<any>[] = [];
+    taskList.push(this._api.search());
+    taskList.push(this._api.version());
     this._sub.add(
-      this._configService.loadPolynrc().pipe(
-        concatMap(polynrc => {
-          this._api.guiPort = polynrc.guiPort;
-          let taskList: Observable<any>[] = [];
-          taskList.push(this._api.search());
-          taskList.push(this._api.version());
-          return forkJoin(taskList);
-        })
-      ).subscribe(
+      forkJoin(taskList).subscribe(
         {
           next: responses => {
             this.availableVersions = responses[0] as string[];
