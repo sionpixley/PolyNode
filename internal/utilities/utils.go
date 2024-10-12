@@ -219,8 +219,8 @@ func UpgradePolyNode(operatingSystem models.OperatingSystem, arch models.Archite
 		return err
 	}
 
-	filename = internal.PolynHomeDir + internal.PathSeparator + filename
 	fmt.Print("Extracting " + filename + "...")
+	filename = internal.PolynHomeDir + internal.PathSeparator + filename
 	err = ExtractFile(filename, internal.PolynHomeDir+internal.PathSeparator+"upgrade-temp")
 	if err != nil {
 		return err
