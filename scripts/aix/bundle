@@ -1,7 +1,5 @@
 #!/bin/sh
 
-version=v0.10.2
-
 # Build AIX Power ISA 64-bit
 
 env GOOS=aix GOARCH=ppc64 go build -tags=prod -o polyn ./cmd/polyn
@@ -13,23 +11,23 @@ cd ../uninstall
 env GOOS=aix GOARCH=ppc64 go build -o ../uninstall-ppc64
 
 cd ..
-mkdir PolyNode-$version-aix-ppc64
-mv setup ./PolyNode-$version-aix-ppc64/setup
+mkdir PolyNode-aix-ppc64
+mv setup ./PolyNode-aix-ppc64/setup
 
-cd PolyNode-$version-aix-ppc64
+cd PolyNode-aix-ppc64
 mkdir PolyNode
 cd ..
-cp polyn ./PolyNode-$version-aix-ppc64/PolyNode
+cp polyn ./PolyNode-aix-ppc64/PolyNode
 
-cp README.md ./PolyNode-$version-aix-ppc64/PolyNode
-cp LICENSE ./PolyNode-$version-aix-ppc64/PolyNode
-cp SECURITY.md ./PolyNode-$version-aix-ppc64/PolyNode
+cp README.md ./PolyNode-aix-ppc64/PolyNode
+cp LICENSE ./PolyNode-aix-ppc64/PolyNode
+cp SECURITY.md ./PolyNode-aix-ppc64/PolyNode
 
-cd ./PolyNode-$version-aix-ppc64/PolyNode
+cd ./PolyNode-aix-ppc64/PolyNode
 mkdir uninstall
 cd ../..
-cp uninstall-ppc64 ./PolyNode-$version-aix-ppc64/PolyNode/uninstall
-cd ./PolyNode-$version-aix-ppc64/PolyNode/uninstall
+cp uninstall-ppc64 ./PolyNode-aix-ppc64/PolyNode/uninstall
+cd ./PolyNode-aix-ppc64/PolyNode/uninstall
 mv uninstall-ppc64 uninstall
 cd ../../..
 
@@ -46,32 +44,32 @@ pnpm install
 pnpm run build
 
 cd ../..
-mkdir PolyNode-GUI-$version-aix-ppc64
-mv setup ./PolyNode-GUI-$version-aix-ppc64/setup
+mkdir PolyNode-GUI-aix-ppc64
+mv setup ./PolyNode-GUI-aix-ppc64/setup
 
-cd PolyNode-GUI-$version-aix-ppc64
+cd PolyNode-GUI-aix-ppc64
 mkdir PolyNode
 cd ..
-mv polyn ./PolyNode-GUI-$version-aix-ppc64/PolyNode/polyn
-mv PolyNode ./PolyNode-GUI-$version-aix-ppc64/PolyNode/PolyNode
+mv polyn ./PolyNode-GUI-aix-ppc64/PolyNode/polyn
+mv PolyNode ./PolyNode-GUI-aix-ppc64/PolyNode/PolyNode
 
-cp README.md ./PolyNode-GUI-$version-aix-ppc64/PolyNode
-cp LICENSE ./PolyNode-GUI-$version-aix-ppc64/PolyNode
-cp SECURITY.md ./PolyNode-GUI-$version-aix-ppc64/PolyNode
+cp README.md ./PolyNode-GUI-aix-ppc64/PolyNode
+cp LICENSE ./PolyNode-GUI-aix-ppc64/PolyNode
+cp SECURITY.md ./PolyNode-GUI-aix-ppc64/PolyNode
 
-cd ./PolyNode-GUI-$version-aix-ppc64/PolyNode
+cd ./PolyNode-GUI-aix-ppc64/PolyNode
 mkdir uninstall
 mkdir gui
 cd gui
 mkdir dist
 cd ../../..
-mv uninstall-ppc64 ./PolyNode-GUI-$version-aix-ppc64/PolyNode/uninstall/uninstall
-cp -r ./web/gui/dist/gui ./PolyNode-GUI-$version-aix-ppc64/PolyNode/gui/dist/GUI
+mv uninstall-ppc64 ./PolyNode-GUI-aix-ppc64/PolyNode/uninstall/uninstall
+cp -r ./web/gui/dist/gui ./PolyNode-GUI-aix-ppc64/PolyNode/gui/dist/GUI
 
 # Bundle
 
-tar -czf PolyNode-$version-aix-ppc64.tar.gz PolyNode-$version-aix-ppc64
-rm -rf PolyNode-$version-aix-ppc64
+tar -czf PolyNode-aix-ppc64.tar.gz PolyNode-aix-ppc64
+rm -rf PolyNode-aix-ppc64
 
-tar -czf PolyNode-GUI-$version-aix-ppc64.tar.gz PolyNode-GUI-$version-aix-ppc64
-rm -rf PolyNode-GUI-$version-aix-ppc64
+tar -czf PolyNode-GUI-aix-ppc64.tar.gz PolyNode-GUI-aix-ppc64
+rm -rf PolyNode-GUI-aix-ppc64

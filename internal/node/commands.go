@@ -29,7 +29,7 @@ func add(version string, operatingSystem models.OperatingSystem, arch models.Arc
 	}
 
 	fileName := "node-" + version + "-" + archiveName
-	fmt.Printf("Downloading %s...", fileName)
+	fmt.Print("Downloading " + fileName + "...")
 
 	url := config.NodeMirror + "/" + version + "/" + fileName
 
@@ -63,6 +63,7 @@ func add(version string, operatingSystem models.OperatingSystem, arch models.Arc
 
 	_, err = io.Copy(file, response.Body)
 	if err != nil {
+		file.Close()
 		return err
 	}
 	// Calling file.Close() explicitly instead of with defer to prevent lock errors.
@@ -76,7 +77,7 @@ func add(version string, operatingSystem models.OperatingSystem, arch models.Arc
 
 	fmt.Println("Done.")
 
-	fmt.Printf("Extracting %s...", fileName)
+	fmt.Print("Extracting " + fileName + "...")
 	err = utilities.ExtractFile(filePath, folderPath)
 	if err != nil {
 		return err
@@ -88,7 +89,7 @@ func add(version string, operatingSystem models.OperatingSystem, arch models.Arc
 	}
 
 	fmt.Println("Done.")
-	fmt.Printf("Adding Node.js %s...Done.\n", version)
+	fmt.Println("Adding Node.js " + version + "...Done.")
 	return nil
 }
 
@@ -97,7 +98,7 @@ func current() {
 	if err != nil {
 		fmt.Println("There aren't any Node.js versions set as the current version.")
 	} else {
-		fmt.Printf("Node.js - %s", string(output))
+		fmt.Print("Node.js - " + string(output))
 	}
 }
 
@@ -111,26 +112,25 @@ func install(version string, operatingSystem models.OperatingSystem, arch models
 }
 
 func list() {
-	dir, err := os.ReadDir(internal.PolynHomeDir + "/node")
+	dir, err := os.ReadDir(internal.PolynHomeDir + internal.PathSeparator + "node")
 	if err != nil {
 		// This means that the node folder doesn't exist. So, there are no Node.js versions downloaded.
 		fmt.Println("There are no Node.js versions downloaded.")
 		fmt.Println("To download a Node.js version, use the 'add' or 'install' command.")
+		return
 	}
 
 	current := ""
 	output, err := exec.Command("node", "-v").Output()
-	if err != nil {
-		// Do nothing. This just means that there isn't a current version set.
-	} else {
+	if err == nil {
 		current = strings.TrimSpace(string(output))
 	}
 
 	for _, item := range dir {
 		if item.IsDir() && current == item.Name() {
-			fmt.Printf("Node.js - %s (current)\n", item.Name())
+			fmt.Println("Node.js - " + item.Name() + " (current)")
 		} else if item.IsDir() {
-			fmt.Printf("Node.js - %s\n", item.Name())
+			fmt.Println("Node.js - " + item.Name())
 		}
 	}
 }
@@ -142,9 +142,9 @@ func remove(version string) error {
 
 	version = utilities.ConvertToSemanticVersion(version)
 
-	fmt.Printf("Removing Node.js %s...", version)
+	fmt.Print("Removing Node.js " + version + "...")
 
-	folderName := internal.PolynHomeDir + "/node/" + version
+	folderName := internal.PolynHomeDir + internal.PathSeparator + "node" + internal.PathSeparator + version
 	err := os.RemoveAll(folderName)
 	if err != nil {
 		return err
@@ -152,13 +152,12 @@ func remove(version string) error {
 
 	current := ""
 	output, err := exec.Command("node", "-v").Output()
-	if err != nil {
-		// Do nothing. This just means that there isn't a current version set.
-	} else {
+	if err == nil {
 		current = strings.TrimSpace(string(output))
 	}
 
 	if current == version {
+		folderName := internal.PolynHomeDir + internal.PathSeparator + "nodejs"
 		err = os.RemoveAll(folderName)
 		if err != nil {
 			return err
@@ -239,7 +238,7 @@ func use(version string, operatingSystem models.OperatingSystem) error {
 
 	version = utilities.ConvertToSemanticVersion(version)
 
-	fmt.Printf("Switching to Node.js %s...", version)
+	fmt.Print("Switching to Node.js " + version + "...")
 
 	err := os.RemoveAll(internal.PolynHomeDir + internal.PathSeparator + "nodejs")
 	if err != nil {

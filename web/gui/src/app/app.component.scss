@@ -26,13 +26,13 @@
   flex-direction: row;
   justify-content: center;
   align-items: center;
-  gap: 2rem;
+  gap: 32px;
   flex-wrap: wrap;
 }
 
 .app-version {
-  right: 1rem;
-  bottom: 0.25rem;
+  right: 16px;
+  bottom: 4px;
   position: fixed;
   color: colors.$on-surface;
 }

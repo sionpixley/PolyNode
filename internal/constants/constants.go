@@ -28,34 +28,37 @@ Commands:
   search            : Prints out a list of the most recent Node.js versions available for download.
   search <prefix>   : Prints out a list of Node.js versions that have this prefix.
   use <version>     : Switches Node.js to a different version.
+  upgrade           : Upgrades PolyNode to the latest release.
   version           : Prints the current version of PolyNode.`
 
 	INVALID_VERSION_FORMAT_ERROR string = "invalid version format"
+	UNSUPPORTED_ARCH_ERROR       string = "unsupported CPU architecture"
 	UNSUPPORTED_OS_ERROR         string = "unsupported operating system"
 
 	// PolyNode's version.
-	VERSION string = "v0.10.2"
+	VERSION string = "v0.11.0"
 )
 
 // NA is for Not Applicable.
 const (
 	NA_OS models.OperatingSystem = iota
+	AIX
 	LINUX
 	MAC
 	WINDOWS
-	AIX
 )
 
 // NA is for Not Applicable.
 const (
 	NA_ARCH models.Architecture = iota
 	ARM64
-	X64
 	PPC64
+	X64
 )
 
 // NA is for Not Applicable.
 // We don't include the version command in this. The version command is handled in main().
+// We don't include the upgrade command in this either.
 const (
 	NA_COMM models.Command = iota
 	ADD

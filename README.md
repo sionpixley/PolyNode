@@ -12,15 +12,16 @@ PolyNode is a CLI tool that helps install and manage multiple versions of Node.j
     4. [Windows](#for-windows)
 3. [How to use](#how-to-use)
     1. [Launching the GUI](#launching-the-gui)
-    2. [Searching for available Node.js versions](#searching-for-available-nodejs-versions)
-    3. [Searching for a specific Node.js version](#searching-for-a-specific-nodejs-version)
-    4. [Downloading and switching to a new version of Node.js](#downloading-and-switching-to-a-new-version-of-nodejs)
-    5. [Downloading a new version of Node.js](#downloading-a-new-version-of-nodejs)
-    6. [Switching to a different downloaded version of Node.js](#switching-to-a-different-downloaded-version-of-nodejs)
-    7. [Printing your current version of Node.js](#printing-your-current-version-of-nodejs)
-    8. [Printing all downloaded versions of Node.js](#printing-all-downloaded-versions-of-nodejs)
-    9. [Deleting a downloaded version of Node.js](#deleting-a-downloaded-version-of-nodejs)
-    10. [Printing your current version of PolyNode](#printing-your-current-version-of-polynode)
+    2. [Upgrading PolyNode](#upgrading-polynode)
+    3. [Searching for available Node.js versions](#searching-for-available-nodejs-versions)
+    4. [Searching for a specific Node.js version](#searching-for-a-specific-nodejs-version)
+    5. [Downloading and switching to a new version of Node.js](#downloading-and-switching-to-a-new-version-of-nodejs)
+    6. [Downloading a new version of Node.js](#downloading-a-new-version-of-nodejs)
+    7. [Switching to a different downloaded version of Node.js](#switching-to-a-different-downloaded-version-of-nodejs)
+    8. [Printing your current version of Node.js](#printing-your-current-version-of-nodejs)
+    9. [Printing all downloaded versions of Node.js](#printing-all-downloaded-versions-of-nodejs)
+    10. [Deleting a downloaded version of Node.js](#deleting-a-downloaded-version-of-nodejs)
+    11. [Printing your current version of PolyNode](#printing-your-current-version-of-polynode)
 4. [How to configure](#how-to-configure-polynode)
     1. [Configuration fields](#configuration-fields)
 5. [How to uninstall](#how-to-uninstall-polynode)
@@ -58,7 +59,7 @@ Please uninstall all Node.js downloads that weren't installed by PolyNode before
 
 ### For Linux
 
-PolyNode only supports Bash, Zsh, or KornShell by default. During the install process, PolyNode edits either .bashrc, .zshrc, or .kshrc to add two locations to the PATH: PolyNode's home directory `~/.PolyNode` and the symlink for Node.js `~/.PolyNode/nodejs/bin`. You can get PolyNode to work for other shells by adding these directories to your PATH environment variable.
+PolyNode only supports Bash, Zsh, or KornShell by default. During the install process, PolyNode edits either .bashrc, .zshrc, or .kshrc to add two locations to the PATH: PolyNode's home directory `$HOME/.PolyNode` and the symlink for Node.js `$HOME/.PolyNode/nodejs/bin`. You can get PolyNode to work for other shells by adding these directories to your PATH environment variable.
 
 1. Navigate to the [latest release](https://github.com/sionpixley/PolyNode/releases/latest).
 2. Download the Linux .tar.xz file appropriate for your CPU architecture.
@@ -87,6 +88,10 @@ PolyNode does not require sudo/admin privileges to use the `polyn` nor the `Poly
 If you installed PolyNode's GUI, type this command into your terminal:
 
 `PolyNode`
+
+### Upgrading PolyNode
+
+`polyn upgrade`
 
 ### Searching for available Node.js versions
 
@@ -152,7 +157,7 @@ or
 
 ## How to configure PolyNode
 
-PolyNode's configuration is handled through a JSON file named `.polynrc` located in PolyNode's home directory (`~/.PolyNode` for Linux/macOS and `%LOCALAPPDATA%\Programs\PolyNode` for Windows). Please see below for the default configuration for `.polynrc`:
+PolyNode's configuration is handled through a JSON file named `.polynrc` located in PolyNode's home directory (`$HOME/.PolyNode` for Linux/macOS and `%LOCALAPPDATA%\Programs\PolyNode` for Windows). Please see below for the default configuration for `.polynrc`:
 
 ```
 {
@@ -177,7 +182,7 @@ PolyNode does not require sudo/admin privileges to uninstall.
 
 ### AIX, Linux, and macOS
 
-1. Run the `~/.PolyNode/uninstall/uninstall` binary.
+1. Run the `$HOME/.PolyNode/uninstall/uninstall` binary.
 
 ### Windows
 
@@ -188,8 +193,9 @@ PolyNode does not require sudo/admin privileges to uninstall.
 ### Required technologies
 
 - Go 1.23.2
-- Angular 18.2.8
-- pnpm 9.12.1
+- Node.js v20.18.0 (if building GUI)
+- Angular 18.2.8 (if building GUI)
+- pnpm 9.12.1 (if building GUI)
 
 ### Building on AIX
 

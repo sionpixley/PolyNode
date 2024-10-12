@@ -22,10 +22,8 @@ func main() {
 
 	if !isSupportedOperatingSystem(operatingSystem) {
 		log.Fatal(constants.UNSUPPORTED_OS_ERROR)
-		return
 	} else if !isSupportedArchitecture(arch) {
-		log.Fatal("unsupported CPU architecture")
-		return
+		log.Fatal(constants.UNSUPPORTED_ARCH_ERROR)
 	}
 
 	if len(os.Args) == 1 {
@@ -42,6 +40,11 @@ func main() {
 
 	if args[1] == "version" {
 		fmt.Println(constants.VERSION)
+	} else if args[1] == "upgrade" {
+		err := utilities.UpgradePolyNode(operatingSystem, arch)
+		if err != nil {
+			log.Fatal(err.Error())
+		}
 	} else if utilities.IsKnownCommand(args[1]) {
 		node.Handle(args[1:], operatingSystem, arch, config)
 	} else {

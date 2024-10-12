@@ -15,6 +15,7 @@ import (
 
 const _UNINSTALL_SCRIPT string = `#!/bin/sh
 
+sleep 1
 rm -rf $HOME/.PolyNode
 rm $HOME/polyn-uninstall-temp`
 

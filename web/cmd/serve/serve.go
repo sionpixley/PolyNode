@@ -40,7 +40,10 @@ func main() {
 		log.Fatal(err.Error())
 	}
 
-	http.ListenAndServe(":"+strconv.Itoa(polyNodeConfig.GuiPort), router)
+	err = http.ListenAndServe(":"+strconv.Itoa(polyNodeConfig.GuiPort), router)
+	if err != nil {
+		log.Fatal(err.Error())
+	}
 }
 
 func mapEndpoints(apiRouter *mux.Router) {
@@ -62,10 +65,13 @@ func mapEndpoints(apiRouter *mux.Router) {
 func serveGui(w http.ResponseWriter, r *http.Request) {
 	trimmedPath := strings.TrimPrefix(r.URL.Path, "/gui")
 	if trimmedPath == "" || trimmedPath == "/" {
-		trimmedPath = "index.html"
+		trimmedPath = "/index.html"
 	}
+
 	filePath := internal.PolyNodeHomeDir + "/gui/dist/gui/browser" + trimmedPath
 	if _, err := os.Stat(filePath); os.IsNotExist(err) {
+		http.ServeFile(w, r, internal.PolyNodeHomeDir+"/gui/dist/gui/browser/index.html")
+	} else if err != nil {
 		http.ServeFile(w, r, internal.PolyNodeHomeDir+"/gui/dist/gui/browser/index.html")
 	} else {
 		http.ServeFile(w, r, filePath)

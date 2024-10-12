@@ -92,8 +92,13 @@ func install(home string) error {
 }
 
 func oldVersionExists(home string) bool {
-	_, err := os.Stat(home + "/.PolyNode")
-	return !os.IsNotExist(err)
+	if _, err := os.Stat(home + "/.PolyNode"); os.IsNotExist(err) {
+		return false
+	} else if err != nil {
+		return false
+	} else {
+		return true
+	}
 }
 
 func upgrade(home string) error {
