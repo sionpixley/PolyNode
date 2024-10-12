@@ -15,6 +15,7 @@ import (
 
 const _UNINSTALL_SCRIPT string = `#!/bin/sh
 
+sleep 1
 rm -rf $HOME/.PolyNode
 rm $HOME/polyn-uninstall-temp`
 
@@ -93,5 +94,5 @@ func uninstall() error {
 		return err
 	}
 
-	return exec.Command(home + "/polyn-uninstall-temp").Run()
+	return exec.Command(home + "/polyn-uninstall-temp &").Run()
 }
