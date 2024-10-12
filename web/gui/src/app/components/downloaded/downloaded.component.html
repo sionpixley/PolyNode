@@ -28,8 +28,9 @@
           @if(v === currentVersion) {
             <mat-icon matTooltip="This is your current version."
               matTooltipPosition="right"
-              matTooltipShowDelay="1000"
-              aria-label="This is your current version.">task_alt</mat-icon>
+              aria-label="This is your current version.">
+              task_alt
+            </mat-icon>
           }
         </td>
       </ng-container>
@@ -45,7 +46,7 @@
         [matTooltip]="useButtonTooltip()"
         matTooltipPosition="below"
         matTooltipShowDelay="1000">
-        <button mat-flat-button disabled style="margin-right: 0.3rem;">Use</button>
+        <button mat-flat-button disabled>Use</button>
       </span>
     }
     @else {

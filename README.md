@@ -58,7 +58,7 @@ Please uninstall all Node.js downloads that weren't installed by PolyNode before
 
 ### For Linux
 
-PolyNode only supports Bash, Zsh, or KornShell by default. During the install process, PolyNode edits either .bashrc, .zshrc, or .kshrc to add two locations to the PATH: PolyNode's home directory `~/.PolyNode` and the symlink for Node.js `~/.PolyNode/nodejs/bin`. You can get PolyNode to work for other shells by adding these directories to your PATH environment variable.
+PolyNode only supports Bash, Zsh, or KornShell by default. During the install process, PolyNode edits either .bashrc, .zshrc, or .kshrc to add two locations to the PATH: PolyNode's home directory `$HOME/.PolyNode` and the symlink for Node.js `$HOME/.PolyNode/nodejs/bin`. You can get PolyNode to work for other shells by adding these directories to your PATH environment variable.
 
 1. Navigate to the [latest release](https://github.com/sionpixley/PolyNode/releases/latest).
 2. Download the Linux .tar.xz file appropriate for your CPU architecture.
@@ -152,7 +152,7 @@ or
 
 ## How to configure PolyNode
 
-PolyNode's configuration is handled through a JSON file named `.polynrc` located in PolyNode's home directory (`~/.PolyNode` for Linux/macOS and `%LOCALAPPDATA%\Programs\PolyNode` for Windows). Please see below for the default configuration for `.polynrc`:
+PolyNode's configuration is handled through a JSON file named `.polynrc` located in PolyNode's home directory (`$HOME/.PolyNode` for Linux/macOS and `%LOCALAPPDATA%\Programs\PolyNode` for Windows). Please see below for the default configuration for `.polynrc`:
 
 ```
 {
@@ -177,7 +177,7 @@ PolyNode does not require sudo/admin privileges to uninstall.
 
 ### AIX, Linux, and macOS
 
-1. Run the `~/.PolyNode/uninstall/uninstall` binary.
+1. Run the `$HOME/.PolyNode/uninstall/uninstall` binary.
 
 ### Windows
 
@@ -188,8 +188,9 @@ PolyNode does not require sudo/admin privileges to uninstall.
 ### Required technologies
 
 - Go 1.23.2
-- Angular 18.2.8
-- pnpm 9.12.1
+- Node.js v20.18.0 (if building GUI)
+- Angular 18.2.8 (if building GUI)
+- pnpm 9.12.1 (if building GUI)
 
 ### Building on AIX
 
