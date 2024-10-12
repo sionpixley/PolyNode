@@ -73,7 +73,7 @@ func DownloadPolyNodeFile(filename string) error {
 		return err
 	}
 
-	_, err = io.Copy(file, request.Body)
+	_, err = io.Copy(file, response.Body)
 	if err != nil {
 		file.Close()
 		return err
