@@ -12,15 +12,16 @@ PolyNode is a CLI tool that helps install and manage multiple versions of Node.j
     4. [Windows](#for-windows)
 3. [How to use](#how-to-use)
     1. [Launching the GUI](#launching-the-gui)
-    2. [Searching for available Node.js versions](#searching-for-available-nodejs-versions)
-    3. [Searching for a specific Node.js version](#searching-for-a-specific-nodejs-version)
-    4. [Downloading and switching to a new version of Node.js](#downloading-and-switching-to-a-new-version-of-nodejs)
-    5. [Downloading a new version of Node.js](#downloading-a-new-version-of-nodejs)
-    6. [Switching to a different downloaded version of Node.js](#switching-to-a-different-downloaded-version-of-nodejs)
-    7. [Printing your current version of Node.js](#printing-your-current-version-of-nodejs)
-    8. [Printing all downloaded versions of Node.js](#printing-all-downloaded-versions-of-nodejs)
-    9. [Deleting a downloaded version of Node.js](#deleting-a-downloaded-version-of-nodejs)
-    10. [Printing your current version of PolyNode](#printing-your-current-version-of-polynode)
+    2. [Upgrading PolyNode](#upgrading-polynode)
+    3. [Searching for available Node.js versions](#searching-for-available-nodejs-versions)
+    4. [Searching for a specific Node.js version](#searching-for-a-specific-nodejs-version)
+    5. [Downloading and switching to a new version of Node.js](#downloading-and-switching-to-a-new-version-of-nodejs)
+    6. [Downloading a new version of Node.js](#downloading-a-new-version-of-nodejs)
+    7. [Switching to a different downloaded version of Node.js](#switching-to-a-different-downloaded-version-of-nodejs)
+    8. [Printing your current version of Node.js](#printing-your-current-version-of-nodejs)
+    9. [Printing all downloaded versions of Node.js](#printing-all-downloaded-versions-of-nodejs)
+    10. [Deleting a downloaded version of Node.js](#deleting-a-downloaded-version-of-nodejs)
+    11. [Printing your current version of PolyNode](#printing-your-current-version-of-polynode)
 4. [How to configure](#how-to-configure-polynode)
     1. [Configuration fields](#configuration-fields)
 5. [How to uninstall](#how-to-uninstall-polynode)
@@ -87,6 +88,10 @@ PolyNode does not require sudo/admin privileges to use the `polyn` nor the `Poly
 If you installed PolyNode's GUI, type this command into your terminal:
 
 `PolyNode`
+
+### Upgrading PolyNode
+
+`polyn upgrade`
 
 ### Searching for available Node.js versions
 

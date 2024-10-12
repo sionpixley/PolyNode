@@ -1,6 +1,6 @@
 #!/bin/sh
 
-version=v0.10.2
+version=v0.11.0
 sign=1
 
 # Build macOS ARM64
