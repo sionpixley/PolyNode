@@ -259,6 +259,6 @@ rm $HOME/.PolyNode/polyn-upgrade-temp`
 			return err
 		}
 
-		return exec.Command(scriptPath + " &").Run()
+		return exec.Command(scriptPath).Run()
 	}
 }

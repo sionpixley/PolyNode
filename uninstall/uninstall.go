@@ -94,5 +94,5 @@ func uninstall() error {
 		return err
 	}
 
-	return exec.Command(home + "/polyn-uninstall-temp &").Run()
+	return exec.Command(home + "/polyn-uninstall-temp").Run()
 }
