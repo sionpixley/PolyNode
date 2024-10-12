@@ -13,7 +13,7 @@ const _WIN_UNINSTALL_SCRIPT string = `@echo off
 
 del %LOCALAPPDATA%\Programs\PolyNode /s /f /q > nul
 rmdir %LOCALAPPDATA%\Programs\PolyNode /s /q
-del %0`
+(goto) 2>nul & del "%~f0"`
 
 func main() {
 	err := uninstall()
