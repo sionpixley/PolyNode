@@ -234,7 +234,9 @@ func runUpgradeScript(operatingSystem models.OperatingSystem) error {
 		upgradeBatchfile := `@echo off
 
 timeout /t 1 /nobreak > nul
-%LOCALAPPDATA%\Programs\PolyNode\upgrade-temp\setup
+cd %LOCALAPPDATA%\Programs\PolyNode\upgrade-temp
+.\setup
+cd %LOCALAPPDATA%
 del %LOCALAPPDATA%\Programs\PolyNode\upgrade-temp /s /f /q > nul
 rmdir %LOCALAPPDATA%\Programs\PolyNode\upgrade-temp /s /q
 (goto) 2>nul & del "%~f0%"`
@@ -250,7 +252,9 @@ rmdir %LOCALAPPDATA%\Programs\PolyNode\upgrade-temp /s /q
 		upgradeScript := `#!/bin/sh
 
 sleep 1
-$HOME/.PolyNode/upgrade-temp/setup
+cd $HOME/.PolyNode/upgrade-temp
+./setup
+cd $HOME
 rm -rf $HOME/.PolyNode/upgrade-temp
 rm $HOME/.PolyNode/polyn-upgrade-temp`
 
