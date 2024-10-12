@@ -63,6 +63,7 @@ func add(version string, operatingSystem models.OperatingSystem, arch models.Arc
 
 	_, err = io.Copy(file, response.Body)
 	if err != nil {
+		file.Close()
 		return err
 	}
 	// Calling file.Close() explicitly instead of with defer to prevent lock errors.

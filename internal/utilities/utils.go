@@ -3,6 +3,7 @@ package utilities
 import (
 	"errors"
 	"fmt"
+	"io"
 	"net/http"
 	"os"
 	"os/exec"
@@ -51,6 +52,34 @@ func DownloadPolyNodeFile(filename string) error {
 
 	client := new(http.Client)
 	request, err := http.NewRequest(http.MethodGet, "https://github.com/sionpixley/PolyNode/releases/latest/download/"+filename, nil)
+	if err != nil {
+		return err
+	}
+
+	response, err := client.Do(request)
+	if err != nil {
+		return err
+	}
+	defer response.Body.Close()
+
+	filename = internal.PolynHomeDir + internal.PathSeparator + filename
+	err = os.RemoveAll(filename)
+	if err != nil {
+		return err
+	}
+
+	file, err := os.Create(filename)
+	if err != nil {
+		return err
+	}
+
+	_, err = io.Copy(file, request.Body)
+	if err != nil {
+		file.Close()
+		return err
+	}
+	// Closing the file explicitly to avoid lock errors.
+	file.Close()
 
 	fmt.Println("Done.")
 	return nil
@@ -185,5 +214,51 @@ func UpgradePolyNode(operatingSystem models.OperatingSystem, arch models.Archite
 		return errors.New(constants.UNSUPPORTED_OS_ERROR)
 	}
 
-	return DownloadPolyNodeFile(filename)
+	err := DownloadPolyNodeFile(filename)
+	if err != nil {
+		return err
+	}
+
+	filename = internal.PolynHomeDir + internal.PathSeparator + filename
+	err = ExtractFile(filename, internal.PolynHomeDir+internal.PathSeparator+"upgrade-temp")
+	if err != nil {
+		return err
+	}
+
+	return runUpgradeScript(operatingSystem)
+}
+
+func runUpgradeScript(operatingSystem models.OperatingSystem) error {
+	if operatingSystem == constants.WINDOWS {
+		batchfilePath := internal.PolynHomeDir + internal.PathSeparator + "polyn-upgrade-temp.cmd"
+		upgradeBatchfile := `@echo off
+
+timeout /t 1 /nobreak > nul
+%LOCALAPPDATA%\Programs\PolyNode\upgrade-temp\setup
+del %LOCALAPPDATA%\Programs\PolyNode\upgrade-temp /s /f /q > nul
+rmdir %LOCALAPPDATA%\Programs\PolyNode\upgrade-temp /s /q
+(goto) 2>nul & del "%~f0%"`
+
+		err := os.WriteFile(batchfilePath, []byte(upgradeBatchfile), 0700)
+		if err != nil {
+			return err
+		}
+
+		return exec.Command("cmd", "/c", "start", "/b", batchfilePath).Run()
+	} else {
+		scriptPath := internal.PolynHomeDir + internal.PathSeparator + "polyn-upgrade-temp"
+		upgradeScript := `#!/bin/sh
+
+sleep 1
+$HOME/.PolyNode/upgrade-temp/setup
+rm -rf $HOME/.PolyNode/upgrade-temp
+rm $HOME/.PolyNode/polyn-upgrade-temp`
+
+		err := os.WriteFile(scriptPath, []byte(upgradeScript), 0700)
+		if err != nil {
+			return err
+		}
+
+		return exec.Command(scriptPath + " &").Run()
+	}
 }
