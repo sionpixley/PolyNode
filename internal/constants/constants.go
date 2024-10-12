@@ -32,6 +32,7 @@ Commands:
   version           : Prints the current version of PolyNode.`
 
 	INVALID_VERSION_FORMAT_ERROR string = "invalid version format"
+	UNSUPPORTED_ARCH_ERROR       string = "unsupported CPU architecture"
 	UNSUPPORTED_OS_ERROR         string = "unsupported operating system"
 
 	// PolyNode's version.
@@ -57,6 +58,7 @@ const (
 
 // NA is for Not Applicable.
 // We don't include the version command in this. The version command is handled in main().
+// We don't include the upgrade command in this either.
 const (
 	NA_COMM models.Command = iota
 	ADD
@@ -65,6 +67,5 @@ const (
 	LIST
 	REMOVE
 	SEARCH
-	UPGRADE
 	USE
 )

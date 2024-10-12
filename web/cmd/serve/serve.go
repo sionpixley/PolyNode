@@ -38,7 +38,6 @@ func main() {
 	}
 	if err != nil {
 		log.Fatal(err.Error())
-		return
 	}
 
 	err = http.ListenAndServe(":"+strconv.Itoa(polyNodeConfig.GuiPort), router)

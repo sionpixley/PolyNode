@@ -29,7 +29,7 @@ func add(version string, operatingSystem models.OperatingSystem, arch models.Arc
 	}
 
 	fileName := "node-" + version + "-" + archiveName
-	fmt.Printf("Downloading %s...", fileName)
+	fmt.Print("Downloading " + fileName + "...")
 
 	url := config.NodeMirror + "/" + version + "/" + fileName
 
@@ -227,10 +227,6 @@ func searchDefault(config polynrc.PolyNodeConfig) error {
 	}
 
 	fmt.Println(output)
-	return nil
-}
-
-func upgrade(operatingSystem models.OperatingSystem, arch models.Architecture) error {
 	return nil
 }
 
