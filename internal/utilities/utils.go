@@ -220,15 +220,18 @@ func UpgradePolyNode(operatingSystem models.OperatingSystem, arch models.Archite
 	}
 
 	filename = internal.PolynHomeDir + internal.PathSeparator + filename
+	fmt.Print("Extracting " + filename + "...")
 	err = ExtractFile(filename, internal.PolynHomeDir+internal.PathSeparator+"upgrade-temp")
 	if err != nil {
 		return err
 	}
+	fmt.Println("Done.")
 
 	return runUpgradeScript(operatingSystem)
 }
 
 func runUpgradeScript(operatingSystem models.OperatingSystem) error {
+	fmt.Print("Running upgrade script...")
 	if operatingSystem == constants.WINDOWS {
 		batchfilePath := internal.PolynHomeDir + internal.PathSeparator + "polyn-upgrade-temp.cmd"
 		upgradeBatchfile := `@echo off
@@ -246,6 +249,7 @@ rmdir %LOCALAPPDATA%\Programs\PolyNode\upgrade-temp /s /q
 			return err
 		}
 
+		fmt.Println("Done.")
 		return exec.Command("cmd", "/c", "start", "/b", batchfilePath).Run()
 	} else {
 		scriptPath := internal.PolynHomeDir + internal.PathSeparator + "polyn-upgrade-temp"
@@ -263,6 +267,7 @@ rm $HOME/.PolyNode/polyn-upgrade-temp`
 			return err
 		}
 
+		fmt.Println("Done.")
 		return exec.Command(scriptPath).Run()
 	}
 }
