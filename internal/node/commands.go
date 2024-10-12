@@ -230,7 +230,7 @@ func searchDefault(config polynrc.PolyNodeConfig) error {
 	return nil
 }
 
-func upgrade() error {
+func upgrade(operatingSystem models.OperatingSystem, arch models.Architecture) error {
 	return nil
 }
 

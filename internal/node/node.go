@@ -49,7 +49,7 @@ func Handle(args []string, operatingSystem models.OperatingSystem, arch models.A
 			err = searchDefault(config)
 		}
 	case constants.UPGRADE:
-		err = upgrade()
+		err = upgrade(operatingSystem, arch)
 	case constants.USE:
 		if len(args) > 1 {
 			err = use(args[1], operatingSystem)
