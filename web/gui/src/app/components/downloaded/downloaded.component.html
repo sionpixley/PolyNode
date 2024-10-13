@@ -8,7 +8,7 @@
           <mat-checkbox [checked]="allAreSelected"
             [matTooltip]="selectAllTooltip()"
             matTooltipPosition="above"
-            matTooltipShowDelay="1000"
+            matTooltipShowDelay="500"
             (change)="selectAllVersions()">
           </mat-checkbox>
         </th>
@@ -45,7 +45,7 @@
       <span class="disabled"
         [matTooltip]="useButtonTooltip()"
         matTooltipPosition="below"
-        matTooltipShowDelay="1000">
+        matTooltipShowDelay="500">
         <button mat-flat-button disabled>Use</button>
       </span>
     }
@@ -56,7 +56,7 @@
     }
 
     @if(removeButtonIsDisabled()) {
-      <span class="disabled" matTooltip="Select at least one row to enable the remove button." matTooltipPosition="below" matTooltipShowDelay="1000">
+      <span class="disabled" matTooltip="Select at least one row to enable the remove button." matTooltipPosition="below" matTooltipShowDelay="500">
         <button mat-flat-button disabled>Remove</button>
       </span>
     }
