@@ -18,7 +18,7 @@
           <mat-checkbox [checked]="allAreSelected"
             [matTooltip]="selectAllTooltip()"
             matTooltipPosition="above"
-            matTooltipShowDelay="1000"
+            matTooltipShowDelay="500"
             (change)="selectAllVersions()">
           </mat-checkbox>
         </th>
@@ -36,7 +36,7 @@
         <th mat-header-cell *matHeaderCellDef></th>
         <td mat-cell *matCellDef="let v" style="color: green; font-weight: 500;">
           @if(isLts(v)) {
-            <span matTooltip="This is an LTS version." matTooltipPosition="right" matTooltipShowDelay="1000">LTS</span>
+            <span matTooltip="This is an LTS version." matTooltipPosition="right" matTooltipShowDelay="500">LTS</span>
           }
         </td>
       </ng-container>
@@ -51,7 +51,7 @@
       <span class="disabled"
         matTooltip="Select at least one row to enable the add button."
         matTooltipPosition="below"
-        matTooltipShowDelay="1000">
+        matTooltipShowDelay="500">
         <button mat-flat-button disabled>Download</button>
       </span>
     }
