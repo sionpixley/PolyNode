@@ -143,7 +143,7 @@ cd %LOCALAPPDATA%\Programs\PolyNode\upgrade-temp
 cd %LOCALAPPDATA%
 del %LOCALAPPDATA%\Programs\PolyNode\upgrade-temp /s /f /q > nul
 rmdir %LOCALAPPDATA%\Programs\PolyNode\upgrade-temp /s /q
-(goto) 2>nul & del "%~f0%"`
+(goto) 2>nul & del "%~f0"`
 
 		err := os.WriteFile(batchfilePath, []byte(upgradeBatchfile), 0700)
 		if err != nil {
