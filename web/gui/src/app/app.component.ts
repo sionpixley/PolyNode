@@ -49,7 +49,7 @@ export class AppComponent implements OnInit, OnDestroy {
             let av: string[] = [];
             let lv: string[] = [];
             for(let rv of responseVersions) {
-              if(rv.includes("(lts)")) {
+              if(rv.includes('(lts)')) {
                 av.push(rv.split(' ')[0]!);
                 lv.push(rv.split(' ')[0]!);
               }
@@ -158,8 +158,8 @@ export class AppComponent implements OnInit, OnDestroy {
             let av: string[] = [];
             let lv: string[] = [];
             for(let version of versions) {
-              if(version.includes("(lts)")) {
-                let parts = version.split(" ");
+              if(version.includes('(lts)')) {
+                let parts = version.split(' ');
                 av.push(parts[0]);
                 lv.push(parts[0]);
               }
