@@ -43,14 +43,14 @@ func (config *PolyNodeConfig) UnmarshalJSON(b []byte) error {
 }
 
 func LoadPolyNodeConfig() PolyNodeConfig {
-	if _, err := os.Stat(internal.PolynHomeDir + internal.PathSeparator + ".polynrc"); os.IsNotExist(err) {
+	if _, err := os.Stat(internal.PolynHomeDir + internal.PathSeparator + "polynrc.json"); os.IsNotExist(err) {
 		// Default config
 		return PolyNodeConfig{GuiPort: DEFAULT_GUI_PORT, NodeMirror: DEFAULT_NODE_MIRROR}
 	} else if err != nil {
 		// Default config
 		return PolyNodeConfig{GuiPort: DEFAULT_GUI_PORT, NodeMirror: DEFAULT_NODE_MIRROR}
 	} else {
-		content, err := os.ReadFile(internal.PolynHomeDir + internal.PathSeparator + ".polynrc")
+		content, err := os.ReadFile(internal.PolynHomeDir + internal.PathSeparator + "polynrc.json")
 		if err != nil {
 			// Default config
 			return PolyNodeConfig{GuiPort: DEFAULT_GUI_PORT, NodeMirror: DEFAULT_NODE_MIRROR}

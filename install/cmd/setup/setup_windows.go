@@ -48,7 +48,7 @@ func addToPath(home string) error {
 }
 
 func createPolynConfig(home string) error {
-	return os.WriteFile(home+"\\PolyNode\\.polynrc", []byte(constants.DEFAULT_POLYNRC), 0644)
+	return os.WriteFile(home+"\\PolyNode\\polynrc.json", []byte(constants.DEFAULT_POLYNRC), 0644)
 }
 
 func install(home string) error {

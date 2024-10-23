@@ -7,6 +7,7 @@ import (
 	"net/http"
 	"os"
 	"os/exec"
+	"slices"
 	"strings"
 
 	"github.com/sionpixley/PolyNode/internal"
@@ -168,8 +169,13 @@ func remove(version string) error {
 	return nil
 }
 
-func search(prefix string, config polynrc.PolyNodeConfig) error {
+func search(prefix string, operatingSystem models.OperatingSystem, arch models.Architecture, config polynrc.PolyNodeConfig) error {
 	prefix = utilities.ConvertToSemanticVersion(prefix)
+
+	nodeVersionFile, err := convertOsAndArchToNodeVersionFile(operatingSystem, arch)
+	if err != nil {
+		return err
+	}
 
 	allVersions, err := getAllNodeVersions(config)
 	if err != nil {
@@ -178,10 +184,12 @@ func search(prefix string, config polynrc.PolyNodeConfig) error {
 
 	output := "\nNode.js\n--------------------------"
 	for _, nodeVersion := range allVersions {
-		if nodeVersion.Lts && strings.HasPrefix(nodeVersion.Version, prefix) {
-			output += "\n" + nodeVersion.Version + " (lts)"
-		} else if strings.HasPrefix(nodeVersion.Version, prefix) {
-			output += "\n" + nodeVersion.Version
+		if slices.Contains(nodeVersion.Files, nodeVersionFile) {
+			if nodeVersion.Lts && strings.HasPrefix(nodeVersion.Version, prefix) {
+				output += "\n" + nodeVersion.Version + " (lts)"
+			} else if strings.HasPrefix(nodeVersion.Version, prefix) {
+				output += "\n" + nodeVersion.Version
+			}
 		}
 	}
 
@@ -189,7 +197,12 @@ func search(prefix string, config polynrc.PolyNodeConfig) error {
 	return nil
 }
 
-func searchDefault(config polynrc.PolyNodeConfig) error {
+func searchDefault(operatingSystem models.OperatingSystem, arch models.Architecture, config polynrc.PolyNodeConfig) error {
+	nodeVersionFile, err := convertOsAndArchToNodeVersionFile(operatingSystem, arch)
+	if err != nil {
+		return err
+	}
+
 	nodeVersions, err := getAllNodeVersions(config)
 	if err != nil {
 		return err
@@ -202,17 +215,19 @@ func searchDefault(config polynrc.PolyNodeConfig) error {
 	ltsVersions := []string{}
 
 	for _, nodeVersion := range nodeVersions {
-		if len(stableVersions) == maxEntries && len(ltsVersions) == maxEntries {
-			break
-		}
+		if slices.Contains(nodeVersion.Files, nodeVersionFile) {
+			if len(stableVersions) == maxEntries && len(ltsVersions) == maxEntries {
+				break
+			}
 
-		majorVersion := strings.Split(nodeVersion.Version, ".")[0]
-		if _, exists := majorVersions[majorVersion]; !exists {
-			majorVersions[majorVersion] = struct{}{}
-			if nodeVersion.Lts && len(ltsVersions) < maxEntries {
-				ltsVersions = append(ltsVersions, nodeVersion.Version)
-			} else if !nodeVersion.Lts && len(stableVersions) < maxEntries {
-				stableVersions = append(stableVersions, nodeVersion.Version)
+			majorVersion := strings.Split(nodeVersion.Version, ".")[0]
+			if _, exists := majorVersions[majorVersion]; !exists {
+				majorVersions[majorVersion] = struct{}{}
+				if nodeVersion.Lts && len(ltsVersions) < maxEntries {
+					ltsVersions = append(ltsVersions, nodeVersion.Version)
+				} else if !nodeVersion.Lts && len(stableVersions) < maxEntries {
+					stableVersions = append(stableVersions, nodeVersion.Version)
+				}
 			}
 		}
 	}
@@ -224,7 +239,7 @@ func searchDefault(config polynrc.PolyNodeConfig) error {
 
 	output += "\n\nLatest LTS versions of Node.js\n---------------------------------"
 	for _, ltsVersion := range ltsVersions {
-		output += "\n" + ltsVersion
+		output += "\n" + ltsVersion + " (lts)"
 	}
 
 	fmt.Println(output)
