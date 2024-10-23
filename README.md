@@ -34,7 +34,7 @@ PolyNode is a CLI tool that helps install and manage multiple versions of Node.j
     4. [macOS](#building-on-macos)
     5. [Windows](#building-on-windows)
 7. [Future development](#future-development)
-8. [Information](#information)
+8. [Acknowledgements](#acknowledgements)
 
 ## Supported operating systems and CPU architectures
 
@@ -193,9 +193,9 @@ PolyNode does not require sudo/admin privileges to uninstall.
 ### Required technologies
 
 - Go 1.23.2
-- Node.js v20.18.0 (if building GUI)
+- Node.js 20.18.0 (if building GUI)
 - Angular 18.2.8 (if building GUI)
-- pnpm 9.12.1 (if building GUI)
+- pnpm 9.12.2 (if building GUI)
 
 ### Building on AIX
 
@@ -217,6 +217,6 @@ Run the batchfile `.\scripts\win\bundle.cmd`. This batchfile will build PolyNode
 
 The original scope of this project was to be able to install and manage multiple versions of Bun, Deno, and Node.js. It currently only supports Node.js, but I would like to support Bun and Deno in the future.
 
-## Information
+## Acknowledgements
 
 PolyNode draws a lot of inspiration, especially in regards to syntax, from other, more well-known projects, like: [nvm](https://github.com/nvm-sh/nvm), [nvm-windows](https://github.com/coreybutler/nvm-windows), and [nvs](https://github.com/jasongin/nvs).

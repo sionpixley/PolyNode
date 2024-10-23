@@ -2,6 +2,7 @@ package main
 
 import (
 	"errors"
+	"fmt"
 	"log"
 	"net/http"
 	"os"
@@ -40,10 +41,8 @@ func main() {
 		log.Fatal(err.Error())
 	}
 
-	err = http.ListenAndServe(":"+strconv.Itoa(polyNodeConfig.GuiPort), router)
-	if err != nil {
-		log.Fatal(err.Error())
-	}
+	fmt.Print("Running at http://localhost:" + strconv.Itoa(polyNodeConfig.GuiPort) + "/gui ...")
+	log.Fatal(http.ListenAndServe(":"+strconv.Itoa(polyNodeConfig.GuiPort), router))
 }
 
 func mapEndpoints(apiRouter *mux.Router) {
