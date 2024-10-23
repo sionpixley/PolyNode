@@ -44,9 +44,9 @@ func Handle(args []string, operatingSystem models.OperatingSystem, arch models.A
 		}
 	case constants.SEARCH:
 		if len(args) > 1 {
-			err = search(args[1], config)
+			err = search(args[1], operatingSystem, arch, config)
 		} else {
-			err = searchDefault(config)
+			err = searchDefault(operatingSystem, arch, config)
 		}
 	case constants.USE:
 		if len(args) > 1 {

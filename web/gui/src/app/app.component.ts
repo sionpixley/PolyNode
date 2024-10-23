@@ -45,10 +45,20 @@ export class AppComponent implements OnInit, OnDestroy {
       forkJoin(taskList).subscribe(
         {
           next: responses => {
-            this.availableVersions = responses[0] as string[];
-            if(this.availableVersions.length === 14) {
-              this.ltsVersions = this.availableVersions.slice(7);
+            let responseVersions = responses[0] as string[];
+            let av: string[] = [];
+            let lv: string[] = [];
+            for(let rv of responseVersions) {
+              if(rv.includes("(lts)")) {
+                av.push(rv.split(' ')[0]!);
+                lv.push(rv.split(' ')[0]!);
+              }
+              else {
+                av.push(rv);
+              }
             }
+            this.availableVersions = av;
+            this.ltsVersions = lv;
 
             this.version = responses[1].toString();
             this.reloadDownloadedVersions();
