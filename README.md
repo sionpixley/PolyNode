@@ -1,6 +1,8 @@
 # PolyNode
 
-PolyNode is a CLI tool that helps install and manage multiple versions of Node.js on the same device. There is a GUI app that you can optionally install.
+PolyNode is a CLI tool that helps install and manage multiple versions of Node.js on the same device. Does not require sudo/admin privileges, and is installed on a per-user basis.
+
+There is a GUI app that you can optionally install.
 
 ## Table of contents
 
