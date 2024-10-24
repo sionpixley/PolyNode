@@ -1,6 +1,8 @@
 # PolyNode
 
-PolyNode is a CLI tool that helps install and manage multiple versions of Node.js on the same device. There is a GUI app that you can optionally install.
+PolyNode is a CLI tool that helps install and manage multiple versions of Node.js on the same device. It does not require sudo/admin privileges, and is installed on a per-user basis.
+
+PolyNode has a GUI that you can use, but it must be installed first. Release assets prefixed with `PolyNode-GUI` will install the CLI command, `polyn`, and also the GUI. Read about [launching the GUI](#launching-the-gui) below.
 
 ## Table of contents
 
@@ -12,7 +14,7 @@ PolyNode is a CLI tool that helps install and manage multiple versions of Node.j
     4. [Windows](#for-windows)
 3. [How to use](#how-to-use)
     1. [Launching the GUI](#launching-the-gui)
-    2. [Upgrading PolyNode](#upgrading-polynode)
+    2. [Upgrading PolyNode](#upgrading-polynode-to-the-latest-release)
     3. [Searching for available Node.js versions](#searching-for-available-nodejs-versions)
     4. [Searching for a specific Node.js version](#searching-for-a-specific-nodejs-version)
     5. [Downloading and switching to a new version of Node.js](#downloading-and-switching-to-a-new-version-of-nodejs)
@@ -46,8 +48,6 @@ PolyNode is a CLI tool that helps install and manage multiple versions of Node.j
 ## How to install PolyNode
 
 PolyNode does not require sudo/admin privileges to install.
-
-If you have a previous version of PolyNode installed, you do not have to uninstall it before installing the new version.
 
 Please uninstall all Node.js downloads that weren't installed by PolyNode before running the setup binary.
 
@@ -83,13 +83,11 @@ PolyNode does not require sudo/admin privileges to use the `polyn` nor the `Poly
 
 ### Launching the GUI
 
-> The GUI is limited compared to the CLI (at the moment).
-
 If you installed PolyNode's GUI, type this command into your terminal:
 
 `PolyNode`
 
-### Upgrading PolyNode
+### Upgrading PolyNode to the latest release
 
 `polyn upgrade`
 
