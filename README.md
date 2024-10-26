@@ -2,7 +2,7 @@
 
 PolyNode is a CLI tool that helps install and manage multiple versions of Node.js on the same device. It does not require sudo/admin privileges, and is installed on a per-user basis.
 
-PolyNode has a GUI that you can use, but it must be installed first. Release assets prefixed with `PolyNode-GUI` will install the CLI command, `polyn`, and also the GUI. Read about [launching the GUI](#launching-the-gui) below.
+PolyNode has a GUI that you can use, but it must be installed first. Release assets prefixed with `PolyNode-GUI` will install the GUI along with the base CLI command, `polyn`. Read about [launching the GUI](#launching-the-gui) below.
 
 ## Table of contents
 
