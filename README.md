@@ -159,7 +159,7 @@ PolyNode's configuration is handled through a JSON file named `polynrc.json` loc
 
 ```
 {
-  "guiPort": 2334,
+  "guiPort": 6011,
   "nodeMirror": "https://nodejs.org/dist"
 }
 ```
@@ -210,10 +210,6 @@ macOS has a POSIX shell script (`./scripts/mac/bundle`) that builds and notarize
 ### Building on Windows
 
 Run the batchfile `.\scripts\win\bundle.cmd`. This batchfile will build PolyNode's source code for x64 and ARM64 (with and without the GUI), and bundle the artifacts as separate .zip files.
-
-## Future development
-
-The original scope of this project was to be able to install and manage multiple versions of Bun, Deno, and Node.js. It currently only supports Node.js, but I would like to support Bun and Deno in the future.
 
 ## Acknowledgements
 

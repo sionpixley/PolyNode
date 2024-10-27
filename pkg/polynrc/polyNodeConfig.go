@@ -9,9 +9,14 @@ import (
 )
 
 const (
-	DEFAULT_GUI_PORT    int    = 2334
+	DEFAULT_GUI_PORT    int    = 6011
 	DEFAULT_NODE_MIRROR string = "https://nodejs.org/dist"
 )
+
+var _DEFAULT_POLYNRC PolyNodeConfig = PolyNodeConfig{
+	GuiPort:    DEFAULT_GUI_PORT,
+	NodeMirror: DEFAULT_NODE_MIRROR,
+}
 
 type PolyNodeConfig struct {
 	GuiPort    int    `json:"guiPort"`
@@ -45,22 +50,22 @@ func (config *PolyNodeConfig) UnmarshalJSON(b []byte) error {
 func LoadPolyNodeConfig() PolyNodeConfig {
 	if _, err := os.Stat(internal.PolynHomeDir + internal.PathSeparator + "polynrc.json"); os.IsNotExist(err) {
 		// Default config
-		return PolyNodeConfig{GuiPort: DEFAULT_GUI_PORT, NodeMirror: DEFAULT_NODE_MIRROR}
+		return _DEFAULT_POLYNRC
 	} else if err != nil {
 		// Default config
-		return PolyNodeConfig{GuiPort: DEFAULT_GUI_PORT, NodeMirror: DEFAULT_NODE_MIRROR}
+		return _DEFAULT_POLYNRC
 	} else {
 		content, err := os.ReadFile(internal.PolynHomeDir + internal.PathSeparator + "polynrc.json")
 		if err != nil {
 			// Default config
-			return PolyNodeConfig{GuiPort: DEFAULT_GUI_PORT, NodeMirror: DEFAULT_NODE_MIRROR}
+			return _DEFAULT_POLYNRC
 		}
 
 		config := PolyNodeConfig{}
 		err = config.UnmarshalJSON(content)
 		if err != nil {
 			// Default config
-			return PolyNodeConfig{GuiPort: DEFAULT_GUI_PORT, NodeMirror: DEFAULT_NODE_MIRROR}
+			return _DEFAULT_POLYNRC
 		}
 		return config
 	}
