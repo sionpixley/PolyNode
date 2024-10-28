@@ -41,7 +41,8 @@ func main() {
 		log.Fatal(err.Error())
 	}
 
-	fmt.Print("Running at http://localhost:" + strconv.Itoa(polyNodeConfig.GuiPort) + "/gui ...")
+	fmt.Println("Running at http://localhost:" + strconv.Itoa(polyNodeConfig.GuiPort) + "/gui")
+	fmt.Print("Ctrl + C to quit...")
 	log.Fatal(http.ListenAndServe(":"+strconv.Itoa(polyNodeConfig.GuiPort), router))
 }
 
