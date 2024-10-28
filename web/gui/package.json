@@ -7,7 +7,7 @@
     "s": "pnpm run start",
     "launch": "ng serve --open",
     "l": "pnpm run launch",
-    "build": "ng build --base-href=/gui/",
+    "build": "pnpm run test && ng build --base-href=/gui/",
     "test": "ng test"
   },
   "private": true,

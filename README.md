@@ -168,7 +168,7 @@ PolyNode's configuration is handled through a JSON file named `polynrc.json` loc
 
 #### guiPort
 
-This field is an `int` that represents the port number the GUI binds to when launched. Default value is `6011`. Only change it if you have another process using that port.
+This field is an `int` that represents the port number the GUI binds to when launched. Only change it if you have another process using that port. Default value is `6011`.
 
 #### nodeMirror
 
@@ -192,8 +192,8 @@ PolyNode does not require sudo/admin privileges to uninstall.
 
 - Go 1.23.2
 - Node.js 20.18.0 (if building GUI)
-- Angular 18.2.8 (if building GUI)
-- pnpm 9.12.2 (if building GUI)
+- Angular 18.2.10 (if building GUI)
+- pnpm 9.12.3 (if building GUI)
 
 ### Building on AIX
 
