@@ -65,7 +65,7 @@ mkdir uninstall
 mkdir gui
 cd ..\..
 move uninstall-arm64.exe .\PolyNode-GUI-win-arm64\PolyNode\uninstall\uninstall.exe
-xcopy /s /i .\web\gui\dist\ .\PolyNode-GUI-win-arm64\PolyNode\gui\dist\
+xcopy /s /i .\web\gui\dist\gui\ .\PolyNode-GUI-win-arm64\PolyNode\gui\dist\gui\
 
 :: Build Windows x64
 
@@ -128,7 +128,7 @@ mkdir uninstall
 mkdir gui
 cd ..\..
 move uninstall-x64.exe .\PolyNode-GUI-win-x64\PolyNode\uninstall\uninstall.exe
-xcopy /s /i .\web\gui\dist\ .\PolyNode-GUI-win-x64\PolyNode\gui\dist\
+xcopy /s /i .\web\gui\dist\gui\ .\PolyNode-GUI-win-x64\PolyNode\gui\dist\gui\
 
 :: Bundle
 
