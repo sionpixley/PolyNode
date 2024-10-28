@@ -168,7 +168,7 @@ PolyNode's configuration is handled through a JSON file named `polynrc.json` loc
 
 #### guiPort
 
-This field is an `int` that represents the port number the GUI binds to when launched. Default value is `2334`. Only change it if you have another process using that port.
+This field is an `int` that represents the port number the GUI binds to when launched. Default value is `6011`. Only change it if you have another process using that port.
 
 #### nodeMirror
 
