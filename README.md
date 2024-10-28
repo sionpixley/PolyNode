@@ -193,7 +193,7 @@ PolyNode does not require sudo/admin privileges to uninstall.
 - Go 1.23.2
 - Node.js 20.18.0 (if building GUI)
 - Angular 18.2.10 (if building GUI)
-- pnpm 9.12.2 (if building GUI)
+- pnpm 9.12.3 (if building GUI)
 
 ### Building on AIX
 
