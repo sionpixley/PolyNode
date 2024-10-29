@@ -15,8 +15,11 @@ import (
 func main() {
 	defer fmt.Println()
 
-	parts := strings.Split(os.Args[0], "\\")
-	currentBinaryLocation := strings.Join(parts[:len(parts)-1], "\\")
+	currentBinaryLocation := "."
+	if strings.Contains(os.Args[0], "\\") {
+		parts := strings.Split(os.Args[0], "\\")
+		currentBinaryLocation = strings.Join(parts[:len(parts)-1], "\\")
+	}
 
 	home := os.Getenv("LOCALAPPDATA") + "\\Programs"
 
