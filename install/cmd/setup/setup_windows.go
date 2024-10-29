@@ -7,6 +7,7 @@ import (
 	"log"
 	"os"
 	"os/exec"
+	"strings"
 
 	"golang.org/x/sys/windows/registry"
 )
@@ -14,13 +15,16 @@ import (
 func main() {
 	defer fmt.Println()
 
+	parts := strings.Split(os.Args[0], "\\")
+	currentBinaryLocation := strings.Join(parts[:len(parts)-1], "\\")
+
 	home := os.Getenv("LOCALAPPDATA") + "\\Programs"
 
 	var err error
 	if oldVersionExists(home) {
-		err = upgrade(home)
+		err = upgrade(currentBinaryLocation, home)
 	} else {
-		err = install(home)
+		err = install(currentBinaryLocation, home)
 	}
 
 	if err != nil {
@@ -51,8 +55,8 @@ func createPolynConfig(home string) error {
 	return os.WriteFile(home+"\\PolyNode\\polynrc.json", []byte(constants.DEFAULT_POLYNRC), 0644)
 }
 
-func install(home string) error {
-	err := exec.Command("cmd", "/c", "xcopy", "/s", "/i", ".\\PolyNode\\", home+"\\PolyNode\\").Run()
+func install(currentBinaryLocation string, home string) error {
+	err := exec.Command("cmd", "/c", "xcopy", "/s", "/i", currentBinaryLocation+"\\PolyNode\\", home+"\\PolyNode\\").Run()
 	if err != nil {
 		return err
 	}
@@ -75,11 +79,11 @@ func oldVersionExists(home string) bool {
 	}
 }
 
-func upgrade(home string) error {
+func upgrade(currentBinaryLocation string, home string) error {
 	err := utilities.RemoveUpgradableFiles(home)
 	if err != nil {
 		return err
 	}
 
-	return utilities.CopyUpgradableFiles(home)
+	return utilities.CopyUpgradableFiles(currentBinaryLocation, home)
 }

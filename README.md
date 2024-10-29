@@ -1,6 +1,6 @@
 # PolyNode
 
-PolyNode is a CLI tool that helps install and manage multiple versions of Node.js on the same device. It does not require sudo/admin privileges, and is installed on a per-user basis.
+PolyNode is a CLI tool that helps install and manage multiple versions of Node.js on the same device. It does not require sudo/admin privileges, and is installed on a per-user basis. Works on AIX, Linux, macOS, and Windows.
 
 PolyNode has a GUI that you can use, but it must be installed first. Release assets prefixed with `PolyNode-GUI` will install the GUI along with the base CLI command, `polyn`. Read about [launching the GUI](#launching-the-gui) below.
 
@@ -191,8 +191,8 @@ PolyNode does not require sudo/admin privileges to uninstall.
 ### Required technologies
 
 - Go 1.23.2
-- Node.js 20.18.0 (if building GUI)
-- Angular 18.2.10 (if building GUI)
+- Node.js ^18.19.1 or ^20.11.1 or ^22.0.0 (if building GUI)
+- Angular ^18.2.0 (if building GUI)
 - pnpm 9.12.3 (if building GUI)
 
 ### Building on AIX
