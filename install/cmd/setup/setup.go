@@ -19,6 +19,12 @@ func main() {
 
 	defer fmt.Println()
 
+	currentBinaryLocation := "."
+	if strings.Contains(os.Args[0], "/") {
+		parts := strings.Split(os.Args[0], "/")
+		currentBinaryLocation = strings.Join(parts[:len(parts)-1], "/")
+	}
+
 	var err error
 	switch operatingSystem {
 	case "aix":
@@ -28,9 +34,9 @@ func main() {
 	case "linux":
 		home := os.Getenv("HOME")
 		if oldVersionExists(home) {
-			err = upgrade(home)
+			err = upgrade(currentBinaryLocation, home)
 		} else {
-			err = install(home)
+			err = install(currentBinaryLocation, home)
 		}
 	default:
 		err = errors.New("unsupported operating system")
@@ -68,8 +74,8 @@ func createPolynConfig(home string) error {
 	return os.WriteFile(home+"/.PolyNode/polynrc.json", []byte(constants.DEFAULT_POLYNRC), 0644)
 }
 
-func install(home string) error {
-	err := exec.Command("cp", "-r", "PolyNode", home+"/.PolyNode").Run()
+func install(currentBinaryLocation string, home string) error {
+	err := exec.Command("cp", "-r", currentBinaryLocation+"/PolyNode", home+"/.PolyNode").Run()
 	if err != nil {
 		return err
 	}
@@ -101,11 +107,11 @@ func oldVersionExists(home string) bool {
 	}
 }
 
-func upgrade(home string) error {
+func upgrade(currentBinaryLocation string, home string) error {
 	err := utilities.RemoveUpgradableFiles(home)
 	if err != nil {
 		return err
 	}
 
-	return utilities.CopyUpgradableFiles(home)
+	return utilities.CopyUpgradableFiles(currentBinaryLocation, home)
 }
