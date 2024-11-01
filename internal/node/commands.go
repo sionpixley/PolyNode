@@ -10,6 +10,7 @@ import (
 	"slices"
 	"strings"
 
+	"github.com/google/uuid"
 	"github.com/sionpixley/PolyNode/internal"
 	"github.com/sionpixley/PolyNode/internal/constants"
 	"github.com/sionpixley/PolyNode/internal/models"
@@ -243,6 +244,46 @@ func searchDefault(operatingSystem models.OperatingSystem, arch models.Architect
 	}
 
 	fmt.Println(output)
+	return nil
+}
+
+func temp(version string, operatingSystem models.OperatingSystem) error {
+	if !utilities.IsValidVersionFormat(version) {
+		return errors.New(constants.INVALID_VERSION_FORMAT_ERROR)
+	}
+
+	version = utilities.ConvertToSemanticVersion(version)
+
+	fmt.Print("Creating temp symlink...")
+
+	// edit-later
+	// Remove expired symlinks
+
+	guid, err := uuid.NewRandom()
+	if err != nil {
+		return err
+	}
+
+	err = os.MkdirAll(internal.PolynHomeDir+internal.PathSeparator+"temp"+internal.PathSeparator+guid.String(), os.ModePerm)
+	if err != nil {
+		return err
+	}
+
+	if operatingSystem == constants.WINDOWS {
+
+	} else {
+		err = os.Symlink(internal.PolynHomeDir+"/node/"+version, internal.PolynHomeDir+"/temp/"+guid.String()+"/nodejs")
+		if err != nil {
+			return err
+		}
+
+		err = exec.Command("export", "PATH="+internal.PolynHomeDir+"/temp/"+guid.String()+"/nodejs/bin:$PATH").Run()
+		if err != nil {
+			return err
+		}
+	}
+
+	fmt.Println("Done.")
 	return nil
 }
 

@@ -48,6 +48,12 @@ func Handle(args []string, operatingSystem models.OperatingSystem, arch models.A
 		} else {
 			err = searchDefault(operatingSystem, arch, config)
 		}
+	case constants.TEMP:
+		if len(args) > 1 {
+			err = temp(args[1], operatingSystem)
+		} else {
+			fmt.Println(constants.HELP)
+		}
 	case constants.USE:
 		if len(args) > 1 {
 			err = use(args[1], operatingSystem)

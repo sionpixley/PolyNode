@@ -67,5 +67,6 @@ const (
 	LIST
 	REMOVE
 	SEARCH
+	TEMP
 	USE
 )

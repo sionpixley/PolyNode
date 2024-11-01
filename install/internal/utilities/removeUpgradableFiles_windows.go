@@ -33,5 +33,10 @@ func RemoveUpgradableFiles(home string) error {
 		return err
 	}
 
+	err = os.RemoveAll(home + "\\PolyNode\\temp")
+	if err != nil {
+		return err
+	}
+
 	return os.RemoveAll(home + "\\PolyNode\\gui")
 }
