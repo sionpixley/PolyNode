@@ -17,7 +17,7 @@ Commands:
   add <version>     : Downloads a specific version of Node.js, but does not switch it to your current version.
   add lts           : Downloads the latest LTS version of Node.js.
   add latest        : Downloads the latest version of Node.js.
-  current           : Prints the current version of Node.js.
+  current           : Prints your current version of Node.js.
   install <version> : Downloads a specific version of Node.js and sets it as your current version.
   install lts       : Downloads the latest LTS version of Node.js and sets it as your current version.
   install latest    : Downloads the latest version of Node.js and sets it as your current version.

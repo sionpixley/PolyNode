@@ -35,8 +35,7 @@ PolyNode has a GUI that you can use, but it must be installed first. Release ass
     3. [Linux](#building-on-linux)
     4. [macOS](#building-on-macos)
     5. [Windows](#building-on-windows)
-7. [Future development](#future-development)
-8. [Acknowledgements](#acknowledgements)
+7. [Acknowledgements](#acknowledgements)
 
 ## Supported operating systems and CPU architectures
 
