@@ -27,7 +27,7 @@ PolyNode has a GUI that you can use, but it must be installed first. Release ass
 4. [How to configure](#how-to-configure-polynode)
     1. [Configuration fields](#configuration-fields)
 5. [How to uninstall](#how-to-uninstall-polynode)
-    1. [AIX, Linux, and macOS](#aix-linux-and-macos)
+    1. [AIX, Linux, or macOS](#aix-linux-or-macos)
     2. [Windows](#windows)
 6. [Building from source](#building-from-source)
     1. [Required technologies](#required-technologies)
@@ -40,7 +40,7 @@ PolyNode has a GUI that you can use, but it must be installed first. Release ass
 
 ## Supported operating systems and CPU architectures
 
-- AIX (Power ISA 64-bit)
+- AIX (Power 64-bit)
 - Linux (x64 and ARM64)
 - macOS (x64 and ARM64)
 - Windows 10 and newer (x64 and ARM64)
@@ -155,7 +155,7 @@ or
 
 ## How to configure PolyNode
 
-PolyNode's configuration is handled through a JSON file named `polynrc.json` located in PolyNode's home directory (`$HOME/.PolyNode` for Linux/macOS and `%LOCALAPPDATA%\Programs\PolyNode` for Windows). Please see below for the default configuration for `polynrc.json`:
+PolyNode's configuration is handled through a JSON file named `polynrc.json` located in PolyNode's home directory (`$HOME/.PolyNode` for AIX/Linux/macOS and `%LOCALAPPDATA%\Programs\PolyNode` for Windows). Please see below for the default configuration for `polynrc.json`:
 
 ```
 {
@@ -178,7 +178,7 @@ This field is a `string` that represents the URL to download Node.js. Default va
 
 PolyNode does not require sudo/admin privileges to uninstall.
 
-### AIX, Linux, and macOS
+### AIX, Linux, or macOS
 
 1. Run the `$HOME/.PolyNode/uninstall/uninstall` binary.
 
