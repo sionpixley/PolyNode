@@ -129,7 +129,7 @@ This command will set your Node.js version across all shell processes. To tempor
 
 This command will temporarily set your Node.js version for your current shell process and all child processes of that shell. This will only set your Node.js version for the lifetime of the shell. For a more permanent solution, see [Setting your default Node.js version](#setting-your-default-nodejs-version).
 
-This command is useful if you need to run two separate projects at the same that depend on different versions of Node.js. 
+This command is useful if you need to run two separate projects at the same time that depend on different versions of Node.js. 
 
 `eval $(polyn temp <version>)`
 
