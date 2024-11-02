@@ -277,13 +277,15 @@ func temp(version string, operatingSystem models.OperatingSystem) error {
 			return err
 		}
 
-		err = exec.Command("export", "PATH="+internal.PolynHomeDir+"/temp/"+guid.String()+"/nodejs/bin:$PATH").Run()
-		if err != nil {
-			return err
-		}
+		fmt.Println("Done.")
+		fmt.Println("Run this command: 'export PATH=" + internal.PolynHomeDir + "/temp/" + guid.String() + "/nodejs/bin:$PATH'")
+		// err = exec.Command("export PATH=" + internal.PolynHomeDir + "/temp/" + guid.String() + "/nodejs/bin:$PATH").Run()
+		// if err != nil {
+		// 	return err
+		// }
 	}
 
-	fmt.Println("Done.")
+	// fmt.Println("Done.")
 	return nil
 }
 
