@@ -10,7 +10,6 @@ import (
 	"slices"
 	"strings"
 
-	"github.com/google/uuid"
 	"github.com/sionpixley/PolyNode/internal"
 	"github.com/sionpixley/PolyNode/internal/constants"
 	"github.com/sionpixley/PolyNode/internal/models"
@@ -254,38 +253,12 @@ func temp(version string, operatingSystem models.OperatingSystem) error {
 
 	version = utilities.ConvertToSemanticVersion(version)
 
-	fmt.Print("Creating temp symlink...")
-
-	// edit-later
-	// Remove expired symlinks
-
-	guid, err := uuid.NewRandom()
-	if err != nil {
-		return err
-	}
-
-	err = os.MkdirAll(internal.PolynHomeDir+internal.PathSeparator+"temp"+internal.PathSeparator+guid.String(), os.ModePerm)
-	if err != nil {
-		return err
-	}
-
 	if operatingSystem == constants.WINDOWS {
 
 	} else {
-		err = os.Symlink(internal.PolynHomeDir+"/node/"+version, internal.PolynHomeDir+"/temp/"+guid.String()+"/nodejs")
-		if err != nil {
-			return err
-		}
-
-		fmt.Println("Done.")
-		fmt.Println("Run this command: 'export PATH=" + internal.PolynHomeDir + "/temp/" + guid.String() + "/nodejs/bin:$PATH'")
-		// err = exec.Command("export PATH=" + internal.PolynHomeDir + "/temp/" + guid.String() + "/nodejs/bin:$PATH").Run()
-		// if err != nil {
-		// 	return err
-		// }
+		fmt.Print("export PATH=" + internal.PolynHomeDir + "/node/" + version + "/bin:$PATH")
 	}
 
-	// fmt.Println("Done.")
 	return nil
 }
 

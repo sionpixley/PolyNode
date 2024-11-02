@@ -17,13 +17,14 @@ PolyNode has a GUI that you can use, but it must be installed first. Release ass
     2. [Upgrading PolyNode](#upgrading-polynode-to-the-latest-release)
     3. [Searching for available Node.js versions](#searching-for-available-nodejs-versions)
     4. [Searching for a specific Node.js version](#searching-for-a-specific-nodejs-version)
-    5. [Downloading and switching to a new version of Node.js](#downloading-and-switching-to-a-new-version-of-nodejs)
-    6. [Downloading a new version of Node.js](#downloading-a-new-version-of-nodejs)
-    7. [Switching to a different downloaded version of Node.js](#switching-to-a-different-downloaded-version-of-nodejs)
-    8. [Printing your current version of Node.js](#printing-your-current-version-of-nodejs)
-    9. [Printing all downloaded versions of Node.js](#printing-all-downloaded-versions-of-nodejs)
-    10. [Deleting a downloaded version of Node.js](#deleting-a-downloaded-version-of-nodejs)
-    11. [Printing your current version of PolyNode](#printing-your-current-version-of-polynode)
+    5. [Downloading a new version of Node.js](#downloading-a-new-version-of-nodejs)
+    6. [Setting your default Node.js version](#setting-your-default-nodejs-version)
+    7. [Temporarily setting your Node.js version](#temporarily-setting-your-nodejs-version)
+    8. [Downloading and setting your default Node.js to a new version](#downloading-and-setting-your-default-nodejs-to-a-new-version)
+    9. [Printing your current version of Node.js](#printing-your-current-version-of-nodejs)
+    10. [Printing all downloaded versions of Node.js](#printing-all-downloaded-versions-of-nodejs)
+    11. [Deleting a downloaded version of Node.js](#deleting-a-downloaded-version-of-nodejs)
+    12. [Printing your current version of PolyNode](#printing-your-current-version-of-polynode)
 4. [How to configure](#how-to-configure-polynode)
     1. [Configuration fields](#configuration-fields)
 5. [How to uninstall](#how-to-uninstall-polynode)
@@ -82,6 +83,8 @@ PolyNode does not require sudo/admin privileges to use the `polyn` nor the `Poly
 
 ### Launching the GUI
 
+> The GUI does not have the ability to temporarily set your Node.js version.
+
 If you installed PolyNode's GUI, type this command into your terminal:
 
 `PolyNode`
@@ -102,7 +105,37 @@ If you want to search for a specific major version, add a "." at the end of your
 
 `polyn search <prefix>`
 
-### Downloading and switching to a new version of Node.js
+### Downloading a new version of Node.js
+
+This command will only download a new version of Node.js. It will not set the new version as your currently-used version. See [Setting your default Node.js version](#setting-your-default-nodejs-version) or [Temporarily setting your Node.js version](#temporarily-setting-your-nodejs-version) on how to use the Node.js you download.
+
+`polyn add <version>`
+
+You can also use the `lts` keyword to download the latest LTS release without providing a specific version. 
+
+`polyn add lts`
+
+The `latest` keyword will download the latest release of Node.js.
+
+`polyn add latest`
+
+### Setting your default Node.js version
+
+This command will set your Node.js version across all shell processes. To temporarily set your Node.js version for a single shell process (and all child processes), please see [Temporarily setting your Node.js version](#temporarily-setting-your-nodejs-version).
+
+`polyn use <version>`
+
+### Temporarily setting your Node.js version
+
+This command will temporarily set your Node.js version for your current shell process and all child processes of that shell. This will only set your Node.js version for the lifetime of the shell. For a more permanent solution, see [Setting your default Node.js version](#setting-your-default-nodejs-version).
+
+This command is useful if you need to run two separate projects at the same that depend on different versions of Node.js. 
+
+`eval $(polyn temp <version>)`
+
+### Downloading and setting your default Node.js to a new version
+
+This command downloads a specific version of Node.js and immediately sets it as your default version.
 
 The `install` command is equivalent to the `add` command followed by the `use` command.
 
@@ -112,21 +145,9 @@ You can also use the `lts` keyword to download the latest LTS release without pr
 
 `polyn install lts`
 
-The `latest` keyword will download the latest release of Node.js, regardless if it's an LTS version or not.
+The `latest` keyword will download the latest release of Node.js.
 
 `polyn install latest`
-
-### Downloading a new version of Node.js
-
-`polyn add <version>`
-
-`polyn add lts`
-
-`polyn add latest`
-
-### Switching to a different downloaded version of Node.js
-
-`polyn use <version>`
 
 ### Printing your current version of Node.js
 
