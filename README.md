@@ -121,7 +121,7 @@ The `latest` keyword will download the latest release of Node.js.
 
 ### Setting your default Node.js version
 
-This command will set your Node.js version across all shell processes. To temporarily set your Node.js version for a single shell process (and all child processes), please see [Temporarily setting your Node.js version](#temporarily-setting-your-nodejs-version).
+This command will set your Node.js version across all shell processes. All new shell processes will automatically use this Node.js version, unless overriden by [temporarily setting the Node.js version](#temporarily-setting-your-nodejs-version).
 
 `polyn use <version>`
 
