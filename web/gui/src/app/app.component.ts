@@ -142,10 +142,19 @@ export class AppComponent implements OnInit, OnDestroy {
     if(prefix.trim() === '') {
       lastValueFrom(this._api.search()).then(
         versions => {
-          this.availableVersions = versions;
-          if(this.availableVersions.length === 14) {
-            this.ltsVersions = this.availableVersions.slice(7);
+          let av: string[] = [];
+          let lv: string[] = [];
+          for(let v of versions) {
+            if(v.includes("(lts)")) {
+              av.push(v.split(' ')[0]!);
+              lv.push(v.split(' ')[0]!);
+            }
+            else {
+              av.push(v);
+            }
           }
+          this.availableVersions = av;
+          this.ltsVersions = lv;
           this.isLoading = false;
         }
       ).catch((err: Error) => console.log(err.message));
