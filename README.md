@@ -219,7 +219,7 @@ PolyNode does not require sudo/admin privileges to uninstall.
 
 ### Building on AIX
 
-Run the POSIX shell script `./scripts/aix/bundle`. This script will build PolyNode's source code for Power ISA 64-bit (with and without the GUI), and bundle the artifacts as separate .tar.gz files.
+Run the POSIX shell script `./scripts/aix/bundle`. This script will build PolyNode's source code for Power 64-bit (with and without the GUI), and bundle the artifacts as separate .tar.gz files.
 
 ### Building on Linux
 
