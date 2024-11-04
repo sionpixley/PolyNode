@@ -128,6 +128,130 @@ cd ../../..
 mv uninstall-x64 ./PolyNode-GUI-linux-x64/PolyNode/uninstall/uninstall
 cp -r ./web/gui/dist/gui ./PolyNode-GUI-linux-x64/PolyNode/gui/dist/gui
 
+# Build Linux Power LE 64-bit
+
+env GOOS=linux GOARCH=ppc64le go build -tags=prod -o polyn ./cmd/polyn
+
+cd install
+env GOOS=linux GOARCH=ppc64le go build -o ../setup ./cmd/setup
+
+cd ../uninstall
+env GOOS=linux GOARCH=ppc64le go build -o ../uninstall-ppc64le
+
+cd ..
+mkdir PolyNode-linux-ppc64le
+mv setup ./PolyNode-linux-ppc64le
+
+cd PolyNode-linux-ppc64le
+mkdir PolyNode
+cd ..
+cp polyn ./PolyNode-linux-ppc64le/PolyNode
+
+cp README.md ./PolyNode-linux-ppc64le/PolyNode
+cp LICENSE ./PolyNode-linux-ppc64le/PolyNode
+cp SECURITY.md ./PolyNode-linux-ppc64le/PolyNode
+
+cd ./PolyNode-linux-ppc64le/PolyNode
+mkdir uninstall
+cd ../..
+cp uninstall-ppc64le ./PolyNode-linux-ppc64le/PolyNode/uninstall
+cd ./PolyNode-linux-ppc64le/PolyNode/uninstall
+mv uninstall-ppc64le uninstall
+cd ../../..
+
+# Build Linux Power LE 64-bit gui
+
+cd install
+env GOOS=linux GOARCH=ppc64le go build -tags=gui -o ../setup ./cmd/setup
+
+cd ../web
+env GOOS=linux GOARCH=ppc64le go build -tags=prod -o ../PolyNode ./cmd/serve
+
+cd ..
+mkdir PolyNode-GUI-linux-ppc64le
+mv setup ./PolyNode-GUI-linux-ppc64le/setup
+
+cd PolyNode-GUI-linux-ppc64le
+mkdir PolyNode
+cd ..
+mv polyn ./PolyNode-GUI-linux-ppc64le/PolyNode/polyn
+mv PolyNode ./PolyNode-GUI-linux-ppc64le/PolyNode/PolyNode
+
+cp README.md ./PolyNode-GUI-linux-ppc64le/PolyNode
+cp LICENSE ./PolyNode-GUI-linux-ppc64le/PolyNode
+cp SECURITY.md ./PolyNode-GUI-linux-ppc64le/PolyNode
+
+cd ./PolyNode-GUI-linux-ppc64le/PolyNode
+mkdir uninstall
+mkdir gui
+cd gui
+mkdir dist
+cd ../../..
+mv uninstall-ppc64le ./PolyNode-GUI-linux-ppc64le/PolyNode/uninstall/uninstall
+cp -r ./web/gui/dist/gui ./PolyNode-GUI-linux-ppc64le/PolyNode/gui/dist/gui
+
+# Build Linux s390x
+
+env GOOS=linux GOARCH=s390x go build -tags=prod -o polyn ./cmd/polyn
+
+cd install
+env GOOS=linux GOARCH=s390x go build -o ../setup ./cmd/setup
+
+cd ../uninstall
+env GOOS=linux GOARCH=s390x go build -o ../uninstall-s390x
+
+cd ..
+mkdir PolyNode-linux-s390x
+mv setup ./PolyNode-linux-s390x
+
+cd PolyNode-linux-s390x
+mkdir PolyNode
+cd ..
+cp polyn ./PolyNode-linux-s390x/PolyNode
+
+cp README.md ./PolyNode-linux-s390x/PolyNode
+cp LICENSE ./PolyNode-linux-s390x/PolyNode
+cp SECURITY.md ./PolyNode-linux-s390x/PolyNode
+
+cd ./PolyNode-linux-s390x/PolyNode
+mkdir uninstall
+cd ../..
+cp uninstall-s390x ./PolyNode-linux-s390x/PolyNode/uninstall
+cd ./PolyNode-linux-s390x/PolyNode/uninstall
+mv uninstall-s390x uninstall
+cd ../../..
+
+# Build Linux s390x gui
+
+cd install
+env GOOS=linux GOARCH=s390x go build -tags=gui -o ../setup ./cmd/setup
+
+cd ../web
+env GOOS=linux GOARCH=s390x go build -tags=prod -o ../PolyNode ./cmd/serve
+
+cd ..
+mkdir PolyNode-GUI-linux-s390x
+mv setup ./PolyNode-GUI-linux-s390x/setup
+
+cd PolyNode-GUI-linux-s390x
+mkdir PolyNode
+cd ..
+mv polyn ./PolyNode-GUI-linux-s390x/PolyNode/polyn
+mv PolyNode ./PolyNode-GUI-linux-s390x/PolyNode/PolyNode
+
+cp README.md ./PolyNode-GUI-linux-s390x/PolyNode
+cp LICENSE ./PolyNode-GUI-linux-s390x/PolyNode
+cp SECURITY.md ./PolyNode-GUI-linux-s390x/PolyNode
+
+cd ./PolyNode-GUI-linux-s390x/PolyNode
+mkdir uninstall
+mkdir gui
+cd gui
+mkdir dist
+cd ../../..
+mv uninstall-s390x ./PolyNode-GUI-linux-s390x/PolyNode/uninstall/uninstall
+cp -r ./web/gui/dist/gui ./PolyNode-GUI-linux-s390x/PolyNode/gui/dist/gui
+
 # Bundle
 
 tar -cJf PolyNode-linux-arm64.tar.xz PolyNode-linux-arm64
@@ -141,3 +265,15 @@ rm -rf PolyNode-linux-x64
 
 tar -cJf PolyNode-GUI-linux-x64.tar.xz PolyNode-GUI-linux-x64
 rm -rf PolyNode-GUI-linux-x64
+
+tar -cJf PolyNode-linux-ppc64le.tar.xz PolyNode-linux-ppc64le
+rm -rf PolyNode-linux-ppc64le
+
+tar -cJf PolyNode-GUI-linux-ppc64le.tar.xz PolyNode-GUI-linux-ppc64le
+rm -rf PolyNode-GUI-linux-ppc64le
+
+tar -cJf PolyNode-linux-s390x.tar.xz PolyNode-linux-s390x
+rm -rf PolyNode-linux-s390x
+
+tar -cJf PolyNode-GUI-linux-s390x.tar.xz PolyNode-GUI-linux-s390x
+rm -rf PolyNode-GUI-linux-s390x

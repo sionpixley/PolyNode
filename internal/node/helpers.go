@@ -40,11 +40,16 @@ func convertOsAndArchToNodeVersionFile(operatingSystem models.OperatingSystem, a
 	case constants.AIX:
 		return "aix-ppc64", nil
 	case constants.LINUX:
-		if arch == constants.ARM64 {
+		switch arch {
+		case constants.ARM64:
 			return "linux-arm64", nil
-		} else if arch == constants.X64 {
+		case constants.PPC64LE:
+			return "linux-ppc64le", nil
+		case constants.S390X:
+			return "linux-s390x", nil
+		case constants.X64:
 			return "linux-x64", nil
-		} else {
+		default:
 			return "", errors.New(constants.UNSUPPORTED_ARCH_ERROR)
 		}
 	case constants.MAC:
@@ -94,11 +99,16 @@ func getArchiveName(operatingSystem models.OperatingSystem, arch models.Architec
 	case constants.AIX:
 		archiveName = "aix-ppc64.tar.gz"
 	case constants.LINUX:
-		if arch == constants.ARM64 {
+		switch arch {
+		case constants.ARM64:
 			archiveName = "linux-arm64.tar.xz"
-		} else if arch == constants.X64 {
+		case constants.PPC64LE:
+			archiveName = "linux-ppc64le.tar.xz"
+		case constants.S390X:
+			archiveName = "linux-s390x.tar.xz"
+		case constants.X64:
 			archiveName = "linux-x64.tar.xz"
-		} else {
+		default:
 			return "", errors.New(constants.UNSUPPORTED_ARCH_ERROR)
 		}
 	case constants.MAC:

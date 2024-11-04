@@ -46,7 +46,7 @@ PolyNode has a GUI that you can use, but it must be installed first. Release ass
 ## Supported operating systems and CPU architectures
 
 - AIX (Power 64-bit)
-- Linux (x64 and ARM64)
+- Linux (x64, ARM64, Power LE 64-bit, and s390x)
 - macOS (x64 and ARM64)
 - Windows 10 and newer (x64 and ARM64)
 

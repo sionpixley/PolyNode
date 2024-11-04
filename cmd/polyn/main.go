@@ -65,6 +65,10 @@ func convertToArchitecture(archStr string) models.Architecture {
 		return constants.ARM64
 	case "ppc64":
 		return constants.PPC64
+	case "ppc64le":
+		return constants.PPC64LE
+	case "s390x":
+		return constants.S390X
 	default:
 		return constants.NA_ARCH
 	}
@@ -198,6 +202,18 @@ func upgradePolyNode(operatingSystem models.OperatingSystem, arch models.Archite
 				filename = "PolyNode-GUI-linux-arm64.tar.xz"
 			} else {
 				filename = "PolyNode-linux-arm64.tar.xz"
+			}
+		case constants.PPC64LE:
+			if guiInstalled {
+				filename = "PolyNode-GUI-linux-ppc64le.tar.xz"
+			} else {
+				filename = "PolyNode-linux-ppc64le.tar.xz"
+			}
+		case constants.S390X:
+			if guiInstalled {
+				filename = "PolyNode-GUI-linux-s390x.tar.xz"
+			} else {
+				filename = "PolyNode-linux-s390x.tar.xz"
 			}
 		case constants.X64:
 			if guiInstalled {

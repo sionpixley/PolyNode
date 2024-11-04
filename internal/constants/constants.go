@@ -55,6 +55,8 @@ const (
 	NA_ARCH models.Architecture = iota
 	ARM64
 	PPC64
+	PPC64LE
+	S390X
 	X64
 )
 
