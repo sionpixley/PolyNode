@@ -20,6 +20,8 @@ PolyNode has a GUI that you can use, but it must be installed first. Release ass
     5. [Downloading a new version of Node.js](#downloading-a-new-version-of-nodejs)
     6. [Setting your default Node.js version](#setting-your-default-nodejs-version)
     7. [Temporarily setting your Node.js version](#temporarily-setting-your-nodejs-version)
+        1. [AIX, Linux, or macOS](#temporarily-setting-your-nodejs-on-aix-linux-or-macos)
+        2. [Windows](#temporarily-setting-your-nodejs-on-windows)
     8. [Downloading and setting your default Node.js to a new version](#downloading-and-setting-your-default-nodejs-to-a-new-version)
     9. [Printing your current version of Node.js](#printing-your-current-version-of-nodejs)
     10. [Printing all downloaded versions of Node.js](#printing-all-downloaded-versions-of-nodejs)
@@ -127,13 +129,17 @@ This command will set your Node.js version across all shell processes. All new s
 
 ### Temporarily setting your Node.js version
 
-> This works on AIX, Linux, and macOS, but not on Windows. I'm working on a solution for Windows.
-
 This command will temporarily set your Node.js version for your current shell process and all child processes of that shell. This will only set your Node.js version for the lifetime of the shell. For a more permanent solution, see [Setting your default Node.js version](#setting-your-default-nodejs-version).
 
 This command is useful if you need to run two separate projects at the same time that depend on different versions of Node.js. 
 
+#### Temporarily setting your Node.js on AIX, Linux, or macOS
+
 `eval $(polyn temp <version>)`
+
+#### Temporarily setting your Node.js on Windows
+
+Unfortunately, Windows doesn't have a command equivalent to the POSIX `eval`. You will have to run `polyn temp <version>` and then copy and paste the command it outputs.
 
 ### Downloading and setting your default Node.js to a new version
 

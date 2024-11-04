@@ -28,7 +28,7 @@ Commands:
   search            : Prints out a list of the most recent Node.js versions available for download.
   search <prefix>   : Prints out a list of Node.js versions that have this prefix.
   temp <version>    : Prints out the command needed to temporarily set your Node.js to a specific version.
-                      Please use 'eval $(polyn temp <version>)' instead.
+                      If on AIX, Linux, or macOS, please use 'eval $(polyn temp <version>)' instead.
   use <version>     : Sets your default Node.js to a different version.
   upgrade           : Upgrades PolyNode to the latest release.
   version           : Prints the current version of PolyNode.`
@@ -38,7 +38,7 @@ Commands:
 	UNSUPPORTED_OS_ERROR         string = "unsupported operating system"
 
 	// PolyNode's version.
-	VERSION string = "v1.1.0-rc.3"
+	VERSION string = "v1.1.0-rc.4"
 )
 
 // NA is for Not Applicable.
@@ -60,7 +60,7 @@ const (
 
 // NA is for Not Applicable.
 // We don't include the version command in this. The version command is handled in main().
-// We don't include the upgrade command in this either.
+// We don't include the upgrade command in this either. It also gets handled in main().
 const (
 	NA_COMM models.Command = iota
 	ADD
