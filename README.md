@@ -38,7 +38,8 @@ PolyNode has a GUI that you can use, but it must be installed first. Release ass
     3. [Linux](#building-on-linux)
     4. [macOS](#building-on-macos)
     5. [Windows](#building-on-windows)
-7. [Acknowledgements](#acknowledgements)
+7. [Contributing](#contributing)
+8. [Acknowledgements](#acknowledgements)
 
 ## Supported operating systems and CPU architectures
 
@@ -238,6 +239,10 @@ macOS has a POSIX shell script (`./scripts/mac/bundle`) that builds and notarize
 ### Building on Windows
 
 Run the batchfile `.\scripts\win\bundle.cmd`. This batchfile will build PolyNode's source code for x64 and ARM64 (with and without the GUI), and bundle the artifacts as separate .zip files.
+
+## Contributing
+
+All contributions are welcome! If you wish to contribute to the project, the best way would be forking this repo and making a pull request from your fork with all of your suggested changes.
 
 ## Acknowledgements
 
