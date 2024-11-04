@@ -17,15 +17,20 @@ PolyNode has a GUI that you can use, but it must be installed first. Release ass
     2. [Upgrading PolyNode](#upgrading-polynode-to-the-latest-release)
     3. [Searching for available Node.js versions](#searching-for-available-nodejs-versions)
     4. [Searching for a specific Node.js version](#searching-for-a-specific-nodejs-version)
-    5. [Downloading and switching to a new version of Node.js](#downloading-and-switching-to-a-new-version-of-nodejs)
-    6. [Downloading a new version of Node.js](#downloading-a-new-version-of-nodejs)
-    7. [Switching to a different downloaded version of Node.js](#switching-to-a-different-downloaded-version-of-nodejs)
-    8. [Printing your current version of Node.js](#printing-your-current-version-of-nodejs)
-    9. [Printing all downloaded versions of Node.js](#printing-all-downloaded-versions-of-nodejs)
-    10. [Deleting a downloaded version of Node.js](#deleting-a-downloaded-version-of-nodejs)
-    11. [Printing your current version of PolyNode](#printing-your-current-version-of-polynode)
+    5. [Downloading a new version of Node.js](#downloading-a-new-version-of-nodejs)
+    6. [Setting your default Node.js version](#setting-your-default-nodejs-version)
+    7. [Temporarily setting your Node.js version](#temporarily-setting-your-nodejs-version)
+        1. [AIX, Linux, or macOS](#temporarily-setting-your-nodejs-on-aix-linux-or-macos)
+        2. [Windows](#temporarily-setting-your-nodejs-on-windows)
+    8. [Downloading and setting your default Node.js to a new version](#downloading-and-setting-your-default-nodejs-to-a-new-version)
+    9. [Printing your current version of Node.js](#printing-your-current-version-of-nodejs)
+    10. [Printing all downloaded versions of Node.js](#printing-all-downloaded-versions-of-nodejs)
+    11. [Deleting a downloaded version of Node.js](#deleting-a-downloaded-version-of-nodejs)
+    12. [Printing your current version of PolyNode](#printing-your-current-version-of-polynode)
 4. [How to configure](#how-to-configure-polynode)
     1. [Configuration fields](#configuration-fields)
+        1. [guiPort](#guiport)
+        2. [nodeMirror](#nodemirror)
 5. [How to uninstall](#how-to-uninstall-polynode)
     1. [AIX, Linux, or macOS](#aix-linux-or-macos)
     2. [Windows](#windows)
@@ -35,7 +40,8 @@ PolyNode has a GUI that you can use, but it must be installed first. Release ass
     3. [Linux](#building-on-linux)
     4. [macOS](#building-on-macos)
     5. [Windows](#building-on-windows)
-7. [Acknowledgements](#acknowledgements)
+7. [Contributing](#contributing)
+8. [Acknowledgements](#acknowledgements)
 
 ## Supported operating systems and CPU architectures
 
@@ -82,6 +88,8 @@ PolyNode does not require sudo/admin privileges to use the `polyn` nor the `Poly
 
 ### Launching the GUI
 
+> The GUI does not have the ability to temporarily set your Node.js version.
+
 If you installed PolyNode's GUI, type this command into your terminal:
 
 `PolyNode`
@@ -102,7 +110,43 @@ If you want to search for a specific major version, add a "." at the end of your
 
 `polyn search <prefix>`
 
-### Downloading and switching to a new version of Node.js
+### Downloading a new version of Node.js
+
+This command will only download a new version of Node.js. It will not set the new version as your currently-used version. See [Setting your default Node.js version](#setting-your-default-nodejs-version) or [Temporarily setting your Node.js version](#temporarily-setting-your-nodejs-version) on how to use the Node.js you download.
+
+`polyn add <version>`
+
+You can also use the `lts` keyword to download the latest LTS release without providing a specific version. 
+
+`polyn add lts`
+
+The `latest` keyword will download the latest release of Node.js.
+
+`polyn add latest`
+
+### Setting your default Node.js version
+
+This command will set your Node.js version across all shell processes. All new shell processes will automatically use this Node.js version, unless overriden by [temporarily setting the Node.js version](#temporarily-setting-your-nodejs-version).
+
+`polyn use <version>`
+
+### Temporarily setting your Node.js version
+
+This command will temporarily set your Node.js version for your current shell process and all child processes of that shell. This will only set your Node.js version for the lifetime of the shell. For a more permanent solution, see [Setting your default Node.js version](#setting-your-default-nodejs-version).
+
+This command is useful if you need to run two separate projects at the same time that depend on different versions of Node.js. 
+
+#### Temporarily setting your Node.js on AIX, Linux, or macOS
+
+`eval $(polyn temp <version>)`
+
+#### Temporarily setting your Node.js on Windows
+
+Unfortunately, Windows doesn't have a command equivalent to the POSIX `eval`. You will have to run `polyn temp <version>` and then copy and paste the command it outputs.
+
+### Downloading and setting your default Node.js to a new version
+
+This command downloads a specific version of Node.js and immediately sets it as your default version.
 
 The `install` command is equivalent to the `add` command followed by the `use` command.
 
@@ -112,21 +156,9 @@ You can also use the `lts` keyword to download the latest LTS release without pr
 
 `polyn install lts`
 
-The `latest` keyword will download the latest release of Node.js, regardless if it's an LTS version or not.
+The `latest` keyword will download the latest release of Node.js.
 
 `polyn install latest`
-
-### Downloading a new version of Node.js
-
-`polyn add <version>`
-
-`polyn add lts`
-
-`polyn add latest`
-
-### Switching to a different downloaded version of Node.js
-
-`polyn use <version>`
 
 ### Printing your current version of Node.js
 
@@ -196,7 +228,7 @@ PolyNode does not require sudo/admin privileges to uninstall.
 
 ### Building on AIX
 
-Run the POSIX shell script `./scripts/aix/bundle`. This script will build PolyNode's source code for Power ISA 64-bit (with and without the GUI), and bundle the artifacts as separate .tar.gz files.
+Run the POSIX shell script `./scripts/aix/bundle`. This script will build PolyNode's source code for Power 64-bit (with and without the GUI), and bundle the artifacts as separate .tar.gz files.
 
 ### Building on Linux
 
@@ -209,6 +241,10 @@ macOS has a POSIX shell script (`./scripts/mac/bundle`) that builds and notarize
 ### Building on Windows
 
 Run the batchfile `.\scripts\win\bundle.cmd`. This batchfile will build PolyNode's source code for x64 and ARM64 (with and without the GUI), and bundle the artifacts as separate .zip files.
+
+## Contributing
+
+All contributions are welcome! If you wish to contribute to the project, the best way would be forking this repo and making a pull request from your fork with all of your suggested changes.
 
 ## Acknowledgements
 

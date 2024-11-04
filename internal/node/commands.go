@@ -246,6 +246,25 @@ func searchDefault(operatingSystem models.OperatingSystem, arch models.Architect
 	return nil
 }
 
+func temp(version string, operatingSystem models.OperatingSystem) error {
+	if !utilities.IsValidVersionFormat(version) {
+		return errors.New(constants.INVALID_VERSION_FORMAT_ERROR)
+	}
+
+	version = utilities.ConvertToSemanticVersion(version)
+
+	if operatingSystem == constants.WINDOWS {
+		fmt.Println("\nIf using Command Prompt, run this command:")
+		fmt.Println("\n  set PATH=" + internal.PolynHomeDir + "\\node\\" + version + ";%PATH%")
+		fmt.Println("\nIf using PowerShell, run this command:")
+		fmt.Println("\n  $env:Path = \"" + internal.PolynHomeDir + "\\node\\" + version + ";\" + $env:Path")
+	} else {
+		fmt.Print("export PATH=" + internal.PolynHomeDir + "/node/" + version + "/bin:$PATH")
+	}
+
+	return nil
+}
+
 func use(version string, operatingSystem models.OperatingSystem) error {
 	if !utilities.IsValidVersionFormat(version) {
 		return errors.New(constants.INVALID_VERSION_FORMAT_ERROR)

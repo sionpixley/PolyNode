@@ -27,6 +27,8 @@ func ConvertToCommand(commandStr string) models.Command {
 		return constants.REMOVE
 	case "search":
 		return constants.SEARCH
+	case "temp":
+		return constants.TEMP
 	case "use":
 		return constants.USE
 	default:
