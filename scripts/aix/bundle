@@ -1,6 +1,6 @@
 #!/bin/sh
 
-# Build AIX Power ISA 64-bit
+# Build AIX Power 64-bit
 
 env GOOS=aix GOARCH=ppc64 go build -tags=prod -o polyn ./cmd/polyn
 
@@ -31,7 +31,7 @@ cd ./PolyNode-aix-ppc64/PolyNode/uninstall
 mv uninstall-ppc64 uninstall
 cd ../../..
 
-# Build AIX Power ISA 64-bit gui
+# Build AIX Power 64-bit gui
 
 cd install
 env GOOS=aix GOARCH=ppc64 go build -tags=gui -o ../setup ./cmd/setup
@@ -64,7 +64,7 @@ cd gui
 mkdir dist
 cd ../../..
 mv uninstall-ppc64 ./PolyNode-GUI-aix-ppc64/PolyNode/uninstall/uninstall
-cp -r ./web/gui/dist/gui ./PolyNode-GUI-aix-ppc64/PolyNode/gui/dist/GUI
+cp -r ./web/gui/dist/gui ./PolyNode-GUI-aix-ppc64/PolyNode/gui/dist/gui
 
 # Bundle
 
