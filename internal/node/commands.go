@@ -254,7 +254,10 @@ func temp(version string, operatingSystem models.OperatingSystem) error {
 	version = utilities.ConvertToSemanticVersion(version)
 
 	if operatingSystem == constants.WINDOWS {
-		fmt.Print("set PATH=" + internal.PolynHomeDir + "\\node\\" + version + ";%PATH%")
+		fmt.Println("\nIf using Command Prompt, run this command:")
+		fmt.Println("\n  set PATH=" + internal.PolynHomeDir + "\\node\\" + version + ";%PATH%")
+		fmt.Println("\nIf using PowerShell, run this command:")
+		fmt.Println("\n  $env:Path = \"" + internal.PolynHomeDir + "\\node\\" + version + ";\" + $env:Path")
 	} else {
 		fmt.Print("export PATH=" + internal.PolynHomeDir + "/node/" + version + "/bin:$PATH")
 	}
