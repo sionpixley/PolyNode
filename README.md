@@ -29,6 +29,8 @@ PolyNode has a GUI that you can use, but it must be installed first. Release ass
     12. [Printing your current version of PolyNode](#printing-your-current-version-of-polynode)
 4. [How to configure](#how-to-configure-polynode)
     1. [Configuration fields](#configuration-fields)
+        1. [guiPort](#guiport)
+        2. [nodeMirror](#nodemirror)
 5. [How to uninstall](#how-to-uninstall-polynode)
     1. [AIX, Linux, or macOS](#aix-linux-or-macos)
     2. [Windows](#windows)
