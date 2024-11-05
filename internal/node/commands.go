@@ -14,10 +14,9 @@ import (
 	"github.com/sionpixley/PolyNode/internal/constants"
 	"github.com/sionpixley/PolyNode/internal/models"
 	"github.com/sionpixley/PolyNode/internal/utilities"
-	"github.com/sionpixley/PolyNode/pkg/polynrc"
 )
 
-func add(version string, operatingSystem models.OperatingSystem, arch models.Architecture, config polynrc.PolyNodeConfig) error {
+func add(version string, operatingSystem models.OperatingSystem, arch models.Architecture, config models.PolyNodeConfig) error {
 	if !utilities.IsValidVersionFormat(version) {
 		return errors.New(constants.INVALID_VERSION_FORMAT_ERROR)
 	}
@@ -103,7 +102,7 @@ func current() {
 	}
 }
 
-func install(version string, operatingSystem models.OperatingSystem, arch models.Architecture, config polynrc.PolyNodeConfig) error {
+func install(version string, operatingSystem models.OperatingSystem, arch models.Architecture, config models.PolyNodeConfig) error {
 	err := add(version, operatingSystem, arch, config)
 	if err != nil {
 		return err
@@ -169,7 +168,7 @@ func remove(version string) error {
 	return nil
 }
 
-func search(prefix string, operatingSystem models.OperatingSystem, arch models.Architecture, config polynrc.PolyNodeConfig) error {
+func search(prefix string, operatingSystem models.OperatingSystem, arch models.Architecture, config models.PolyNodeConfig) error {
 	prefix = utilities.ConvertToSemanticVersion(prefix)
 
 	nodeVersionFile, err := convertOsAndArchToNodeVersionFile(operatingSystem, arch)
@@ -197,7 +196,7 @@ func search(prefix string, operatingSystem models.OperatingSystem, arch models.A
 	return nil
 }
 
-func searchDefault(operatingSystem models.OperatingSystem, arch models.Architecture, config polynrc.PolyNodeConfig) error {
+func searchDefault(operatingSystem models.OperatingSystem, arch models.Architecture, config models.PolyNodeConfig) error {
 	nodeVersionFile, err := convertOsAndArchToNodeVersionFile(operatingSystem, arch)
 	if err != nil {
 		return err

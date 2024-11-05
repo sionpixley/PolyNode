@@ -1,4 +1,4 @@
-//go:build !windows && !gui
+//go:build !windows
 
 package utilities
 

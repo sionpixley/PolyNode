@@ -1,5 +1,3 @@
-//go:build !gui
-
 package utilities
 
 import (

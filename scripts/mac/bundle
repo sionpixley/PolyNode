@@ -56,65 +56,7 @@ cp SECURITY.md ./PolyNode-darwin-arm64/PolyNode
 cd ./PolyNode-darwin-arm64/PolyNode
 mkdir uninstall
 cd ../..
-cp uninstall-arm64 ./PolyNode-darwin-arm64/PolyNode/uninstall
-cd ./PolyNode-darwin-arm64/PolyNode/uninstall
-mv uninstall-arm64 uninstall
-cd ../../..
-
-# Build macOS ARM64 gui
-
-cd install
-env GOOS=darwin GOARCH=arm64 go build -tags=gui -o ../setup ./cmd/setup
-cd ..
-
-if [ $sign -eq 1 ]; then
-  codesign -v -f --timestamp --options=runtime --sign $CODESIGN_TEAM_ID setup
-  zip setup.zip setup
-  rm setup
-  xcrun notarytool submit --apple-id $CODESIGN_APPLE_ID --team-id $CODESIGN_TEAM_ID --password $CODESIGN_PASSWD setup.zip
-  unzip setup.zip
-  rm setup.zip
-fi
-
-cd web
-env GOOS=darwin GOARCH=arm64 go build -tags=prod -o ../PolyNode ./cmd/serve
-cd ..
-
-if [ $sign -eq 1 ]; then
-  codesign -v -f --timestamp --options=runtime --sign $CODESIGN_TEAM_ID PolyNode
-  zip PolyNode.zip PolyNode
-  rm PolyNode
-  xcrun notarytool submit --apple-id $CODESIGN_APPLE_ID --team-id $CODESIGN_TEAM_ID --password $CODESIGN_PASSWD PolyNode.zip
-  unzip PolyNode.zip
-  rm PolyNode.zip
-fi
-
-cd ./web/gui
-pnpm install
-pnpm run build
-
-cd ../..
-mkdir PolyNode-GUI-darwin-arm64
-mv setup ./PolyNode-GUI-darwin-arm64/setup
-
-cd PolyNode-GUI-darwin-arm64
-mkdir PolyNode
-cd ..
-mv polyn ./PolyNode-GUI-darwin-arm64/PolyNode/polyn
-mv PolyNode ./PolyNode-GUI-darwin-arm64/PolyNode/PolyNode
-
-cp README.md ./PolyNode-GUI-darwin-arm64/PolyNode
-cp LICENSE ./PolyNode-GUI-darwin-arm64/PolyNode
-cp SECURITY.md ./PolyNode-GUI-darwin-arm64/PolyNode
-
-cd ./PolyNode-GUI-darwin-arm64/PolyNode
-mkdir uninstall
-mkdir gui
-cd gui
-mkdir dist
-cd ../../..
-mv uninstall-arm64 ./PolyNode-GUI-darwin-arm64/PolyNode/uninstall/uninstall
-cp -r ./web/gui/dist/gui ./PolyNode-GUI-darwin-arm64/PolyNode/gui/dist/gui
+mv uninstall-arm64 ./PolyNode-darwin-arm64/PolyNode/uninstall/uninstall
 
 # Build macOS x64
 
@@ -170,71 +112,12 @@ cp SECURITY.md ./PolyNode-darwin-x64/PolyNode
 cd ./PolyNode-darwin-x64/PolyNode
 mkdir uninstall
 cd ../..
-cp uninstall-x64 ./PolyNode-darwin-x64/PolyNode/uninstall
-cd ./PolyNode-darwin-x64/PolyNode/uninstall
-mv uninstall-x64 uninstall
-cd ../../..
-
-# Build macOS x64 gui
-
-cd install
-env GOOS=darwin GOARCH=amd64 go build -tags=gui -o ../setup ./cmd/setup
-cd ..
-
-if [ $sign -eq 1 ]; then
-  codesign -v -f --timestamp --options=runtime --sign $CODESIGN_TEAM_ID setup
-  zip setup.zip setup
-  rm setup
-  xcrun notarytool submit --apple-id $CODESIGN_APPLE_ID --team-id $CODESIGN_TEAM_ID --password $CODESIGN_PASSWD setup.zip
-  unzip setup.zip
-  rm setup.zip
-fi
-
-cd web
-env GOOS=darwin GOARCH=amd64 go build -tags=prod -o ../PolyNode ./cmd/serve
-cd ..
-
-if [ $sign -eq 1 ]; then
-  codesign -v -f --timestamp --options=runtime --sign $CODESIGN_TEAM_ID PolyNode
-  zip PolyNode.zip PolyNode
-  rm PolyNode
-  xcrun notarytool submit --apple-id $CODESIGN_APPLE_ID --team-id $CODESIGN_TEAM_ID --password $CODESIGN_PASSWD PolyNode.zip
-  unzip PolyNode.zip
-  rm PolyNode.zip
-fi
-
-mkdir PolyNode-GUI-darwin-x64
-mv setup ./PolyNode-GUI-darwin-x64/setup
-
-cd PolyNode-GUI-darwin-x64
-mkdir PolyNode
-cd ..
-mv polyn ./PolyNode-GUI-darwin-x64/PolyNode/polyn
-mv PolyNode ./PolyNode-GUI-darwin-x64/PolyNode/PolyNode
-
-cp README.md ./PolyNode-GUI-darwin-x64/PolyNode
-cp LICENSE ./PolyNode-GUI-darwin-x64/PolyNode
-cp SECURITY.md ./PolyNode-GUI-darwin-x64/PolyNode
-
-cd ./PolyNode-GUI-darwin-x64/PolyNode
-mkdir uninstall
-mkdir gui
-cd gui
-mkdir dist
-cd ../../..
-mv uninstall-x64 ./PolyNode-GUI-darwin-x64/PolyNode/uninstall/uninstall
-cp -r ./web/gui/dist/gui ./PolyNode-GUI-darwin-x64/PolyNode/gui/dist/gui
+mv uninstall-x64 ./PolyNode-darwin-x64/PolyNode/uninstall/uninstall
 
 # Bundle
 
 tar -czf PolyNode-darwin-arm64.tar.gz PolyNode-darwin-arm64
 rm -rf PolyNode-darwin-arm64
 
-tar -czf PolyNode-GUI-darwin-arm64.tar.gz PolyNode-GUI-darwin-arm64
-rm -rf PolyNode-GUI-darwin-arm64
-
 tar -czf PolyNode-darwin-x64.tar.gz PolyNode-darwin-x64
 rm -rf PolyNode-darwin-x64
-
-tar -czf PolyNode-GUI-darwin-x64.tar.gz PolyNode-GUI-darwin-x64
-rm -rf PolyNode-GUI-darwin-x64

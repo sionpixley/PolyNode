@@ -1,7 +1,0 @@
-@use '../../../colors';
-
-.app-downloaded-remove-button {
-  background: colors.$error !important;
-  color: colors.$on-error !important;
-  border: 1px solid colors.$on-surface;
-}
