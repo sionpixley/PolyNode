@@ -6,13 +6,14 @@ PolyNode has a GUI that you can use, but it must be installed first. Release ass
 
 ## Table of contents
 
-1. [Supported operating systems and CPU architectures](#supported-operating-systems-and-cpu-architectures)
-2. [How to install](#how-to-install-polynode)
+1. [Project directory structure](#project-directory-structure)
+2. [Supported operating systems and CPU architectures](#supported-operating-systems-and-cpu-architectures)
+3. [How to install](#how-to-install-polynode)
     1. [AIX](#for-aix)
     2. [Linux](#for-linux)
     3. [macOS](#for-macos)
     4. [Windows](#for-windows)
-3. [How to use](#how-to-use)
+4. [How to use](#how-to-use)
     1. [Launching the GUI](#launching-the-gui)
     2. [Upgrading PolyNode](#upgrading-polynode-to-the-latest-release)
     3. [Searching for available Node.js versions](#searching-for-available-nodejs-versions)
@@ -27,21 +28,136 @@ PolyNode has a GUI that you can use, but it must be installed first. Release ass
     10. [Printing all downloaded versions of Node.js](#printing-all-downloaded-versions-of-nodejs)
     11. [Deleting a downloaded version of Node.js](#deleting-a-downloaded-version-of-nodejs)
     12. [Printing your current version of PolyNode](#printing-your-current-version-of-polynode)
-4. [How to configure](#how-to-configure-polynode)
+5. [How to configure](#how-to-configure-polynode)
     1. [Configuration fields](#configuration-fields)
         1. [guiPort](#guiport)
         2. [nodeMirror](#nodemirror)
-5. [How to uninstall](#how-to-uninstall-polynode)
+6. [How to uninstall](#how-to-uninstall-polynode)
     1. [AIX, Linux, or macOS](#aix-linux-or-macos)
     2. [Windows](#windows)
-6. [Building from source](#building-from-source)
+7. [Building from source](#building-from-source)
     1. [Required technologies](#required-technologies)
     2. [AIX](#building-on-aix)
     3. [Linux](#building-on-linux)
     4. [macOS](#building-on-macos)
     5. [Windows](#building-on-windows)
-7. [Contributing](#contributing)
-8. [Acknowledgements](#acknowledgements)
+8. [Contributing](#contributing)
+9. [Acknowledgements](#acknowledgements)
+
+## Project directory structure
+
+```
+PolyNode
+├── CODE_OF_CONDUCT.md
+├── LICENSE
+├── README.md
+├── SECURITY.md
+├── cmd
+│   └── polyn
+│       └── main.go
+├── go.mod
+├── go.sum
+├── install
+│   ├── cmd
+│   │   └── setup
+│   │       ├── setup.go
+│   │       └── setup_windows.go
+│   ├── go.mod
+│   ├── go.sum
+│   └── internal
+│       ├── constants
+│       │   └── constants.go
+│       └── utilities
+│           ├── copyUpgradableFiles-gui.go
+│           ├── copyUpgradableFiles-gui_windows.go
+│           ├── copyUpgradableFiles.go
+│           ├── copyUpgradableFiles_windows.go
+│           ├── removeUpgradableFiles.go
+│           └── removeUpgradableFiles_windows.go
+├── internal
+│   ├── constants
+│   │   └── constants.go
+│   ├── homeDir-prod.go
+│   ├── homeDir.go
+│   ├── models
+│   │   ├── aliases.go
+│   │   └── nodeVersion.go
+│   ├── node
+│   │   ├── commands.go
+│   │   ├── helpers.go
+│   │   └── node.go
+│   └── utilities
+│       └── utils.go
+├── pkg
+│   └── polynrc
+│       └── polyNodeConfig.go
+├── scripts
+│   ├── aix
+│   │   └── bundle
+│   ├── linux
+│   │   └── bundle
+│   ├── mac
+│   │   └── bundle
+│   └── win
+│       └── bundle.cmd
+├── uninstall
+│   ├── go.mod
+│   ├── go.sum
+│   ├── uninstall.go
+│   └── uninstall_windows.go
+└── web
+    ├── cmd
+    │   └── serve
+    │       └── serve.go
+    ├── go.mod
+    ├── go.sum
+    ├── gui
+    │   ├── angular.json
+    │   ├── package.json
+    │   ├── pnpm-lock.yaml
+    │   ├── public
+    │   │   └── favicon.ico
+    │   ├── src
+    │   │   ├── _colors.scss
+    │   │   ├── app
+    │   │   │   ├── app.component.html
+    │   │   │   ├── app.component.scss
+    │   │   │   ├── app.component.spec.ts
+    │   │   │   ├── app.component.ts
+    │   │   │   ├── app.config.ts
+    │   │   │   ├── components
+    │   │   │   │   ├── available
+    │   │   │   │   │   ├── available.component.html
+    │   │   │   │   │   ├── available.component.scss
+    │   │   │   │   │   ├── available.component.spec.ts
+    │   │   │   │   │   └── available.component.ts
+    │   │   │   │   ├── downloaded
+    │   │   │   │   │   ├── downloaded.component.html
+    │   │   │   │   │   ├── downloaded.component.scss
+    │   │   │   │   │   ├── downloaded.component.spec.ts
+    │   │   │   │   │   └── downloaded.component.ts
+    │   │   │   │   └── spinner
+    │   │   │   │       ├── spinner.component.html
+    │   │   │   │       ├── spinner.component.scss
+    │   │   │   │       └── spinner.component.ts
+    │   │   │   └── services
+    │   │   │       └── gui.service.ts
+    │   │   ├── index.html
+    │   │   ├── main.ts
+    │   │   ├── styles.scss
+    │   │   └── theme.scss
+    │   ├── tsconfig.app.json
+    │   ├── tsconfig.json
+    │   └── tsconfig.spec.json
+    └── internal
+        ├── homeDir-prod.go
+        ├── homeDir.go
+        ├── middleware
+        │   └── middleware.go
+        └── services
+            ├── domain.go
+            └── repo.go
+```
 
 ## Supported operating systems and CPU architectures
 
