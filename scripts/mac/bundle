@@ -47,7 +47,7 @@ mv setup ./PolyNode-darwin-arm64/setup
 cd PolyNode-darwin-arm64
 mkdir PolyNode
 cd ..
-cp polyn ./PolyNode-darwin-arm64/PolyNode
+mv polyn ./PolyNode-darwin-arm64/PolyNode/polyn
 
 cp README.md ./PolyNode-darwin-arm64/PolyNode
 cp LICENSE ./PolyNode-darwin-arm64/PolyNode
@@ -103,7 +103,7 @@ mv setup ./PolyNode-darwin-x64/setup
 cd PolyNode-darwin-x64
 mkdir PolyNode
 cd ..
-cp polyn ./PolyNode-darwin-x64/PolyNode
+mv polyn ./PolyNode-darwin-x64/PolyNode/polyn
 
 cp README.md ./PolyNode-darwin-x64/PolyNode
 cp LICENSE ./PolyNode-darwin-x64/PolyNode

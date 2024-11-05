@@ -17,7 +17,7 @@ mv setup ./PolyNode-linux-arm64/setup
 cd PolyNode-linux-arm64
 mkdir PolyNode
 cd ..
-cp polyn ./PolyNode-linux-arm64/PolyNode
+mv polyn ./PolyNode-linux-arm64/PolyNode/polyn
 
 cp README.md ./PolyNode-linux-arm64/PolyNode
 cp LICENSE ./PolyNode-linux-arm64/PolyNode
@@ -45,7 +45,7 @@ mv setup ./PolyNode-linux-x64
 cd PolyNode-linux-x64
 mkdir PolyNode
 cd ..
-cp polyn ./PolyNode-linux-x64/PolyNode
+mv polyn ./PolyNode-linux-x64/PolyNode/polyn
 
 cp README.md ./PolyNode-linux-x64/PolyNode
 cp LICENSE ./PolyNode-linux-x64/PolyNode
@@ -73,7 +73,7 @@ mv setup ./PolyNode-linux-ppc64le
 cd PolyNode-linux-ppc64le
 mkdir PolyNode
 cd ..
-cp polyn ./PolyNode-linux-ppc64le/PolyNode
+mv polyn ./PolyNode-linux-ppc64le/PolyNode/polyn
 
 cp README.md ./PolyNode-linux-ppc64le/PolyNode
 cp LICENSE ./PolyNode-linux-ppc64le/PolyNode
@@ -101,7 +101,7 @@ mv setup ./PolyNode-linux-s390x
 cd PolyNode-linux-s390x
 mkdir PolyNode
 cd ..
-cp polyn ./PolyNode-linux-s390x/PolyNode
+mv polyn ./PolyNode-linux-s390x/PolyNode/polyn
 
 cp README.md ./PolyNode-linux-s390x/PolyNode
 cp LICENSE ./PolyNode-linux-s390x/PolyNode

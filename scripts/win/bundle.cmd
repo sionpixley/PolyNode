@@ -20,7 +20,7 @@ move setup.exe .\PolyNode-win-arm64\setup.exe
 cd PolyNode-win-arm64
 mkdir PolyNode
 cd ..
-copy polyn.exe .\PolyNode-win-arm64\PolyNode
+move polyn.exe .\PolyNode-win-arm64\PolyNode\polyn.exe
 
 copy README.md .\PolyNode-win-arm64\PolyNode
 copy LICENSE .\PolyNode-win-arm64\PolyNode
@@ -51,7 +51,7 @@ move setup.exe .\PolyNode-win-x64\setup.exe
 cd PolyNode-win-x64
 mkdir PolyNode
 cd ..
-copy polyn.exe .\PolyNode-win-x64\PolyNode
+move polyn.exe .\PolyNode-win-x64\PolyNode\polyn.exe
 
 copy README.md .\PolyNode-win-x64\PolyNode
 copy LICENSE .\PolyNode-win-x64\PolyNode

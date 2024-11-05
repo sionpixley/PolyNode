@@ -17,7 +17,7 @@ mv setup ./PolyNode-aix-ppc64/setup
 cd PolyNode-aix-ppc64
 mkdir PolyNode
 cd ..
-cp polyn ./PolyNode-aix-ppc64/PolyNode
+mv polyn ./PolyNode-aix-ppc64/PolyNode/polyn
 
 cp README.md ./PolyNode-aix-ppc64/PolyNode
 cp LICENSE ./PolyNode-aix-ppc64/PolyNode
