@@ -1,6 +1,7 @@
 package utilities
 
 import (
+	"os"
 	"os/exec"
 )
 
@@ -26,4 +27,38 @@ func CopyUpgradableFiles(currentBinaryLocation string, home string) error {
 	}
 
 	return exec.Command("cmd", "/c", "copy", currentBinaryLocation+"\\PolyNode\\uninstall\\uninstall.exe", home+"\\PolyNode\\uninstall\\uninstall.exe").Run()
+}
+
+func RemoveUpgradableFiles(home string) error {
+	err := os.RemoveAll(home + "\\PolyNode\\polyn.exe")
+	if err != nil {
+		return err
+	}
+
+	err = os.RemoveAll(home + "\\PolyNode\\uninstall\\uninstall.exe")
+	if err != nil {
+		return err
+	}
+
+	err = os.RemoveAll(home + "\\PolyNode\\PolyNode.exe")
+	if err != nil {
+		return err
+	}
+
+	err = os.RemoveAll(home + "\\PolyNode\\LICENSE")
+	if err != nil {
+		return err
+	}
+
+	err = os.RemoveAll(home + "\\PolyNode\\README.md")
+	if err != nil {
+		return err
+	}
+
+	err = os.RemoveAll(home + "\\PolyNode\\SECURITY.md")
+	if err != nil {
+		return err
+	}
+
+	return os.RemoveAll(home + "\\PolyNode\\gui")
 }

@@ -49,48 +49,46 @@ PolyNode
 ├── README.md
 ├── SECURITY.md
 ├── cmd
-│   └── polyn
-│       └── main.go
+│   └── polyn
+│       └── main.go
 ├── go.mod
 ├── install
-│   ├── cmd
-│   │   └── setup
-│   │       ├── setup.go
-│   │       └── setup_windows.go
-│   ├── go.mod
-│   ├── go.sum
-│   └── internal
-│       ├── constants
-│       │   └── constants.go
-│       └── utilities
-│           ├── copyUpgradableFiles.go
-│           ├── copyUpgradableFiles_windows.go
-│           ├── removeUpgradableFiles.go
-│           └── removeUpgradableFiles_windows.go
+│   ├── cmd
+│   │   └── setup
+│   │       ├── setup.go
+│   │       └── setup_windows.go
+│   ├── go.mod
+│   ├── go.sum
+│   └── internal
+│       ├── constants
+│       │   └── constants.go
+│       └── utilities
+│           ├── utilities.go
+│           └── utilities_windows.go
 ├── internal
-│   ├── constants
-│   │   └── constants.go
-│   ├── homeDir-prod.go
-│   ├── homeDir.go
-│   ├── models
-│   │   ├── aliases.go
-│   │   ├── nodeVersion.go
-│   │   └── polyNodeConfig.go
-│   ├── node
-│   │   ├── commands.go
-│   │   ├── helpers.go
-│   │   └── node.go
-│   └── utilities
-│       └── utils.go
+│   ├── constants
+│   │   └── constants.go
+│   ├── homeDir-prod.go
+│   ├── homeDir.go
+│   ├── models
+│   │   ├── aliases.go
+│   │   ├── nodeVersion.go
+│   │   └── polyNodeConfig.go
+│   ├── node
+│   │   ├── commands.go
+│   │   ├── helpers.go
+│   │   └── node.go
+│   └── utilities
+│       └── utils.go
 ├── scripts
-│   ├── aix
-│   │   └── bundle
-│   ├── linux
-│   │   └── bundle
-│   ├── mac
-│   │   └── bundle
-│   └── win
-│       └── bundle.cmd
+│   ├── aix
+│   │   └── bundle
+│   ├── linux
+│   │   └── bundle
+│   ├── mac
+│   │   └── bundle
+│   └── win
+│       └── bundle.cmd
 └── uninstall
     ├── go.mod
     ├── go.sum
