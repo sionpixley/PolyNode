@@ -1,13 +1,13 @@
 //go:build !windows
 
-package utilities
+package main
 
 import (
 	"os"
 	"os/exec"
 )
 
-func CopyUpgradableFiles(currentBinaryLocation string, home string) error {
+func copyUpgradableFiles(currentBinaryLocation string, home string) error {
 	err := exec.Command("cp", currentBinaryLocation+"/PolyNode/polyn", home+"/.PolyNode/polyn").Run()
 	if err != nil {
 		return err
@@ -31,7 +31,7 @@ func CopyUpgradableFiles(currentBinaryLocation string, home string) error {
 	return exec.Command("cp", currentBinaryLocation+"/PolyNode/uninstall/uninstall", home+"/.PolyNode/uninstall/uninstall").Run()
 }
 
-func RemoveUpgradableFiles(home string) error {
+func removeUpgradableFiles(home string) error {
 	err := os.RemoveAll(home + "/.PolyNode/polyn")
 	if err != nil {
 		return err

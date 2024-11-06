@@ -55,16 +55,15 @@ PolyNode
 ├── install
 │   ├── cmd
 │   │   └── setup
+│   │       ├── helpers.go
+│   │       ├── helpers_windows.go
 │   │       ├── setup.go
 │   │       └── setup_windows.go
 │   ├── go.mod
 │   ├── go.sum
 │   └── internal
-│       ├── constants
-│       │   └── constants.go
-│       └── utilities
-│           ├── utilities.go
-│           └── utilities_windows.go
+│       └── constants
+│           └── constants.go
 ├── internal
 │   ├── constants
 │   │   └── constants.go

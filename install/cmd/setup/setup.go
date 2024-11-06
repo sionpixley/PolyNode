@@ -6,7 +6,6 @@ import (
 	"errors"
 	"fmt"
 	"install/internal/constants"
-	"install/internal/utilities"
 	"log"
 	"os"
 	"os/exec"
@@ -108,10 +107,10 @@ func oldVersionExists(home string) bool {
 }
 
 func upgrade(currentBinaryLocation string, home string) error {
-	err := utilities.RemoveUpgradableFiles(home)
+	err := removeUpgradableFiles(home)
 	if err != nil {
 		return err
 	}
 
-	return utilities.CopyUpgradableFiles(currentBinaryLocation, home)
+	return copyUpgradableFiles(currentBinaryLocation, home)
 }
