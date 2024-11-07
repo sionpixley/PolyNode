@@ -38,7 +38,7 @@ func main() {
 			err = install(currentBinaryLocation, home)
 		}
 	default:
-		err = errors.New("unsupported operating system")
+		err = errors.New("setup: unsupported operating system")
 	}
 
 	if err != nil {
@@ -92,7 +92,7 @@ func install(currentBinaryLocation string, home string) error {
 	} else if strings.HasSuffix(shell, "/ksh") {
 		return addToPath(home, ".kshrc")
 	} else {
-		return errors.New("unsupported shell")
+		return errors.New("setup: unsupported shell")
 	}
 }
 

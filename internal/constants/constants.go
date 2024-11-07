@@ -33,9 +33,9 @@ Commands:
   upgrade           : Upgrades PolyNode to the latest release.
   version           : Prints the current version of PolyNode.`
 
-	INVALID_VERSION_FORMAT_ERROR string = "invalid version format"
-	UNSUPPORTED_ARCH_ERROR       string = "unsupported CPU architecture"
-	UNSUPPORTED_OS_ERROR         string = "unsupported operating system"
+	INVALID_VERSION_FORMAT_ERROR string = "polyn: invalid version format"
+	UNSUPPORTED_ARCH_ERROR       string = "polyn: unsupported CPU architecture"
+	UNSUPPORTED_OS_ERROR         string = "polyn: unsupported operating system"
 
 	// PolyNode's version.
 	VERSION string = "v2.0.0"

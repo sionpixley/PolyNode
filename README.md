@@ -260,7 +260,7 @@ PolyNode does not require sudo/admin privileges to uninstall.
 
 ### Required technologies
 
-- Go 1.23.2
+- Go 1.23.3
 
 ### Building on AIX
 
