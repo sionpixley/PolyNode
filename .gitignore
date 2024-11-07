@@ -1,16 +1,10 @@
 # General files and folders
 
-*.exe
 *.tar.gz
 *.tar.xz
 *.zip
 .DS_Store
-node_modules/
-dist/
-.angular/
 
 # Specific files and folders
 
 /node
-/nodejs
-/web/cmd/serve/gui

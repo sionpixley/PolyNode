@@ -1,4 +1,4 @@
-package polynrc
+package models
 
 import (
 	"encoding/json"
@@ -9,17 +9,14 @@ import (
 )
 
 const (
-	DEFAULT_GUI_PORT    int    = 6011
 	DEFAULT_NODE_MIRROR string = "https://nodejs.org/dist"
 )
 
 var _DEFAULT_POLYNRC PolyNodeConfig = PolyNodeConfig{
-	GuiPort:    DEFAULT_GUI_PORT,
 	NodeMirror: DEFAULT_NODE_MIRROR,
 }
 
 type PolyNodeConfig struct {
-	GuiPort    int    `json:"guiPort"`
 	NodeMirror string `json:"nodeMirror"`
 }
 
@@ -28,13 +25,6 @@ func (config *PolyNodeConfig) UnmarshalJSON(b []byte) error {
 	err := json.Unmarshal(b, &temp)
 	if err != nil {
 		return err
-	}
-
-	port, exists := temp["guiPort"]
-	if exists {
-		config.GuiPort = int(port.(float64))
-	} else {
-		config.GuiPort = DEFAULT_GUI_PORT
 	}
 
 	mirror, exists := temp["nodeMirror"]

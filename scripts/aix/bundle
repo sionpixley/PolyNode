@@ -1,6 +1,6 @@
 #!/bin/sh
 
-# Build AIX Power ISA 64-bit
+# Build AIX Power 64-bit
 
 env GOOS=aix GOARCH=ppc64 go build -tags=prod -o polyn ./cmd/polyn
 
@@ -17,7 +17,7 @@ mv setup ./PolyNode-aix-ppc64/setup
 cd PolyNode-aix-ppc64
 mkdir PolyNode
 cd ..
-cp polyn ./PolyNode-aix-ppc64/PolyNode
+mv polyn ./PolyNode-aix-ppc64/PolyNode/polyn
 
 cp README.md ./PolyNode-aix-ppc64/PolyNode
 cp LICENSE ./PolyNode-aix-ppc64/PolyNode
@@ -26,50 +26,9 @@ cp SECURITY.md ./PolyNode-aix-ppc64/PolyNode
 cd ./PolyNode-aix-ppc64/PolyNode
 mkdir uninstall
 cd ../..
-cp uninstall-ppc64 ./PolyNode-aix-ppc64/PolyNode/uninstall
-cd ./PolyNode-aix-ppc64/PolyNode/uninstall
-mv uninstall-ppc64 uninstall
-cd ../../..
-
-# Build AIX Power ISA 64-bit gui
-
-cd install
-env GOOS=aix GOARCH=ppc64 go build -tags=gui -o ../setup ./cmd/setup
-
-cd ../web
-env GOOS=aix GOARCH=ppc64 go build -tags=prod -o ../PolyNode ./cmd/serve
-
-cd gui
-pnpm install
-pnpm run build
-
-cd ../..
-mkdir PolyNode-GUI-aix-ppc64
-mv setup ./PolyNode-GUI-aix-ppc64/setup
-
-cd PolyNode-GUI-aix-ppc64
-mkdir PolyNode
-cd ..
-mv polyn ./PolyNode-GUI-aix-ppc64/PolyNode/polyn
-mv PolyNode ./PolyNode-GUI-aix-ppc64/PolyNode/PolyNode
-
-cp README.md ./PolyNode-GUI-aix-ppc64/PolyNode
-cp LICENSE ./PolyNode-GUI-aix-ppc64/PolyNode
-cp SECURITY.md ./PolyNode-GUI-aix-ppc64/PolyNode
-
-cd ./PolyNode-GUI-aix-ppc64/PolyNode
-mkdir uninstall
-mkdir gui
-cd gui
-mkdir dist
-cd ../../..
-mv uninstall-ppc64 ./PolyNode-GUI-aix-ppc64/PolyNode/uninstall/uninstall
-cp -r ./web/gui/dist/gui ./PolyNode-GUI-aix-ppc64/PolyNode/gui/dist/GUI
+mv uninstall-ppc64 ./PolyNode-aix-ppc64/PolyNode/uninstall/uninstall
 
 # Bundle
 
 tar -czf PolyNode-aix-ppc64.tar.gz PolyNode-aix-ppc64
 rm -rf PolyNode-aix-ppc64
-
-tar -czf PolyNode-GUI-aix-ppc64.tar.gz PolyNode-GUI-aix-ppc64
-rm -rf PolyNode-GUI-aix-ppc64

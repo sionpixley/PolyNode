@@ -17,7 +17,7 @@ mv setup ./PolyNode-linux-arm64/setup
 cd PolyNode-linux-arm64
 mkdir PolyNode
 cd ..
-cp polyn ./PolyNode-linux-arm64/PolyNode
+mv polyn ./PolyNode-linux-arm64/PolyNode/polyn
 
 cp README.md ./PolyNode-linux-arm64/PolyNode
 cp LICENSE ./PolyNode-linux-arm64/PolyNode
@@ -26,45 +26,7 @@ cp SECURITY.md ./PolyNode-linux-arm64/PolyNode
 cd ./PolyNode-linux-arm64/PolyNode
 mkdir uninstall
 cd ../..
-cp uninstall-arm64 ./PolyNode-linux-arm64/PolyNode/uninstall
-cd ./PolyNode-linux-arm64/PolyNode/uninstall
-mv uninstall-arm64 uninstall
-cd ../../..
-
-# Build Linux ARM64 gui
-
-cd install
-env GOOS=linux GOARCH=arm64 go build -tags=gui -o ../setup ./cmd/setup
-
-cd ../web
-env GOOS=linux GOARCH=arm64 go build -tags=prod -o ../PolyNode ./cmd/serve
-
-cd gui
-pnpm install
-pnpm run build
-
-cd ../..
-mkdir PolyNode-GUI-linux-arm64
-mv setup ./PolyNode-GUI-linux-arm64/setup
-
-cd PolyNode-GUI-linux-arm64
-mkdir PolyNode
-cd ..
-mv polyn ./PolyNode-GUI-linux-arm64/PolyNode/polyn
-mv PolyNode ./PolyNode-GUI-linux-arm64/PolyNode/PolyNode
-
-cp README.md ./PolyNode-GUI-linux-arm64/PolyNode
-cp LICENSE ./PolyNode-GUI-linux-arm64/PolyNode
-cp SECURITY.md ./PolyNode-GUI-linux-arm64/PolyNode
-
-cd ./PolyNode-GUI-linux-arm64/PolyNode
-mkdir uninstall
-mkdir gui
-cd gui
-mkdir dist
-cd ../../..
-mv uninstall-arm64 ./PolyNode-GUI-linux-arm64/PolyNode/uninstall/uninstall
-cp -r ./web/gui/dist/gui ./PolyNode-GUI-linux-arm64/PolyNode/gui/dist/gui
+mv uninstall-arm64 ./PolyNode-linux-arm64/PolyNode/uninstall/uninstall
 
 # Build Linux x64
 
@@ -83,7 +45,7 @@ mv setup ./PolyNode-linux-x64
 cd PolyNode-linux-x64
 mkdir PolyNode
 cd ..
-cp polyn ./PolyNode-linux-x64/PolyNode
+mv polyn ./PolyNode-linux-x64/PolyNode/polyn
 
 cp README.md ./PolyNode-linux-x64/PolyNode
 cp LICENSE ./PolyNode-linux-x64/PolyNode
@@ -92,52 +54,74 @@ cp SECURITY.md ./PolyNode-linux-x64/PolyNode
 cd ./PolyNode-linux-x64/PolyNode
 mkdir uninstall
 cd ../..
-cp uninstall-x64 ./PolyNode-linux-x64/PolyNode/uninstall
-cd ./PolyNode-linux-x64/PolyNode/uninstall
-mv uninstall-x64 uninstall
-cd ../../..
+mv uninstall-x64 ./PolyNode-linux-x64/PolyNode/uninstall/uninstall
 
-# Build Linux x64 gui
+# Build Linux Power LE 64-bit
+
+env GOOS=linux GOARCH=ppc64le go build -tags=prod -o polyn ./cmd/polyn
 
 cd install
-env GOOS=linux GOARCH=amd64 go build -tags=gui -o ../setup ./cmd/setup
+env GOOS=linux GOARCH=ppc64le go build -o ../setup ./cmd/setup
 
-cd ../web
-env GOOS=linux GOARCH=amd64 go build -tags=prod -o ../PolyNode ./cmd/serve
+cd ../uninstall
+env GOOS=linux GOARCH=ppc64le go build -o ../uninstall-ppc64le
 
 cd ..
-mkdir PolyNode-GUI-linux-x64
-mv setup ./PolyNode-GUI-linux-x64/setup
+mkdir PolyNode-linux-ppc64le
+mv setup ./PolyNode-linux-ppc64le
 
-cd PolyNode-GUI-linux-x64
+cd PolyNode-linux-ppc64le
 mkdir PolyNode
 cd ..
-mv polyn ./PolyNode-GUI-linux-x64/PolyNode/polyn
-mv PolyNode ./PolyNode-GUI-linux-x64/PolyNode/PolyNode
+mv polyn ./PolyNode-linux-ppc64le/PolyNode/polyn
 
-cp README.md ./PolyNode-GUI-linux-x64/PolyNode
-cp LICENSE ./PolyNode-GUI-linux-x64/PolyNode
-cp SECURITY.md ./PolyNode-GUI-linux-x64/PolyNode
+cp README.md ./PolyNode-linux-ppc64le/PolyNode
+cp LICENSE ./PolyNode-linux-ppc64le/PolyNode
+cp SECURITY.md ./PolyNode-linux-ppc64le/PolyNode
 
-cd ./PolyNode-GUI-linux-x64/PolyNode
+cd ./PolyNode-linux-ppc64le/PolyNode
 mkdir uninstall
-mkdir gui
-cd gui
-mkdir dist
-cd ../../..
-mv uninstall-x64 ./PolyNode-GUI-linux-x64/PolyNode/uninstall/uninstall
-cp -r ./web/gui/dist/gui ./PolyNode-GUI-linux-x64/PolyNode/gui/dist/gui
+cd ../..
+mv uninstall-ppc64le ./PolyNode-linux-ppc64le/PolyNode/uninstall/uninstall
+
+# Build Linux s390x
+
+env GOOS=linux GOARCH=s390x go build -tags=prod -o polyn ./cmd/polyn
+
+cd install
+env GOOS=linux GOARCH=s390x go build -o ../setup ./cmd/setup
+
+cd ../uninstall
+env GOOS=linux GOARCH=s390x go build -o ../uninstall-s390x
+
+cd ..
+mkdir PolyNode-linux-s390x
+mv setup ./PolyNode-linux-s390x
+
+cd PolyNode-linux-s390x
+mkdir PolyNode
+cd ..
+mv polyn ./PolyNode-linux-s390x/PolyNode/polyn
+
+cp README.md ./PolyNode-linux-s390x/PolyNode
+cp LICENSE ./PolyNode-linux-s390x/PolyNode
+cp SECURITY.md ./PolyNode-linux-s390x/PolyNode
+
+cd ./PolyNode-linux-s390x/PolyNode
+mkdir uninstall
+cd ../..
+mv uninstall-s390x ./PolyNode-linux-s390x/PolyNode/uninstall/uninstall
 
 # Bundle
 
 tar -cJf PolyNode-linux-arm64.tar.xz PolyNode-linux-arm64
 rm -rf PolyNode-linux-arm64
 
-tar -cJf PolyNode-GUI-linux-arm64.tar.xz PolyNode-GUI-linux-arm64
-rm -rf PolyNode-GUI-linux-arm64
-
 tar -cJf PolyNode-linux-x64.tar.xz PolyNode-linux-x64
 rm -rf PolyNode-linux-x64
 
-tar -cJf PolyNode-GUI-linux-x64.tar.xz PolyNode-GUI-linux-x64
-rm -rf PolyNode-GUI-linux-x64
+tar -cJf PolyNode-linux-ppc64le.tar.xz PolyNode-linux-ppc64le
+rm -rf PolyNode-linux-ppc64le
+
+tar -cJf PolyNode-linux-s390x.tar.xz PolyNode-linux-s390x
+rm -rf PolyNode-linux-s390x

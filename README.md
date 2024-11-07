@@ -2,51 +2,103 @@
 
 PolyNode is a CLI tool that helps install and manage multiple versions of Node.js on the same device. It does not require sudo/admin privileges, and is installed on a per-user basis. Works on AIX, Linux, macOS, and Windows.
 
-PolyNode has a GUI that you can use, but it must be installed first. Release assets prefixed with `PolyNode-GUI` will install the GUI along with the base CLI command, `polyn`. Read about [launching the GUI](#launching-the-gui) below.
-
 ## Table of contents
 
-1. [Supported operating systems and CPU architectures](#supported-operating-systems-and-cpu-architectures)
-2. [How to install](#how-to-install-polynode)
+1. [Project directory structure](#project-directory-structure)
+2. [Supported operating systems and CPU architectures](#supported-operating-systems-and-cpu-architectures)
+3. [How to install](#how-to-install-polynode)
     1. [AIX](#for-aix)
     2. [Linux](#for-linux)
     3. [macOS](#for-macos)
     4. [Windows](#for-windows)
-3. [How to use](#how-to-use)
-    1. [Launching the GUI](#launching-the-gui)
-    2. [Upgrading PolyNode](#upgrading-polynode-to-the-latest-release)
-    3. [Searching for available Node.js versions](#searching-for-available-nodejs-versions)
-    4. [Searching for a specific Node.js version](#searching-for-a-specific-nodejs-version)
-    5. [Downloading a new version of Node.js](#downloading-a-new-version-of-nodejs)
-    6. [Setting your default Node.js version](#setting-your-default-nodejs-version)
-    7. [Temporarily setting your Node.js version](#temporarily-setting-your-nodejs-version)
+4. [How to use](#how-to-use)
+    1. [Upgrading PolyNode](#upgrading-polynode-to-the-latest-release)
+    2. [Searching for available Node.js versions](#searching-for-available-nodejs-versions)
+    3. [Searching for a specific Node.js version](#searching-for-a-specific-nodejs-version)
+    4. [Downloading a new version of Node.js](#downloading-a-new-version-of-nodejs)
+    5. [Setting your default Node.js version](#setting-your-default-nodejs-version)
+    6. [Temporarily setting your Node.js version](#temporarily-setting-your-nodejs-version)
         1. [AIX, Linux, or macOS](#temporarily-setting-your-nodejs-on-aix-linux-or-macos)
         2. [Windows](#temporarily-setting-your-nodejs-on-windows)
-    8. [Downloading and setting your default Node.js to a new version](#downloading-and-setting-your-default-nodejs-to-a-new-version)
-    9. [Printing your current version of Node.js](#printing-your-current-version-of-nodejs)
-    10. [Printing all downloaded versions of Node.js](#printing-all-downloaded-versions-of-nodejs)
-    11. [Deleting a downloaded version of Node.js](#deleting-a-downloaded-version-of-nodejs)
-    12. [Printing your current version of PolyNode](#printing-your-current-version-of-polynode)
-4. [How to configure](#how-to-configure-polynode)
+    7. [Downloading and setting your default Node.js to a new version](#downloading-and-setting-your-default-nodejs-to-a-new-version)
+    8. [Printing your current version of Node.js](#printing-your-current-version-of-nodejs)
+    9. [Printing all downloaded versions of Node.js](#printing-all-downloaded-versions-of-nodejs)
+    10. [Deleting a downloaded version of Node.js](#deleting-a-downloaded-version-of-nodejs)
+    11. [Printing your current version of PolyNode](#printing-your-current-version-of-polynode)
+5. [How to configure](#how-to-configure-polynode)
     1. [Configuration fields](#configuration-fields)
-        1. [guiPort](#guiport)
-        2. [nodeMirror](#nodemirror)
-5. [How to uninstall](#how-to-uninstall-polynode)
+        1. [nodeMirror](#nodemirror)
+6. [How to uninstall](#how-to-uninstall-polynode)
     1. [AIX, Linux, or macOS](#aix-linux-or-macos)
     2. [Windows](#windows)
-6. [Building from source](#building-from-source)
+7. [Building from source](#building-from-source)
     1. [Required technologies](#required-technologies)
     2. [AIX](#building-on-aix)
     3. [Linux](#building-on-linux)
     4. [macOS](#building-on-macos)
     5. [Windows](#building-on-windows)
-7. [Contributing](#contributing)
-8. [Acknowledgements](#acknowledgements)
+8. [Contributing](#contributing)
+9. [Acknowledgements](#acknowledgements)
+
+## Project directory structure
+
+```
+PolyNode
+├── CODE_OF_CONDUCT.md
+├── LICENSE
+├── README.md
+├── SECURITY.md
+├── cmd
+│   └── polyn
+│       └── main.go
+├── go.mod
+├── install
+│   ├── cmd
+│   │   └── setup
+│   │       ├── helpers.go
+│   │       ├── helpers_windows.go
+│   │       ├── setup.go
+│   │       └── setup_windows.go
+│   ├── go.mod
+│   ├── go.sum
+│   └── internal
+│       └── constants
+│           └── constants.go
+├── internal
+│   ├── constants
+│   │   └── constants.go
+│   ├── homeDir-prod.go
+│   ├── homeDir.go
+│   ├── models
+│   │   ├── aliases.go
+│   │   ├── nodeVersion.go
+│   │   └── polyNodeConfig.go
+│   ├── node
+│   │   ├── commands.go
+│   │   ├── helpers.go
+│   │   └── node.go
+│   └── utilities
+│       └── utils.go
+├── scripts
+│   ├── aix
+│   │   └── bundle
+│   ├── linux
+│   │   └── bundle
+│   ├── mac
+│   │   └── bundle
+│   └── win
+│       └── bundle.cmd
+└── uninstall
+    ├── go.mod
+    ├── go.sum
+    ├── uninstall.go
+    └── uninstall_windows.go
+```
 
 ## Supported operating systems and CPU architectures
 
 - AIX (Power 64-bit)
-- Linux (x64 and ARM64)
+- Linux (x64, ARM64, Power LE 64-bit, and s390x)
 - macOS (x64 and ARM64)
 - Windows 10 and newer (x64 and ARM64)
 
@@ -84,15 +136,7 @@ PolyNode only supports Bash, Zsh, or KornShell by default. During the install pr
 
 ## How to use
 
-PolyNode does not require sudo/admin privileges to use the `polyn` nor the `PolyNode` command.
-
-### Launching the GUI
-
-> The GUI does not have the ability to temporarily set your Node.js version.
-
-If you installed PolyNode's GUI, type this command into your terminal:
-
-`PolyNode`
+PolyNode does not require sudo/admin privileges to use the `polyn` command.
 
 ### Upgrading PolyNode to the latest release
 
@@ -186,20 +230,15 @@ or
 
 ## How to configure PolyNode
 
-PolyNode's configuration is handled through a JSON file named `polynrc.json` located in PolyNode's home directory (`$HOME/.PolyNode` for AIX/Linux/macOS and `%LOCALAPPDATA%\Programs\PolyNode` for Windows). Please see below for the default configuration for `polynrc.json`:
+PolyNode's configuration is handled through a JSON file named `polynrc.json` located in PolyNode's home directory (`$HOME/.PolyNode` for AIX/Linux/macOS or `%LOCALAPPDATA%\Programs\PolyNode` for Windows). Please see below for the default configuration for `polynrc.json`:
 
 ```
 {
-  "guiPort": 6011,
   "nodeMirror": "https://nodejs.org/dist"
 }
 ```
 
 ### Configuration fields
-
-#### guiPort
-
-This field is an `int` that represents the port number the GUI binds to when launched. Only change it if you have another process using that port. Default value is `6011`.
 
 #### nodeMirror
 
@@ -222,25 +261,22 @@ PolyNode does not require sudo/admin privileges to uninstall.
 ### Required technologies
 
 - Go 1.23.2
-- Node.js ^18.19.1 or ^20.11.1 or ^22.0.0 (if building GUI)
-- Angular ^18.2.0 (if building GUI)
-- pnpm 9.12.3 (if building GUI)
 
 ### Building on AIX
 
-Run the POSIX shell script `./scripts/aix/bundle`. This script will build PolyNode's source code for Power 64-bit (with and without the GUI), and bundle the artifacts as separate .tar.gz files.
+Run the POSIX shell script `./scripts/aix/bundle`. This script will build PolyNode's source code for Power 64-bit and bundle the artifacts as a .tar.gz file.
 
 ### Building on Linux
 
-Run the POSIX shell script `./scripts/linux/bundle`. This script will build PolyNode's source code for x64 and ARM64 (with and without the GUI), and bundle the artifacts as separate .tar.xz files.
+Run the POSIX shell script `./scripts/linux/bundle`. This script will build PolyNode's source code for x64 and ARM64 and bundle the artifacts as separate .tar.xz files.
 
 ### Building on macOS
 
-macOS has a POSIX shell script (`./scripts/mac/bundle`) that builds and notarizes PolyNode's source code for x64 and ARM64 (with and without the GUI), and bundles the artifacts as separate .tar.gz files. If you don't need to distribute the binaries, then you don't need the notarization step. Just edit the bundle script and set the `sign` variable to `0`.
+macOS has a POSIX shell script (`./scripts/mac/bundle`) that builds and notarizes PolyNode's source code for x64 and ARM64 and bundles the artifacts as separate .tar.gz files. If you don't need to distribute the binaries, then you don't need the notarization step. Just edit the bundle script and set the `sign` variable to `0`.
 
 ### Building on Windows
 
-Run the batchfile `.\scripts\win\bundle.cmd`. This batchfile will build PolyNode's source code for x64 and ARM64 (with and without the GUI), and bundle the artifacts as separate .zip files.
+Run the batchfile `.\scripts\win\bundle.cmd`. This batchfile will build PolyNode's source code for x64 and ARM64 and bundle the artifacts as separate .zip files.
 
 ## Contributing
 

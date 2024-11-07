@@ -38,7 +38,7 @@ Commands:
 	UNSUPPORTED_OS_ERROR         string = "unsupported operating system"
 
 	// PolyNode's version.
-	VERSION string = "v1.1.0"
+	VERSION string = "v2.0.0"
 )
 
 // NA is for Not Applicable.
@@ -55,6 +55,8 @@ const (
 	NA_ARCH models.Architecture = iota
 	ARM64
 	PPC64
+	PPC64LE
+	S390X
 	X64
 )
 

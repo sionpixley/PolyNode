@@ -16,7 +16,6 @@ import (
 	"github.com/sionpixley/PolyNode/internal/models"
 	"github.com/sionpixley/PolyNode/internal/node"
 	"github.com/sionpixley/PolyNode/internal/utilities"
-	"github.com/sionpixley/PolyNode/pkg/polynrc"
 )
 
 func main() {
@@ -36,7 +35,7 @@ func main() {
 		return
 	}
 
-	config := polynrc.LoadPolyNodeConfig()
+	config := models.LoadPolyNodeConfig()
 
 	args := []string{}
 	for _, arg := range os.Args {
@@ -65,6 +64,10 @@ func convertToArchitecture(archStr string) models.Architecture {
 		return constants.ARM64
 	case "ppc64":
 		return constants.PPC64
+	case "ppc64le":
+		return constants.PPC64LE
+	case "s390x":
+		return constants.S390X
 	default:
 		return constants.NA_ARCH
 	}
@@ -174,71 +177,38 @@ rm $HOME/.PolyNode/polyn-upgrade-temp`
 }
 
 func upgradePolyNode(operatingSystem models.OperatingSystem, arch models.Architecture) error {
-	var guiInstalled bool
-	if _, err := os.Stat(internal.PolynHomeDir + internal.PathSeparator + "gui"); os.IsNotExist(err) {
-		guiInstalled = false
-	} else if err != nil {
-		guiInstalled = false
-	} else {
-		guiInstalled = true
-	}
-
 	var filename string
 	switch operatingSystem {
 	case constants.AIX:
-		if guiInstalled {
-			filename = "PolyNode-GUI-aix-ppc64.tar.gz"
-		} else {
-			filename = "PolyNode-aix-ppc64.tar.gz"
-		}
+		filename = "PolyNode-aix-ppc64.tar.gz"
 	case constants.LINUX:
 		switch arch {
 		case constants.ARM64:
-			if guiInstalled {
-				filename = "PolyNode-GUI-linux-arm64.tar.xz"
-			} else {
-				filename = "PolyNode-linux-arm64.tar.xz"
-			}
+			filename = "PolyNode-linux-arm64.tar.xz"
+		case constants.PPC64LE:
+			filename = "PolyNode-linux-ppc64le.tar.xz"
+		case constants.S390X:
+			filename = "PolyNode-linux-s390x.tar.xz"
 		case constants.X64:
-			if guiInstalled {
-				filename = "PolyNode-GUI-linux-x64.tar.xz"
-			} else {
-				filename = "PolyNode-linux-x64.tar.xz"
-			}
+			filename = "PolyNode-linux-x64.tar.xz"
 		default:
 			return errors.New(constants.UNSUPPORTED_ARCH_ERROR)
 		}
 	case constants.MAC:
 		switch arch {
 		case constants.ARM64:
-			if guiInstalled {
-				filename = "PolyNode-GUI-darwin-arm64.tar.gz"
-			} else {
-				filename = "PolyNode-darwin-arm64.tar.gz"
-			}
+			filename = "PolyNode-darwin-arm64.tar.gz"
 		case constants.X64:
-			if guiInstalled {
-				filename = "PolyNode-GUI-darwin-x64.tar.gz"
-			} else {
-				filename = "PolyNode-darwin-x64.tar.gz"
-			}
+			filename = "PolyNode-darwin-x64.tar.gz"
 		default:
 			return errors.New(constants.UNSUPPORTED_ARCH_ERROR)
 		}
 	case constants.WINDOWS:
 		switch arch {
 		case constants.ARM64:
-			if guiInstalled {
-				filename = "PolyNode-GUI-win-arm64.zip"
-			} else {
-				filename = "PolyNode-win-arm64.zip"
-			}
+			filename = "PolyNode-win-arm64.zip"
 		case constants.X64:
-			if guiInstalled {
-				filename = "PolyNode-GUI-win-x64.zip"
-			} else {
-				filename = "PolyNode-win-x64.zip"
-			}
+			filename = "PolyNode-win-x64.zip"
 		default:
 			return errors.New(constants.UNSUPPORTED_ARCH_ERROR)
 		}
