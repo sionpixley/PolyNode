@@ -1,5 +1,7 @@
 # Security Policy
 
+For the most up-to-date security policy, please visit the [GitHub repo](https://github.com/sionpixley/PolyNode).
+
 ## Supported Versions
 
 | Version | Supported          |
