@@ -78,7 +78,7 @@ func removePathLinuxAndMac(home string) error {
 	} else if strings.HasSuffix(shell, "/ksh") {
 		return removePath(home, ".kshrc")
 	} else {
-		return errors.New("uninstall error: unsupported shell")
+		return errors.New("uninstall: unsupported shell")
 	}
 }
 
