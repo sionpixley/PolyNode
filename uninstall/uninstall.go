@@ -33,7 +33,7 @@ func main() {
 	case "linux":
 		err = uninstall()
 	default:
-		err = errors.New("unsupported operating system")
+		err = errors.New("uninstall: unsupported operating system")
 	}
 
 	if err != nil {
@@ -78,7 +78,7 @@ func removePathLinuxAndMac(home string) error {
 	} else if strings.HasSuffix(shell, "/ksh") {
 		return removePath(home, ".kshrc")
 	} else {
-		return errors.New("unsupported shell")
+		return errors.New("uninstall: unsupported shell")
 	}
 }
 
