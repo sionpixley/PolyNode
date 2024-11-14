@@ -93,7 +93,7 @@ func getAllNodeVersions(config models.PolyNodeConfig) ([]models.NodeVersion, err
 }
 
 func getArchiveName(operatingSystem models.OperatingSystem, arch models.Architecture) (string, error) {
-	archiveName := ""
+	var archiveName string
 	switch operatingSystem {
 	case constants.AIX:
 		archiveName = "aix-ppc64.tar.gz"

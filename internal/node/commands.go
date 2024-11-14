@@ -120,7 +120,7 @@ func list() {
 		return
 	}
 
-	current := ""
+	var current string
 	output, err := exec.Command("node", "-v").Output()
 	if err == nil {
 		current = strings.TrimSpace(string(output))
@@ -150,7 +150,7 @@ func remove(version string) error {
 		return err
 	}
 
-	current := ""
+	var current string
 	output, err := exec.Command("node", "-v").Output()
 	if err == nil {
 		current = strings.TrimSpace(string(output))

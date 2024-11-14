@@ -51,7 +51,7 @@ func LoadPolyNodeConfig() PolyNodeConfig {
 			return _DEFAULT_POLYNRC
 		}
 
-		config := PolyNodeConfig{}
+		var config PolyNodeConfig
 		err = config.UnmarshalJSON(content)
 		if err != nil {
 			// Default config

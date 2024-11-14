@@ -35,7 +35,7 @@ func removePath(home string) error {
 		return err
 	}
 
-	updatedPath := ""
+	var updatedPath string
 	parts := strings.Split(path, ";")
 	for _, part := range parts {
 		if part != home+"\\PolyNode" && part != home+"\\PolyNode\\nodejs" {

@@ -49,7 +49,7 @@ func removePath(home string, rcFile string) error {
 
 	scanner := bufio.NewScanner(rc)
 	scanner.Split(bufio.ScanLines)
-	content := ""
+	var content string
 	for scanner.Scan() {
 		line := scanner.Text()
 		if !strings.Contains(line, "export PATH=$PATH:"+home+"/.PolyNode:"+home+"/.PolyNode/nodejs/bin") {

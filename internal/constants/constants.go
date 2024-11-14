@@ -25,8 +25,8 @@ Commands:
   ls                : Alias for 'list' command.
   remove <version>  : Deletes a version of Node.js.
   rm <version>      : Alias for 'remove' command.
-  search            : Prints out a list of the most recent Node.js versions available for download.
-  search <prefix>   : Prints out a list of Node.js versions that have this prefix.
+  search [prefix]   : Prints out a list of Node.js versions that have this prefix.
+                      If the prefix is omitted, prints out a list of the most recent Node.js versions available for download.
   temp <version>    : Prints out the command needed to temporarily set your Node.js to a specific version.
                       If on AIX, Linux, or macOS, please use 'eval $(polyn temp <version>)' instead.
   use <version>     : Sets your default Node.js to a different version.
@@ -38,7 +38,7 @@ Commands:
 	UNSUPPORTED_OS_ERROR         string = "polyn: unsupported operating system"
 
 	// PolyNode's version.
-	VERSION string = "v2.0.1"
+	VERSION string = "v2.0.2"
 )
 
 // NA is for Not Applicable.
