@@ -2,13 +2,13 @@
 
 # Build Linux ARM64
 
-env GOOS=linux GOARCH=arm64 go build -tags=prod -o polyn ./cmd/polyn
+env GOOS=linux GOARCH=arm64 go build -ldflags="-s -w" -tags=prod -o polyn ./cmd/polyn
 
 cd install
-env GOOS=linux GOARCH=arm64 go build -o ../setup ./cmd/setup
+env GOOS=linux GOARCH=arm64 go build -ldflags="-s -w" -o ../setup ./cmd/setup
 
 cd ../uninstall
-env GOOS=linux GOARCH=arm64 go build -o ../uninstall-arm64
+env GOOS=linux GOARCH=arm64 go build -ldflags="-s -w" -o ../uninstall-arm64
 
 cd ..
 mkdir PolyNode-linux-arm64
@@ -30,13 +30,13 @@ mv uninstall-arm64 ./PolyNode-linux-arm64/PolyNode/uninstall/uninstall
 
 # Build Linux x64
 
-env GOOS=linux GOARCH=amd64 go build -tags=prod -o polyn ./cmd/polyn
+env GOOS=linux GOARCH=amd64 go build -ldflags="-s -w" -tags=prod -o polyn ./cmd/polyn
 
 cd install
-env GOOS=linux GOARCH=amd64 go build -o ../setup ./cmd/setup
+env GOOS=linux GOARCH=amd64 go build -ldflags="-s -w" -o ../setup ./cmd/setup
 
 cd ../uninstall
-env GOOS=linux GOARCH=amd64 go build -o ../uninstall-x64
+env GOOS=linux GOARCH=amd64 go build -ldflags="-s -w" -o ../uninstall-x64
 
 cd ..
 mkdir PolyNode-linux-x64
@@ -58,13 +58,13 @@ mv uninstall-x64 ./PolyNode-linux-x64/PolyNode/uninstall/uninstall
 
 # Build Linux Power LE 64-bit
 
-env GOOS=linux GOARCH=ppc64le go build -tags=prod -o polyn ./cmd/polyn
+env GOOS=linux GOARCH=ppc64le go build -ldflags="-s -w" -tags=prod -o polyn ./cmd/polyn
 
 cd install
-env GOOS=linux GOARCH=ppc64le go build -o ../setup ./cmd/setup
+env GOOS=linux GOARCH=ppc64le go build -ldflags="-s -w" -o ../setup ./cmd/setup
 
 cd ../uninstall
-env GOOS=linux GOARCH=ppc64le go build -o ../uninstall-ppc64le
+env GOOS=linux GOARCH=ppc64le go build -ldflags="-s -w" -o ../uninstall-ppc64le
 
 cd ..
 mkdir PolyNode-linux-ppc64le
@@ -86,13 +86,13 @@ mv uninstall-ppc64le ./PolyNode-linux-ppc64le/PolyNode/uninstall/uninstall
 
 # Build Linux s390x
 
-env GOOS=linux GOARCH=s390x go build -tags=prod -o polyn ./cmd/polyn
+env GOOS=linux GOARCH=s390x go build -ldflags="-s -w" -tags=prod -o polyn ./cmd/polyn
 
 cd install
-env GOOS=linux GOARCH=s390x go build -o ../setup ./cmd/setup
+env GOOS=linux GOARCH=s390x go build -ldflags="-s -w" -o ../setup ./cmd/setup
 
 cd ../uninstall
-env GOOS=linux GOARCH=s390x go build -o ../uninstall-s390x
+env GOOS=linux GOARCH=s390x go build -ldflags="-s -w" -o ../uninstall-s390x
 
 cd ..
 mkdir PolyNode-linux-s390x

@@ -5,13 +5,13 @@
 set GOOS=windows
 set GOARCH=arm64
 
-go build -tags=prod -o polyn.exe ./cmd/polyn
+go build -ldflags="-s -w" -tags=prod -o polyn.exe ./cmd/polyn
 
 cd install
-go build -o ../setup.exe ./cmd/setup
+go build -ldflags="-s -w" -o ../setup.exe ./cmd/setup
 
 cd ..\uninstall
-go build -o ../uninstall-arm64.exe
+go build -ldflags="-s -w" -o ../uninstall-arm64.exe
 
 cd ..
 mkdir PolyNode-win-arm64
@@ -36,13 +36,13 @@ move uninstall-arm64.exe .\PolyNode-win-arm64\PolyNode\uninstall\uninstall.exe
 set GOOS=windows
 set GOARCH=amd64
 
-go build -tags=prod -o polyn.exe ./cmd/polyn
+go build -ldflags="-s -w" -tags=prod -o polyn.exe ./cmd/polyn
 
 cd install
-go build -o ../setup.exe ./cmd/setup
+go build -ldflags="-s -w" -o ../setup.exe ./cmd/setup
 
 cd ..\uninstall
-go build -o ../uninstall-x64.exe
+go build -ldflags="-s -w" -o ../uninstall-x64.exe
 
 cd ..
 mkdir PolyNode-win-x64
