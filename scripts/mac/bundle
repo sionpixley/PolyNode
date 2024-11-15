@@ -4,39 +4,39 @@ sign=1
 
 # Build macOS ARM64
 
-env GOOS=darwin GOARCH=arm64 go build -tags=prod -o polyn ./cmd/polyn
+env GOOS=darwin GOARCH=arm64 go build -ldflags="-s -w" -tags=prod -o polyn ./cmd/polyn
 
 if [ $sign -eq 1 ]; then
-  codesign -v -f --timestamp --options=runtime --sign $CODESIGN_TEAM_ID polyn
+  codesign -v -f --timestamp --options=runtime --sign=$CODESIGN_TEAM_ID polyn
   zip polyn.zip polyn
   rm polyn
-  xcrun notarytool submit --apple-id $CODESIGN_APPLE_ID --team-id $CODESIGN_TEAM_ID --password $CODESIGN_PASSWD polyn.zip
+  xcrun notarytool submit --apple-id=$CODESIGN_APPLE_ID --team-id=$CODESIGN_TEAM_ID --password=$CODESIGN_PASSWD polyn.zip
   unzip polyn.zip
   rm polyn.zip
 fi
 
 cd install
-env GOOS=darwin GOARCH=arm64 go build -o ../setup ./cmd/setup
+env GOOS=darwin GOARCH=arm64 go build -ldflags="-s -w" -o ../setup ./cmd/setup
 cd ..
 
 if [ $sign -eq 1 ]; then
-  codesign -v -f --timestamp --options=runtime --sign $CODESIGN_TEAM_ID setup
+  codesign -v -f --timestamp --options=runtime --sign=$CODESIGN_TEAM_ID setup
   zip setup.zip setup
   rm setup
-  xcrun notarytool submit --apple-id $CODESIGN_APPLE_ID --team-id $CODESIGN_TEAM_ID --password $CODESIGN_PASSWD setup.zip
+  xcrun notarytool submit --apple-id=$CODESIGN_APPLE_ID --team-id=$CODESIGN_TEAM_ID --password=$CODESIGN_PASSWD setup.zip
   unzip setup.zip
   rm setup.zip
 fi
 
 cd uninstall
-env GOOS=darwin GOARCH=arm64 go build -o ../uninstall-arm64
+env GOOS=darwin GOARCH=arm64 go build -ldflags="-s -w" -o ../uninstall-arm64
 cd ..
 
 if [ $sign -eq 1 ]; then
-  codesign -v -f --timestamp --options=runtime --sign $CODESIGN_TEAM_ID uninstall-arm64
+  codesign -v -f --timestamp --options=runtime --sign=$CODESIGN_TEAM_ID uninstall-arm64
   zip uninstall.zip uninstall-arm64
   rm uninstall-arm64
-  xcrun notarytool submit --apple-id $CODESIGN_APPLE_ID --team-id $CODESIGN_TEAM_ID --password $CODESIGN_PASSWD uninstall.zip
+  xcrun notarytool submit --apple-id=$CODESIGN_APPLE_ID --team-id=$CODESIGN_TEAM_ID --password=$CODESIGN_PASSWD uninstall.zip
   unzip uninstall.zip
   rm uninstall.zip
 fi
@@ -60,39 +60,39 @@ mv uninstall-arm64 ./PolyNode-darwin-arm64/PolyNode/uninstall/uninstall
 
 # Build macOS x64
 
-env GOOS=darwin GOARCH=amd64 go build -tags=prod -o polyn ./cmd/polyn
+env GOOS=darwin GOARCH=amd64 go build -ldflags="-s -w" -tags=prod -o polyn ./cmd/polyn
 
 if [ $sign -eq 1 ]; then
-  codesign -v -f --timestamp --options=runtime --sign $CODESIGN_TEAM_ID polyn
+  codesign -v -f --timestamp --options=runtime --sign=$CODESIGN_TEAM_ID polyn
   zip polyn.zip polyn
   rm polyn
-  xcrun notarytool submit --apple-id $CODESIGN_APPLE_ID --team-id $CODESIGN_TEAM_ID --password $CODESIGN_PASSWD polyn.zip
+  xcrun notarytool submit --apple-id=$CODESIGN_APPLE_ID --team-id=$CODESIGN_TEAM_ID --password=$CODESIGN_PASSWD polyn.zip
   unzip polyn.zip
   rm polyn.zip
 fi
 
 cd install
-env GOOS=darwin GOARCH=amd64 go build -o ../setup ./cmd/setup
+env GOOS=darwin GOARCH=amd64 go build -ldflags="-s -w" -o ../setup ./cmd/setup
 cd ..
 
 if [ $sign -eq 1 ]; then
-  codesign -v -f --timestamp --options=runtime --sign $CODESIGN_TEAM_ID setup
+  codesign -v -f --timestamp --options=runtime --sign=$CODESIGN_TEAM_ID setup
   zip setup.zip setup
   rm setup
-  xcrun notarytool submit --apple-id $CODESIGN_APPLE_ID --team-id $CODESIGN_TEAM_ID --password $CODESIGN_PASSWD setup.zip
+  xcrun notarytool submit --apple-id=$CODESIGN_APPLE_ID --team-id=$CODESIGN_TEAM_ID --password=$CODESIGN_PASSWD setup.zip
   unzip setup.zip
   rm setup.zip
 fi
 
 cd uninstall
-env GOOS=darwin GOARCH=amd64 go build -o ../uninstall-x64
+env GOOS=darwin GOARCH=amd64 go build -ldflags="-s -w" -o ../uninstall-x64
 cd ..
 
 if [ $sign -eq 1 ]; then
-  codesign -v -f --timestamp --options=runtime --sign $CODESIGN_TEAM_ID uninstall-x64
+  codesign -v -f --timestamp --options=runtime --sign=$CODESIGN_TEAM_ID uninstall-x64
   zip uninstall.zip uninstall-x64
   rm uninstall-x64
-  xcrun notarytool submit --apple-id $CODESIGN_APPLE_ID --team-id $CODESIGN_TEAM_ID --password $CODESIGN_PASSWD uninstall.zip
+  xcrun notarytool submit --apple-id=$CODESIGN_APPLE_ID --team-id=$CODESIGN_TEAM_ID --password=$CODESIGN_PASSWD uninstall.zip
   unzip uninstall.zip
   rm uninstall.zip
 fi
