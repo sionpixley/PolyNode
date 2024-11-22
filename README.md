@@ -14,17 +14,16 @@ PolyNode is a CLI tool that helps install and manage multiple versions of Node.j
 4. [How to use](#how-to-use)
     1. [Upgrading PolyNode](#upgrading-polynode-to-the-latest-release)
     2. [Searching for available Node.js versions](#searching-for-available-nodejs-versions)
-    3. [Searching for a specific Node.js version](#searching-for-a-specific-nodejs-version)
-    4. [Downloading a new version of Node.js](#downloading-a-new-version-of-nodejs)
-    5. [Setting your default Node.js version](#setting-your-default-nodejs-version)
-    6. [Temporarily setting your Node.js version](#temporarily-setting-your-nodejs-version)
+    3. [Downloading a new version of Node.js](#downloading-a-new-version-of-nodejs)
+    4. [Setting your default Node.js version](#setting-your-default-nodejs-version)
+    5. [Temporarily setting your Node.js version](#temporarily-setting-your-nodejs-version)
         1. [AIX, Linux, or macOS](#temporarily-setting-your-nodejs-on-aix-linux-or-macos)
         2. [Windows](#temporarily-setting-your-nodejs-on-windows)
-    7. [Downloading and setting your default Node.js to a new version](#downloading-and-setting-your-default-nodejs-to-a-new-version)
-    8. [Printing your current version of Node.js](#printing-your-current-version-of-nodejs)
-    9. [Printing all downloaded versions of Node.js](#printing-all-downloaded-versions-of-nodejs)
-    10. [Deleting a downloaded version of Node.js](#deleting-a-downloaded-version-of-nodejs)
-    11. [Printing your current version of PolyNode](#printing-your-current-version-of-polynode)
+    6. [Downloading and setting your default Node.js to a new version](#downloading-and-setting-your-default-nodejs-to-a-new-version)
+    7. [Printing your current version of Node.js](#printing-your-current-version-of-nodejs)
+    8. [Printing all downloaded versions of Node.js](#printing-all-downloaded-versions-of-nodejs)
+    9. [Deleting a downloaded version of Node.js](#deleting-a-downloaded-version-of-nodejs)
+    10. [Printing your current version of PolyNode](#printing-your-current-version-of-polynode)
 5. [How to configure](#how-to-configure-polynode)
     1. [Configuration fields](#configuration-fields)
         1. [nodeMirror](#nodemirror)
@@ -144,15 +143,13 @@ PolyNode does not require sudo/admin privileges to use the `polyn` command.
 
 ### Searching for available Node.js versions
 
-`polyn search`
-
-### Searching for a specific Node.js version
+`polyn search [prefix]`
 
 Using a prefix will match anything with this prefix. So `polyn search 1` will match with any Node.js version that starts with "1".
 
 If you want to search for a specific major version, add a "." at the end of your prefix. `polyn search 18.` will print all Node.js v18 releases.
 
-`polyn search <prefix>`
+A default list will print if no prefix is given.
 
 ### Downloading a new version of Node.js
 
