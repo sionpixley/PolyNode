@@ -85,13 +85,14 @@ func install(currentBinaryLocation string, home string) error {
 	}
 
 	shell := os.Getenv("SHELL")
-	if strings.HasSuffix(shell, "/bash") {
+	switch {
+	case strings.HasSuffix(shell, "/bash"):
 		return addToPath(home, ".bashrc")
-	} else if strings.HasSuffix(shell, "/zsh") {
+	case strings.HasSuffix(shell, "/zsh"):
 		return addToPath(home, ".zshrc")
-	} else if strings.HasSuffix(shell, "/ksh") {
+	case strings.HasSuffix(shell, "/ksh"):
 		return addToPath(home, ".kshrc")
-	} else {
+	default:
 		return errors.New("setup: unsupported shell")
 	}
 }

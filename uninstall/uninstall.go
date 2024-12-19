@@ -71,13 +71,14 @@ func removePath(home string, rcFile string) error {
 
 func removePathLinuxAndMac(home string) error {
 	shell := os.Getenv("SHELL")
-	if strings.HasSuffix(shell, "/bash") {
+	switch {
+	case strings.HasSuffix(shell, "/bash"):
 		return removePath(home, ".bashrc")
-	} else if strings.HasSuffix(shell, "/zsh") {
+	case strings.HasSuffix(shell, "/zsh"):
 		return removePath(home, ".zshrc")
-	} else if strings.HasSuffix(shell, "/ksh") {
+	case strings.HasSuffix(shell, "/ksh"):
 		return removePath(home, ".kshrc")
-	} else {
+	default:
 		return errors.New("uninstall: unsupported shell")
 	}
 }
