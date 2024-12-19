@@ -42,16 +42,17 @@ func main() {
 		args = append(args, strings.ToLower(arg))
 	}
 
-	if args[1] == "version" {
+	switch {
+	case args[1] == "version":
 		fmt.Println(constants.VERSION)
-	} else if args[1] == "upgrade" {
+	case args[1] == "upgrade":
 		err := upgradePolyNode(operatingSystem, arch)
 		if err != nil {
 			log.Fatal(err.Error())
 		}
-	} else if utilities.IsKnownCommand(args[1]) {
+	case utilities.IsKnownCommand(args[1]):
 		node.Handle(args[1:], operatingSystem, arch, config)
-	} else {
+	default:
 		fmt.Println(constants.HELP)
 	}
 }
