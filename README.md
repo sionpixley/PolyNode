@@ -42,51 +42,52 @@ PolyNode is a CLI tool that helps install and manage multiple versions of Node.j
 ## Project directory structure
 
 ```
-PolyNode
+.
 ├── CODE_OF_CONDUCT.md
 ├── LICENSE
 ├── README.md
 ├── SECURITY.md
 ├── cmd
-│   └── polyn
-│       └── main.go
+│   └── polyn
+│       ├── helpers.go
+│       └── main.go
 ├── go.mod
 ├── install
-│   ├── cmd
-│   │   └── setup
-│   │       ├── helpers.go
-│   │       ├── helpers_windows.go
-│   │       ├── setup.go
-│   │       └── setup_windows.go
-│   ├── go.mod
-│   ├── go.sum
-│   └── internal
-│       └── constants
-│           └── constants.go
+│   ├── cmd
+│   │   └── setup
+│   │       ├── helpers.go
+│   │       ├── helpers_windows.go
+│   │       ├── setup.go
+│   │       └── setup_windows.go
+│   ├── go.mod
+│   ├── go.sum
+│   └── internal
+│       └── constants
+│           └── constants.go
 ├── internal
-│   ├── constants
-│   │   └── constants.go
-│   ├── homeDir-prod.go
-│   ├── homeDir.go
-│   ├── models
-│   │   ├── aliases.go
-│   │   ├── nodeVersion.go
-│   │   └── polyNodeConfig.go
-│   ├── node
-│   │   ├── commands.go
-│   │   ├── helpers.go
-│   │   └── node.go
-│   └── utilities
-│       └── utils.go
+│   ├── constants
+│   │   └── constants.go
+│   ├── homeDir-prod.go
+│   ├── homeDir.go
+│   ├── models
+│   │   ├── aliases.go
+│   │   ├── nodeVersion.go
+│   │   └── polyNodeConfig.go
+│   ├── node
+│   │   ├── commands.go
+│   │   ├── helpers.go
+│   │   └── node.go
+│   └── utilities
+│       └── utils.go
 ├── scripts
-│   ├── aix
-│   │   └── bundle
-│   ├── linux
-│   │   └── bundle
-│   ├── mac
-│   │   └── bundle
-│   └── win
-│       └── bundle.cmd
+│   ├── aix
+│   │   └── bundle
+│   ├── linux
+│   │   └── bundle
+│   ├── mac
+│   │   └── bundle
+│   └── win
+│       └── bundle.cmd
 └── uninstall
     ├── go.mod
     ├── go.sum
