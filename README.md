@@ -1,6 +1,6 @@
 # PolyNode
 
-PolyNode is a CLI tool that helps install and manage multiple versions of Node.js on the same device. It does not require sudo/admin privileges, and is installed on a per-user basis. Works on AIX, Linux, macOS, and Windows.
+PolyNode is a CLI tool that helps install and manage multiple versions of Node.js on the same device. It does not require sudo/admin privileges and is installed on a per-user basis. Works on AIX, Linux, macOS, and Windows.
 
 ## Table of contents
 
@@ -266,7 +266,7 @@ Run the POSIX shell script `./scripts/aix/bundle`. This script will build PolyNo
 
 ### Building on Linux
 
-Run the POSIX shell script `./scripts/linux/bundle`. This script will build PolyNode's source code for x64 and ARM64 and bundle the artifacts as separate .tar.xz files.
+Run the POSIX shell script `./scripts/linux/bundle`. This script will build PolyNode's source code for x64, ARM64, Power LE 64-bit, and s390x and bundle the artifacts as separate .tar.xz files.
 
 ### Building on macOS
 
