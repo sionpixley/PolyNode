@@ -263,7 +263,7 @@ PolyNode does not require sudo/admin privileges to uninstall.
 
 There are two main ways to build PolyNode from source: Using the [bundle scripts](#bundle-scripts) or [building the Dockerfile](#dockerfile). 
 
-If you're just testing PolyNode locally, I would recommend building a Docker image from the Dockerfile. The bundle scripts are helpful if you want to install/distribute your own build.
+If you're just testing your build locally, I would recommend building a Docker image from the Dockerfile. The bundle scripts are helpful if you want to install/distribute your own build.
 
 ### Bundle scripts
 

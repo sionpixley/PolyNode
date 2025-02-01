@@ -3,6 +3,9 @@ FROM ubuntu:latest AS base
 RUN apt-get update && apt-get upgrade -y
 RUN apt-get install -y ca-certificates xz-utils
 
+ENV SHELL=/bin/bash
+ENV PATH=$PATH:/root/.PolyNode:/root/.PolyNode/nodejs/bin
+
 FROM golang:1.23.5-alpine AS build
 
 WORKDIR /PolyNode
@@ -24,8 +27,6 @@ RUN cd PolyNode && mkdir uninstall && cd ..
 COPY --from=build /PolyNode/uninstall-linux ./PolyNode/uninstall/uninstall-linux
 RUN cd ./PolyNode/uninstall && mv uninstall-linux uninstall && cd ..
 
-ENV SHELL=/bin/bash
-ENV PATH=$PATH:/root/.PolyNode:/root/.PolyNode/nodejs/bin
 RUN ./setup
 
 CMD [ "sleep", "infinity" ]
