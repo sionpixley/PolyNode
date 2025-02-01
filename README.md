@@ -31,11 +31,15 @@ PolyNode is a CLI tool that helps install and manage multiple versions of Node.j
     1. [AIX, Linux, or macOS](#aix-linux-or-macos)
     2. [Windows](#windows)
 7. [Building from source](#building-from-source)
-    1. [Required technologies](#required-technologies)
-    2. [AIX](#building-on-aix)
-    3. [Linux](#building-on-linux)
-    4. [macOS](#building-on-macos)
-    5. [Windows](#building-on-windows)
+    1. [Bundle scripts](#bundle-scripts)
+        1. [Required technologies](#required-technologies)
+        2. [AIX](#building-on-aix)
+        3. [Linux](#building-on-linux)
+        4. [macOS](#building-on-macos)
+        5. [Windows](#building-on-windows)
+    2. [Dockerfile](#dockerfile)
+        1. [Required technologies](#required-technologies-1)
+        2. [Building an image](#building-an-image)
 8. [Contributing](#contributing)
 9. [Acknowledgements](#acknowledgements)
 
@@ -44,6 +48,7 @@ PolyNode is a CLI tool that helps install and manage multiple versions of Node.j
 ```
 .
 ├── CODE_OF_CONDUCT.md
+├── Dockerfile
 ├── LICENSE
 ├── README.md
 ├── SECURITY.md
@@ -256,25 +261,41 @@ PolyNode does not require sudo/admin privileges to uninstall.
 
 ## Building from source
 
-### Required technologies
+There are two main ways to build PolyNode from source: Using the [bundle scripts](#bundle-scripts) or [building the Dockerfile](#dockerfile). 
+
+If you're just testing PolyNode locally, I would recommend building a Docker image from the Dockerfile. The bundle scripts are helpful if you want to install/distribute your own build.
+
+### Bundle scripts
+
+#### Required technologies
 
 - Go 1.23.5
 
-### Building on AIX
+#### Building on AIX
 
 Run the POSIX shell script `./scripts/aix/bundle`. This script will build PolyNode's source code for Power 64-bit and bundle the artifacts as a .tar.gz file.
 
-### Building on Linux
+#### Building on Linux
 
 Run the POSIX shell script `./scripts/linux/bundle`. This script will build PolyNode's source code for x64, ARM64, Power LE 64-bit, and s390x and bundle the artifacts as separate .tar.xz files.
 
-### Building on macOS
+#### Building on macOS
 
 macOS has a POSIX shell script (`./scripts/mac/bundle`) that builds and notarizes PolyNode's source code for x64 and ARM64 and bundles the artifacts as separate .tar.gz files. If you don't need to distribute the binaries, then you don't need the notarization step. Just edit the bundle script and set the `sign` variable to `0`.
 
-### Building on Windows
+#### Building on Windows
 
 Run the batchfile `.\scripts\win\bundle.cmd`. This batchfile will build PolyNode's source code for x64 and ARM64 and bundle the artifacts as separate .zip files.
+
+### Dockerfile
+
+#### Required technologies
+
+- Docker
+
+#### Building an image
+
+`docker build -t polyn .`
 
 ## Contributing
 
