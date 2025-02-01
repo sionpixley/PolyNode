@@ -4,7 +4,7 @@ PolyNode is a CLI tool that helps install and manage multiple versions of Node.j
 
 ## Table of contents
 
-1. [Project directory structure](#project-directory-structure)
+1. [Project structure](#project-structure)
 2. [Supported operating systems and CPU architectures](#supported-operating-systems-and-cpu-architectures)
 3. [How to install](#how-to-install-polynode)
     1. [AIX](#for-aix)
@@ -43,7 +43,7 @@ PolyNode is a CLI tool that helps install and manage multiple versions of Node.j
 8. [Contributing](#contributing)
 9. [Acknowledgements](#acknowledgements)
 
-## Project directory structure
+## Project structure
 
 ```
 .
