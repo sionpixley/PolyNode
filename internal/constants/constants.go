@@ -3,8 +3,7 @@ package constants
 import "github.com/sionpixley/PolyNode/internal/models"
 
 const (
-	HELP string = `
-Description:
+	HELP string = `Description:
 
     PolyNode is a CLI tool that helps install and manage multiple versions of Node.js on the same device.
 
@@ -53,7 +52,7 @@ Keywords:
 	UNSUPPORTED_OS_ERROR         string = "polyn: unsupported operating system"
 
 	// PolyNode's version.
-	VERSION string = "v2.0.8"
+	VERSION string = "v2.0.9"
 )
 
 // NA is for Not Applicable.

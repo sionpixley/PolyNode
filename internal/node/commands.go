@@ -181,7 +181,7 @@ func search(prefix string, operatingSystem models.OperatingSystem, arch models.A
 		return err
 	}
 
-	output := "\nNode.js\n--------------------------"
+	output := "Node.js\n--------------------------"
 	for _, nodeVersion := range allVersions {
 		if slices.Contains(nodeVersion.Files, nodeVersionFile) {
 			if nodeVersion.Lts && strings.HasPrefix(nodeVersion.Version, prefix) {
@@ -231,7 +231,7 @@ func searchDefault(operatingSystem models.OperatingSystem, arch models.Architect
 		}
 	}
 
-	output := "\nLatest stable versions of Node.js\n---------------------------------"
+	output := "Latest stable versions of Node.js\n---------------------------------"
 	for _, stableVersion := range stableVersions {
 		output += "\n" + stableVersion
 	}
