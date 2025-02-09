@@ -19,7 +19,7 @@ rmdir %LOCALAPPDATA%\Programs\PolyNode /s /q
 func main() {
 	err := uninstall()
 	if err != nil {
-		log.Fatal(err.Error())
+		log.Fatalln(err.Error())
 	}
 }
 

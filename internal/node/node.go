@@ -64,6 +64,6 @@ func Handle(args []string, operatingSystem models.OperatingSystem, arch models.A
 	}
 
 	if err != nil {
-		log.Fatal(err.Error())
+		log.Fatalln(err.Error())
 	}
 }
