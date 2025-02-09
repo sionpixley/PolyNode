@@ -1,7 +1,7 @@
 **/.DS_Store
-**/.github
 **/.vscode
 .editorconfig
+.github
 .gitignore
 CODE_OF_CONDUCT.md
 LICENSE

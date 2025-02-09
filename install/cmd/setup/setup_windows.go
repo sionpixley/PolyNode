@@ -26,7 +26,7 @@ func main() {
 	}
 
 	if err != nil {
-		log.Fatal(err.Error())
+		log.Fatalln(err.Error())
 	} else {
 		fmt.Println("The polyn command has been installed.")
 		fmt.Println("Please close all open terminals.")

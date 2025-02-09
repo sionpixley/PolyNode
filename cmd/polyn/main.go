@@ -18,9 +18,9 @@ func main() {
 	arch := convertToArchitecture(runtime.GOARCH)
 
 	if !isSupportedOperatingSystem(operatingSystem) {
-		log.Fatal(constants.UNSUPPORTED_OS_ERROR)
+		log.Fatalln(constants.UNSUPPORTED_OS_ERROR)
 	} else if !isSupportedArchitecture(arch) {
-		log.Fatal(constants.UNSUPPORTED_ARCH_ERROR)
+		log.Fatalln(constants.UNSUPPORTED_ARCH_ERROR)
 	}
 
 	if len(os.Args) == 1 {
@@ -41,7 +41,7 @@ func main() {
 	case args[1] == "upgrade":
 		err := upgradePolyNode(operatingSystem, arch)
 		if err != nil {
-			log.Fatal(err.Error())
+			log.Fatalln(err.Error())
 		}
 	case utilities.IsKnownCommand(args[1]):
 		node.Handle(args[1:], operatingSystem, arch, config)
