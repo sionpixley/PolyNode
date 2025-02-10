@@ -5,7 +5,6 @@ package main
 import (
 	"bufio"
 	"errors"
-	"fmt"
 	"log"
 	"os"
 	"os/exec"
@@ -21,8 +20,6 @@ rm $HOME/polyn-uninstall-temp`
 
 func main() {
 	operatingSystem := runtime.GOOS
-
-	defer fmt.Println()
 
 	var err error
 	switch operatingSystem {

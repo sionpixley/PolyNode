@@ -14,8 +14,6 @@ import (
 func main() {
 	operatingSystem := runtime.GOOS
 
-	defer fmt.Println()
-
 	currentBinaryLocation := "."
 	if strings.Contains(os.Args[0], "/") {
 		parts := strings.Split(os.Args[0], "/")
