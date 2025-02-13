@@ -6,7 +6,7 @@ RUN apt-get install -y ca-certificates xz-utils
 ENV SHELL=/bin/bash
 ENV PATH=$PATH:/root/.PolyNode:/root/.PolyNode/nodejs/bin
 
-FROM golang:1.23.6-alpine AS build
+FROM golang:1.24.0-alpine AS build
 
 WORKDIR /PolyNode
 
