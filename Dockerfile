@@ -1,7 +1,6 @@
-FROM ubuntu:latest AS base
+FROM fedora:latest AS base
 
-RUN apt-get update && apt-get upgrade -y
-RUN apt-get install -y ca-certificates xz-utils
+RUN dnf upgrade --refresh -y
 
 ENV SHELL=/bin/bash
 ENV PATH=$PATH:/root/.PolyNode:/root/.PolyNode/nodejs/bin
