@@ -1,13 +1,11 @@
 package node
 
 import (
-	"errors"
 	"fmt"
 	"io"
 	"net/http"
 	"os"
 	"os/exec"
-	"slices"
 	"strings"
 
 	"github.com/sionpixley/PolyNode/internal"
@@ -17,11 +15,16 @@ import (
 )
 
 func add(version string, operatingSystem models.OperatingSystem, arch models.Architecture, config models.PolyNodeConfig) error {
-	if !utilities.IsValidVersionFormat(version) {
-		return errors.New(constants.INVALID_VERSION_FORMAT_ERROR)
-	}
+	var err error
 
-	version = utilities.ConvertToSemanticVersion(version)
+	if utilities.IsValidVersionFormat(version) {
+		version = utilities.ConvertToSemanticVersion(version)
+	} else {
+		version, err = convertPrefixToVersionDown(version, operatingSystem, arch, config)
+		if err != nil {
+			return err
+		}
+	}
 
 	archiveName, err := getArchiveName(operatingSystem, arch)
 	if err != nil {
@@ -115,8 +118,7 @@ func list() {
 	dir, err := os.ReadDir(internal.PolynHomeDir + internal.PathSeparator + "node")
 	if err != nil {
 		// This means that the node folder doesn't exist. So, there are no Node.js versions downloaded.
-		fmt.Println("There are no Node.js versions downloaded.")
-		fmt.Println("To download a Node.js version, use the 'add' or 'install' command.")
+		fmt.Println(constants.NO_DOWNLOADED_NODEJS_MESSAGE)
 		return
 	}
 
@@ -136,16 +138,25 @@ func list() {
 }
 
 func remove(version string) error {
-	if !utilities.IsValidVersionFormat(version) {
-		return errors.New(constants.INVALID_VERSION_FORMAT_ERROR)
-	}
+	var err error
 
-	version = utilities.ConvertToSemanticVersion(version)
+	if utilities.IsValidVersionFormat(version) {
+		version = utilities.ConvertToSemanticVersion(version)
+	} else {
+		version, err = convertPrefixToVersionLocalAsc(version)
+		// We don't want to do anything when the error's value is 'skip'.
+		// If the error is 'skip' then that means the node directory doesn't exist.
+		// We don't treat it like an error in that case.
+		// This is unique to this function (asc and desc versions) throughout the system (so far at least). 2025-02-25
+		if err != nil && err.Error() != "skip" {
+			return err
+		}
+	}
 
 	fmt.Print("Removing Node.js " + version + "...")
 
 	folderName := internal.PolynHomeDir + internal.PathSeparator + "node" + internal.PathSeparator + version
-	err := os.RemoveAll(folderName)
+	err = os.RemoveAll(folderName)
 	if err != nil {
 		return err
 	}
@@ -171,24 +182,17 @@ func remove(version string) error {
 func search(prefix string, operatingSystem models.OperatingSystem, arch models.Architecture, config models.PolyNodeConfig) error {
 	prefix = utilities.ConvertToSemanticVersion(prefix)
 
-	nodeVersionFile, err := convertOsAndArchToNodeVersionFile(operatingSystem, arch)
-	if err != nil {
-		return err
-	}
-
-	allVersions, err := getAllNodeVersions(config)
+	allVersions, err := getAllNodeVersionsForOsAndArch(operatingSystem, arch, config)
 	if err != nil {
 		return err
 	}
 
 	output := "Node.js\n--------------------------"
 	for _, nodeVersion := range allVersions {
-		if slices.Contains(nodeVersion.Files, nodeVersionFile) {
-			if nodeVersion.Lts && strings.HasPrefix(nodeVersion.Version, prefix) {
-				output += "\n" + nodeVersion.Version + " (lts)"
-			} else if strings.HasPrefix(nodeVersion.Version, prefix) {
-				output += "\n" + nodeVersion.Version
-			}
+		if nodeVersion.Lts && strings.HasPrefix(nodeVersion.Version, prefix) {
+			output += "\n" + nodeVersion.Version + " (lts)"
+		} else if strings.HasPrefix(nodeVersion.Version, prefix) {
+			output += "\n" + nodeVersion.Version
 		}
 	}
 
@@ -197,12 +201,7 @@ func search(prefix string, operatingSystem models.OperatingSystem, arch models.A
 }
 
 func searchDefault(operatingSystem models.OperatingSystem, arch models.Architecture, config models.PolyNodeConfig) error {
-	nodeVersionFile, err := convertOsAndArchToNodeVersionFile(operatingSystem, arch)
-	if err != nil {
-		return err
-	}
-
-	nodeVersions, err := getAllNodeVersions(config)
+	nodeVersions, err := getAllNodeVersionsForOsAndArch(operatingSystem, arch, config)
 	if err != nil {
 		return err
 	}
@@ -214,19 +213,17 @@ func searchDefault(operatingSystem models.OperatingSystem, arch models.Architect
 	ltsVersions := []string{}
 
 	for _, nodeVersion := range nodeVersions {
-		if slices.Contains(nodeVersion.Files, nodeVersionFile) {
-			if len(stableVersions) == maxEntries && len(ltsVersions) == maxEntries {
-				break
-			}
+		if len(stableVersions) == maxEntries && len(ltsVersions) == maxEntries {
+			break
+		}
 
-			majorVersion := strings.Split(nodeVersion.Version, ".")[0]
-			if _, exists := majorVersions[majorVersion]; !exists {
-				majorVersions[majorVersion] = struct{}{}
-				if nodeVersion.Lts && len(ltsVersions) < maxEntries {
-					ltsVersions = append(ltsVersions, nodeVersion.Version)
-				} else if !nodeVersion.Lts && len(stableVersions) < maxEntries {
-					stableVersions = append(stableVersions, nodeVersion.Version)
-				}
+		majorVersion := strings.Split(nodeVersion.Version, ".")[0]
+		if _, exists := majorVersions[majorVersion]; !exists {
+			majorVersions[majorVersion] = struct{}{}
+			if nodeVersion.Lts && len(ltsVersions) < maxEntries {
+				ltsVersions = append(ltsVersions, nodeVersion.Version)
+			} else if !nodeVersion.Lts && len(stableVersions) < maxEntries {
+				stableVersions = append(stableVersions, nodeVersion.Version)
 			}
 		}
 	}
@@ -246,11 +243,20 @@ func searchDefault(operatingSystem models.OperatingSystem, arch models.Architect
 }
 
 func temp(version string, operatingSystem models.OperatingSystem) error {
-	if !utilities.IsValidVersionFormat(version) {
-		return errors.New(constants.INVALID_VERSION_FORMAT_ERROR)
-	}
+	var err error
 
-	version = utilities.ConvertToSemanticVersion(version)
+	if utilities.IsValidVersionFormat(version) {
+		version = utilities.ConvertToSemanticVersion(version)
+	} else {
+		version, err = convertPrefixToVersionLocalDesc(version)
+		// We don't want to do anything when the error's value is 'skip'.
+		// If the error is 'skip' then that means the node directory doesn't exist.
+		// We don't treat it like an error in that case.
+		// This is unique to this function (asc and desc versions) throughout the system (so far at least). 2025-02-25
+		if err != nil && err.Error() != "skip" {
+			return err
+		}
+	}
 
 	if operatingSystem == constants.WINDOWS {
 		fmt.Println("\nIf using Command Prompt, run this command:")
@@ -265,15 +271,24 @@ func temp(version string, operatingSystem models.OperatingSystem) error {
 }
 
 func use(version string, operatingSystem models.OperatingSystem) error {
-	if !utilities.IsValidVersionFormat(version) {
-		return errors.New(constants.INVALID_VERSION_FORMAT_ERROR)
-	}
+	var err error
 
-	version = utilities.ConvertToSemanticVersion(version)
+	if utilities.IsValidVersionFormat(version) {
+		version = utilities.ConvertToSemanticVersion(version)
+	} else {
+		version, err = convertPrefixToVersionLocalDesc(version)
+		// We don't want to do anything when the error's value is 'skip'.
+		// If the error is 'skip' then that means the node directory doesn't exist.
+		// We don't treat it like an error in that case.
+		// This is unique to this function (asc and desc versions) throughout the system (so far at least). 2025-02-25
+		if err != nil && err.Error() != "skip" {
+			return err
+		}
+	}
 
 	fmt.Print("Switching to Node.js " + version + "...")
 
-	err := os.RemoveAll(internal.PolynHomeDir + internal.PathSeparator + "nodejs")
+	err = os.RemoveAll(internal.PolynHomeDir + internal.PathSeparator + "nodejs")
 	if err != nil {
 		return err
 	}
