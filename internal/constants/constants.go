@@ -13,27 +13,27 @@ Usage:
 
 Commands:
 
-    add <version or keyword>
+    add <version or keyword or prefix>
         Downloads a specific version of Node.js, but does not switch it to your current version.
     current
         Prints your current version of Node.js.
-    install <version or keyword>
+    install <version or keyword or prefix>
         Downloads a specific version of Node.js and sets it as your default version.
     list
         Prints the list of downloaded Node.js versions.
     ls
         Alias for 'list' command.
-    remove <version>
+    remove <version or prefix>
         Deletes a version of Node.js.
-    rm <version>
+    rm <version or prefix>
         Alias for 'remove' command.
     search [prefix]
         Prints out a list of Node.js versions that have this prefix.
         If the prefix is omitted, prints out a list of the most recent Node.js versions available for download.
-    temp <version>
+    temp <version or prefix>
         Prints out the command needed to temporarily set your Node.js to a specific version.
         If on AIX, Linux, or macOS, please use 'eval $(polyn temp <version>)' instead.
-    use <version>
+    use <version or prefix>
         Sets your default Node.js to a different version.
     upgrade
         Upgrades PolyNode to the latest release.

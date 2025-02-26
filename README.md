@@ -15,14 +15,19 @@ PolyNode is a CLI tool that helps install and manage multiple versions of Node.j
     1. [Upgrading PolyNode](#upgrading-polynode-to-the-latest-release)
     2. [Searching for available Node.js versions](#searching-for-available-nodejs-versions)
     3. [Downloading a new version of Node.js](#downloading-a-new-version-of-nodejs)
+        1. [Examples](#examples)
     4. [Setting your default Node.js version](#setting-your-default-nodejs-version)
+        1. [Examples](#examples-1)
     5. [Temporarily setting your Node.js version](#temporarily-setting-your-nodejs-version)
         1. [AIX, Linux, or macOS](#temporarily-setting-your-nodejs-on-aix-linux-or-macos)
+            1. [Examples](#examples-2)
         2. [Windows](#temporarily-setting-your-nodejs-on-windows)
     6. [Downloading and setting your default Node.js to a new version](#downloading-and-setting-your-default-nodejs-to-a-new-version)
+        1. [Examples](#examples-3)
     7. [Printing your current version of Node.js](#printing-your-current-version-of-nodejs)
     8. [Printing all downloaded versions of Node.js](#printing-all-downloaded-versions-of-nodejs)
     9. [Deleting a downloaded version of Node.js](#deleting-a-downloaded-version-of-nodejs)
+        1. [Examples](#examples-4)
     10. [Printing your current version of PolyNode](#printing-your-current-version-of-polynode)
 5. [How to configure](#how-to-configure-polynode)
     1. [Configuration fields](#configuration-fields)
@@ -161,21 +166,39 @@ A default list will print if no prefix is given.
 
 This command will only download a new version of Node.js. It will not set the new version as your currently-used version. See [Setting your default Node.js version](#setting-your-default-nodejs-version) or [Temporarily setting your Node.js version](#temporarily-setting-your-nodejs-version) on how to use the Node.js you download.
 
-`polyn add <version>`
+`polyn add <version or keyword or prefix>`
 
-You can also use the `lts` keyword to download the latest LTS release without providing a specific version. 
+#### Examples
 
-`polyn add lts`
+```
+// Downloading a specific version of Node.js.
+polyn add 23.7.0
 
-The `latest` keyword will download the latest release of Node.js.
+// Downloading the latest Node.js release that matches a prefix.
+polyn add 23
 
-`polyn add latest`
+// Downloading the latest Node.js LTS release.
+polyn add lts
+
+// Downloading the latest Node.js release.
+polyn add latest
+```
 
 ### Setting your default Node.js version
 
 This command will set your Node.js version across all shell processes. All new shell processes will automatically use this Node.js version, unless overriden by [temporarily setting the Node.js version](#temporarily-setting-your-nodejs-version).
 
-`polyn use <version>`
+`polyn use <version or prefix>`
+
+#### Examples
+
+```
+// Setting your default to a specific Node.js version.
+polyn use 23.7.0
+
+// Setting your default to the latest Node.js release that matches a prefix.
+polyn use 23
+```
 
 ### Temporarily setting your Node.js version
 
@@ -185,7 +208,17 @@ This command is useful if you need to run two separate projects at the same time
 
 #### Temporarily setting your Node.js on AIX, Linux, or macOS
 
-`eval $(polyn temp <version>)`
+`eval $(polyn temp <version or prefix>)`
+
+##### Examples
+
+```
+// Temporarily setting your Node.js to a specific version.
+eval $(polyn temp 23.7.0)
+
+// Temporarily setting your Node.js to the latest release that matches a prefix.
+eval $(polyn temp 23)
+```
 
 #### Temporarily setting your Node.js on Windows
 
@@ -197,15 +230,23 @@ This command downloads a specific version of Node.js and immediately sets it as 
 
 The `install` command is equivalent to the `add` command followed by the `use` command.
 
-`polyn install <version>`
+`polyn install <version or keyword or prefix>`
 
-You can also use the `lts` keyword to download the latest LTS release without providing a specific version. 
+#### Examples
 
-`polyn install lts`
+```
+// Downloading and setting your default to a specific version of Node.js.
+polyn install 23.7.0
 
-The `latest` keyword will download the latest release of Node.js.
+// Downloading and setting your default to the latest Node.js release that matches a prefix.
+polyn install 23
 
-`polyn install latest`
+// Downloading and setting your default to the latest Node.js LTS release.
+polyn install lts
+
+// Downloading and setting your default to the latest Node.js release.
+polyn install latest
+```
 
 ### Printing your current version of Node.js
 
@@ -221,11 +262,21 @@ or
 
 ### Deleting a downloaded version of Node.js
 
-`polyn rm <version>`
+`polyn rm <version or prefix>`
 
 or 
 
-`polyn remove <version>`
+`polyn remove <version or prefix>`
+
+#### Examples
+
+```
+// Deleting a specific version of Node.js.
+polyn rm 23.7.0
+
+// Deleting the oldest Node.js release that matches a prefix.
+polyn rm 23
+```
 
 ### Printing your current version of PolyNode
 
