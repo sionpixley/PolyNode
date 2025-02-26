@@ -47,12 +47,13 @@ Keywords:
     lts
         Represents the most recent LTS release of Node.js.`
 
-	INVALID_VERSION_FORMAT_ERROR string = "polyn: invalid version format"
-	UNSUPPORTED_ARCH_ERROR       string = "polyn: unsupported CPU architecture"
-	UNSUPPORTED_OS_ERROR         string = "polyn: unsupported operating system"
+	NO_DOWNLOADED_NODEJS_MESSAGE string = "There are no Node.js versions downloaded.\nTo download a Node.js version, use the 'add' or 'install' command."
+
+	UNSUPPORTED_ARCH_ERROR string = "polyn error: unsupported CPU architecture"
+	UNSUPPORTED_OS_ERROR   string = "polyn error: unsupported operating system"
 
 	// PolyNode's version.
-	VERSION string = "v2.0.10"
+	VERSION string = "v2.1.0"
 )
 
 // NA is for Not Applicable.

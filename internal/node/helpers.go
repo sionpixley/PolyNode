@@ -3,10 +3,16 @@ package node
 import (
 	"encoding/json"
 	"errors"
+	"fmt"
 	"net/http"
+	"os"
+	"sort"
+	"strings"
 
+	"github.com/sionpixley/PolyNode/internal"
 	"github.com/sionpixley/PolyNode/internal/constants"
 	"github.com/sionpixley/PolyNode/internal/models"
+	"github.com/sionpixley/PolyNode/internal/utilities"
 )
 
 func convertKeywordToVersion(keyword string, config models.PolyNodeConfig) string {
@@ -70,6 +76,63 @@ func convertOsAndArchToNodeVersionFile(operatingSystem models.OperatingSystem, a
 	default:
 		return "", errors.New(constants.UNSUPPORTED_OS_ERROR)
 	}
+}
+
+func convertPrefixToVersionDown(prefix string, config models.PolyNodeConfig) (string, error) {
+	nodeVersions, err := getAllNodeVersions(config)
+	if err != nil {
+		return "", err
+	}
+
+	prefix = utilities.ConvertToSemanticVersion(prefix)
+	for _, nodeVersion := range nodeVersions {
+		if strings.HasPrefix(nodeVersion.Version, prefix) {
+			return nodeVersion.Version, nil
+		}
+	}
+
+	return "", errors.New("polyn error: no Node.js versions match the prefix '" + prefix + "'")
+}
+
+func convertPrefixToVersionLocalAsc(prefix string) (string, error) {
+	dir, err := os.ReadDir(internal.PolynHomeDir + internal.PathSeparator + "node")
+	if err != nil {
+		// The node directory doesn't exist.
+		// Passing a 'skip' to explicitly not treat this code path as an error.
+		fmt.Println(constants.NO_DOWNLOADED_NODEJS_MESSAGE)
+		return "", errors.New("skip")
+	}
+
+	prefix = utilities.ConvertToSemanticVersion(prefix)
+	for _, item := range dir {
+		if strings.HasPrefix(item.Name(), prefix) && item.IsDir() {
+			return item.Name(), nil
+		}
+	}
+
+	return "", errors.New("polyn error: no downloaded Node.js versions match the prefix '" + prefix + "'")
+}
+
+func convertPrefixToVersionLocalDesc(prefix string) (string, error) {
+	dir, err := os.ReadDir(internal.PolynHomeDir + internal.PathSeparator + "node")
+	if err != nil {
+		// The node directory doesn't exist.
+		// Passing a 'skip' to explicitly not treat this code path as an error.
+		fmt.Println(constants.NO_DOWNLOADED_NODEJS_MESSAGE)
+		return "", errors.New("skip")
+	}
+
+	prefix = utilities.ConvertToSemanticVersion(prefix)
+	sort.Slice(dir, func(i int, j int) bool {
+		return dir[i].Name() > dir[j].Name()
+	})
+	for _, item := range dir {
+		if strings.HasPrefix(item.Name(), prefix) && item.IsDir() {
+			return item.Name(), nil
+		}
+	}
+
+	return "", errors.New("polyn error: no downloaded Node.js versions match the prefix '" + prefix + "'")
 }
 
 func getAllNodeVersions(config models.PolyNodeConfig) ([]models.NodeVersion, error) {
