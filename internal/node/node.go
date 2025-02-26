@@ -21,7 +21,7 @@ func Handle(args []string, operatingSystem models.OperatingSystem, arch models.A
 	switch command {
 	case constants.ADD:
 		if len(args) > 1 {
-			err = add(convertKeywordToVersion(args[1], config), operatingSystem, arch, config)
+			err = add(convertKeywordToVersion(args[1], operatingSystem, arch, config), operatingSystem, arch, config)
 		} else {
 			fmt.Println(constants.HELP)
 		}
@@ -29,7 +29,7 @@ func Handle(args []string, operatingSystem models.OperatingSystem, arch models.A
 		current()
 	case constants.INSTALL:
 		if len(args) > 1 {
-			err = install(convertKeywordToVersion(args[1], config), operatingSystem, arch, config)
+			err = install(convertKeywordToVersion(args[1], operatingSystem, arch, config), operatingSystem, arch, config)
 		} else {
 			fmt.Println(constants.HELP)
 		}

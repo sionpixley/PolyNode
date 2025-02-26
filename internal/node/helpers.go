@@ -6,6 +6,7 @@ import (
 	"fmt"
 	"net/http"
 	"os"
+	"slices"
 	"sort"
 	"strings"
 
@@ -15,9 +16,9 @@ import (
 	"github.com/sionpixley/PolyNode/internal/utilities"
 )
 
-func convertKeywordToVersion(keyword string, config models.PolyNodeConfig) string {
+func convertKeywordToVersion(keyword string, operatingSystem models.OperatingSystem, arch models.Architecture, config models.PolyNodeConfig) string {
 	if keyword == "lts" {
-		nodeVersions, err := getAllNodeVersions(config)
+		nodeVersions, err := getAllNodeVersionsForOsAndArch(operatingSystem, arch, config)
 		if err != nil {
 			return keyword
 		}
@@ -29,7 +30,7 @@ func convertKeywordToVersion(keyword string, config models.PolyNodeConfig) strin
 		}
 		return keyword
 	} else if keyword == "latest" {
-		nodeVersions, err := getAllNodeVersions(config)
+		nodeVersions, err := getAllNodeVersionsForOsAndArch(operatingSystem, arch, config)
 		if err != nil {
 			return keyword
 		}
@@ -78,8 +79,8 @@ func convertOsAndArchToNodeVersionFile(operatingSystem models.OperatingSystem, a
 	}
 }
 
-func convertPrefixToVersionDown(prefix string, config models.PolyNodeConfig) (string, error) {
-	nodeVersions, err := getAllNodeVersions(config)
+func convertPrefixToVersionDown(prefix string, operatingSystem models.OperatingSystem, arch models.Architecture, config models.PolyNodeConfig) (string, error) {
+	nodeVersions, err := getAllNodeVersionsForOsAndArch(operatingSystem, arch, config)
 	if err != nil {
 		return "", err
 	}
@@ -135,7 +136,7 @@ func convertPrefixToVersionLocalDesc(prefix string) (string, error) {
 	return "", errors.New("polyn error: no downloaded Node.js versions match the prefix '" + prefix + "'")
 }
 
-func getAllNodeVersions(config models.PolyNodeConfig) ([]models.NodeVersion, error) {
+func getAllNodeVersionsForOsAndArch(operatingSystem models.OperatingSystem, arch models.Architecture, config models.PolyNodeConfig) ([]models.NodeVersion, error) {
 	url := config.NodeMirror + "/index.json"
 
 	client := new(http.Client)
@@ -152,7 +153,23 @@ func getAllNodeVersions(config models.PolyNodeConfig) ([]models.NodeVersion, err
 
 	var nodeVersions []models.NodeVersion
 	err = json.NewDecoder(response.Body).Decode(&nodeVersions)
-	return nodeVersions, err
+	if err != nil {
+		return nil, err
+	}
+
+	nodeVersionFile, err := convertOsAndArchToNodeVersionFile(operatingSystem, arch)
+	if err != nil {
+		return nil, err
+	}
+
+	compatibleNodeVersions := []models.NodeVersion{}
+	for _, nodeVersion := range nodeVersions {
+		if slices.Contains(nodeVersion.Files, nodeVersionFile) {
+			compatibleNodeVersions = append(compatibleNodeVersions, nodeVersion)
+		}
+	}
+
+	return compatibleNodeVersions, err
 }
 
 func getArchiveName(operatingSystem models.OperatingSystem, arch models.Architecture) (string, error) {

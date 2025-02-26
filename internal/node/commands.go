@@ -6,7 +6,6 @@ import (
 	"net/http"
 	"os"
 	"os/exec"
-	"slices"
 	"strings"
 
 	"github.com/sionpixley/PolyNode/internal"
@@ -21,7 +20,7 @@ func add(version string, operatingSystem models.OperatingSystem, arch models.Arc
 	if utilities.IsValidVersionFormat(version) {
 		version = utilities.ConvertToSemanticVersion(version)
 	} else {
-		version, err = convertPrefixToVersionDown(version, config)
+		version, err = convertPrefixToVersionDown(version, operatingSystem, arch, config)
 		if err != nil {
 			return err
 		}
@@ -183,24 +182,17 @@ func remove(version string) error {
 func search(prefix string, operatingSystem models.OperatingSystem, arch models.Architecture, config models.PolyNodeConfig) error {
 	prefix = utilities.ConvertToSemanticVersion(prefix)
 
-	nodeVersionFile, err := convertOsAndArchToNodeVersionFile(operatingSystem, arch)
-	if err != nil {
-		return err
-	}
-
-	allVersions, err := getAllNodeVersions(config)
+	allVersions, err := getAllNodeVersionsForOsAndArch(operatingSystem, arch, config)
 	if err != nil {
 		return err
 	}
 
 	output := "Node.js\n--------------------------"
 	for _, nodeVersion := range allVersions {
-		if slices.Contains(nodeVersion.Files, nodeVersionFile) {
-			if nodeVersion.Lts && strings.HasPrefix(nodeVersion.Version, prefix) {
-				output += "\n" + nodeVersion.Version + " (lts)"
-			} else if strings.HasPrefix(nodeVersion.Version, prefix) {
-				output += "\n" + nodeVersion.Version
-			}
+		if nodeVersion.Lts && strings.HasPrefix(nodeVersion.Version, prefix) {
+			output += "\n" + nodeVersion.Version + " (lts)"
+		} else if strings.HasPrefix(nodeVersion.Version, prefix) {
+			output += "\n" + nodeVersion.Version
 		}
 	}
 
@@ -209,12 +201,7 @@ func search(prefix string, operatingSystem models.OperatingSystem, arch models.A
 }
 
 func searchDefault(operatingSystem models.OperatingSystem, arch models.Architecture, config models.PolyNodeConfig) error {
-	nodeVersionFile, err := convertOsAndArchToNodeVersionFile(operatingSystem, arch)
-	if err != nil {
-		return err
-	}
-
-	nodeVersions, err := getAllNodeVersions(config)
+	nodeVersions, err := getAllNodeVersionsForOsAndArch(operatingSystem, arch, config)
 	if err != nil {
 		return err
 	}
@@ -226,19 +213,17 @@ func searchDefault(operatingSystem models.OperatingSystem, arch models.Architect
 	ltsVersions := []string{}
 
 	for _, nodeVersion := range nodeVersions {
-		if slices.Contains(nodeVersion.Files, nodeVersionFile) {
-			if len(stableVersions) == maxEntries && len(ltsVersions) == maxEntries {
-				break
-			}
+		if len(stableVersions) == maxEntries && len(ltsVersions) == maxEntries {
+			break
+		}
 
-			majorVersion := strings.Split(nodeVersion.Version, ".")[0]
-			if _, exists := majorVersions[majorVersion]; !exists {
-				majorVersions[majorVersion] = struct{}{}
-				if nodeVersion.Lts && len(ltsVersions) < maxEntries {
-					ltsVersions = append(ltsVersions, nodeVersion.Version)
-				} else if !nodeVersion.Lts && len(stableVersions) < maxEntries {
-					stableVersions = append(stableVersions, nodeVersion.Version)
-				}
+		majorVersion := strings.Split(nodeVersion.Version, ".")[0]
+		if _, exists := majorVersions[majorVersion]; !exists {
+			majorVersions[majorVersion] = struct{}{}
+			if nodeVersion.Lts && len(ltsVersions) < maxEntries {
+				ltsVersions = append(ltsVersions, nodeVersion.Version)
+			} else if !nodeVersion.Lts && len(stableVersions) < maxEntries {
+				stableVersions = append(stableVersions, nodeVersion.Version)
 			}
 		}
 	}
