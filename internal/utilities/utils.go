@@ -90,6 +90,9 @@ func IsValidVersionFormat(version string) bool {
 		'9': {},
 	}
 	for _, part := range parts {
+		if part == "" {
+			return false
+		}
 		for _, char := range part {
 			if _, exists := validChars[char]; !exists {
 				return false

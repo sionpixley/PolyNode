@@ -259,7 +259,7 @@ func temp(version string, operatingSystem models.OperatingSystem) error {
 	}
 
 	if operatingSystem == constants.WINDOWS {
-		fmt.Println("\nIf using Command Prompt, run this command:")
+		fmt.Println("If using Command Prompt, run this command:")
 		fmt.Println("\n  set PATH=" + internal.PolynHomeDir + "\\node\\" + version + ";%PATH%")
 		fmt.Println("\nIf using PowerShell, run this command:")
 		fmt.Println("\n  $env:Path = \"" + internal.PolynHomeDir + "\\node\\" + version + ";\" + $env:Path")
