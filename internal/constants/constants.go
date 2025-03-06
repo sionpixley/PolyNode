@@ -53,7 +53,7 @@ Keywords:
 	UNSUPPORTED_OS_ERROR   string = "polyn error: unsupported operating system"
 
 	// PolyNode's version.
-	VERSION string = "v2.1.1"
+	VERSION string = "v2.1.2"
 )
 
 // NA is for Not Applicable.
