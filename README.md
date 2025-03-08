@@ -4,14 +4,15 @@ PolyNode is a Node.js version manager that does not require sudo/admin privilege
 
 ## Table of contents
 
-1. [Project structure](#project-structure)
-2. [Supported operating systems and CPU architectures](#supported-operating-systems-and-cpu-architectures)
-3. [How to install](#how-to-install-polynode)
+1. [Quick demo](#quick-demo)
+2. [Project structure](#project-structure)
+3. [Supported operating systems and CPU architectures](#supported-operating-systems-and-cpu-architectures)
+4. [How to install](#how-to-install-polynode)
     1. [AIX](#for-aix)
     2. [Linux](#for-linux)
     3. [macOS](#for-macos)
     4. [Windows](#for-windows)
-4. [How to use](#how-to-use)
+5. [How to use](#how-to-use)
     1. [Upgrading PolyNode](#upgrading-polynode-to-the-latest-release)
     2. [Searching for available Node.js versions](#searching-for-available-nodejs-versions)
     3. [Downloading a new version of Node.js](#downloading-a-new-version-of-nodejs)
@@ -29,13 +30,13 @@ PolyNode is a Node.js version manager that does not require sudo/admin privilege
     9. [Deleting a downloaded version of Node.js](#deleting-a-downloaded-version-of-nodejs)
         1. [Examples](#examples-4)
     10. [Printing your current version of PolyNode](#printing-your-current-version-of-polynode)
-5. [How to configure](#how-to-configure-polynode)
+6. [How to configure](#how-to-configure-polynode)
     1. [Configuration fields](#configuration-fields)
         1. [nodeMirror](#nodemirror)
-6. [How to uninstall](#how-to-uninstall-polynode)
+7. [How to uninstall](#how-to-uninstall-polynode)
     1. [AIX, Linux, or macOS](#aix-linux-or-macos)
     2. [Windows](#windows)
-7. [Building from source](#building-from-source)
+8. [Building from source](#building-from-source)
     1. [Bundle scripts](#bundle-scripts)
         1. [Required technologies](#required-technologies)
         2. [AIX](#building-on-aix)
@@ -45,8 +46,12 @@ PolyNode is a Node.js version manager that does not require sudo/admin privilege
     2. [Dockerfile](#dockerfile)
         1. [Required technologies](#required-technologies-1)
         2. [Building an image](#building-an-image)
-8. [Contributing](#contributing)
-9. [Acknowledgements](#acknowledgements)
+9. [Contributing](#contributing)
+10. [Acknowledgements](#acknowledgements)
+
+## Quick demo
+
+![polyn demo](https://github.com/sionpixley/PolyNode/blob/main/demo.gif)
 
 ## Project structure
 
