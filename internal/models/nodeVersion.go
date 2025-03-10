@@ -26,7 +26,7 @@ func (nodeVersion *NodeVersion) UnmarshalJSON(b []byte) error {
 		nodeVersion.Files = append(nodeVersion.Files, rawFile.(string))
 	}
 
-	if reflect.TypeOf(temp["lts"]).String() == "bool" {
+	if reflect.TypeOf(temp["lts"]).Kind() == reflect.Bool {
 		nodeVersion.Lts = false
 	} else {
 		nodeVersion.Lts = true
