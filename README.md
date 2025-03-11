@@ -66,6 +66,7 @@ PolyNode is a Node.js version manager that does not require sudo/admin privilege
 │   └── polyn
 │       ├── helpers.go
 │       └── main.go
+├── demo.gif
 ├── go.mod
 ├── install
 │   ├── cmd
