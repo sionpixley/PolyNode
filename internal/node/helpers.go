@@ -8,6 +8,7 @@ import (
 	"os"
 	"slices"
 	"sort"
+	"strconv"
 	"strings"
 
 	"github.com/sionpixley/PolyNode/internal"
@@ -105,6 +106,30 @@ func convertPrefixToVersionLocalAsc(prefix string) (string, error) {
 	}
 
 	prefix = utilities.ConvertToSemanticVersion(prefix)
+	sort.Slice(dir, func(i int, j int) bool {
+		left := dir[i].Name()
+		right := dir[j].Name()
+
+		leftParts := strings.Split(left[1:], ".")
+		rightParts := strings.Split(right[1:], ".")
+
+		for k := range len(leftParts) {
+			leftVal, err := strconv.Atoi(leftParts[k])
+			if err != nil {
+				panic(err)
+			}
+			rightVal, err := strconv.Atoi(rightParts[k])
+			if err != nil {
+				panic(err)
+			}
+
+			if leftVal != rightVal {
+				return leftVal < rightVal
+			}
+		}
+
+		return true
+	})
 	for _, item := range dir {
 		if strings.HasPrefix(item.Name(), prefix) && item.IsDir() {
 			return item.Name(), nil
@@ -125,7 +150,28 @@ func convertPrefixToVersionLocalDesc(prefix string) (string, error) {
 
 	prefix = utilities.ConvertToSemanticVersion(prefix)
 	sort.Slice(dir, func(i int, j int) bool {
-		return dir[i].Name() > dir[j].Name()
+		left := dir[i].Name()
+		right := dir[j].Name()
+
+		leftParts := strings.Split(left[1:], ".")
+		rightParts := strings.Split(right[1:], ".")
+
+		for k := range len(leftParts) {
+			leftVal, err := strconv.Atoi(leftParts[k])
+			if err != nil {
+				panic(err)
+			}
+			rightVal, err := strconv.Atoi(rightParts[k])
+			if err != nil {
+				panic(err)
+			}
+
+			if leftVal != rightVal {
+				return leftVal > rightVal
+			}
+		}
+
+		return true
 	})
 	for _, item := range dir {
 		if strings.HasPrefix(item.Name(), prefix) && item.IsDir() {
