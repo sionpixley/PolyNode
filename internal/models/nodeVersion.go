@@ -2,7 +2,6 @@ package models
 
 import (
 	"encoding/json"
-	"reflect"
 )
 
 type NodeVersion struct {
@@ -26,9 +25,10 @@ func (nodeVersion *NodeVersion) UnmarshalJSON(b []byte) error {
 		nodeVersion.Files = append(nodeVersion.Files, rawFile.(string))
 	}
 
-	if reflect.TypeOf(temp["lts"]).Kind() == reflect.Bool {
+	switch temp["lts"].(type) {
+	case bool:
 		nodeVersion.Lts = false
-	} else {
+	default:
 		nodeVersion.Lts = true
 	}
 
