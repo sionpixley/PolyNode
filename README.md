@@ -176,17 +176,17 @@ This command will only download a new version of Node.js. It will not set the ne
 
 #### Examples
 
-```
-// Downloading a specific version of Node.js.
+```sh
+# Downloading a specific version of Node.js.
 polyn add 23.7.0
 
-// Downloading the latest Node.js release that matches a prefix.
+# Downloading the latest Node.js release that matches a prefix.
 polyn add 23
 
-// Downloading the latest Node.js LTS release.
+# Downloading the latest Node.js LTS release.
 polyn add lts
 
-// Downloading the latest Node.js release.
+# Downloading the latest Node.js release.
 polyn add latest
 ```
 
@@ -198,11 +198,11 @@ This command will set your Node.js version across all shell processes. All new s
 
 #### Examples
 
-```
-// Setting your default to a specific Node.js version.
+```sh
+# Setting your default to a specific Node.js version.
 polyn use 23.7.0
 
-// Setting your default to the latest Node.js release that matches a prefix.
+# Setting your default to the latest Node.js release that matches a prefix.
 polyn use 23
 ```
 
@@ -218,11 +218,11 @@ This command is useful if you need to run two separate projects at the same time
 
 ##### Examples
 
-```
-// Temporarily setting your Node.js to a specific version.
+```sh
+# Temporarily setting your Node.js to a specific version.
 eval $(polyn temp 23.7.0)
 
-// Temporarily setting your Node.js to the latest release that matches a prefix.
+# Temporarily setting your Node.js to the latest release that matches a prefix.
 eval $(polyn temp 23)
 ```
 
@@ -240,17 +240,17 @@ The `install` command is equivalent to the `add` command followed by the `use` c
 
 #### Examples
 
-```
-// Downloading and setting your default to a specific version of Node.js.
+```sh
+# Downloading and setting your default to a specific version of Node.js.
 polyn install 23.7.0
 
-// Downloading and setting your default to the latest Node.js release that matches a prefix.
+# Downloading and setting your default to the latest Node.js release that matches a prefix.
 polyn install 23
 
-// Downloading and setting your default to the latest Node.js LTS release.
+# Downloading and setting your default to the latest Node.js LTS release.
 polyn install lts
 
-// Downloading and setting your default to the latest Node.js release.
+# Downloading and setting your default to the latest Node.js release.
 polyn install latest
 ```
 
@@ -276,11 +276,11 @@ or
 
 #### Examples
 
-```
-// Deleting a specific version of Node.js.
+```sh
+# Deleting a specific version of Node.js.
 polyn rm 23.7.0
 
-// Deleting the oldest Node.js release that matches a prefix.
+# Deleting the oldest Node.js release that matches a prefix.
 polyn rm 23
 ```
 
@@ -292,7 +292,7 @@ polyn rm 23
 
 PolyNode's configuration is handled through a JSON file named `polynrc.json` located in PolyNode's home directory (`$HOME/.PolyNode` for AIX/Linux/macOS or `%LOCALAPPDATA%\Programs\PolyNode` for Windows). Please see below for the default configuration for `polynrc.json`:
 
-```
+```json
 {
   "nodeMirror": "https://nodejs.org/dist"
 }
