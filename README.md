@@ -57,24 +57,31 @@ PolyNode is a Node.js version manager that does not require sudo/admin privilege
 
 ```
 .
-├── CODE_OF_CONDUCT.md
-├── Dockerfile
-├── LICENSE
-├── README.md
-├── SECURITY.md
+├── .dockerignore
+├── .editorconfig
+├── .github
+│   └── ISSUE_TEMPLATE
+│       ├── bug_report.md
+│       ├── custom.md
+│       └── feature_request.md
+├── .gitignore
+├── .vscode
+│   └── launch.json
 ├── cmd
 │   └── polyn
 │       ├── helpers.go
 │       └── main.go
+├── CODE_OF_CONDUCT.md
 ├── demo.gif
+├── Dockerfile
 ├── go.mod
 ├── install
 │   ├── cmd
 │   │   └── setup
-│   │       ├── helpers.go
 │   │       ├── helpers_windows.go
-│   │       ├── setup.go
-│   │       └── setup_windows.go
+│   │       ├── helpers.go
+│   │       ├── setup_windows.go
+│   │       └── setup.go
 │   ├── go.mod
 │   ├── go.sum
 │   └── internal
@@ -95,6 +102,8 @@ PolyNode is a Node.js version manager that does not require sudo/admin privilege
 │   │   └── node.go
 │   └── utilities
 │       └── utils.go
+├── LICENSE
+├── README.md
 ├── scripts
 │   ├── aix
 │   │   └── bundle
@@ -104,11 +113,12 @@ PolyNode is a Node.js version manager that does not require sudo/admin privilege
 │   │   └── bundle
 │   └── win
 │       └── bundle.cmd
+├── SECURITY.md
 └── uninstall
     ├── go.mod
     ├── go.sum
-    ├── uninstall.go
-    └── uninstall_windows.go
+    ├── uninstall_windows.go
+    └── uninstall.go
 ```
 
 ## Supported operating systems and CPU architectures
@@ -326,7 +336,7 @@ If you're just testing your build locally, I would recommend building a Docker i
 
 #### Required technologies
 
-- Go 1.24.2
+- Go 1.24.3
 
 #### Building on AIX
 
