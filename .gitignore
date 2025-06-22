@@ -1,10 +1,7 @@
-# General files and folders
-
+.DS_Store
+.idea/
+/node
 *.tar.gz
 *.tar.xz
+.vscode/
 *.zip
-.DS_Store
-
-# Specific files and folders
-
-/node
