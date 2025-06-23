@@ -18,34 +18,38 @@ func main() {
 	arch := convertToArchitecture(runtime.GOARCH)
 
 	if !isSupportedOperatingSystem(operatingSystem) {
-		log.Fatalln(constants.UNSUPPORTED_OS_ERROR)
+		log.Fatalln(constants.UnsupportedOSError)
 	} else if !isSupportedArchitecture(arch) {
-		log.Fatalln(constants.UNSUPPORTED_ARCH_ERROR)
+		log.Fatalln(constants.UnsupportedArchError)
 	}
 
 	if len(os.Args) == 1 {
-		fmt.Println(constants.HELP)
+		fmt.Println(constants.Help)
 		return
 	}
 
 	config := models.LoadPolyNodeConfig()
 
-	args := []string{}
-	for _, arg := range os.Args {
-		args = append(args, strings.ToLower(arg))
+	args := make([]string, len(os.Args)-1)
+	for i, arg := range os.Args {
+		if i == 0 {
+			continue
+		} else {
+			args[i-1] = strings.ToLower(arg)
+		}
 	}
 
 	switch {
-	case args[1] == "version":
-		fmt.Println(constants.VERSION)
-	case args[1] == "upgrade":
+	case args[0] == "version":
+		fmt.Println(constants.Version)
+	case args[0] == "upgrade":
 		err := upgradePolyNode(operatingSystem, arch)
 		if err != nil {
 			log.Fatalln(err.Error())
 		}
-	case utilities.IsKnownCommand(args[1]):
-		node.Handle(args[1:], operatingSystem, arch, config)
+	case utilities.IsKnownCommand(args[0]):
+		node.Handle(args, operatingSystem, arch, config)
 	default:
-		fmt.Println(constants.HELP)
+		fmt.Println(constants.Help)
 	}
 }

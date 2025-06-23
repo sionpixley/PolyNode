@@ -3,7 +3,7 @@ package constants
 import "github.com/sionpixley/PolyNode/internal/models"
 
 const (
-	HELP string = `Description:
+	Help string = `Description:
 
     PolyNode is a CLI tool that helps install and manage multiple versions of Node.js on the same device.
 
@@ -47,31 +47,31 @@ Keywords:
     lts
         Represents the most recent LTS release of Node.js.`
 
-	NO_DOWNLOADED_NODEJS_MESSAGE string = "There are no Node.js versions downloaded.\nTo download a Node.js version, use the 'add' or 'install' command."
+	NoDownloadedNodejsMessage string = "There are no Node.js versions downloaded.\nTo download a Node.js version, use the 'add' or 'install' command."
 
-	UNSUPPORTED_ARCH_ERROR string = "polyn error: unsupported CPU architecture"
-	UNSUPPORTED_OS_ERROR   string = "polyn error: unsupported operating system"
+	UnsupportedArchError string = "polyn error: unsupported CPU architecture"
+	UnsupportedOSError   string = "polyn error: unsupported operating system"
 
 	// PolyNode's version.
-	VERSION string = "v2.1.8"
+	Version string = "v2.1.8"
 )
 
 // NA is for Not Applicable.
 const (
-	NA_OS models.OperatingSystem = iota
-	AIX
-	LINUX
-	MAC
-	WINDOWS
+	NAOS models.OperatingSystem = iota
+	Aix
+	Linux
+	Mac
+	Windows
 )
 
 // NA is for Not Applicable.
 const (
-	NA_ARCH models.Architecture = iota
-	ARM64
-	PPC64
-	PPC64LE
-	S390X
+	NAArch models.Architecture = iota
+	Arm64
+	Ppc64
+	Ppc64Le
+	S390x
 	X64
 )
 
@@ -79,13 +79,13 @@ const (
 // We don't include the version command in this. The version command is handled in main().
 // We don't include the upgrade command in this either. It also gets handled in main().
 const (
-	NA_COMM models.Command = iota
-	ADD
-	CURRENT
-	INSTALL
-	LIST
-	REMOVE
-	SEARCH
-	TEMP
-	USE
+	NAComm models.Command = iota
+	Add
+	Current
+	Install
+	List
+	Remove
+	Search
+	Temp
+	Use
 )

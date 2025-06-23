@@ -19,30 +19,30 @@ func convertToArchitecture(archStr string) models.Architecture {
 	case "amd64":
 		return constants.X64
 	case "arm64":
-		return constants.ARM64
+		return constants.Arm64
 	case "ppc64":
-		return constants.PPC64
+		return constants.Ppc64
 	case "ppc64le":
-		return constants.PPC64LE
+		return constants.Ppc64Le
 	case "s390x":
-		return constants.S390X
+		return constants.S390x
 	default:
-		return constants.NA_ARCH
+		return constants.NAArch
 	}
 }
 
 func convertToOperatingSystem(osStr string) models.OperatingSystem {
 	switch osStr {
 	case "aix":
-		return constants.AIX
+		return constants.Aix
 	case "darwin":
-		return constants.MAC
+		return constants.Mac
 	case "linux":
-		return constants.LINUX
+		return constants.Linux
 	case "windows":
-		return constants.WINDOWS
+		return constants.Windows
 	default:
-		return constants.NA_OS
+		return constants.NAOS
 	}
 }
 
@@ -85,16 +85,16 @@ func downloadPolyNodeFile(filename string) error {
 }
 
 func isSupportedArchitecture(arch models.Architecture) bool {
-	return arch != constants.NA_ARCH
+	return arch != constants.NAArch
 }
 
 func isSupportedOperatingSystem(operatingSystem models.OperatingSystem) bool {
-	return operatingSystem != constants.NA_OS
+	return operatingSystem != constants.NAOS
 }
 
 func runUpgradeScript(operatingSystem models.OperatingSystem) error {
 	fmt.Print("Running upgrade script...")
-	if operatingSystem == constants.WINDOWS {
+	if operatingSystem == constants.Windows {
 		batchfilePath := internal.PolynHomeDir + internal.PathSeparator + "polyn-upgrade-temp.cmd"
 		upgradeBatchfile := `@echo off
 
@@ -137,41 +137,41 @@ rm $HOME/.PolyNode/polyn-upgrade-temp`
 func upgradePolyNode(operatingSystem models.OperatingSystem, arch models.Architecture) error {
 	var filename string
 	switch operatingSystem {
-	case constants.AIX:
+	case constants.Aix:
 		filename = "PolyNode-aix-ppc64.tar.gz"
-	case constants.LINUX:
+	case constants.Linux:
 		switch arch {
-		case constants.ARM64:
+		case constants.Arm64:
 			filename = "PolyNode-linux-arm64.tar.xz"
-		case constants.PPC64LE:
+		case constants.Ppc64Le:
 			filename = "PolyNode-linux-ppc64le.tar.xz"
-		case constants.S390X:
+		case constants.S390x:
 			filename = "PolyNode-linux-s390x.tar.xz"
 		case constants.X64:
 			filename = "PolyNode-linux-x64.tar.xz"
 		default:
-			return errors.New(constants.UNSUPPORTED_ARCH_ERROR)
+			return errors.New(constants.UnsupportedArchError)
 		}
-	case constants.MAC:
+	case constants.Mac:
 		switch arch {
-		case constants.ARM64:
+		case constants.Arm64:
 			filename = "PolyNode-darwin-arm64.tar.gz"
 		case constants.X64:
 			filename = "PolyNode-darwin-x64.tar.gz"
 		default:
-			return errors.New(constants.UNSUPPORTED_ARCH_ERROR)
+			return errors.New(constants.UnsupportedArchError)
 		}
-	case constants.WINDOWS:
+	case constants.Windows:
 		switch arch {
-		case constants.ARM64:
+		case constants.Arm64:
 			filename = "PolyNode-win-arm64.zip"
 		case constants.X64:
 			filename = "PolyNode-win-x64.zip"
 		default:
-			return errors.New(constants.UNSUPPORTED_ARCH_ERROR)
+			return errors.New(constants.UnsupportedArchError)
 		}
 	default:
-		return errors.New(constants.UNSUPPORTED_OS_ERROR)
+		return errors.New(constants.UnsupportedOSError)
 	}
 
 	err := downloadPolyNodeFile(filename)

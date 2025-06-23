@@ -81,7 +81,8 @@ func add(version string, operatingSystem models.OperatingSystem, arch models.Arc
 	fmt.Println("Done.")
 
 	fmt.Print("Extracting " + fileName + "...")
-	err = utilities.ExtractFile(filePath, folderPath)
+	err = utilities.ExtractGzip(filePath, folderPath)
+	//err = utilities.ExtractFile(filePath, folderPath)
 	if err != nil {
 		return err
 	}
@@ -118,7 +119,7 @@ func list() {
 	dir, err := os.ReadDir(internal.PolynHomeDir + internal.PathSeparator + "node")
 	if err != nil {
 		// This means that the node folder doesn't exist. So, there are no Node.js versions downloaded.
-		fmt.Println(constants.NO_DOWNLOADED_NODEJS_MESSAGE)
+		fmt.Println(constants.NoDownloadedNodejsMessage)
 		return
 	}
 
@@ -258,7 +259,7 @@ func temp(version string, operatingSystem models.OperatingSystem) error {
 		}
 	}
 
-	if operatingSystem == constants.WINDOWS {
+	if operatingSystem == constants.Windows {
 		fmt.Println("If using Command Prompt, run this command:")
 		fmt.Println("\n  set PATH=" + internal.PolynHomeDir + "\\node\\" + version + ";%PATH%")
 		fmt.Println("\nIf using PowerShell, run this command:")
@@ -293,7 +294,7 @@ func use(version string, operatingSystem models.OperatingSystem) error {
 		return err
 	}
 
-	if operatingSystem == constants.WINDOWS {
+	if operatingSystem == constants.Windows {
 		err = exec.Command("cmd", "/c", "mklink", "/j", internal.PolynHomeDir+"\\nodejs", internal.PolynHomeDir+"\\node\\"+version).Run()
 		if err != nil {
 			return err

@@ -1,6 +1,6 @@
 package constants
 
-const DEFAULT_POLYNRC string = `{
+const DefaultPolynrc string = `{
   "nodeMirror": "https://nodejs.org/dist"
 }
 `

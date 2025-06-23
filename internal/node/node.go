@@ -9,58 +9,58 @@ import (
 	"github.com/sionpixley/PolyNode/internal/utilities"
 )
 
-// Main function for Node.js actions.
+// Handle function is the main function for Node.js actions.
 func Handle(args []string, operatingSystem models.OperatingSystem, arch models.Architecture, config models.PolyNodeConfig) {
 	if len(args) == 0 {
-		fmt.Println(constants.HELP)
+		fmt.Println(constants.Help)
 		return
 	}
 
 	var err error
 	command := utilities.ConvertToCommand(args[0])
 	switch command {
-	case constants.ADD:
+	case constants.Add:
 		if len(args) > 1 {
 			err = add(convertKeywordToVersion(args[1], operatingSystem, arch, config), operatingSystem, arch, config)
 		} else {
-			fmt.Println(constants.HELP)
+			fmt.Println(constants.Help)
 		}
-	case constants.CURRENT:
+	case constants.Current:
 		current()
-	case constants.INSTALL:
+	case constants.Install:
 		if len(args) > 1 {
 			err = install(convertKeywordToVersion(args[1], operatingSystem, arch, config), operatingSystem, arch, config)
 		} else {
-			fmt.Println(constants.HELP)
+			fmt.Println(constants.Help)
 		}
-	case constants.LIST:
+	case constants.List:
 		list()
-	case constants.REMOVE:
+	case constants.Remove:
 		if len(args) > 1 {
 			err = remove(args[1])
 		} else {
-			fmt.Println(constants.HELP)
+			fmt.Println(constants.Help)
 		}
-	case constants.SEARCH:
+	case constants.Search:
 		if len(args) > 1 {
 			err = search(args[1], operatingSystem, arch, config)
 		} else {
 			err = searchDefault(operatingSystem, arch, config)
 		}
-	case constants.TEMP:
+	case constants.Temp:
 		if len(args) > 1 {
 			err = temp(args[1], operatingSystem)
 		} else {
-			fmt.Println(constants.HELP)
+			fmt.Println(constants.Help)
 		}
-	case constants.USE:
+	case constants.Use:
 		if len(args) > 1 {
 			err = use(args[1], operatingSystem)
 		} else {
-			fmt.Println(constants.HELP)
+			fmt.Println(constants.Help)
 		}
 	default:
-		fmt.Println(constants.HELP)
+		fmt.Println(constants.Help)
 	}
 
 	if err != nil {

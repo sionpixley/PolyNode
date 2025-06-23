@@ -55,7 +55,7 @@ func copyUpgradableFiles(currentBinaryLocation string, home string) error {
 }
 
 func createPolynConfig(home string) error {
-	return os.WriteFile(home+"/.PolyNode/polynrc.json", []byte(constants.DEFAULT_POLYNRC), 0644)
+	return os.WriteFile(home+"/.PolyNode/polynrc.json", []byte(constants.DefaultPolynrc), 0644)
 }
 
 func install(currentBinaryLocation string, home string) error {

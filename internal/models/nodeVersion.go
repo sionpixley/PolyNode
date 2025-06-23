@@ -19,10 +19,10 @@ func (nodeVersion *NodeVersion) UnmarshalJSON(b []byte) error {
 
 	nodeVersion.Version = temp["version"].(string)
 
-	nodeVersion.Files = []string{}
 	rawFiles := temp["files"].([]any)
-	for _, rawFile := range rawFiles {
-		nodeVersion.Files = append(nodeVersion.Files, rawFile.(string))
+	nodeVersion.Files = make([]string, len(rawFiles))
+	for i, rawFile := range rawFiles {
+		nodeVersion.Files[i] = rawFile.(string)
 	}
 
 	switch temp["lts"].(type) {
