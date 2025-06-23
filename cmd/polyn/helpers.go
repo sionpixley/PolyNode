@@ -142,13 +142,13 @@ func upgradePolyNode(operatingSystem models.OperatingSystem, arch models.Archite
 	case constants.Linux:
 		switch arch {
 		case constants.Arm64:
-			filename = "PolyNode-linux-arm64.tar.xz"
+			filename = "PolyNode-linux-arm64.tar.gz"
 		case constants.Ppc64Le:
-			filename = "PolyNode-linux-ppc64le.tar.xz"
+			filename = "PolyNode-linux-ppc64le.tar.gz"
 		case constants.S390x:
-			filename = "PolyNode-linux-s390x.tar.xz"
+			filename = "PolyNode-linux-s390x.tar.gz"
 		case constants.X64:
-			filename = "PolyNode-linux-x64.tar.xz"
+			filename = "PolyNode-linux-x64.tar.gz"
 		default:
 			return errors.New(constants.UnsupportedArchError)
 		}

@@ -81,8 +81,7 @@ func add(version string, operatingSystem models.OperatingSystem, arch models.Arc
 	fmt.Println("Done.")
 
 	fmt.Print("Extracting " + fileName + "...")
-	err = utilities.ExtractGzip(filePath, folderPath)
-	//err = utilities.ExtractFile(filePath, folderPath)
+	err = utilities.ExtractFile(filePath, folderPath)
 	if err != nil {
 		return err
 	}

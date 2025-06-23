@@ -2,11 +2,11 @@ package utilities
 
 import (
 	"archive/tar"
+	"archive/zip"
 	"compress/gzip"
 	"github.com/sionpixley/PolyNode/internal"
 	"io"
 	"os"
-	"os/exec"
 	"path/filepath"
 	"strings"
 
@@ -60,25 +60,22 @@ func ExtractFile(source string, destination string) error {
 		return err
 	}
 
-	err = exec.Command("tar", "-xf", source, "-C", destination, "--strip-components=1").Run()
-	if err != nil {
-		return err
+	if strings.HasSuffix(source, ".gz") {
+		err = ExtractGzip(source, destination)
+		if err != nil {
+			return err
+		}
+	} else {
+		err = ExtractZip(source, destination)
+		if err != nil {
+			return err
+		}
 	}
 
 	return os.RemoveAll(source)
 }
 
 func ExtractGzip(source string, destination string) error {
-	err := os.RemoveAll(destination)
-	if err != nil {
-		return err
-	}
-
-	err = os.MkdirAll(destination, os.ModePerm)
-	if err != nil {
-		return err
-	}
-
 	file, err := os.Open(source)
 	if err != nil {
 		return err
@@ -123,6 +120,51 @@ func ExtractGzip(source string, destination string) error {
 			outFile.Close()
 		default:
 			// Do nothing.
+		}
+	}
+
+	return nil
+}
+
+func ExtractZip(source string, destination string) error {
+	zipReader, err := zip.OpenReader(source)
+	if err != nil {
+		return err
+	}
+	defer zipReader.Close()
+
+	for _, file := range zipReader.File {
+		path := stripTopDir(file.Name)
+		target := filepath.Join(destination, path)
+
+		if file.FileInfo().IsDir() {
+			if e := os.MkdirAll(target, file.Mode()); e != nil {
+				return e
+			}
+		} else {
+			if e := os.MkdirAll(filepath.Dir(target), file.Mode()); e != nil {
+				return e
+			}
+
+			src, err := file.Open()
+			if err != nil {
+				return err
+			}
+
+			dist, err := os.OpenFile(target, os.O_CREATE|os.O_RDWR|os.O_TRUNC, file.Mode())
+			if err != nil {
+				src.Close()
+				return err
+			}
+
+			if _, e2 := io.Copy(dist, src); e2 != nil {
+				src.Close()
+				dist.Close()
+				return e2
+			}
+
+			src.Close()
+			dist.Close()
 		}
 	}
 
