@@ -22,12 +22,12 @@ func autoUpdate(operatingSystem models.OperatingSystem, arch models.Architecture
 	now := time.Now().UTC()
 	lastUpdated := getLastAutoUpdate()
 	if now.Sub(lastUpdated).Hours() > 719 {
-		err := os.WriteFile(internal.PolynHomeDir+internal.PathSeparator+"lastAutoUpdate.txt", []byte(now.Format(isoDateTime)), 0644)
+		err := updatePolyNode(operatingSystem, arch)
 		if err != nil {
 			return err
 		}
 
-		err = upgradePolyNode(operatingSystem, arch)
+		err = os.WriteFile(internal.PolynHomeDir+internal.PathSeparator+"lastAutoUpdate.txt", []byte(now.Format(isoDateTime)), 0644)
 		if err != nil {
 			return err
 		}
@@ -177,7 +177,7 @@ rm $HOME/.PolyNode/polyn-upgrade-temp`
 	}
 }
 
-func upgradePolyNode(operatingSystem models.OperatingSystem, arch models.Architecture) error {
+func updatePolyNode(operatingSystem models.OperatingSystem, arch models.Architecture) error {
 	var filename string
 	switch operatingSystem {
 	case constants.Aix:

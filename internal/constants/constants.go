@@ -35,8 +35,8 @@ Commands:
         If on AIX, Linux, or macOS, please use 'eval $(polyn temp <version>)' instead.
     use <version or prefix>
         Sets your default Node.js to a different version.
-    upgrade
-        Upgrades PolyNode to the latest release.
+    update
+        Updates PolyNode to the latest release.
     version
         Prints the current version of PolyNode.
 

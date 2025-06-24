@@ -49,8 +49,8 @@ func main() {
 	switch {
 	case args[0] == "version":
 		fmt.Println(constants.Version)
-	case args[0] == "upgrade":
-		err := upgradePolyNode(operatingSystem, arch)
+	case args[0] == "update":
+		err := updatePolyNode(operatingSystem, arch)
 		if err != nil {
 			log.Fatalln(err.Error())
 		}

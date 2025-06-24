@@ -13,7 +13,7 @@ PolyNode is a Node.js version manager that does not require sudo/admin privilege
     3. [macOS](#for-macos)
     4. [Windows](#for-windows)
 5. [How to use](#how-to-use)
-    1. [Upgrading PolyNode](#upgrading-polynode-to-the-latest-release)
+    1. [Updating PolyNode](#updating-polynode-to-the-latest-release)
     2. [Searching for available Node.js versions](#searching-for-available-nodejs-versions)
     3. [Downloading a new version of Node.js](#downloading-a-new-version-of-nodejs)
         1. [Examples](#examples)
@@ -162,9 +162,11 @@ PolyNode only supports Bash, Zsh, or KornShell by default. During the install pr
 
 PolyNode does not require sudo/admin privileges to use the `polyn` command.
 
-### Upgrading PolyNode to the latest release
+### Updating PolyNode to the latest release
 
-`polyn upgrade`
+PolyNode has an auto updater, so manually updating your PolyNode is not usually required unless you have configured PolyNode to not use the auto updater.
+
+`polyn update`
 
 ### Searching for available Node.js versions
 
@@ -302,15 +304,20 @@ PolyNode's configuration is handled through a JSON file named `polynrc.json` loc
 
 ```json
 {
+  "autoUpdate": true,
   "nodeMirror": "https://nodejs.org/dist"
 }
 ```
 
 ### Configuration fields
 
+#### autoUpdate
+
+This field is a `bool` that configures if PolyNode's auto updater should run or not. Default value is `true`.
+
 #### nodeMirror
 
-This field is a `string` that represents the URL to download Node.js. Default value is `"https://nodejs.org/dist"`.
+This field is a `string` that configures the URL to download Node.js. Default value is `"https://nodejs.org/dist"`.
 
 ## How to uninstall PolyNode
 
