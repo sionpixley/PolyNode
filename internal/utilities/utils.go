@@ -37,7 +37,7 @@ func ConvertToCommand(commandStr string) models.Command {
 	case "use":
 		return constants.Use
 	default:
-		return constants.NAComm
+		return constants.OtherComm
 	}
 }
 
@@ -171,7 +171,7 @@ func ExtractZip(source string, destination string) error {
 }
 
 func IsKnownCommand(command string) bool {
-	return ConvertToCommand(command) != constants.NAComm
+	return ConvertToCommand(command) != constants.OtherComm
 }
 
 func IsValidVersionFormat(version string) bool {

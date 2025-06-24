@@ -11,7 +11,7 @@ import (
 
 const _WIN_UNINSTALL_SCRIPT string = `@echo off
 
-timeout /t 1 /nobreak > nul
+timeout /t 5 /nobreak > nul
 del %LOCALAPPDATA%\Programs\PolyNode /s /f /q > nul
 rmdir %LOCALAPPDATA%\Programs\PolyNode /s /q
 (goto) 2>nul & del "%~f0"`

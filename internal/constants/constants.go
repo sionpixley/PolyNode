@@ -53,21 +53,19 @@ Keywords:
 	UnsupportedOSError   string = "polyn error: unsupported operating system"
 
 	// PolyNode's version.
-	Version string = "v3.0.0-rc.1"
+	Version string = "v3.0.0-rc.2"
 )
 
-// NA is for Not Applicable.
 const (
-	NAOS models.OperatingSystem = iota
+	OtherOS models.OperatingSystem = iota
 	Aix
 	Linux
 	Mac
 	Windows
 )
 
-// NA is for Not Applicable.
 const (
-	NAArch models.Architecture = iota
+	OtherArch models.Architecture = iota
 	Arm64
 	Ppc64
 	Ppc64Le
@@ -75,11 +73,10 @@ const (
 	X64
 )
 
-// NA is for Not Applicable.
 // We don't include the version command in this. The version command is handled in main().
 // We don't include the upgrade command in this either. It also gets handled in main().
 const (
-	NAComm models.Command = iota
+	OtherComm models.Command = iota
 	Add
 	Current
 	Install

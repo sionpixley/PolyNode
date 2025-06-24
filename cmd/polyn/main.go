@@ -30,6 +30,13 @@ func main() {
 
 	config := models.LoadPolyNodeConfig()
 
+	if config.AutoUpdate {
+		e := autoUpdate(operatingSystem, arch)
+		if e != nil {
+			log.Fatalln(e.Error())
+		}
+	}
+
 	args := make([]string, len(os.Args)-1)
 	for i, arg := range os.Args {
 		if i == 0 {

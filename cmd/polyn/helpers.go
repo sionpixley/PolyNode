@@ -7,12 +7,34 @@ import (
 	"net/http"
 	"os"
 	"os/exec"
+	"strings"
+	"time"
 
 	"github.com/sionpixley/PolyNode/internal"
 	"github.com/sionpixley/PolyNode/internal/constants"
 	"github.com/sionpixley/PolyNode/internal/models"
 	"github.com/sionpixley/PolyNode/internal/utilities"
 )
+
+const isoDateTime = "2006-01-02T15:04:05.000Z07:00"
+
+func autoUpdate(operatingSystem models.OperatingSystem, arch models.Architecture) error {
+	now := time.Now().UTC()
+	lastUpdated := getLastAutoUpdate()
+	if now.Sub(lastUpdated).Hours() > 719 {
+		err := os.WriteFile(internal.PolynHomeDir+internal.PathSeparator+"lastAutoUpdate.txt", []byte(now.Format(isoDateTime)), 0644)
+		if err != nil {
+			return err
+		}
+
+		err = upgradePolyNode(operatingSystem, arch)
+		if err != nil {
+			return err
+		}
+	}
+
+	return nil
+}
 
 func convertToArchitecture(archStr string) models.Architecture {
 	switch archStr {
@@ -27,7 +49,7 @@ func convertToArchitecture(archStr string) models.Architecture {
 	case "s390x":
 		return constants.S390x
 	default:
-		return constants.NAArch
+		return constants.OtherArch
 	}
 }
 
@@ -42,7 +64,7 @@ func convertToOperatingSystem(osStr string) models.OperatingSystem {
 	case "windows":
 		return constants.Windows
 	default:
-		return constants.NAOS
+		return constants.OtherOS
 	}
 }
 
@@ -84,12 +106,33 @@ func downloadPolyNodeFile(filename string) error {
 	return nil
 }
 
+func getLastAutoUpdate() time.Time {
+	if _, err := os.Stat(internal.PolynHomeDir + internal.PathSeparator + "lastAutoUpdate.txt"); os.IsNotExist(err) {
+		return time.Now().UTC().AddDate(0, 0, -30)
+	} else if err != nil {
+		return time.Now().UTC().AddDate(0, 0, -30)
+	} else {
+		content, err := os.ReadFile(internal.PolynHomeDir + internal.PathSeparator + "lastAutoUpdate.txt")
+		if err != nil {
+			return time.Now().UTC().AddDate(0, 0, -30)
+		}
+
+		timeStr := strings.TrimSpace(string(content))
+		t, err := time.Parse(isoDateTime, timeStr)
+		if err != nil {
+			return time.Now().UTC().AddDate(0, 0, -30)
+		}
+
+		return t
+	}
+}
+
 func isSupportedArchitecture(arch models.Architecture) bool {
-	return arch != constants.NAArch
+	return arch != constants.OtherArch
 }
 
 func isSupportedOperatingSystem(operatingSystem models.OperatingSystem) bool {
-	return operatingSystem != constants.NAOS
+	return operatingSystem != constants.OtherOS
 }
 
 func runUpgradeScript(operatingSystem models.OperatingSystem) error {
@@ -98,7 +141,7 @@ func runUpgradeScript(operatingSystem models.OperatingSystem) error {
 		batchfilePath := internal.PolynHomeDir + internal.PathSeparator + "polyn-upgrade-temp.cmd"
 		upgradeBatchfile := `@echo off
 
-timeout /t 1 /nobreak > nul
+timeout /t 5 /nobreak > nul
 cd %LOCALAPPDATA%\Programs\PolyNode\upgrade-temp
 .\setup
 cd %LOCALAPPDATA%

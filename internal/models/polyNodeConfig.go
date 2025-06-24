@@ -9,14 +9,17 @@ import (
 )
 
 const (
+	defaultAutoUpdate        = true
 	defaultNodeMirror string = "https://nodejs.org/dist"
 )
 
 var defaultPolynrc PolyNodeConfig = PolyNodeConfig{
+	AutoUpdate: defaultAutoUpdate,
 	NodeMirror: defaultNodeMirror,
 }
 
 type PolyNodeConfig struct {
+	AutoUpdate bool   `json:"autoUpdate"`
 	NodeMirror string `json:"nodeMirror"`
 }
 
@@ -25,6 +28,13 @@ func (config *PolyNodeConfig) UnmarshalJSON(b []byte) error {
 	err := json.Unmarshal(b, &temp)
 	if err != nil {
 		return err
+	}
+
+	autoUpdate, exists := temp["autoUpdate"]
+	if exists {
+		config.AutoUpdate = autoUpdate.(bool)
+	} else {
+		config.AutoUpdate = defaultAutoUpdate
 	}
 
 	mirror, exists := temp["nodeMirror"]
