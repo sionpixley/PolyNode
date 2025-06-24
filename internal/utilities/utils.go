@@ -134,8 +134,7 @@ func ExtractZip(source string, destination string) error {
 	defer zipReader.Close()
 
 	for _, file := range zipReader.File {
-		path := stripTopDir(file.Name)
-		target := filepath.Join(destination, path)
+		target := filepath.Join(destination, stripTopDir(file.Name))
 
 		if file.FileInfo().IsDir() {
 			if e := os.MkdirAll(target, file.Mode()); e != nil {
