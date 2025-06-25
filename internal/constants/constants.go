@@ -53,7 +53,7 @@ Keywords:
 	UnsupportedOSError   string = "polyn error: unsupported operating system"
 
 	// PolyNode's version.
-	Version string = "v3.0.0-rc.2"
+	Version string = "v3.0.0-rc.3"
 )
 
 const (
@@ -74,7 +74,7 @@ const (
 )
 
 // We don't include the version command in this. The version command is handled in main().
-// We don't include the upgrade command in this either. It also gets handled in main().
+// We don't include the update command in this either. It also gets handled in main().
 const (
 	OtherComm models.Command = iota
 	Add

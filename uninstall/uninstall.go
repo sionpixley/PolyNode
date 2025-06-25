@@ -7,16 +7,9 @@ import (
 	"errors"
 	"log"
 	"os"
-	"os/exec"
 	"runtime"
 	"strings"
 )
-
-const _UNINSTALL_SCRIPT string = `#!/bin/sh
-
-sleep 1
-rm -rf $HOME/.PolyNode
-rm $HOME/polyn-uninstall-temp`
 
 func main() {
 	operatingSystem := runtime.GOOS
@@ -87,10 +80,6 @@ func uninstall() error {
 		return err
 	}
 
-	err = os.WriteFile(home+"/polyn-uninstall-temp", []byte(_UNINSTALL_SCRIPT), 0700)
-	if err != nil {
-		return err
-	}
-
-	return exec.Command(home + "/polyn-uninstall-temp").Run()
+	err = os.RemoveAll(home + "/.PolyNode")
+	return err
 }

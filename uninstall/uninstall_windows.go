@@ -3,18 +3,10 @@ package main
 import (
 	"log"
 	"os"
-	"os/exec"
 	"strings"
 
 	"golang.org/x/sys/windows/registry"
 )
-
-const _WIN_UNINSTALL_SCRIPT string = `@echo off
-
-timeout /t 5 /nobreak > nul
-del %LOCALAPPDATA%\Programs\PolyNode /s /f /q > nul
-rmdir %LOCALAPPDATA%\Programs\PolyNode /s /q
-(goto) 2>nul & del "%~f0"`
 
 func main() {
 	err := uninstall()
@@ -54,10 +46,6 @@ func uninstall() error {
 		return err
 	}
 
-	err = os.WriteFile(home+"\\polyn-uninstall-temp.cmd", []byte(_WIN_UNINSTALL_SCRIPT), 0700)
-	if err != nil {
-		return err
-	}
-
-	return exec.Command("cmd", "/c", "start", "/b", home+"\\polyn-uninstall-temp").Run()
+	err = os.RemoveAll(home + "\\PolyNode")
+	return err
 }

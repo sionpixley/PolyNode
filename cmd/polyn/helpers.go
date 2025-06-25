@@ -135,46 +135,20 @@ func isSupportedOperatingSystem(operatingSystem models.OperatingSystem) bool {
 	return operatingSystem != constants.OtherOS
 }
 
-func runUpgradeScript(operatingSystem models.OperatingSystem) error {
+func runUpgradeScript() error {
 	fmt.Print("Running upgrade script...")
-	if operatingSystem == constants.Windows {
-		batchfilePath := internal.PolynHomeDir + internal.PathSeparator + "polyn-upgrade-temp.cmd"
-		upgradeBatchfile := `@echo off
-
-timeout /t 5 /nobreak > nul
-cd %LOCALAPPDATA%\Programs\PolyNode\upgrade-temp
-.\setup
-cd %LOCALAPPDATA%
-del %LOCALAPPDATA%\Programs\PolyNode\upgrade-temp /s /f /q > nul
-rmdir %LOCALAPPDATA%\Programs\PolyNode\upgrade-temp /s /q
-(goto) 2>nul & del "%~f0"`
-
-		err := os.WriteFile(batchfilePath, []byte(upgradeBatchfile), 0700)
-		if err != nil {
-			return err
-		}
-
-		fmt.Println("Done.")
-		return exec.Command("cmd", "/c", "start", "/b", batchfilePath).Run()
-	} else {
-		scriptPath := internal.PolynHomeDir + internal.PathSeparator + "polyn-upgrade-temp"
-		upgradeScript := `#!/bin/sh
-
-sleep 1
-cd $HOME/.PolyNode/upgrade-temp
-./setup
-cd $HOME
-rm -rf $HOME/.PolyNode/upgrade-temp
-rm $HOME/.PolyNode/polyn-upgrade-temp`
-
-		err := os.WriteFile(scriptPath, []byte(upgradeScript), 0700)
-		if err != nil {
-			return err
-		}
-
-		fmt.Println("Done.")
-		return exec.Command(scriptPath).Run()
+	err := exec.Command(internal.PolynHomeDir + internal.PathSeparator + "upgrade-temp" + internal.PathSeparator + "setup").Run()
+	if err != nil {
+		return err
 	}
+
+	err = os.RemoveAll(internal.PolynHomeDir + internal.PathSeparator + "upgrade-temp")
+	if err != nil {
+		return err
+	}
+
+	fmt.Println("Done.")
+	return nil
 }
 
 func updatePolyNode(operatingSystem models.OperatingSystem, arch models.Architecture) error {
@@ -230,5 +204,5 @@ func updatePolyNode(operatingSystem models.OperatingSystem, arch models.Architec
 	}
 	fmt.Println("Done.")
 
-	return runUpgradeScript(operatingSystem)
+	return runUpgradeScript()
 }
