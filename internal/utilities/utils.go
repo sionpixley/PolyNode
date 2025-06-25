@@ -133,37 +133,42 @@ func ExtractZip(source string, destination string) error {
 	}
 	defer zipReader.Close()
 
+	isRoot := true
 	for _, file := range zipReader.File {
-		target := filepath.Join(destination, stripTopDir(file.Name))
-
-		if file.FileInfo().IsDir() {
-			if e := os.MkdirAll(target, file.Mode()); e != nil {
-				return e
-			}
+		if isRoot {
+			isRoot = false
 		} else {
-			if e := os.MkdirAll(filepath.Dir(target), file.Mode()); e != nil {
-				return e
-			}
+			target := filepath.Join(destination, stripTopDir(file.Name))
 
-			src, err := file.Open()
-			if err != nil {
-				return err
-			}
+			if file.FileInfo().IsDir() {
+				if e := os.MkdirAll(target, file.Mode()); e != nil {
+					return e
+				}
+			} else {
+				if e := os.MkdirAll(filepath.Dir(target), file.Mode()); e != nil {
+					return e
+				}
 
-			dist, err := os.OpenFile(target, os.O_CREATE|os.O_RDWR|os.O_TRUNC, file.Mode())
-			if err != nil {
-				src.Close()
-				return err
-			}
+				src, err := file.Open()
+				if err != nil {
+					return err
+				}
 
-			if _, e2 := io.Copy(dist, src); e2 != nil {
+				dist, err := os.OpenFile(target, os.O_CREATE|os.O_RDWR|os.O_TRUNC, file.Mode())
+				if err != nil {
+					src.Close()
+					return err
+				}
+
+				if _, e2 := io.Copy(dist, src); e2 != nil {
+					src.Close()
+					dist.Close()
+					return e2
+				}
+
 				src.Close()
 				dist.Close()
-				return e2
 			}
-
-			src.Close()
-			dist.Close()
 		}
 	}
 

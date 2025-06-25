@@ -29,7 +29,7 @@ func main() {
 	case "linux":
 		home := os.Getenv("HOME")
 		if oldVersionExists(home) {
-			err = upgrade(currentBinaryLocation, home)
+			err = update(currentBinaryLocation, home)
 		} else {
 			err = install(currentBinaryLocation, home)
 		}

@@ -16,18 +16,13 @@ import (
 	"github.com/sionpixley/PolyNode/internal/utilities"
 )
 
-const isoDateTime = "2006-01-02T15:04:05.000Z07:00"
+const isoDateTimeFormat = "2006-01-02T15:04:05.000Z07:00"
 
 func autoUpdate(operatingSystem models.OperatingSystem, arch models.Architecture) error {
 	now := time.Now().UTC()
 	lastUpdated := getLastAutoUpdate()
 	if now.Sub(lastUpdated).Hours() > 719 {
 		err := updatePolyNode(operatingSystem, arch)
-		if err != nil {
-			return err
-		}
-
-		err = os.WriteFile(internal.PolynHomeDir+internal.PathSeparator+"lastAutoUpdate.txt", []byte(now.Format(isoDateTime)), 0644)
 		if err != nil {
 			return err
 		}
@@ -118,7 +113,7 @@ func getLastAutoUpdate() time.Time {
 		}
 
 		timeStr := strings.TrimSpace(string(content))
-		t, err := time.Parse(isoDateTime, timeStr)
+		t, err := time.Parse(isoDateTimeFormat, timeStr)
 		if err != nil {
 			return time.Now().UTC().AddDate(0, 0, -30)
 		}
@@ -136,13 +131,13 @@ func isSupportedOperatingSystem(operatingSystem models.OperatingSystem) bool {
 }
 
 func runUpgradeScript() error {
-	fmt.Print("Running upgrade script...")
-	err := exec.Command(internal.PolynHomeDir + internal.PathSeparator + "upgrade-temp" + internal.PathSeparator + "setup").Run()
+	fmt.Print("Running update...")
+	err := exec.Command(internal.PolynHomeDir + internal.PathSeparator + "update-temp" + internal.PathSeparator + "setup").Run()
 	if err != nil {
 		return err
 	}
 
-	err = os.RemoveAll(internal.PolynHomeDir + internal.PathSeparator + "upgrade-temp")
+	err = os.RemoveAll(internal.PolynHomeDir + internal.PathSeparator + "update-temp")
 	if err != nil {
 		return err
 	}
@@ -198,7 +193,7 @@ func updatePolyNode(operatingSystem models.OperatingSystem, arch models.Architec
 
 	fmt.Print("Extracting " + filename + "...")
 	filename = internal.PolynHomeDir + internal.PathSeparator + filename
-	err = utilities.ExtractFile(filename, internal.PolynHomeDir+internal.PathSeparator+"upgrade-temp")
+	err = utilities.ExtractFile(filename, internal.PolynHomeDir+internal.PathSeparator+"update-temp")
 	if err != nil {
 		return err
 	}
