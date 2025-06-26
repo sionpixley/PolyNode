@@ -4,7 +4,6 @@ import (
 	"archive/tar"
 	"archive/zip"
 	"compress/gzip"
-	"github.com/sionpixley/PolyNode/internal"
 	"io"
 	"os"
 	"path/filepath"
@@ -133,42 +132,37 @@ func ExtractZip(source string, destination string) error {
 	}
 	defer zipReader.Close()
 
-	isRoot := true
 	for _, file := range zipReader.File {
-		if isRoot {
-			isRoot = false
+		target := filepath.Join(destination, stripTopDir(file.Name))
+
+		if file.FileInfo().IsDir() {
+			if e := os.MkdirAll(target, file.Mode()); e != nil {
+				return e
+			}
 		} else {
-			target := filepath.Join(destination, stripTopDir(file.Name))
+			if e := os.MkdirAll(filepath.Dir(target), file.Mode()); e != nil {
+				return e
+			}
 
-			if file.FileInfo().IsDir() {
-				if e := os.MkdirAll(target, file.Mode()); e != nil {
-					return e
-				}
-			} else {
-				if e := os.MkdirAll(filepath.Dir(target), file.Mode()); e != nil {
-					return e
-				}
+			src, err := file.Open()
+			if err != nil {
+				return err
+			}
 
-				src, err := file.Open()
-				if err != nil {
-					return err
-				}
+			dist, err := os.OpenFile(target, os.O_CREATE|os.O_RDWR|os.O_TRUNC, file.Mode())
+			if err != nil {
+				src.Close()
+				return err
+			}
 
-				dist, err := os.OpenFile(target, os.O_CREATE|os.O_RDWR|os.O_TRUNC, file.Mode())
-				if err != nil {
-					src.Close()
-					return err
-				}
-
-				if _, e2 := io.Copy(dist, src); e2 != nil {
-					src.Close()
-					dist.Close()
-					return e2
-				}
-
+			if _, e2 := io.Copy(dist, src); e2 != nil {
 				src.Close()
 				dist.Close()
+				return e2
 			}
+
+			src.Close()
+			dist.Close()
 		}
 	}
 
@@ -216,7 +210,7 @@ func IsValidVersionFormat(version string) bool {
 }
 
 func stripTopDir(path string) string {
-	parts := strings.SplitN(path, internal.PathSeparator, 2)
+	parts := strings.SplitN(path, "/", 2)
 	if len(parts) == 2 {
 		return parts[1]
 	} else {

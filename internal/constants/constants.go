@@ -53,7 +53,7 @@ Keywords:
 	UnsupportedOSError   string = "polyn error: unsupported operating system"
 
 	// PolyNode's version.
-	Version string = "v3.0.0-rc.4"
+	Version string = "v3.0.0-rc.5"
 )
 
 const (

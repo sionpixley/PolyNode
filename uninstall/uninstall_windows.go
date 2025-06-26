@@ -8,6 +8,12 @@ import (
 	"golang.org/x/sys/windows/registry"
 )
 
+const uninstallBatch = `@echo off
+timeout /t 2 /nobreak > nul
+del %LOCALAPPDATA%\Programs\PolyNode /s /f /q > nul
+rmdir %LOCALAPPDATA%\Programs\PolyNode /s /q
+(goto) 2>nul & del "%~f0"`
+
 func main() {
 	err := uninstall()
 	if err != nil {
@@ -46,6 +52,10 @@ func uninstall() error {
 		return err
 	}
 
-	err = os.RemoveAll(home + "\\PolyNode")
-	return err
+	err = os.WriteFile(home+"\\polyn-uninstall-temp.cmd", []byte(uninstallBatch), 0744)
+	if err != nil {
+		return err
+	}
+
+	return exec.Command("cmd", "/c", "start", "/b", home+"\\polyn-uninstall-temp").Run()
 }
