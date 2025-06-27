@@ -3,13 +3,14 @@ package main
 import (
 	"log"
 	"os"
+	"os/exec"
 	"strings"
 
 	"golang.org/x/sys/windows/registry"
 )
 
-const uninstallBatch = `@echo off
-timeout /t 2 /nobreak > nul
+const uninstallBatch string = `@echo off
+timeout /t 1 /nobreak > nul
 del %LOCALAPPDATA%\Programs\PolyNode /s /f /q > nul
 rmdir %LOCALAPPDATA%\Programs\PolyNode /s /q
 (goto) 2>nul & del "%~f0"`

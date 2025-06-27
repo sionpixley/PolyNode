@@ -136,7 +136,7 @@ func runUpdateScript(operatingSystem models.OperatingSystem) error {
 	if operatingSystem == constants.Windows {
 		batchfilePath := internal.PolynHomeDir + "\\polyn-upgrade-temp.cmd"
 		upgradeBatchfile := `@echo off
-timeout /t 2 /nobreak > nul
+timeout /t 1 /nobreak > nul
 cd %LOCALAPPDATA%\Programs\PolyNode\upgrade-temp
 .\setup
 cd %LOCALAPPDATA%
