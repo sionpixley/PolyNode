@@ -117,6 +117,20 @@ func ExtractGzip(source string, destination string) error {
 				return e2
 			}
 			outFile.Close()
+		case tar.TypeSymlink:
+			if e := os.MkdirAll(filepath.Dir(target), os.FileMode(header.Mode)); e != nil {
+				return e
+			}
+			if e2 := os.Symlink(header.Linkname, target); e2 != nil {
+				return e2
+			}
+		case tar.TypeLink:
+			if e := os.MkdirAll(filepath.Dir(target), os.FileMode(header.Mode)); e != nil {
+				return e
+			}
+			if e2 := os.Link(header.Linkname, target); e2 != nil {
+				return e2
+			}
 		default:
 			// Do nothing.
 		}
@@ -139,6 +153,28 @@ func ExtractZip(source string, destination string) error {
 			if e := os.MkdirAll(target, file.Mode()); e != nil {
 				return e
 			}
+		} else if file.Mode()&os.ModeSymlink != 0 {
+			if e := os.MkdirAll(filepath.Dir(target), file.Mode()); e != nil {
+				return e
+			}
+
+			src, err := file.Open()
+			if err != nil {
+				return err
+			}
+
+			link, err := io.ReadAll(src)
+			if err != nil {
+				src.Close()
+				return err
+			}
+
+			if e2 := os.Symlink(string(link), target); e2 != nil {
+				src.Close()
+				return e2
+			}
+
+			src.Close()
 		} else {
 			if e := os.MkdirAll(filepath.Dir(target), file.Mode()); e != nil {
 				return e
