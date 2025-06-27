@@ -97,7 +97,7 @@ PolyNode does not require sudo/admin privileges to use the `polyn` command.
 
 ### Updating PolyNode to the latest release
 
-PolyNode has an auto updater, so manually updating your PolyNode is not usually required unless you have configured PolyNode to not use the auto updater.
+PolyNode has an auto updater, so manually updating your PolyNode is not usually required.
 
 You can turn off the auto updater in the [configuration file](#autoupdate).
 
@@ -248,7 +248,7 @@ PolyNode's configuration is handled through a JSON file named `polynrc.json` loc
 
 #### autoUpdate
 
-This field is a `bool` that configures if PolyNode's auto updater should run or not. Default value is `true`.
+This field is a `bool` that configures if PolyNode's auto updater should run. Default value is `true`.
 
 #### nodeMirror
 
