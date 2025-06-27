@@ -8,8 +8,6 @@ import (
 )
 
 func main() {
-	defer fmt.Println()
-
 	currentBinaryLocation := "."
 	if strings.Contains(os.Args[0], "\\") {
 		parts := strings.Split(os.Args[0], "\\")
@@ -20,7 +18,7 @@ func main() {
 
 	var err error
 	if oldVersionExists(home) {
-		err = upgrade(currentBinaryLocation, home)
+		err = update(currentBinaryLocation, home)
 	} else {
 		err = install(currentBinaryLocation, home)
 	}

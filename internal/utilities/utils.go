@@ -1,8 +1,12 @@
 package utilities
 
 import (
+	"archive/tar"
+	"archive/zip"
+	"compress/gzip"
+	"io"
 	"os"
-	"os/exec"
+	"path/filepath"
 	"strings"
 
 	"github.com/sionpixley/PolyNode/internal/constants"
@@ -12,27 +16,27 @@ import (
 func ConvertToCommand(commandStr string) models.Command {
 	switch commandStr {
 	case "add":
-		return constants.ADD
+		return constants.Add
 	case "current":
-		return constants.CURRENT
+		return constants.Current
 	case "install":
-		return constants.INSTALL
+		return constants.Install
 	case "ls":
 		fallthrough
 	case "list":
-		return constants.LIST
+		return constants.List
 	case "rm":
 		fallthrough
 	case "remove":
-		return constants.REMOVE
+		return constants.Remove
 	case "search":
-		return constants.SEARCH
+		return constants.Search
 	case "temp":
-		return constants.TEMP
+		return constants.Temp
 	case "use":
-		return constants.USE
+		return constants.Use
 	default:
-		return constants.NA_COMM
+		return constants.OtherComm
 	}
 }
 
@@ -55,16 +59,118 @@ func ExtractFile(source string, destination string) error {
 		return err
 	}
 
-	err = exec.Command("tar", "-xf", source, "-C", destination, "--strip-components=1").Run()
-	if err != nil {
-		return err
+	if strings.HasSuffix(source, ".gz") {
+		err = ExtractGzip(source, destination)
+		if err != nil {
+			return err
+		}
+	} else {
+		err = ExtractZip(source, destination)
+		if err != nil {
+			return err
+		}
 	}
 
 	return os.RemoveAll(source)
 }
 
+func ExtractGzip(source string, destination string) error {
+	file, err := os.Open(source)
+	if err != nil {
+		return err
+	}
+	defer file.Close()
+
+	gzipReader, err := gzip.NewReader(file)
+	if err != nil {
+		return err
+	}
+	defer gzipReader.Close()
+
+	tarReader := tar.NewReader(gzipReader)
+
+	for {
+		header, err := tarReader.Next()
+		if err == io.EOF {
+			break
+		} else if err != nil {
+			return err
+		}
+
+		target := filepath.Join(destination, stripTopDir(header.Name))
+
+		switch header.Typeflag {
+		case tar.TypeDir:
+			if e := os.MkdirAll(target, os.FileMode(header.Mode)); e != nil {
+				return e
+			}
+		case tar.TypeReg:
+			if e := os.MkdirAll(filepath.Dir(target), os.FileMode(header.Mode)); e != nil {
+				return e
+			}
+			outFile, err := os.OpenFile(target, os.O_CREATE|os.O_RDWR|os.O_TRUNC, os.FileMode(header.Mode))
+			if err != nil {
+				return err
+			}
+			if _, e2 := io.Copy(outFile, tarReader); e2 != nil {
+				outFile.Close()
+				return e2
+			}
+			outFile.Close()
+		default:
+			// Do nothing.
+		}
+	}
+
+	return nil
+}
+
+func ExtractZip(source string, destination string) error {
+	zipReader, err := zip.OpenReader(source)
+	if err != nil {
+		return err
+	}
+	defer zipReader.Close()
+
+	for _, file := range zipReader.File {
+		target := filepath.Join(destination, stripTopDir(file.Name))
+
+		if file.FileInfo().IsDir() {
+			if e := os.MkdirAll(target, file.Mode()); e != nil {
+				return e
+			}
+		} else {
+			if e := os.MkdirAll(filepath.Dir(target), file.Mode()); e != nil {
+				return e
+			}
+
+			src, err := file.Open()
+			if err != nil {
+				return err
+			}
+
+			dist, err := os.OpenFile(target, os.O_CREATE|os.O_RDWR|os.O_TRUNC, file.Mode())
+			if err != nil {
+				src.Close()
+				return err
+			}
+
+			if _, e2 := io.Copy(dist, src); e2 != nil {
+				src.Close()
+				dist.Close()
+				return e2
+			}
+
+			src.Close()
+			dist.Close()
+		}
+	}
+
+	return nil
+}
+
 func IsKnownCommand(command string) bool {
-	return ConvertToCommand(command) != constants.NA_COMM
+	return ConvertToCommand(command) != constants.OtherComm
 }
 
 func IsValidVersionFormat(version string) bool {
@@ -101,4 +207,13 @@ func IsValidVersionFormat(version string) bool {
 	}
 
 	return true
+}
+
+func stripTopDir(path string) string {
+	parts := strings.SplitN(path, "/", 2)
+	if len(parts) == 2 {
+		return parts[1]
+	} else {
+		return path
+	}
 }

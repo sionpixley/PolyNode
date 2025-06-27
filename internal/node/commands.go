@@ -118,7 +118,7 @@ func list() {
 	dir, err := os.ReadDir(internal.PolynHomeDir + internal.PathSeparator + "node")
 	if err != nil {
 		// This means that the node folder doesn't exist. So, there are no Node.js versions downloaded.
-		fmt.Println(constants.NO_DOWNLOADED_NODEJS_MESSAGE)
+		fmt.Println(constants.NoDownloadedNodejsMessage)
 		return
 	}
 
@@ -209,21 +209,25 @@ func searchDefault(operatingSystem models.OperatingSystem, arch models.Architect
 	maxEntries := 7
 
 	majorVersions := map[string]struct{}{}
-	stableVersions := []string{}
-	ltsVersions := []string{}
+	stableVersions := make([]string, maxEntries)
+	ltsVersions := make([]string, maxEntries)
+	var sIndex int
+	var lIndex int
 
 	for _, nodeVersion := range nodeVersions {
-		if len(stableVersions) == maxEntries && len(ltsVersions) == maxEntries {
+		if sIndex == maxEntries && lIndex == maxEntries {
 			break
 		}
 
 		majorVersion := strings.Split(nodeVersion.Version, ".")[0]
 		if _, exists := majorVersions[majorVersion]; !exists {
 			majorVersions[majorVersion] = struct{}{}
-			if nodeVersion.Lts && len(ltsVersions) < maxEntries {
-				ltsVersions = append(ltsVersions, nodeVersion.Version)
-			} else if !nodeVersion.Lts && len(stableVersions) < maxEntries {
-				stableVersions = append(stableVersions, nodeVersion.Version)
+			if nodeVersion.Lts && lIndex < maxEntries {
+				ltsVersions[lIndex] = nodeVersion.Version
+				lIndex += 1
+			} else if !nodeVersion.Lts && sIndex < maxEntries {
+				stableVersions[sIndex] = nodeVersion.Version
+				sIndex += 1
 			}
 		}
 	}
@@ -258,7 +262,7 @@ func temp(version string, operatingSystem models.OperatingSystem) error {
 		}
 	}
 
-	if operatingSystem == constants.WINDOWS {
+	if operatingSystem == constants.Windows {
 		fmt.Println("If using Command Prompt, run this command:")
 		fmt.Println("\n  set PATH=" + internal.PolynHomeDir + "\\node\\" + version + ";%PATH%")
 		fmt.Println("\nIf using PowerShell, run this command:")
@@ -293,7 +297,7 @@ func use(version string, operatingSystem models.OperatingSystem) error {
 		return err
 	}
 
-	if operatingSystem == constants.WINDOWS {
+	if operatingSystem == constants.Windows {
 		err = exec.Command("cmd", "/c", "mklink", "/j", internal.PolynHomeDir+"\\nodejs", internal.PolynHomeDir+"\\node\\"+version).Run()
 		if err != nil {
 			return err

@@ -114,14 +114,18 @@ mv uninstall-s390x ./PolyNode-linux-s390x/PolyNode/uninstall/uninstall
 
 # Bundle
 
+tar -czf PolyNode-linux-arm64.tar.gz PolyNode-linux-arm64
 tar -cJf PolyNode-linux-arm64.tar.xz PolyNode-linux-arm64
 rm -rf PolyNode-linux-arm64
 
+tar -czf PolyNode-linux-x64.tar.gz PolyNode-linux-x64
 tar -cJf PolyNode-linux-x64.tar.xz PolyNode-linux-x64
 rm -rf PolyNode-linux-x64
 
+tar -czf PolyNode-linux-ppc64le.tar.gz PolyNode-linux-ppc64le
 tar -cJf PolyNode-linux-ppc64le.tar.xz PolyNode-linux-ppc64le
 rm -rf PolyNode-linux-ppc64le
 
+tar -czf PolyNode-linux-s390x.tar.gz PolyNode-linux-s390x
 tar -cJf PolyNode-linux-s390x.tar.xz PolyNode-linux-s390x
 rm -rf PolyNode-linux-s390x

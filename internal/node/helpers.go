@@ -44,39 +44,39 @@ func convertKeywordToVersion(keyword string, operatingSystem models.OperatingSys
 
 func convertOsAndArchToNodeVersionFile(operatingSystem models.OperatingSystem, arch models.Architecture) (string, error) {
 	switch operatingSystem {
-	case constants.AIX:
+	case constants.Aix:
 		return "aix-ppc64", nil
-	case constants.LINUX:
+	case constants.Linux:
 		switch arch {
-		case constants.ARM64:
+		case constants.Arm64:
 			return "linux-arm64", nil
-		case constants.PPC64LE:
+		case constants.Ppc64Le:
 			return "linux-ppc64le", nil
-		case constants.S390X:
+		case constants.S390x:
 			return "linux-s390x", nil
 		case constants.X64:
 			return "linux-x64", nil
 		default:
-			return "", errors.New(constants.UNSUPPORTED_ARCH_ERROR)
+			return "", errors.New(constants.UnsupportedArchError)
 		}
-	case constants.MAC:
-		if arch == constants.ARM64 {
+	case constants.Mac:
+		if arch == constants.Arm64 {
 			return "osx-arm64-tar", nil
 		} else if arch == constants.X64 {
 			return "osx-x64-tar", nil
 		} else {
-			return "", errors.New(constants.UNSUPPORTED_ARCH_ERROR)
+			return "", errors.New(constants.UnsupportedArchError)
 		}
-	case constants.WINDOWS:
-		if arch == constants.ARM64 {
+	case constants.Windows:
+		if arch == constants.Arm64 {
 			return "win-arm64-zip", nil
 		} else if arch == constants.X64 {
 			return "win-x64-zip", nil
 		} else {
-			return "", errors.New(constants.UNSUPPORTED_ARCH_ERROR)
+			return "", errors.New(constants.UnsupportedArchError)
 		}
 	default:
-		return "", errors.New(constants.UNSUPPORTED_OS_ERROR)
+		return "", errors.New(constants.UnsupportedOSError)
 	}
 }
 
@@ -101,7 +101,7 @@ func convertPrefixToVersionLocalAsc(prefix string) (string, error) {
 	if err != nil {
 		// The node directory doesn't exist.
 		// Passing a 'skip' to explicitly not treat this code path as an error.
-		fmt.Println(constants.NO_DOWNLOADED_NODEJS_MESSAGE)
+		fmt.Println(constants.NoDownloadedNodejsMessage)
 		return "", errors.New("skip")
 	}
 
@@ -144,7 +144,7 @@ func convertPrefixToVersionLocalDesc(prefix string) (string, error) {
 	if err != nil {
 		// The node directory doesn't exist.
 		// Passing a 'skip' to explicitly not treat this code path as an error.
-		fmt.Println(constants.NO_DOWNLOADED_NODEJS_MESSAGE)
+		fmt.Println(constants.NoDownloadedNodejsMessage)
 		return "", errors.New("skip")
 	}
 
@@ -221,39 +221,39 @@ func getAllNodeVersionsForOsAndArch(operatingSystem models.OperatingSystem, arch
 func getArchiveName(operatingSystem models.OperatingSystem, arch models.Architecture) (string, error) {
 	var archiveName string
 	switch operatingSystem {
-	case constants.AIX:
+	case constants.Aix:
 		archiveName = "aix-ppc64.tar.gz"
-	case constants.LINUX:
+	case constants.Linux:
 		switch arch {
-		case constants.ARM64:
-			archiveName = "linux-arm64.tar.xz"
-		case constants.PPC64LE:
-			archiveName = "linux-ppc64le.tar.xz"
-		case constants.S390X:
-			archiveName = "linux-s390x.tar.xz"
+		case constants.Arm64:
+			archiveName = "linux-arm64.tar.gz"
+		case constants.Ppc64Le:
+			archiveName = "linux-ppc64le.tar.gz"
+		case constants.S390x:
+			archiveName = "linux-s390x.tar.gz"
 		case constants.X64:
-			archiveName = "linux-x64.tar.xz"
+			archiveName = "linux-x64.tar.gz"
 		default:
-			return "", errors.New(constants.UNSUPPORTED_ARCH_ERROR)
+			return "", errors.New(constants.UnsupportedArchError)
 		}
-	case constants.MAC:
-		if arch == constants.ARM64 {
+	case constants.Mac:
+		if arch == constants.Arm64 {
 			archiveName = "darwin-arm64.tar.gz"
 		} else if arch == constants.X64 {
 			archiveName = "darwin-x64.tar.gz"
 		} else {
-			return "", errors.New(constants.UNSUPPORTED_ARCH_ERROR)
+			return "", errors.New(constants.UnsupportedArchError)
 		}
-	case constants.WINDOWS:
-		if arch == constants.ARM64 {
+	case constants.Windows:
+		if arch == constants.Arm64 {
 			archiveName = "win-arm64.zip"
 		} else if arch == constants.X64 {
 			archiveName = "win-x64.zip"
 		} else {
-			return "", errors.New(constants.UNSUPPORTED_ARCH_ERROR)
+			return "", errors.New(constants.UnsupportedArchError)
 		}
 	default:
-		return "", errors.New(constants.UNSUPPORTED_OS_ERROR)
+		return "", errors.New(constants.UnsupportedOSError)
 	}
 
 	return archiveName, nil

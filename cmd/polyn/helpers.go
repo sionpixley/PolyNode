@@ -7,6 +7,8 @@ import (
 	"net/http"
 	"os"
 	"os/exec"
+	"strings"
+	"time"
 
 	"github.com/sionpixley/PolyNode/internal"
 	"github.com/sionpixley/PolyNode/internal/constants"
@@ -14,35 +16,50 @@ import (
 	"github.com/sionpixley/PolyNode/internal/utilities"
 )
 
+const isoDateTimeFormat = "2006-01-02T15:04:05.000Z07:00"
+
+func autoUpdate(operatingSystem models.OperatingSystem, arch models.Architecture) error {
+	now := time.Now().UTC()
+	lastUpdated := getLastAutoUpdate()
+	if now.Sub(lastUpdated).Hours() > 719 {
+		err := updatePolyNode(operatingSystem, arch)
+		if err != nil {
+			return err
+		}
+	}
+
+	return nil
+}
+
 func convertToArchitecture(archStr string) models.Architecture {
 	switch archStr {
 	case "amd64":
 		return constants.X64
 	case "arm64":
-		return constants.ARM64
+		return constants.Arm64
 	case "ppc64":
-		return constants.PPC64
+		return constants.Ppc64
 	case "ppc64le":
-		return constants.PPC64LE
+		return constants.Ppc64Le
 	case "s390x":
-		return constants.S390X
+		return constants.S390x
 	default:
-		return constants.NA_ARCH
+		return constants.OtherArch
 	}
 }
 
 func convertToOperatingSystem(osStr string) models.OperatingSystem {
 	switch osStr {
 	case "aix":
-		return constants.AIX
+		return constants.Aix
 	case "darwin":
-		return constants.MAC
+		return constants.Mac
 	case "linux":
-		return constants.LINUX
+		return constants.Linux
 	case "windows":
-		return constants.WINDOWS
+		return constants.Windows
 	default:
-		return constants.NA_OS
+		return constants.OtherOS
 	}
 }
 
@@ -84,20 +101,41 @@ func downloadPolyNodeFile(filename string) error {
 	return nil
 }
 
+func getLastAutoUpdate() time.Time {
+	if _, err := os.Stat(internal.PolynHomeDir + internal.PathSeparator + "lastAutoUpdate.txt"); os.IsNotExist(err) {
+		return time.Now().UTC().AddDate(0, 0, -30)
+	} else if err != nil {
+		return time.Now().UTC().AddDate(0, 0, -30)
+	} else {
+		content, err := os.ReadFile(internal.PolynHomeDir + internal.PathSeparator + "lastAutoUpdate.txt")
+		if err != nil {
+			return time.Now().UTC().AddDate(0, 0, -30)
+		}
+
+		timeStr := strings.TrimSpace(string(content))
+		t, err := time.Parse(isoDateTimeFormat, timeStr)
+		if err != nil {
+			return time.Now().UTC().AddDate(0, 0, -30)
+		}
+
+		return t
+	}
+}
+
 func isSupportedArchitecture(arch models.Architecture) bool {
-	return arch != constants.NA_ARCH
+	return arch != constants.OtherArch
 }
 
 func isSupportedOperatingSystem(operatingSystem models.OperatingSystem) bool {
-	return operatingSystem != constants.NA_OS
+	return operatingSystem != constants.OtherOS
 }
 
-func runUpgradeScript(operatingSystem models.OperatingSystem) error {
-	fmt.Print("Running upgrade script...")
-	if operatingSystem == constants.WINDOWS {
-		batchfilePath := internal.PolynHomeDir + internal.PathSeparator + "polyn-upgrade-temp.cmd"
-		upgradeBatchfile := `@echo off
+func runUpdateScript(operatingSystem models.OperatingSystem) error {
+	fmt.Print("Running update...")
 
+	if operatingSystem == constants.Windows {
+		batchfilePath := internal.PolynHomeDir + "\\polyn-upgrade-temp.cmd"
+		upgradeBatchfile := `@echo off
 timeout /t 1 /nobreak > nul
 cd %LOCALAPPDATA%\Programs\PolyNode\upgrade-temp
 .\setup
@@ -106,72 +144,69 @@ del %LOCALAPPDATA%\Programs\PolyNode\upgrade-temp /s /f /q > nul
 rmdir %LOCALAPPDATA%\Programs\PolyNode\upgrade-temp /s /q
 (goto) 2>nul & del "%~f0"`
 
-		err := os.WriteFile(batchfilePath, []byte(upgradeBatchfile), 0700)
+		err := os.WriteFile(batchfilePath, []byte(upgradeBatchfile), 0744)
 		if err != nil {
 			return err
 		}
 
-		fmt.Println("Done.")
-		return exec.Command("cmd", "/c", "start", "/b", batchfilePath).Run()
+		err = exec.Command("cmd", "/c", "start", "/b", batchfilePath).Run()
+		if err != nil {
+			return err
+		}
 	} else {
-		scriptPath := internal.PolynHomeDir + internal.PathSeparator + "polyn-upgrade-temp"
-		upgradeScript := `#!/bin/sh
-
-sleep 1
-cd $HOME/.PolyNode/upgrade-temp
-./setup
-cd $HOME
-rm -rf $HOME/.PolyNode/upgrade-temp
-rm $HOME/.PolyNode/polyn-upgrade-temp`
-
-		err := os.WriteFile(scriptPath, []byte(upgradeScript), 0700)
+		err := exec.Command(internal.PolynHomeDir + internal.PathSeparator + "update-temp" + internal.PathSeparator + "setup").Run()
 		if err != nil {
 			return err
 		}
 
-		fmt.Println("Done.")
-		return exec.Command(scriptPath).Run()
+		err = os.RemoveAll(internal.PolynHomeDir + internal.PathSeparator + "update-temp")
+		if err != nil {
+			return err
+		}
 	}
+
+	fmt.Println("Done.")
+	return nil
 }
 
-func upgradePolyNode(operatingSystem models.OperatingSystem, arch models.Architecture) error {
+func updatePolyNode(operatingSystem models.OperatingSystem, arch models.Architecture) error {
 	var filename string
 	switch operatingSystem {
-	case constants.AIX:
+	case constants.Aix:
 		filename = "PolyNode-aix-ppc64.tar.gz"
-	case constants.LINUX:
+	case constants.Linux:
 		switch arch {
-		case constants.ARM64:
-			filename = "PolyNode-linux-arm64.tar.xz"
-		case constants.PPC64LE:
-			filename = "PolyNode-linux-ppc64le.tar.xz"
-		case constants.S390X:
-			filename = "PolyNode-linux-s390x.tar.xz"
+		case constants.Arm64:
+			filename = "PolyNode-linux-arm64.tar.gz"
+		case constants.Ppc64Le:
+			filename = "PolyNode-linux-ppc64le.tar.gz"
+		case constants.S390x:
+			filename = "PolyNode-linux-s390x.tar.gz"
 		case constants.X64:
-			filename = "PolyNode-linux-x64.tar.xz"
+			filename = "PolyNode-linux-x64.tar.gz"
 		default:
-			return errors.New(constants.UNSUPPORTED_ARCH_ERROR)
+			return errors.New(constants.UnsupportedArchError)
 		}
-	case constants.MAC:
+	case constants.Mac:
 		switch arch {
-		case constants.ARM64:
+		case constants.Arm64:
 			filename = "PolyNode-darwin-arm64.tar.gz"
 		case constants.X64:
 			filename = "PolyNode-darwin-x64.tar.gz"
 		default:
-			return errors.New(constants.UNSUPPORTED_ARCH_ERROR)
+			return errors.New(constants.UnsupportedArchError)
 		}
-	case constants.WINDOWS:
+	case constants.Windows:
 		switch arch {
-		case constants.ARM64:
+		case constants.Arm64:
 			filename = "PolyNode-win-arm64.zip"
 		case constants.X64:
 			filename = "PolyNode-win-x64.zip"
 		default:
-			return errors.New(constants.UNSUPPORTED_ARCH_ERROR)
+			return errors.New(constants.UnsupportedArchError)
 		}
 	default:
-		return errors.New(constants.UNSUPPORTED_OS_ERROR)
+		return errors.New(constants.UnsupportedOSError)
 	}
 
 	err := downloadPolyNodeFile(filename)
@@ -181,11 +216,11 @@ func upgradePolyNode(operatingSystem models.OperatingSystem, arch models.Archite
 
 	fmt.Print("Extracting " + filename + "...")
 	filename = internal.PolynHomeDir + internal.PathSeparator + filename
-	err = utilities.ExtractFile(filename, internal.PolynHomeDir+internal.PathSeparator+"upgrade-temp")
+	err = utilities.ExtractFile(filename, internal.PolynHomeDir+internal.PathSeparator+"update-temp")
 	if err != nil {
 		return err
 	}
 	fmt.Println("Done.")
 
-	return runUpgradeScript(operatingSystem)
+	return runUpdateScript(operatingSystem)
 }

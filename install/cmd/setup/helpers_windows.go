@@ -4,6 +4,7 @@ import (
 	"install/internal/constants"
 	"os"
 	"os/exec"
+	"time"
 
 	"golang.org/x/sys/windows/registry"
 )
@@ -24,7 +25,7 @@ func addToPath(home string) error {
 	return key.SetStringValue("Path", path)
 }
 
-func copyUpgradableFiles(currentBinaryLocation string, home string) error {
+func copyUpdatableFiles(currentBinaryLocation string, home string) error {
 	err := exec.Command("cmd", "/c", "copy", currentBinaryLocation+"\\PolyNode\\polyn.exe", home+"\\PolyNode\\polyn.exe").Run()
 	if err != nil {
 		return err
@@ -45,11 +46,21 @@ func copyUpgradableFiles(currentBinaryLocation string, home string) error {
 		return err
 	}
 
-	return exec.Command("cmd", "/c", "copy", currentBinaryLocation+"\\PolyNode\\uninstall\\uninstall.exe", home+"\\PolyNode\\uninstall\\uninstall.exe").Run()
+	err = exec.Command("cmd", "/c", "copy", currentBinaryLocation+"\\PolyNode\\uninstall\\uninstall.exe", home+"\\PolyNode\\uninstall\\uninstall.exe").Run()
+	if err != nil {
+		return err
+	}
+
+	return createLastAutoUpdateFile(home)
+}
+
+func createLastAutoUpdateFile(home string) error {
+	now := time.Now().UTC()
+	return os.WriteFile(home+"\\PolyNode\\lastAutoUpdate.txt", []byte(now.Format(constants.ISODateTimeFormat)), 0644)
 }
 
 func createPolynConfig(home string) error {
-	return os.WriteFile(home+"\\PolyNode\\polynrc.json", []byte(constants.DEFAULT_POLYNRC), 0644)
+	return os.WriteFile(home+"\\PolyNode\\polynrc.json", []byte(constants.DefaultPolynrc), 0644)
 }
 
 func install(currentBinaryLocation string, home string) error {
@@ -59,6 +70,11 @@ func install(currentBinaryLocation string, home string) error {
 	}
 
 	err = createPolynConfig(home)
+	if err != nil {
+		return err
+	}
+
+	err = createLastAutoUpdateFile(home)
 	if err != nil {
 		return err
 	}
@@ -76,18 +92,13 @@ func oldVersionExists(home string) bool {
 	}
 }
 
-func removeUpgradableFiles(home string) error {
+func removeUpdatableFiles(home string) error {
 	err := os.RemoveAll(home + "\\PolyNode\\polyn.exe")
 	if err != nil {
 		return err
 	}
 
 	err = os.RemoveAll(home + "\\PolyNode\\uninstall\\uninstall.exe")
-	if err != nil {
-		return err
-	}
-
-	err = os.RemoveAll(home + "\\PolyNode\\PolyNode.exe")
 	if err != nil {
 		return err
 	}
@@ -102,19 +113,14 @@ func removeUpgradableFiles(home string) error {
 		return err
 	}
 
-	err = os.RemoveAll(home + "\\PolyNode\\SECURITY.md")
-	if err != nil {
-		return err
-	}
-
-	return os.RemoveAll(home + "\\PolyNode\\gui")
+	return os.RemoveAll(home + "\\PolyNode\\SECURITY.md")
 }
 
-func upgrade(currentBinaryLocation string, home string) error {
-	err := removeUpgradableFiles(home)
+func update(currentBinaryLocation string, home string) error {
+	err := removeUpdatableFiles(home)
 	if err != nil {
 		return err
 	}
 
-	return copyUpgradableFiles(currentBinaryLocation, home)
+	return copyUpdatableFiles(currentBinaryLocation, home)
 }

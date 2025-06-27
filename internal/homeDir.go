@@ -2,15 +2,7 @@
 
 package internal
 
-import "runtime"
+import "os"
 
-var PathSeparator string
+var PathSeparator string = string(os.PathSeparator)
 var PolynHomeDir string = "."
-
-func init() {
-	if runtime.GOOS == "windows" {
-		PathSeparator = "\\"
-	} else {
-		PathSeparator = "/"
-	}
-}

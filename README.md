@@ -5,15 +5,14 @@ PolyNode is a Node.js version manager that does not require sudo/admin privilege
 ## Table of contents
 
 1. [Quick demo](#quick-demo)
-2. [Project structure](#project-structure)
-3. [Supported operating systems and CPU architectures](#supported-operating-systems-and-cpu-architectures)
-4. [How to install](#how-to-install-polynode)
+2. [Supported operating systems and CPU architectures](#supported-operating-systems-and-cpu-architectures)
+3. [How to install](#how-to-install-polynode)
     1. [AIX](#for-aix)
     2. [Linux](#for-linux)
     3. [macOS](#for-macos)
     4. [Windows](#for-windows)
-5. [How to use](#how-to-use)
-    1. [Upgrading PolyNode](#upgrading-polynode-to-the-latest-release)
+4. [How to use](#how-to-use)
+    1. [Updating PolyNode](#updating-polynode-to-the-latest-release)
     2. [Searching for available Node.js versions](#searching-for-available-nodejs-versions)
     3. [Downloading a new version of Node.js](#downloading-a-new-version-of-nodejs)
         1. [Examples](#examples)
@@ -30,13 +29,13 @@ PolyNode is a Node.js version manager that does not require sudo/admin privilege
     9. [Deleting a downloaded version of Node.js](#deleting-a-downloaded-version-of-nodejs)
         1. [Examples](#examples-4)
     10. [Printing your current version of PolyNode](#printing-your-current-version-of-polynode)
-6. [How to configure](#how-to-configure-polynode)
+5. [How to configure](#how-to-configure-polynode)
     1. [Configuration fields](#configuration-fields)
         1. [nodeMirror](#nodemirror)
-7. [How to uninstall](#how-to-uninstall-polynode)
+6. [How to uninstall](#how-to-uninstall-polynode)
     1. [AIX, Linux, or macOS](#aix-linux-or-macos)
     2. [Windows](#windows)
-8. [Building from source](#building-from-source)
+7. [Building from source](#building-from-source)
     1. [Bundle scripts](#bundle-scripts)
         1. [Required technologies](#required-technologies)
         2. [AIX](#building-on-aix)
@@ -46,87 +45,19 @@ PolyNode is a Node.js version manager that does not require sudo/admin privilege
     2. [Dockerfile](#dockerfile)
         1. [Required technologies](#required-technologies-1)
         2. [Building an image](#building-an-image)
-9. [Contributing](#contributing)
-10. [Acknowledgements](#acknowledgements)
+8. [Contributing](#contributing)
+9. [Acknowledgements](#acknowledgements)
 
 ## Quick demo
 
 ![polyn demo](https://github.com/sionpixley/PolyNode/blob/main/demo.gif)
-
-## Project structure
-
-```
-.
-├── .dockerignore
-├── .editorconfig
-├── .github
-│   └── ISSUE_TEMPLATE
-│       ├── bug_report.md
-│       ├── custom.md
-│       └── feature_request.md
-├── .gitignore
-├── .vscode
-│   └── launch.json
-├── cmd
-│   └── polyn
-│       ├── helpers.go
-│       └── main.go
-├── CODE_OF_CONDUCT.md
-├── demo.gif
-├── Dockerfile
-├── go.mod
-├── install
-│   ├── cmd
-│   │   └── setup
-│   │       ├── helpers_windows.go
-│   │       ├── helpers.go
-│   │       ├── setup_windows.go
-│   │       └── setup.go
-│   ├── go.mod
-│   ├── go.sum
-│   └── internal
-│       └── constants
-│           └── constants.go
-├── internal
-│   ├── constants
-│   │   └── constants.go
-│   ├── homeDir-prod.go
-│   ├── homeDir.go
-│   ├── models
-│   │   ├── aliases.go
-│   │   ├── nodeVersion.go
-│   │   └── polyNodeConfig.go
-│   ├── node
-│   │   ├── commands.go
-│   │   ├── helpers.go
-│   │   └── node.go
-│   └── utilities
-│       └── utils.go
-├── LICENSE
-├── README.md
-├── scripts
-│   ├── aix
-│   │   └── bundle
-│   ├── linux
-│   │   └── bundle
-│   ├── mac
-│   │   └── bundle
-│   └── win
-│       └── bundle.cmd
-├── SECURITY.md
-└── uninstall
-    ├── go.mod
-    ├── go.sum
-    ├── uninstall_windows.go
-    └── uninstall.go
-```
 
 ## Supported operating systems and CPU architectures
 
 - AIX (Power 64-bit)
 - Linux (x64, ARM64, Power LE 64-bit, and s390x)
 - macOS (x64 and ARM64)
-- Windows 10 and newer (x64 and ARM64)
+- Windows (x64 and ARM64)
 
 ## How to install PolyNode
 
@@ -164,9 +95,13 @@ PolyNode only supports Bash, Zsh, or KornShell by default. During the install pr
 
 PolyNode does not require sudo/admin privileges to use the `polyn` command.
 
-### Upgrading PolyNode to the latest release
+### Updating PolyNode to the latest release
 
-`polyn upgrade`
+PolyNode has an auto updater, so manually updating your PolyNode is not usually required.
+
+You can turn off the auto updater in the [configuration file](#autoupdate).
+
+`polyn update`
 
 ### Searching for available Node.js versions
 
@@ -304,15 +239,20 @@ PolyNode's configuration is handled through a JSON file named `polynrc.json` loc
 
 ```json
 {
+  "autoUpdate": true,
   "nodeMirror": "https://nodejs.org/dist"
 }
 ```
 
 ### Configuration fields
 
+#### autoUpdate
+
+This field is a `bool` that configures if PolyNode's auto updater should run. Default value is `true`.
+
 #### nodeMirror
 
-This field is a `string` that represents the URL to download Node.js. Default value is `"https://nodejs.org/dist"`.
+This field is a `string` that configures the URL to download Node.js. Default value is `"https://nodejs.org/dist"`.
 
 ## How to uninstall PolyNode
 
