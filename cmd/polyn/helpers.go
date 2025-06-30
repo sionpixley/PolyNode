@@ -16,7 +16,7 @@ import (
 	"github.com/sionpixley/PolyNode/internal/utilities"
 )
 
-const isoDateTimeFormat = "2006-01-02T15:04:05.000Z07:00"
+const isoDateTimeFormat = "2006-01-02T15:04:05.000Z"
 
 func autoUpdate(operatingSystem models.OperatingSystem, arch models.Architecture) error {
 	now := time.Now().UTC()
