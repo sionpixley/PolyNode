@@ -11,8 +11,13 @@ import (
 
 const uninstallBatch string = `@echo off
 timeout /t 1 /nobreak > nul
+cd %LOCALAPPDATA%
 del %LOCALAPPDATA%\Programs\PolyNode /s /f /q > nul
 rmdir %LOCALAPPDATA%\Programs\PolyNode /s /q
+if exist %LOCALAPPDATA%\Programs\PolyNode\ (
+  del %LOCALAPPDATA%\Programs\PolyNode /s /q > nul
+  rmdir %LOCALAPPDATA%\Programs\PolyNode /s /q
+)
 (goto) 2>nul & del "%~f0"`
 
 func main() {
