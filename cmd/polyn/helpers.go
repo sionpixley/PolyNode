@@ -142,7 +142,7 @@ cd %LOCALAPPDATA%\Programs\PolyNode\upgrade-temp
 cd %LOCALAPPDATA%
 del %LOCALAPPDATA%\Programs\PolyNode\upgrade-temp /s /f /q > nul
 rmdir %LOCALAPPDATA%\Programs\PolyNode\upgrade-temp /s /q
-if exist %LOCALAPPDATA%\Programs\PolyNode\upgrade-temp (
+if exist %LOCALAPPDATA%\Programs\PolyNode\upgrade-temp\ (
   del %LOCALAPPDATA%\Programs\PolyNode\upgrade-temp /s /f /q > nul
   rmdir %LOCALAPPDATA%\Programs\PolyNode\upgrade-temp /s /q
 )
