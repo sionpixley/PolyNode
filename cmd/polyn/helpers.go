@@ -16,7 +16,7 @@ import (
 	"github.com/sionpixley/PolyNode/internal/utilities"
 )
 
-const isoDateTimeFormat = "2006-01-02T15:04:05.000Z"
+const isoDateTimeFormat = "2006-01-02T15:04:05.000Z07:00"
 
 func autoUpdate(operatingSystem models.OperatingSystem, arch models.Architecture) error {
 	now := time.Now().UTC()
@@ -142,6 +142,10 @@ cd %LOCALAPPDATA%\Programs\PolyNode\upgrade-temp
 cd %LOCALAPPDATA%
 del %LOCALAPPDATA%\Programs\PolyNode\upgrade-temp /s /f /q > nul
 rmdir %LOCALAPPDATA%\Programs\PolyNode\upgrade-temp /s /q
+if exist %LOCALAPPDATA%\Programs\PolyNode\upgrade-temp (
+  del %LOCALAPPDATA%\Programs\PolyNode\upgrade-temp /s /f /q > nul
+  rmdir %LOCALAPPDATA%\Programs\PolyNode\upgrade-temp /s /q
+)
 (goto) 2>nul & del "%~f0"`
 
 		err := os.WriteFile(batchfilePath, []byte(upgradeBatchfile), 0744)
