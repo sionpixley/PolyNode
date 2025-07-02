@@ -134,21 +134,22 @@ func runUpdateScript(operatingSystem models.OperatingSystem) error {
 	fmt.Print("Running update...")
 
 	if operatingSystem == constants.Windows {
-		batchfilePath := internal.PolynHomeDir + "\\polyn-upgrade-temp.cmd"
-		upgradeBatchfile := `@echo off
+		batchfilePath := internal.PolynHomeDir + "\\polyn-update-temp.cmd"
+		updateBatchfile := `@echo off
 timeout /t 1 /nobreak > nul
-cd %LOCALAPPDATA%\Programs\PolyNode\upgrade-temp
+cd %LOCALAPPDATA%\Programs\PolyNode\update-temp
 .\setup
+timeout /t 1 /nobreak > nul
 cd %LOCALAPPDATA%
-del %LOCALAPPDATA%\Programs\PolyNode\upgrade-temp /s /f /q > nul
-rmdir %LOCALAPPDATA%\Programs\PolyNode\upgrade-temp /s /q
-if exist %LOCALAPPDATA%\Programs\PolyNode\upgrade-temp\ (
-  del %LOCALAPPDATA%\Programs\PolyNode\upgrade-temp /s /f /q > nul
-  rmdir %LOCALAPPDATA%\Programs\PolyNode\upgrade-temp /s /q
+del %LOCALAPPDATA%\Programs\PolyNode\update-temp /s /f /q > nul
+rmdir %LOCALAPPDATA%\Programs\PolyNode\update-temp /s /q
+if exist %LOCALAPPDATA%\Programs\PolyNode\update-temp\ (
+  del %LOCALAPPDATA%\Programs\PolyNode\update-temp /s /f /q > nul
+  rmdir %LOCALAPPDATA%\Programs\PolyNode\update-temp /s /q
 )
 (goto) 2>nul & del "%~f0"`
 
-		err := os.WriteFile(batchfilePath, []byte(upgradeBatchfile), 0744)
+		err := os.WriteFile(batchfilePath, []byte(updateBatchfile), 0744)
 		if err != nil {
 			return err
 		}
