@@ -76,8 +76,8 @@ Please uninstall all Node.js downloads that weren't installed by PolyNode before
 PolyNode only supports Bash, Zsh, or KornShell by default. During the install process, PolyNode edits either .bashrc, .zshrc, or .kshrc to add two locations to the PATH: PolyNode's home directory `$HOME/.PolyNode` and the symlink for Node.js `$HOME/.PolyNode/nodejs/bin`. You can get PolyNode to work for other shells by adding these directories to your PATH environment variable.
 
 1. Navigate to the [latest release](https://github.com/sionpixley/PolyNode/releases/latest).
-2. Download the Linux .tar.xz file appropriate for your CPU architecture.
-3. Extract the .tar.xz file and run the setup binary.
+2. Download the Linux .tar.xz or .tar.gz file appropriate for your CPU architecture.
+3. Extract the tarball and run the setup binary.
 
 ### For macOS
 
@@ -99,7 +99,7 @@ PolyNode does not require sudo/admin privileges to use the `polyn` command.
 
 PolyNode has an auto updater, so manually updating your PolyNode is not usually required.
 
-You can turn off the auto updater in the [configuration file](#autoupdate).
+You can turn off the auto updater in the [configuration file](#how-to-configure-polynode).
 
 `polyn update`
 
@@ -276,7 +276,7 @@ If you're just testing your build locally, I would recommend building a Docker i
 
 #### Required technologies
 
-- Go 1.24.4
+- Go 1.24.5
 
 #### Building on AIX
 
@@ -284,7 +284,7 @@ Run the POSIX shell script `./scripts/aix/bundle`. This script will build PolyNo
 
 #### Building on Linux
 
-Run the POSIX shell script `./scripts/linux/bundle`. This script will build PolyNode's source code for x64, ARM64, Power LE 64-bit, and s390x and bundle the artifacts as separate .tar.xz files.
+Run the POSIX shell script `./scripts/linux/bundle`. This script will build PolyNode's source code for x64, ARM64, Power LE 64-bit, and s390x and bundle the artifacts as separate .tar.xz and .tar.gz files. The contents of the .tar.xz files and the .tar.gz files are identical. Both formats are provided for backwards compatiblity reasons.
 
 #### Building on macOS
 
