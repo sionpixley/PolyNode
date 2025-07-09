@@ -88,14 +88,12 @@ func downloadPolyNodeFile(filename string) error {
 	if err != nil {
 		return err
 	}
+	defer file.Close()
 
 	_, err = io.Copy(file, response.Body)
 	if err != nil {
-		file.Close()
 		return err
 	}
-	// Closing the file explicitly to avoid lock errors.
-	file.Close()
 
 	fmt.Println("Done.")
 	return nil
