@@ -209,25 +209,21 @@ func searchDefault(operatingSystem models.OperatingSystem, arch models.Architect
 	maxEntries := 7
 
 	majorVersions := map[string]struct{}{}
-	stableVersions := make([]string, maxEntries)
-	ltsVersions := make([]string, maxEntries)
-	var sIndex int
-	var lIndex int
+	stableVersions := []string{}
+	ltsVersions := []string{}
 
 	for _, nodeVersion := range nodeVersions {
-		if sIndex == maxEntries && lIndex == maxEntries {
+		if len(stableVersions) == maxEntries && len(ltsVersions) == maxEntries {
 			break
 		}
 
 		majorVersion := strings.Split(nodeVersion.Version, ".")[0]
 		if _, exists := majorVersions[majorVersion]; !exists {
 			majorVersions[majorVersion] = struct{}{}
-			if nodeVersion.Lts && lIndex < maxEntries {
-				ltsVersions[lIndex] = nodeVersion.Version
-				lIndex += 1
-			} else if !nodeVersion.Lts && sIndex < maxEntries {
-				stableVersions[sIndex] = nodeVersion.Version
-				sIndex += 1
+			if nodeVersion.Lts && len(ltsVersions) < maxEntries {
+				ltsVersions = append(ltsVersions, nodeVersion.Version)
+			} else if !nodeVersion.Lts && len(stableVersions) < maxEntries {
+				stableVersions = append(stableVersions, nodeVersion.Version)
 			}
 		}
 	}
