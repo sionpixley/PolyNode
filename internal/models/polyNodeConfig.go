@@ -48,14 +48,15 @@ func (config *PolyNodeConfig) UnmarshalJSON(b []byte) error {
 }
 
 func LoadPolyNodeConfig() PolyNodeConfig {
-	if _, err := os.Stat(internal.PolynHomeDir + internal.PathSeparator + "polynrc.json"); os.IsNotExist(err) {
+	configPath := internal.PolynHomeDir + internal.PathSeparator + "polynrc.json"
+	if _, err := os.Stat(configPath); os.IsNotExist(err) {
 		// Default config
 		return defaultPolynrc
 	} else if err != nil {
 		// Default config
 		return defaultPolynrc
 	} else {
-		content, err := os.ReadFile(internal.PolynHomeDir + internal.PathSeparator + "polynrc.json")
+		content, err := os.ReadFile(configPath)
 		if err != nil {
 			// Default config
 			return defaultPolynrc

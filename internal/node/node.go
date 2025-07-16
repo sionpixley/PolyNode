@@ -11,11 +11,6 @@ import (
 
 // Handle function is the main function for Node.js actions.
 func Handle(args []string, operatingSystem models.OperatingSystem, arch models.Architecture, config models.PolyNodeConfig) {
-	if len(args) == 0 {
-		fmt.Println(constants.Help)
-		return
-	}
-
 	var err error
 	command := utilities.ConvertToCommand(args[0])
 	switch command {

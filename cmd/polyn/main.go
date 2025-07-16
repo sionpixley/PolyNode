@@ -17,7 +17,7 @@ func main() {
 	operatingSystem := convertToOperatingSystem(runtime.GOOS)
 	arch := convertToArchitecture(runtime.GOARCH)
 
-	if !isSupportedOperatingSystem(operatingSystem) {
+	if !isSupportedOS(operatingSystem) {
 		log.Fatalln(constants.UnsupportedOSError)
 	} else if !isSupportedArchitecture(arch) {
 		log.Fatalln(constants.UnsupportedArchError)

@@ -21,7 +21,7 @@ const isoDateTimeFormat = "2006-01-02T15:04:05.000Z07:00"
 func autoUpdate(operatingSystem models.OperatingSystem, arch models.Architecture) error {
 	now := time.Now().UTC()
 	lastUpdated := getLastAutoUpdate()
-	if now.Sub(lastUpdated).Hours() > 719 {
+	if now.Sub(lastUpdated).Hours() >= 720 {
 		err := updatePolyNode(operatingSystem, arch)
 		if err != nil {
 			return err
@@ -100,12 +100,13 @@ func downloadPolyNodeFile(filename string) error {
 }
 
 func getLastAutoUpdate() time.Time {
-	if _, err := os.Stat(internal.PolynHomeDir + internal.PathSeparator + "lastAutoUpdate.txt"); os.IsNotExist(err) {
+	updateFilePath := internal.PolynHomeDir + internal.PathSeparator + "lastAutoUpdate.txt"
+	if _, err := os.Stat(updateFilePath); os.IsNotExist(err) {
 		return time.Now().UTC().AddDate(0, 0, -30)
 	} else if err != nil {
 		return time.Now().UTC().AddDate(0, 0, -30)
 	} else {
-		content, err := os.ReadFile(internal.PolynHomeDir + internal.PathSeparator + "lastAutoUpdate.txt")
+		content, err := os.ReadFile(updateFilePath)
 		if err != nil {
 			return time.Now().UTC().AddDate(0, 0, -30)
 		}
@@ -124,7 +125,7 @@ func isSupportedArchitecture(arch models.Architecture) bool {
 	return arch != constants.OtherArch
 }
 
-func isSupportedOperatingSystem(operatingSystem models.OperatingSystem) bool {
+func isSupportedOS(operatingSystem models.OperatingSystem) bool {
 	return operatingSystem != constants.OtherOS
 }
 
@@ -157,12 +158,13 @@ if exist %LOCALAPPDATA%\Programs\PolyNode\update-temp\ (
 			return err
 		}
 	} else {
-		err := exec.Command(internal.PolynHomeDir + internal.PathSeparator + "update-temp" + internal.PathSeparator + "setup").Run()
+		updateTemp := internal.PolynHomeDir + internal.PathSeparator + "update-temp"
+		err := exec.Command(updateTemp + internal.PathSeparator + "setup").Run()
 		if err != nil {
 			return err
 		}
 
-		err = os.RemoveAll(internal.PolynHomeDir + internal.PathSeparator + "update-temp")
+		err = os.RemoveAll(updateTemp)
 		if err != nil {
 			return err
 		}
@@ -217,7 +219,7 @@ func updatePolyNode(operatingSystem models.OperatingSystem, arch models.Architec
 		return err
 	}
 
-	fmt.Print("Extracting " + filename + "...")
+	fmt.Printf("Extracting %s...", filename)
 	filename = internal.PolynHomeDir + internal.PathSeparator + filename
 	err = utilities.ExtractFile(filename, internal.PolynHomeDir+internal.PathSeparator+"update-temp")
 	if err != nil {
