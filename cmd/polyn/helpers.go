@@ -20,7 +20,7 @@ const isoDateTimeFormat = "2006-01-02T15:04:05.000Z07:00"
 
 func autoUpdate(operatingSystem models.OperatingSystem, arch models.Architecture) error {
 	now := time.Now().UTC()
-	lastUpdated := getLastAutoUpdate()
+	lastUpdated := getLastUpdate()
 	if now.Sub(lastUpdated).Hours() >= 720 {
 		err := updatePolyNode(operatingSystem, arch)
 		if err != nil {
@@ -99,8 +99,8 @@ func downloadPolyNodeFile(filename string) error {
 	return nil
 }
 
-func getLastAutoUpdate() time.Time {
-	updateFilePath := internal.PolynHomeDir + internal.PathSeparator + "lastAutoUpdate.txt"
+func getLastUpdate() time.Time {
+	updateFilePath := internal.PolynHomeDir + internal.PathSeparator + "last-update.txt"
 	if _, err := os.Stat(updateFilePath); os.IsNotExist(err) {
 		return time.Now().UTC().AddDate(0, 0, -30)
 	} else if err != nil {
