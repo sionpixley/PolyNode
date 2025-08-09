@@ -51,12 +51,12 @@ func copyUpdatableFiles(currentBinaryLocation string, home string) error {
 		return err
 	}
 
-	return createLastAutoUpdateFile(home)
+	return createLastUpdateFile(home)
 }
 
-func createLastAutoUpdateFile(home string) error {
+func createLastUpdateFile(home string) error {
 	now := time.Now().UTC()
-	return os.WriteFile(home+"\\PolyNode\\lastAutoUpdate.txt", []byte(now.Format(constants.ISODateTimeFormat)), 0644)
+	return os.WriteFile(home+"\\PolyNode\\last-update.txt", []byte(now.Format(constants.ISODateTimeFormat)), 0644)
 }
 
 func createPolynConfig(home string) error {
@@ -74,7 +74,7 @@ func install(currentBinaryLocation string, home string) error {
 		return err
 	}
 
-	err = createLastAutoUpdateFile(home)
+	err = createLastUpdateFile(home)
 	if err != nil {
 		return err
 	}
@@ -109,6 +109,11 @@ func removeUpdatableFiles(home string) error {
 	}
 
 	err = os.RemoveAll(home + "\\PolyNode\\README.md")
+	if err != nil {
+		return err
+	}
+
+	err = os.RemoveAll(home + "\\PolyNode\\lastAutoUpdate.txt")
 	if err != nil {
 		return err
 	}
