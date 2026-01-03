@@ -5,6 +5,7 @@ import (
 	"log"
 
 	"github.com/sionpixley/PolyNode/internal/constants"
+	"github.com/sionpixley/PolyNode/internal/constants/command"
 	"github.com/sionpixley/PolyNode/internal/models"
 	"github.com/sionpixley/PolyNode/internal/utilities"
 )
@@ -12,43 +13,43 @@ import (
 // Handle function is the main function for Node.js actions.
 func Handle(args []string, operatingSystem models.OperatingSystem, arch models.Architecture, config models.PolyNodeConfig) {
 	var err error
-	command := utilities.ConvertToCommand(args[0])
-	switch command {
-	case constants.Add:
+	comm := utilities.ConvertToCommand(args[0])
+	switch comm {
+	case command.Add:
 		if len(args) > 1 {
 			err = add(convertKeywordToVersion(args[1], operatingSystem, arch, config), operatingSystem, arch, config)
 		} else {
 			fmt.Println(constants.Help)
 		}
-	case constants.Current:
+	case command.Current:
 		current()
-	case constants.Install:
+	case command.Install:
 		if len(args) > 1 {
 			err = install(convertKeywordToVersion(args[1], operatingSystem, arch, config), operatingSystem, arch, config)
 		} else {
 			fmt.Println(constants.Help)
 		}
-	case constants.List:
+	case command.List:
 		list()
-	case constants.Remove:
+	case command.Remove:
 		if len(args) > 1 {
 			err = remove(args[1])
 		} else {
 			fmt.Println(constants.Help)
 		}
-	case constants.Search:
+	case command.Search:
 		if len(args) > 1 {
 			err = search(args[1], operatingSystem, arch, config)
 		} else {
 			err = searchDefault(operatingSystem, arch, config)
 		}
-	case constants.Temp:
+	case command.Temp:
 		if len(args) > 1 {
 			err = temp(args[1], operatingSystem)
 		} else {
 			fmt.Println(constants.Help)
 		}
-	case constants.Use:
+	case command.Use:
 		if len(args) > 1 {
 			err = use(args[1], operatingSystem)
 		} else {
@@ -59,6 +60,6 @@ func Handle(args []string, operatingSystem models.OperatingSystem, arch models.A
 	}
 
 	if err != nil {
-		log.Fatalln(err.Error())
+		log.Fatalln(err)
 	}
 }

@@ -1,7 +1,5 @@
 package constants
 
-import "github.com/sionpixley/PolyNode/internal/models"
-
 const (
 	Help string = `Description:
 
@@ -53,36 +51,5 @@ Keywords:
 	UnsupportedOSError   string = "polyn error: unsupported operating system"
 
 	// PolyNode's version.
-	Version string = "v3.0.11"
-)
-
-const (
-	OtherOS models.OperatingSystem = iota
-	Aix
-	Linux
-	Mac
-	Windows
-)
-
-const (
-	OtherArch models.Architecture = iota
-	Arm64
-	Ppc64
-	Ppc64Le
-	S390x
-	X64
-)
-
-// We don't include the version command in this. The version command is handled in main().
-// We don't include the update command in this either. It also gets handled in main().
-const (
-	OtherComm models.Command = iota
-	Add
-	Current
-	Install
-	List
-	Remove
-	Search
-	Temp
-	Use
+	Version string = "v3.0.12"
 )

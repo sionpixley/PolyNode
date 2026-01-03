@@ -10,6 +10,7 @@ import (
 
 	"github.com/sionpixley/PolyNode/internal"
 	"github.com/sionpixley/PolyNode/internal/constants"
+	"github.com/sionpixley/PolyNode/internal/constants/opsys"
 	"github.com/sionpixley/PolyNode/internal/models"
 	"github.com/sionpixley/PolyNode/internal/utilities"
 )
@@ -17,7 +18,7 @@ import (
 func add(version string, operatingSystem models.OperatingSystem, arch models.Architecture, config models.PolyNodeConfig) error {
 	var err error
 
-	if utilities.IsValidVersionFormat(version) {
+	if utilities.ValidVersionFormat(version) {
 		version = utilities.ConvertToSemanticVersion(version)
 	} else {
 		version, err = convertPrefixToVersionDown(version, operatingSystem, arch, config)
@@ -32,7 +33,7 @@ func add(version string, operatingSystem models.OperatingSystem, arch models.Arc
 	}
 
 	fileName := "node-" + version + "-" + archiveName
-	fmt.Printf("Downloading %s...", fileName)
+	fmt.Printf("downloading %s...", fileName)
 
 	url := config.NodeMirror + "/" + version + "/" + fileName
 
@@ -67,11 +68,11 @@ func add(version string, operatingSystem models.OperatingSystem, arch models.Arc
 
 	_, err = io.Copy(file, response.Body)
 	if err != nil {
-		file.Close()
+		_ = file.Close()
 		return err
 	}
 	// Calling file.Close() explicitly instead of with defer to prevent lock errors.
-	file.Close()
+	_ = file.Close()
 
 	folderPath := nodePath + internal.PathSeparator + version
 	err = os.RemoveAll(folderPath)
@@ -79,9 +80,9 @@ func add(version string, operatingSystem models.OperatingSystem, arch models.Arc
 		return err
 	}
 
-	fmt.Println("Done.")
+	fmt.Println("done")
 
-	fmt.Printf("Extracting %s...", fileName)
+	fmt.Printf("extracting %s...", fileName)
 	err = utilities.ExtractFile(filePath, folderPath)
 	if err != nil {
 		return err
@@ -92,8 +93,8 @@ func add(version string, operatingSystem models.OperatingSystem, arch models.Arc
 		return err
 	}
 
-	fmt.Println("Done.")
-	fmt.Printf("Adding Node.js %s...Done.\n", version)
+	fmt.Println("done")
+	fmt.Printf("adding Node.js %s...done\n", version)
 	return nil
 }
 
@@ -141,7 +142,7 @@ func list() {
 func remove(version string) error {
 	var err error
 
-	if utilities.IsValidVersionFormat(version) {
+	if utilities.ValidVersionFormat(version) {
 		version = utilities.ConvertToSemanticVersion(version)
 	} else {
 		version, err = convertPrefixToVersionLocalAsc(version)
@@ -154,7 +155,7 @@ func remove(version string) error {
 		}
 	}
 
-	fmt.Printf("Removing Node.js %s...", version)
+	fmt.Printf("removing Node.js %s...", version)
 
 	folderName := internal.PolynHomeDir + internal.PathSeparator + "node" + internal.PathSeparator + version
 	err = os.RemoveAll(folderName)
@@ -176,7 +177,7 @@ func remove(version string) error {
 		}
 	}
 
-	fmt.Println("Done.")
+	fmt.Println("done")
 	return nil
 }
 
@@ -250,7 +251,7 @@ func searchDefault(operatingSystem models.OperatingSystem, arch models.Architect
 func temp(version string, operatingSystem models.OperatingSystem) error {
 	var err error
 
-	if utilities.IsValidVersionFormat(version) {
+	if utilities.ValidVersionFormat(version) {
 		version = utilities.ConvertToSemanticVersion(version)
 	} else {
 		version, err = convertPrefixToVersionLocalDesc(version)
@@ -263,7 +264,7 @@ func temp(version string, operatingSystem models.OperatingSystem) error {
 		}
 	}
 
-	if operatingSystem == constants.Windows {
+	if operatingSystem == opsys.Windows {
 		nodeVersionPath := internal.PolynHomeDir + "\\node\\" + version
 		fmt.Println("If using Command Prompt, run this command:")
 		fmt.Printf("\n  set PATH=%s%s\n", nodeVersionPath, ";%PATH%")
@@ -279,7 +280,7 @@ func temp(version string, operatingSystem models.OperatingSystem) error {
 func use(version string, operatingSystem models.OperatingSystem) error {
 	var err error
 
-	if utilities.IsValidVersionFormat(version) {
+	if utilities.ValidVersionFormat(version) {
 		version = utilities.ConvertToSemanticVersion(version)
 	} else {
 		version, err = convertPrefixToVersionLocalDesc(version)
@@ -292,7 +293,7 @@ func use(version string, operatingSystem models.OperatingSystem) error {
 		}
 	}
 
-	fmt.Printf("Switching to Node.js %s...", version)
+	fmt.Printf("switching to Node.js %s...", version)
 
 	nodejsPath := internal.PolynHomeDir + internal.PathSeparator + "nodejs"
 	err = os.RemoveAll(nodejsPath)
@@ -300,7 +301,7 @@ func use(version string, operatingSystem models.OperatingSystem) error {
 		return err
 	}
 
-	if operatingSystem == constants.Windows {
+	if operatingSystem == opsys.Windows {
 		err = exec.Command("cmd", "/c", "mklink", "/j", nodejsPath, internal.PolynHomeDir+"\\node\\"+version).Run()
 		if err != nil {
 			return err
@@ -312,6 +313,6 @@ func use(version string, operatingSystem models.OperatingSystem) error {
 		}
 	}
 
-	fmt.Println("Done.")
+	fmt.Println("done")
 	return nil
 }

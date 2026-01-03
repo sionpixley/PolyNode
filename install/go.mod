@@ -1,5 +1,5 @@
 module install
 
-go 1.25.4
+go 1.25.5
 
-require golang.org/x/sys v0.37.0
+require golang.org/x/sys v0.39.0

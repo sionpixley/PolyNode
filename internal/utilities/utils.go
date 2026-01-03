@@ -9,43 +9,43 @@ import (
 	"path/filepath"
 	"strings"
 
-	"github.com/sionpixley/PolyNode/internal/constants"
+	"github.com/sionpixley/PolyNode/internal/constants/command"
 	"github.com/sionpixley/PolyNode/internal/models"
 )
 
 func ConvertToCommand(commandStr string) models.Command {
 	switch commandStr {
 	case "add":
-		return constants.Add
+		return command.Add
 	case "current":
-		return constants.Current
+		return command.Current
 	case "install":
-		return constants.Install
+		return command.Install
 	case "ls":
 		fallthrough
 	case "list":
-		return constants.List
+		return command.List
 	case "rm":
 		fallthrough
 	case "remove":
-		return constants.Remove
+		return command.Remove
 	case "search":
-		return constants.Search
+		return command.Search
 	case "temp":
-		return constants.Temp
+		return command.Temp
 	case "use":
-		return constants.Use
+		return command.Use
 	default:
-		return constants.OtherComm
+		return command.Other
 	}
 }
 
 func ConvertToSemanticVersion(version string) string {
 	if version[0] == 'v' {
 		return version
-	} else {
-		return "v" + version
 	}
+
+	return "v" + version
 }
 
 func ExtractFile(source string, destination string) error {
@@ -113,10 +113,10 @@ func ExtractGzip(source string, destination string) error {
 				return err
 			}
 			if _, e2 := io.Copy(outFile, tarReader); e2 != nil {
-				outFile.Close()
+				_ = outFile.Close()
 				return e2
 			}
-			outFile.Close()
+			_ = outFile.Close()
 		case tar.TypeSymlink:
 			if e := os.MkdirAll(filepath.Dir(target), os.FileMode(header.Mode)); e != nil {
 				return e
@@ -165,16 +165,16 @@ func ExtractZip(source string, destination string) error {
 
 			link, err := io.ReadAll(src)
 			if err != nil {
-				src.Close()
+				_ = src.Close()
 				return err
 			}
 
 			if e2 := os.Symlink(string(link), target); e2 != nil {
-				src.Close()
+				_ = src.Close()
 				return e2
 			}
 
-			src.Close()
+			_ = src.Close()
 		} else {
 			if e := os.MkdirAll(filepath.Dir(target), file.Mode()); e != nil {
 				return e
@@ -187,29 +187,29 @@ func ExtractZip(source string, destination string) error {
 
 			dist, err := os.OpenFile(target, os.O_CREATE|os.O_RDWR|os.O_TRUNC, file.Mode())
 			if err != nil {
-				src.Close()
+				_ = src.Close()
 				return err
 			}
 
 			if _, e2 := io.Copy(dist, src); e2 != nil {
-				src.Close()
-				dist.Close()
+				_ = src.Close()
+				_ = dist.Close()
 				return e2
 			}
 
-			src.Close()
-			dist.Close()
+			_ = src.Close()
+			_ = dist.Close()
 		}
 	}
 
 	return nil
 }
 
-func IsKnownCommand(command string) bool {
-	return ConvertToCommand(command) != constants.OtherComm
+func KnownCommand(comm string) bool {
+	return ConvertToCommand(comm) != command.Other
 }
 
-func IsValidVersionFormat(version string) bool {
+func ValidVersionFormat(version string) bool {
 	if version[0] == 'v' {
 		version = version[1:]
 	}
@@ -249,7 +249,7 @@ func stripTopDir(path string) string {
 	parts := strings.SplitN(path, "/", 2)
 	if len(parts) == 2 {
 		return parts[1]
-	} else {
-		return path
 	}
+
+	return path
 }

@@ -17,9 +17,9 @@ func main() {
 	operatingSystem := convertToOperatingSystem(runtime.GOOS)
 	arch := convertToArchitecture(runtime.GOARCH)
 
-	if !isSupportedOS(operatingSystem) {
+	if !supportedOS(operatingSystem) {
 		log.Fatalln(constants.UnsupportedOSError)
-	} else if !isSupportedArchitecture(arch) {
+	} else if !supportedArchitecture(arch) {
 		log.Fatalln(constants.UnsupportedArchError)
 	}
 
@@ -45,9 +45,9 @@ func main() {
 	case args[0] == "update":
 		err := updatePolyNode(operatingSystem, arch)
 		if err != nil {
-			log.Fatalln(err.Error())
+			log.Fatalln(err)
 		}
-	case utilities.IsKnownCommand(args[0]):
+	case utilities.KnownCommand(args[0]):
 		node.Handle(args, operatingSystem, arch, config)
 	default:
 		fmt.Println(constants.Help)
@@ -57,7 +57,7 @@ func main() {
 	if config.AutoUpdate {
 		e := autoUpdate(operatingSystem, arch)
 		if e != nil {
-			log.Fatalln(e.Error())
+			log.Fatalln(e)
 		}
 	}
 }
