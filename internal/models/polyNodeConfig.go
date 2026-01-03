@@ -9,7 +9,7 @@ import (
 )
 
 const (
-	defaultAutoUpdate        = true
+	defaultAutoUpdate bool   = true
 	defaultNodeMirror string = "https://nodejs.org/dist"
 )
 
@@ -55,19 +55,20 @@ func LoadPolyNodeConfig() PolyNodeConfig {
 	} else if err != nil {
 		// Default config
 		return defaultPolynrc
-	} else {
-		content, err := os.ReadFile(configPath)
-		if err != nil {
-			// Default config
-			return defaultPolynrc
-		}
-
-		var config PolyNodeConfig
-		err = config.UnmarshalJSON(content)
-		if err != nil {
-			// Default config
-			return defaultPolynrc
-		}
-		return config
 	}
+
+	content, err := os.ReadFile(configPath)
+	if err != nil {
+		// Default config
+		return defaultPolynrc
+	}
+
+	var config PolyNodeConfig
+	err = config.UnmarshalJSON(content)
+	if err != nil {
+		// Default config
+		return defaultPolynrc
+	}
+
+	return config
 }

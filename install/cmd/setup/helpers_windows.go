@@ -87,9 +87,9 @@ func oldVersionExists(home string) bool {
 		return false
 	} else if err != nil {
 		return false
-	} else {
-		return true
 	}
+
+	return true
 }
 
 func removeUpdatableFiles(home string) error {

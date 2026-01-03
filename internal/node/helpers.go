@@ -13,6 +13,8 @@ import (
 
 	"github.com/sionpixley/PolyNode/internal"
 	"github.com/sionpixley/PolyNode/internal/constants"
+	"github.com/sionpixley/PolyNode/internal/constants/arch"
+	"github.com/sionpixley/PolyNode/internal/constants/opsys"
 	"github.com/sionpixley/PolyNode/internal/models"
 	"github.com/sionpixley/PolyNode/internal/utilities"
 )
@@ -37,44 +39,42 @@ func convertKeywordToVersion(keyword string, operatingSystem models.OperatingSys
 		}
 
 		return nodeVersions[0].Version
-	} else {
-		return keyword
 	}
+
+	return keyword
 }
 
-func convertOsAndArchToNodeVersionFile(operatingSystem models.OperatingSystem, arch models.Architecture) (string, error) {
+func convertOsAndArchToNodeVersionFile(operatingSystem models.OperatingSystem, architecture models.Architecture) (string, error) {
 	switch operatingSystem {
-	case constants.Aix:
+	case opsys.AIX:
 		return "aix-ppc64", nil
-	case constants.Linux:
-		switch arch {
-		case constants.Arm64:
+	case opsys.Linux:
+		switch architecture {
+		case arch.ARM64:
 			return "linux-arm64", nil
-		case constants.Ppc64Le:
+		case arch.PPC64LE:
 			return "linux-ppc64le", nil
-		case constants.S390x:
+		case arch.S390X:
 			return "linux-s390x", nil
-		case constants.X64:
+		case arch.X64:
 			return "linux-x64", nil
 		default:
 			return "", errors.New(constants.UnsupportedArchError)
 		}
-	case constants.Mac:
-		if arch == constants.Arm64 {
+	case opsys.Mac:
+		if architecture == arch.ARM64 {
 			return "osx-arm64-tar", nil
-		} else if arch == constants.X64 {
+		} else if architecture == arch.X64 {
 			return "osx-x64-tar", nil
-		} else {
-			return "", errors.New(constants.UnsupportedArchError)
 		}
-	case constants.Windows:
-		if arch == constants.Arm64 {
+		return "", errors.New(constants.UnsupportedArchError)
+	case opsys.Windows:
+		if architecture == arch.ARM64 {
 			return "win-arm64-zip", nil
-		} else if arch == constants.X64 {
+		} else if architecture == arch.X64 {
 			return "win-x64-zip", nil
-		} else {
-			return "", errors.New(constants.UnsupportedArchError)
 		}
+		return "", errors.New(constants.UnsupportedArchError)
 	default:
 		return "", errors.New(constants.UnsupportedOSError)
 	}
@@ -218,36 +218,36 @@ func getAllNodeVersionsForOsAndArch(operatingSystem models.OperatingSystem, arch
 	return compatibleNodeVersions, err
 }
 
-func getArchiveName(operatingSystem models.OperatingSystem, arch models.Architecture) (string, error) {
+func getArchiveName(operatingSystem models.OperatingSystem, architecture models.Architecture) (string, error) {
 	var archiveName string
 	switch operatingSystem {
-	case constants.Aix:
+	case opsys.AIX:
 		archiveName = "aix-ppc64.tar.gz"
-	case constants.Linux:
-		switch arch {
-		case constants.Arm64:
+	case opsys.Linux:
+		switch architecture {
+		case arch.ARM64:
 			archiveName = "linux-arm64.tar.gz"
-		case constants.Ppc64Le:
+		case arch.PPC64LE:
 			archiveName = "linux-ppc64le.tar.gz"
-		case constants.S390x:
+		case arch.S390X:
 			archiveName = "linux-s390x.tar.gz"
-		case constants.X64:
+		case arch.X64:
 			archiveName = "linux-x64.tar.gz"
 		default:
 			return "", errors.New(constants.UnsupportedArchError)
 		}
-	case constants.Mac:
-		if arch == constants.Arm64 {
+	case opsys.Mac:
+		if architecture == arch.ARM64 {
 			archiveName = "darwin-arm64.tar.gz"
-		} else if arch == constants.X64 {
+		} else if architecture == arch.X64 {
 			archiveName = "darwin-x64.tar.gz"
 		} else {
 			return "", errors.New(constants.UnsupportedArchError)
 		}
-	case constants.Windows:
-		if arch == constants.Arm64 {
+	case opsys.Windows:
+		if architecture == arch.ARM64 {
 			archiveName = "win-arm64.zip"
-		} else if arch == constants.X64 {
+		} else if architecture == arch.X64 {
 			archiveName = "win-x64.zip"
 		} else {
 			return "", errors.New(constants.UnsupportedArchError)

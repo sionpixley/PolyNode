@@ -18,7 +18,7 @@ func addToPath(home string, rcFile string) error {
 		return err
 	}
 	// Calling close directly instead of with defer. Will be reopening the file soon.
-	f.Close()
+	_ = f.Close()
 
 	contentData, err := os.ReadFile(home + "/" + rcFile)
 	if err != nil {
@@ -103,9 +103,9 @@ func oldVersionExists(home string) bool {
 		return false
 	} else if err != nil {
 		return false
-	} else {
-		return true
 	}
+
+	return true
 }
 
 func removeUpdatableFiles(home string) error {

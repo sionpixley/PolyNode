@@ -27,7 +27,7 @@ func main() {
 	}
 
 	if err != nil {
-		log.Fatalln(err.Error())
+		log.Fatalln(err)
 	}
 }
 
@@ -54,7 +54,7 @@ func removePath(home string, rcFile string) error {
 
 	// Explicitly calling close instead of using defer.
 	// Need to have more control before writing to the file.
-	rc.Close()
+	_ = rc.Close()
 
 	return os.WriteFile(home+"/"+rcFile, []byte(content), 0644)
 }
