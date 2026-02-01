@@ -4,9 +4,11 @@ import (
 	"errors"
 	"fmt"
 	"io"
+	"log"
 	"net/http"
 	"os"
 	"os/exec"
+	"runtime"
 	"strings"
 	"time"
 
@@ -15,6 +17,7 @@ import (
 	"github.com/sionpixley/PolyNode/internal/constants/arch"
 	"github.com/sionpixley/PolyNode/internal/constants/opsys"
 	"github.com/sionpixley/PolyNode/internal/models"
+	"github.com/sionpixley/PolyNode/internal/node"
 	"github.com/sionpixley/PolyNode/internal/utilities"
 )
 
@@ -31,6 +34,22 @@ func autoUpdate(operatingSystem models.OperatingSystem, arch models.Architecture
 	}
 
 	return nil
+}
+
+func checkArchitecture() models.Architecture {
+	architecture := convertToArchitecture(runtime.GOARCH)
+	if !supportedArchitecture(architecture) {
+		log.Fatalln(constants.UnsupportedArchError)
+	}
+	return architecture
+}
+
+func checkOS() models.OperatingSystem {
+	operatingSystem := convertToOperatingSystem(runtime.GOOS)
+	if !supportedOS(operatingSystem) {
+		log.Fatalln(constants.UnsupportedOSError)
+	}
+	return operatingSystem
 }
 
 func convertToArchitecture(archStr string) models.Architecture {
@@ -101,6 +120,29 @@ func downloadPolyNodeFile(filename string) error {
 	return nil
 }
 
+func execute(args []string, operatingSystem models.OperatingSystem, arch models.Architecture, config models.PolyNodeConfig) {
+	switch {
+	case args[0] == "version":
+		fmt.Println(constants.Version)
+	case args[0] == "update":
+		err := updatePolyNode(operatingSystem, arch)
+		if err != nil {
+			log.Fatalln(err)
+		}
+	case utilities.KnownCommand(args[0]):
+		node.Handle(args, operatingSystem, arch, config)
+	default:
+		fmt.Println(constants.Help)
+	}
+
+	if config.AutoUpdate {
+		e := autoUpdate(operatingSystem, arch)
+		if e != nil {
+			log.Fatalln(e)
+		}
+	}
+}
+
 func getLastUpdate() time.Time {
 	updateFilePath := internal.PolynHomeDir + internal.PathSeparator + "last-update.txt"
 	if _, err := os.Stat(updateFilePath); os.IsNotExist(err) {
@@ -121,6 +163,24 @@ func getLastUpdate() time.Time {
 	}
 
 	return t
+}
+
+func parseCLIArgs() []string {
+	if len(os.Args) == 1 {
+		fmt.Println(constants.Help)
+		os.Exit(0)
+	}
+
+	args := make([]string, len(os.Args)-1)
+	for i, arg := range os.Args {
+		if i == 0 {
+			continue
+		} else {
+			args[i-1] = strings.ToLower(arg)
+		}
+	}
+
+	return args
 }
 
 func runUpdateScript(operatingSystem models.OperatingSystem) error {
