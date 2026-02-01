@@ -23,11 +23,11 @@ import (
 
 const isoDateTimeFormat = "2006-01-02T15:04:05.000Z07:00"
 
-func autoUpdate(operatingSystem models.OperatingSystem, arch models.Architecture) error {
+func autoUpdate(operatingSystem models.OperatingSystem, architecture models.Architecture) error {
 	now := time.Now().UTC()
 	lastUpdated := getLastUpdate()
 	if now.Sub(lastUpdated).Hours() >= 720 {
-		err := updatePolyNode(operatingSystem, arch)
+		err := updatePolyNode(operatingSystem, architecture)
 		if err != nil {
 			return err
 		}
@@ -120,23 +120,23 @@ func downloadPolyNodeFile(filename string) error {
 	return nil
 }
 
-func execute(args []string, operatingSystem models.OperatingSystem, arch models.Architecture, config models.PolyNodeConfig) {
+func execute(args []string, operatingSystem models.OperatingSystem, architecture models.Architecture, config models.PolyNodeConfig) {
 	switch {
 	case args[0] == "version":
 		fmt.Println(constants.Version)
 	case args[0] == "update":
-		err := updatePolyNode(operatingSystem, arch)
+		err := updatePolyNode(operatingSystem, architecture)
 		if err != nil {
 			log.Fatalln(err)
 		}
 	case utilities.KnownCommand(args[0]):
-		node.Handle(args, operatingSystem, arch, config)
+		node.Handle(args, operatingSystem, architecture, config)
 	default:
 		fmt.Println(constants.Help)
 	}
 
 	if config.AutoUpdate {
-		e := autoUpdate(operatingSystem, arch)
+		e := autoUpdate(operatingSystem, architecture)
 		if e != nil {
 			log.Fatalln(e)
 		}
