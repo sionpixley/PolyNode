@@ -56,6 +56,6 @@ Keywords:
 	UnsupportedArchError string = "polyn error: unsupported CPU architecture"
 	UnsupportedOSError   string = "polyn error: unsupported operating system"
 
-	// PolyNode's version.
-	Version string = "v3.0.13"
+	// Version constant is PolyNode's version.
+	Version string = "v3.0.14"
 )

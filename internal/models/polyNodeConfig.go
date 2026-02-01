@@ -13,7 +13,7 @@ const (
 	defaultNodeMirror string = "https://nodejs.org/dist"
 )
 
-var defaultPolynrc PolyNodeConfig = PolyNodeConfig{
+var defaultPolynrc = PolyNodeConfig{
 	AutoUpdate: defaultAutoUpdate,
 	NodeMirror: defaultNodeMirror,
 }

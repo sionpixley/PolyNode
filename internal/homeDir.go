@@ -4,5 +4,5 @@ package internal
 
 import "os"
 
-var PathSeparator string = string(os.PathSeparator)
-var PolynHomeDir string = "."
+var PathSeparator = string(os.PathSeparator)
+var PolynHomeDir = "."
