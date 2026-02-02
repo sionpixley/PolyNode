@@ -122,24 +122,26 @@ func downloadPolyNodeFile(filename string) error {
 }
 
 func execute(args []string, operatingSystem models.OperatingSystem, architecture models.Architecture, config models.PolyNodeConfig) {
+	var err error
 	switch {
 	case args[0] == "version":
 		fmt.Println(constants.Version)
 	case args[0] == "update":
-		err := updatePolyNode(operatingSystem, architecture)
+		err = updatePolyNode(operatingSystem, architecture)
 		if err != nil {
 			log.Fatalln(err)
 		}
 	case utilities.KnownCommand(args[0]):
 		node.Handle(args, operatingSystem, architecture, config)
 	default:
-		log.Fatalf(constants.UnknownCommandError+"\n", args[0])
+		err = fmt.Errorf(constants.UnknownCommandError, args[0])
+		log.Fatalln(err)
 	}
 
 	if config.AutoUpdate {
-		e := autoUpdate(operatingSystem, architecture)
-		if e != nil {
-			log.Fatalln(e)
+		err = autoUpdate(operatingSystem, architecture)
+		if err != nil {
+			log.Fatalln(err)
 		}
 	}
 }
