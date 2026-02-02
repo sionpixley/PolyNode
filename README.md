@@ -97,11 +97,11 @@ PolyNode does not require sudo/admin privileges to use the `polyn` command.
 
 ### Updating PolyNode to the latest release
 
+`polyn update`
+
 PolyNode has an auto updater, so manually updating your PolyNode is not usually required.
 
 You can turn off the auto updater in the [configuration file](#how-to-configure-polynode).
-
-`polyn update`
 
 ### Searching for available Node.js versions
 
@@ -115,9 +115,9 @@ A default list will print if no prefix is given.
 
 ### Downloading a new version of Node.js
 
-This command will only download a new version of Node.js. It will not set the new version as your currently-used version. See [Setting your default Node.js version](#setting-your-default-nodejs-version) or [Temporarily setting your Node.js version](#temporarily-setting-your-nodejs-version) on how to use the Node.js you download.
-
 `polyn add <version or keyword or prefix>`
+
+This command will only download a new version of Node.js. It will not set the new version as your currently-used version. See [Setting your default Node.js version](#setting-your-default-nodejs-version) or [Temporarily setting your Node.js version](#temporarily-setting-your-nodejs-version) on how to use the Node.js you download.
 
 #### Examples
 
@@ -137,9 +137,9 @@ polyn add latest
 
 ### Setting your default Node.js version
 
-This command will set your Node.js version across all shell processes. All new shell processes will automatically use this Node.js version, unless overriden by [temporarily setting the Node.js version](#temporarily-setting-your-nodejs-version).
-
 `polyn default <version or prefix>`
+
+This command will set your Node.js version across all shell processes. All new shell processes will automatically use this Node.js version, unless overriden by [temporarily setting the Node.js version](#temporarily-setting-your-nodejs-version).
 
 #### Examples
 
@@ -177,11 +177,11 @@ Unfortunately, Windows doesn't have a command equivalent to the POSIX `eval`. Yo
 
 ### Downloading and setting your default Node.js to a new version
 
+`polyn install <version or keyword or prefix>`
+
 This command downloads a specific version of Node.js and immediately sets it as your default version.
 
 The `install` command is equivalent to the `add` command followed by the `default` command.
-
-`polyn install <version or keyword or prefix>`
 
 #### Examples
 
