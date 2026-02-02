@@ -19,6 +19,8 @@ func ConvertToCommand(commandStr string) models.Command {
 		return command.Add
 	case "current":
 		return command.Current
+	case "default":
+		return command.Default
 	case "install":
 		return command.Install
 	case "ls":
@@ -31,8 +33,6 @@ func ConvertToCommand(commandStr string) models.Command {
 		return command.Remove
 	case "search":
 		return command.Search
-	case "temp":
-		return command.Temp
 	case "use":
 		return command.Use
 	default:

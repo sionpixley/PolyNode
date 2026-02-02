@@ -7,7 +7,7 @@ const (
 
 Usage:
 
-    polyn command [option]
+    polyn [option...] command
 
 Commands:
 
@@ -16,6 +16,9 @@ Commands:
         Prefix will match the newest version with that prefix.
     current
         Prints your current version of Node.js.
+    default <version or prefix>
+        Sets your default Node.js to a different version.
+        Prefix will match the newest version with that prefix.
     install <version or keyword or prefix>
         Downloads a specific version of Node.js and sets it as your default version.
         Prefix will match the newest version with that prefix.
@@ -32,15 +35,12 @@ Commands:
     search [prefix]
         Prints out a list of Node.js versions that have this prefix.
         If the prefix is omitted, prints out a list of the most recent Node.js versions available for download.
-    temp <version or prefix>
-        Prints out the command needed to temporarily set your Node.js to a specific version.
-        If on AIX, Linux, or macOS, please use 'eval $(polyn temp <version>)' instead.
-        Prefix will match the newest version with that prefix.
-    use <version or prefix>
-        Sets your default Node.js to a different version.
-        Prefix will match the newest version with that prefix.
     update
         Updates PolyNode to the latest release.
+    use <version or prefix>
+        Prints out the command needed to temporarily set your Node.js to a specific version.
+        If on AIX, Linux, or macOS, please use 'eval $(polyn use <version or prefix>)' instead.
+        Prefix will match the newest version with that prefix.
     version
         Prints the current version of PolyNode.
 
@@ -66,5 +66,5 @@ Options:
 	UnsupportedOSError   string = "polyn error: unsupported operating system"
 
 	// Version constant is PolyNode's version.
-	Version string = "v3.1.0"
+	Version string = "v4.0.0"
 )

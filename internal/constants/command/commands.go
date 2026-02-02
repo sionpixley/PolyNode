@@ -8,10 +8,10 @@ const (
 	Other models.Command = iota
 	Add
 	Current
+	Default
 	Install
 	List
 	Remove
 	Search
-	Temp
 	Use
 )

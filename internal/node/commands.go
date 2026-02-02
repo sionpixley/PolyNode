@@ -107,13 +107,53 @@ func current() {
 	}
 }
 
+func def(version string, operatingSystem models.OperatingSystem) error {
+	var err error
+
+	if utilities.ValidVersionFormat(version) {
+		version = utilities.ConvertToSemanticVersion(version)
+	} else {
+		version, err = convertPrefixToVersionLocalDesc(version)
+		// We don't want to do anything when the error's value is 'skip'.
+		// If the error is 'skip' then that means the node directory doesn't exist.
+		// We don't treat it like an error in that case.
+		// This is unique to this function (asc and desc versions) throughout the system (so far at least). 2025-02-25
+		if err != nil && err.Error() != "skip" {
+			return err
+		}
+	}
+
+	fmt.Printf("switching to Node.js %s...", version)
+
+	nodejsPath := internal.PolynHomeDir + internal.PathSeparator + "nodejs"
+	err = os.RemoveAll(nodejsPath)
+	if err != nil {
+		return err
+	}
+
+	if operatingSystem == opsys.Windows {
+		err = exec.Command("cmd", "/c", "mklink", "/j", nodejsPath, internal.PolynHomeDir+"\\node\\"+version).Run()
+		if err != nil {
+			return err
+		}
+	} else {
+		err = os.Symlink(internal.PolynHomeDir+"/node/"+version, nodejsPath)
+		if err != nil {
+			return err
+		}
+	}
+
+	fmt.Println("done")
+	return nil
+}
+
 func install(version string, operatingSystem models.OperatingSystem, arch models.Architecture, config models.PolyNodeConfig) error {
 	err := add(version, operatingSystem, arch, config)
 	if err != nil {
 		return err
 	}
 
-	return use(version, operatingSystem)
+	return def(version, operatingSystem)
 }
 
 func list() {
@@ -248,7 +288,7 @@ func searchDefault(operatingSystem models.OperatingSystem, arch models.Architect
 	return nil
 }
 
-func temp(version string, operatingSystem models.OperatingSystem) error {
+func use(version string, operatingSystem models.OperatingSystem) error {
 	var err error
 
 	if utilities.ValidVersionFormat(version) {
@@ -274,45 +314,5 @@ func temp(version string, operatingSystem models.OperatingSystem) error {
 		fmt.Printf("export PATH=%s", internal.PolynHomeDir+"/node/"+version+"/bin:$PATH")
 	}
 
-	return nil
-}
-
-func use(version string, operatingSystem models.OperatingSystem) error {
-	var err error
-
-	if utilities.ValidVersionFormat(version) {
-		version = utilities.ConvertToSemanticVersion(version)
-	} else {
-		version, err = convertPrefixToVersionLocalDesc(version)
-		// We don't want to do anything when the error's value is 'skip'.
-		// If the error is 'skip' then that means the node directory doesn't exist.
-		// We don't treat it like an error in that case.
-		// This is unique to this function (asc and desc versions) throughout the system (so far at least). 2025-02-25
-		if err != nil && err.Error() != "skip" {
-			return err
-		}
-	}
-
-	fmt.Printf("switching to Node.js %s...", version)
-
-	nodejsPath := internal.PolynHomeDir + internal.PathSeparator + "nodejs"
-	err = os.RemoveAll(nodejsPath)
-	if err != nil {
-		return err
-	}
-
-	if operatingSystem == opsys.Windows {
-		err = exec.Command("cmd", "/c", "mklink", "/j", nodejsPath, internal.PolynHomeDir+"\\node\\"+version).Run()
-		if err != nil {
-			return err
-		}
-	} else {
-		err = os.Symlink(internal.PolynHomeDir+"/node/"+version, nodejsPath)
-		if err != nil {
-			return err
-		}
-	}
-
-	fmt.Println("done")
 	return nil
 }

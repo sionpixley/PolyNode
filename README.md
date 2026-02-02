@@ -139,16 +139,16 @@ polyn add latest
 
 This command will set your Node.js version across all shell processes. All new shell processes will automatically use this Node.js version, unless overriden by [temporarily setting the Node.js version](#temporarily-setting-your-nodejs-version).
 
-`polyn use <version or prefix>`
+`polyn default <version or prefix>`
 
 #### Examples
 
 ```sh
 # Setting your default to a specific Node.js version.
-polyn use 23.7.0
+polyn default 23.7.0
 
 # Setting your default to the latest Node.js release that matches a prefix.
-polyn use 23
+polyn default 23
 ```
 
 ### Temporarily setting your Node.js version
@@ -159,27 +159,27 @@ This command is useful if you need to run two separate projects at the same time
 
 #### Temporarily setting your Node.js on AIX, Linux, or macOS
 
-`eval $(polyn temp <version or prefix>)`
+`eval $(polyn use <version or prefix>)`
 
 ##### Examples
 
 ```sh
 # Temporarily setting your Node.js to a specific version.
-eval $(polyn temp 23.7.0)
+eval $(polyn use 23.7.0)
 
 # Temporarily setting your Node.js to the latest release that matches a prefix.
-eval $(polyn temp 23)
+eval $(polyn use 23)
 ```
 
 #### Temporarily setting your Node.js on Windows
 
-Unfortunately, Windows doesn't have a command equivalent to the POSIX `eval`. You will have to run `polyn temp <version or prefix>` and then copy and paste the command it outputs.
+Unfortunately, Windows doesn't have a command equivalent to the POSIX `eval`. You will have to run `polyn use <version or prefix>` and then copy and paste the command it outputs.
 
 ### Downloading and setting your default Node.js to a new version
 
 This command downloads a specific version of Node.js and immediately sets it as your default version.
 
-The `install` command is equivalent to the `add` command followed by the `use` command.
+The `install` command is equivalent to the `add` command followed by the `default` command.
 
 `polyn install <version or keyword or prefix>`
 

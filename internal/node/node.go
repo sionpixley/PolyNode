@@ -23,6 +23,12 @@ func Handle(args []string, operatingSystem models.OperatingSystem, arch models.A
 		}
 	case command.Current:
 		current()
+	case command.Default:
+		if len(args) > 1 {
+			err = def(args[1], operatingSystem)
+		} else {
+			err = fmt.Errorf(constants.MissingVersionOrPrefixError, args[0])
+		}
 	case command.Install:
 		if len(args) > 1 {
 			err = install(convertKeywordToVersion(args[1], operatingSystem, arch, config), operatingSystem, arch, config)
@@ -42,12 +48,6 @@ func Handle(args []string, operatingSystem models.OperatingSystem, arch models.A
 			err = search(args[1], operatingSystem, arch, config)
 		} else {
 			err = searchDefault(operatingSystem, arch, config)
-		}
-	case command.Temp:
-		if len(args) > 1 {
-			err = temp(args[1], operatingSystem)
-		} else {
-			err = fmt.Errorf(constants.MissingVersionOrPrefixError, args[0])
 		}
 	case command.Use:
 		if len(args) > 1 {
