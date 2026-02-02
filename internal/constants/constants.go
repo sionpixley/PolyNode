@@ -7,7 +7,7 @@ const (
 
 Usage:
 
-    polyn command
+    polyn command [option]
 
 Commands:
 
@@ -49,13 +49,22 @@ Keywords:
     latest
         Represents the latest release of Node.js.
     lts
-        Represents the most recent LTS release of Node.js.`
+        Represents the most recent LTS release of Node.js.
+
+Options:
+
+    -h, --help
+        Prints help and usage information.`
+
+	MissingVersionKeywordOrPrefixError string = "polyn error: the '%s' command is missing a version, keyword, or prefix"
+	MissingVersionOrPrefixError        string = "polyn error: the '%s' command is missing a version or prefix"
 
 	NoDownloadedNodejsMessage string = "There are no Node.js versions downloaded.\nTo download a Node.js version, use the 'add' or 'install' command."
 
+	UnknownCommandError  string = "polyn error: unknown command '%s'"
 	UnsupportedArchError string = "polyn error: unsupported CPU architecture"
 	UnsupportedOSError   string = "polyn error: unsupported operating system"
 
 	// Version constant is PolyNode's version.
-	Version string = "v3.0.14"
+	Version string = "v3.1.0"
 )

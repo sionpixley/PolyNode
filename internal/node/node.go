@@ -19,7 +19,7 @@ func Handle(args []string, operatingSystem models.OperatingSystem, arch models.A
 		if len(args) > 1 {
 			err = add(convertKeywordToVersion(args[1], operatingSystem, arch, config), operatingSystem, arch, config)
 		} else {
-			fmt.Println(constants.Help)
+			err = fmt.Errorf(constants.MissingVersionKeywordOrPrefixError, args[0])
 		}
 	case command.Current:
 		current()
@@ -27,7 +27,7 @@ func Handle(args []string, operatingSystem models.OperatingSystem, arch models.A
 		if len(args) > 1 {
 			err = install(convertKeywordToVersion(args[1], operatingSystem, arch, config), operatingSystem, arch, config)
 		} else {
-			fmt.Println(constants.Help)
+			err = fmt.Errorf(constants.MissingVersionKeywordOrPrefixError, args[0])
 		}
 	case command.List:
 		list()
@@ -35,7 +35,7 @@ func Handle(args []string, operatingSystem models.OperatingSystem, arch models.A
 		if len(args) > 1 {
 			err = remove(args[1])
 		} else {
-			fmt.Println(constants.Help)
+			err = fmt.Errorf(constants.MissingVersionOrPrefixError, args[0])
 		}
 	case command.Search:
 		if len(args) > 1 {
@@ -47,16 +47,16 @@ func Handle(args []string, operatingSystem models.OperatingSystem, arch models.A
 		if len(args) > 1 {
 			err = temp(args[1], operatingSystem)
 		} else {
-			fmt.Println(constants.Help)
+			err = fmt.Errorf(constants.MissingVersionOrPrefixError, args[0])
 		}
 	case command.Use:
 		if len(args) > 1 {
 			err = use(args[1], operatingSystem)
 		} else {
-			fmt.Println(constants.Help)
+			err = fmt.Errorf(constants.MissingVersionOrPrefixError, args[0])
 		}
 	default:
-		fmt.Println(constants.Help)
+		err = fmt.Errorf(constants.UnknownCommandError, args[0])
 	}
 
 	if err != nil {

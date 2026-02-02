@@ -47,7 +47,7 @@ func add(version string, operatingSystem models.OperatingSystem, arch models.Arc
 	if err != nil {
 		return err
 	}
-	defer response.Body.Close()
+	defer func() { _ = response.Body.Close() }()
 
 	nodePath := internal.PolynHomeDir + internal.PathSeparator + "node"
 	err = os.MkdirAll(nodePath, os.ModePerm)
@@ -184,7 +184,7 @@ func remove(version string) error {
 func search(prefix string, operatingSystem models.OperatingSystem, arch models.Architecture, config models.PolyNodeConfig) error {
 	prefix = utilities.ConvertToSemanticVersion(prefix)
 
-	allVersions, err := getAllNodeVersionsForOsAndArch(operatingSystem, arch, config)
+	allVersions, err := getAllNodeVersionsForOSAndArch(operatingSystem, arch, config)
 	if err != nil {
 		return err
 	}
@@ -207,7 +207,7 @@ func search(prefix string, operatingSystem models.OperatingSystem, arch models.A
 }
 
 func searchDefault(operatingSystem models.OperatingSystem, arch models.Architecture, config models.PolyNodeConfig) error {
-	nodeVersions, err := getAllNodeVersionsForOsAndArch(operatingSystem, arch, config)
+	nodeVersions, err := getAllNodeVersionsForOSAndArch(operatingSystem, arch, config)
 	if err != nil {
 		return err
 	}

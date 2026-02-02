@@ -7,7 +7,7 @@ import (
 	"runtime"
 )
 
-var PathSeparator string = string(os.PathSeparator)
+var PathSeparator = string(os.PathSeparator)
 var PolynHomeDir string
 
 func init() {

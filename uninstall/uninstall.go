@@ -23,7 +23,7 @@ func main() {
 	case "linux":
 		err = uninstall()
 	default:
-		err = errors.New("uninstall: unsupported operating system")
+		err = errors.New("polyn uninstall: unsupported operating system")
 	}
 
 	if err != nil {

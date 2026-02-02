@@ -19,6 +19,7 @@ import (
 	"github.com/sionpixley/PolyNode/internal/models"
 	"github.com/sionpixley/PolyNode/internal/node"
 	"github.com/sionpixley/PolyNode/internal/utilities"
+	flag "github.com/spf13/pflag"
 )
 
 const isoDateTimeFormat = "2006-01-02T15:04:05.000Z07:00"
@@ -97,7 +98,7 @@ func downloadPolyNodeFile(filename string) error {
 	if err != nil {
 		return err
 	}
-	defer response.Body.Close()
+	defer func() { _ = response.Body.Close() }()
 
 	filename = internal.PolynHomeDir + internal.PathSeparator + filename
 	err = os.RemoveAll(filename)
@@ -109,7 +110,7 @@ func downloadPolyNodeFile(filename string) error {
 	if err != nil {
 		return err
 	}
-	defer file.Close()
+	defer func() { _ = file.Close() }()
 
 	_, err = io.Copy(file, response.Body)
 	if err != nil {
@@ -132,7 +133,7 @@ func execute(args []string, operatingSystem models.OperatingSystem, architecture
 	case utilities.KnownCommand(args[0]):
 		node.Handle(args, operatingSystem, architecture, config)
 	default:
-		fmt.Println(constants.Help)
+		log.Fatalf(constants.UnknownCommandError+"\n", args[0])
 	}
 
 	if config.AutoUpdate {
@@ -166,18 +167,20 @@ func getLastUpdate() time.Time {
 }
 
 func parseCLIArgs() []string {
-	if len(os.Args) == 1 {
-		fmt.Println(constants.Help)
-		os.Exit(0)
+	flag.Usage = func() {
+		w := flag.CommandLine.Output()
+		_, _ = fmt.Fprintln(w, constants.Help)
 	}
 
-	args := make([]string, len(os.Args)-1)
-	for i, arg := range os.Args {
-		if i == 0 {
-			continue
-		} else {
-			args[i-1] = strings.ToLower(arg)
-		}
+	flag.Parse()
+
+	if flag.NArg() < 1 {
+		log.Fatalln("polyn error: no command specified")
+	}
+
+	args := make([]string, flag.NArg())
+	for i := range flag.NArg() {
+		args[i] = strings.ToLower(flag.Arg(i))
 	}
 
 	return args

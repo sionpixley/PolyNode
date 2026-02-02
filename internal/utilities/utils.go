@@ -79,13 +79,13 @@ func ExtractGzip(source string, destination string) error {
 	if err != nil {
 		return err
 	}
-	defer file.Close()
+	defer func() { _ = file.Close() }()
 
 	gzipReader, err := gzip.NewReader(file)
 	if err != nil {
 		return err
 	}
-	defer gzipReader.Close()
+	defer func() { _ = gzipReader.Close() }()
 
 	tarReader := tar.NewReader(gzipReader)
 
@@ -144,7 +144,7 @@ func ExtractZip(source string, destination string) error {
 	if err != nil {
 		return err
 	}
-	defer zipReader.Close()
+	defer func() { _ = zipReader.Close() }()
 
 	for _, file := range zipReader.File {
 		target := filepath.Join(destination, stripTopDir(strings.ReplaceAll(file.Name, "\\", "/")))
