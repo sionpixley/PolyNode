@@ -23,7 +23,7 @@ func main() {
 	case "linux":
 		err = uninstall()
 	default:
-		err = errors.New("polyn uninstall: unsupported operating system")
+		err = errors.New("polyn uninstall error: unsupported operating system")
 	}
 
 	if err != nil {
@@ -69,7 +69,7 @@ func removePathLinuxAndMac(home string) error {
 	case strings.HasSuffix(shell, "/ksh"):
 		return removePath(home, ".kshrc")
 	default:
-		return errors.New("uninstall: unsupported shell")
+		return errors.New("polyn uninstall error: unsupported shell")
 	}
 }
 
