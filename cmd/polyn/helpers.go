@@ -177,7 +177,8 @@ func parseCLIArgs() []string {
 	flag.Parse()
 
 	if flag.NArg() < 1 {
-		log.Fatalln("polyn error: no command specified")
+		fmt.Println(constants.Help)
+		os.Exit(0)
 	}
 
 	args := make([]string, flag.NArg())
