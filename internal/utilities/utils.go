@@ -4,8 +4,8 @@ import (
 	"archive/tar"
 	"archive/zip"
 	"compress/gzip"
+	"fmt"
 	"io"
-	"log"
 	"os"
 	"path/filepath"
 	"strings"
@@ -211,10 +211,11 @@ func KnownCommand(comm string) bool {
 	return ConvertToCommand(comm) != command.Other
 }
 
-func LogError(err error) {
+func LogUserError(err error) {
 	flag.CommandLine.SetOutput(os.Stderr)
 	flag.Usage()
-	log.Fatalln(err)
+	_, _ = fmt.Fprintln(os.Stderr, err)
+	os.Exit(1)
 }
 
 func ValidVersionFormat(version string) bool {

@@ -123,19 +123,16 @@ func downloadPolyNodeFile(filename string) error {
 
 func execute(args []string, operatingSystem models.OperatingSystem, architecture models.Architecture, config models.PolyNodeConfig) {
 	var err error
-	switch {
-	case args[0] == "version":
-		fmt.Println(constants.Version)
-	case args[0] == "update":
+	if args[0] == "update" {
 		err = updatePolyNode(operatingSystem, architecture)
 		if err != nil {
 			log.Fatalln(err)
 		}
-	case utilities.KnownCommand(args[0]):
+	} else if utilities.KnownCommand(args[0]) {
 		node.Handle(args, operatingSystem, architecture, config)
-	default:
+	} else {
 		err = fmt.Errorf(constants.UnknownCommandError, args[0])
-		utilities.LogError(err)
+		utilities.LogUserError(err)
 	}
 
 	if config.AutoUpdate {
@@ -174,10 +171,19 @@ func parseCLIArgs() []string {
 		_, _ = fmt.Fprintln(w, constants.Help)
 	}
 
+	var version bool
+	flag.BoolVarP(&version, "version", "v", false, "print the version and exit")
+
 	flag.Parse()
 
+	if version {
+		fmt.Println(constants.Version)
+		os.Exit(0)
+	}
+
 	if flag.NArg() < 1 {
-		fmt.Println(constants.Help)
+		flag.CommandLine.SetOutput(os.Stdout)
+		flag.Usage()
 		os.Exit(0)
 	}
 

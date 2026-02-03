@@ -41,8 +41,6 @@ Commands:
         Prints out the command needed to temporarily set your Node.js to a specific version.
         If on AIX, Linux, or macOS, please use 'eval $(polyn use <version or prefix>)' instead.
         Prefix will match the newest version with that prefix.
-    version
-        Prints the current version of PolyNode.
 
 Keywords:
 
@@ -54,16 +52,18 @@ Keywords:
 Options:
 
     -h, --help
-        Prints help and usage information.`
+        Prints help and usage information.
+    -v, --version
+        Prints the current version of PolyNode.`
 
-	MissingVersionKeywordOrPrefixError string = "polyn error: the '%s' command is missing a version, keyword, or prefix"
-	MissingVersionOrPrefixError        string = "polyn error: the '%s' command is missing a version or prefix"
+	MissingVersionKeywordOrPrefixError string = "missing argument: the '%s' command is missing a version, keyword, or prefix"
+	MissingVersionOrPrefixError        string = "missing argument: the '%s' command is missing a version or prefix"
 
 	NoDownloadedNodejsMessage string = "There are no Node.js versions downloaded.\nTo download a Node.js version, use the 'add' or 'install' command."
 
-	UnknownCommandError  string = "polyn error: unknown command '%s'"
-	UnsupportedArchError string = "polyn error: unsupported CPU architecture"
-	UnsupportedOSError   string = "polyn error: unsupported operating system"
+	UnknownCommandError  string = "unknown command: '%s' is not a known command"
+	UnsupportedArchError string = "polyn: unsupported CPU architecture"
+	UnsupportedOSError   string = "polyn: unsupported operating system"
 
 	// Version constant is PolyNode's version.
 	Version string = "v4.0.0"
