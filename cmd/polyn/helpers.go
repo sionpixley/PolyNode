@@ -135,7 +135,7 @@ func execute(args []string, operatingSystem models.OperatingSystem, architecture
 		node.Handle(args, operatingSystem, architecture, config)
 	default:
 		err = fmt.Errorf(constants.UnknownCommandError, args[0])
-		log.Fatalln(err)
+		utilities.LogError(err)
 	}
 
 	if config.AutoUpdate {

@@ -5,12 +5,14 @@ import (
 	"archive/zip"
 	"compress/gzip"
 	"io"
+	"log"
 	"os"
 	"path/filepath"
 	"strings"
 
 	"github.com/sionpixley/PolyNode/internal/constants/command"
 	"github.com/sionpixley/PolyNode/internal/models"
+	flag "github.com/spf13/pflag"
 )
 
 func ConvertToCommand(commandStr string) models.Command {
@@ -207,6 +209,12 @@ func ExtractZip(source string, destination string) error {
 
 func KnownCommand(comm string) bool {
 	return ConvertToCommand(comm) != command.Other
+}
+
+func LogError(err error) {
+	flag.CommandLine.SetOutput(os.Stderr)
+	flag.Usage()
+	log.Fatalln(err)
 }
 
 func ValidVersionFormat(version string) bool {
