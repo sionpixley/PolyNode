@@ -115,7 +115,7 @@ A default list will print if no prefix is given.
 
 ### Downloading a new version of Node.js
 
-`polyn add <version or keyword or prefix>`
+`polyn add <version | keyword | prefix>`
 
 This command will only download a new version of Node.js. It will not set the new version as your currently-used version. See [Setting your default Node.js version](#setting-your-default-nodejs-version) or [Temporarily setting your Node.js version](#temporarily-setting-your-nodejs-version) on how to use the Node.js you download.
 
@@ -137,7 +137,7 @@ polyn add latest
 
 ### Setting your default Node.js version
 
-`polyn default <version or prefix>`
+`polyn default <version | prefix>`
 
 This command will set your Node.js version across all shell processes. All new shell processes will automatically use this Node.js version, unless overriden by [temporarily setting the Node.js version](#temporarily-setting-your-nodejs-version).
 
@@ -159,7 +159,7 @@ This command is useful if you need to run two separate projects at the same time
 
 #### Temporarily setting your Node.js on AIX, Linux, or macOS
 
-`eval $(polyn use <version or prefix>)`
+`eval $(polyn use <version | prefix>)`
 
 ##### Examples
 
@@ -177,7 +177,7 @@ Unfortunately, Windows doesn't have a command equivalent to the POSIX `eval`. Yo
 
 ### Downloading and setting your default Node.js to a new version
 
-`polyn install <version or keyword or prefix>`
+`polyn install <version | keyword | prefix>`
 
 This command downloads a specific version of Node.js and immediately sets it as your default version.
 
@@ -213,11 +213,11 @@ or
 
 ### Deleting a downloaded version of Node.js
 
-`polyn rm <version or prefix>`
+`polyn rm <version | prefix>`
 
 or 
 
-`polyn remove <version or prefix>`
+`polyn remove <version | prefix>`
 
 #### Examples
 
@@ -231,7 +231,11 @@ polyn rm 23
 
 ### Printing your current version of PolyNode
 
-`polyn version`
+`polyn -v`
+
+or
+
+`polyn --version`
 
 ## How to configure PolyNode
 
@@ -276,7 +280,7 @@ If you're just testing your build locally, I would recommend building a Docker i
 
 #### Required technologies
 
-- Go 1.25.6
+- Go 1.25.7
 
 #### Building on AIX
 
