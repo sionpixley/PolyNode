@@ -239,7 +239,9 @@ or
 
 ## How to configure PolyNode
 
-PolyNode's configuration is handled through a JSON file named `polynrc.json` located in PolyNode's home directory (`$HOME/.PolyNode` for AIX/Linux/macOS or `%LOCALAPPDATA%\Programs\PolyNode` for Windows). Please see below for the default configuration for `polynrc.json`:
+`polyn config-set <config_field> <value>`
+
+PolyNode's configuration is handled through a JSON file named `polynrc.json` located in PolyNode's home directory (`$HOME/.PolyNode` for AIX/Linux/macOS or `%LOCALAPPDATA%\Programs\PolyNode` for Windows). You can either use the `config-set` command (recommended) or edit the file directly. Please see below for the default configuration for `polynrc.json`:
 
 ```json
 {
