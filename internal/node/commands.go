@@ -99,8 +99,7 @@ func add(version string, operatingSystem models.OperatingSystem, arch models.Arc
 	return nil
 }
 
-func configGet(configField string) {
-	config := models.LoadPolyNodeConfig()
+func configGet(config models.PolyNodeConfig, configField string) {
 	if configField == "autoupdate" {
 		fmt.Println(config.AutoUpdate)
 	} else if configField == "nodemirror" {
@@ -111,8 +110,7 @@ func configGet(configField string) {
 	}
 }
 
-func configGetAll() {
-	config := models.LoadPolyNodeConfig()
+func configGetAll(config models.PolyNodeConfig) {
 	s := `{
   "autoUpdate": %t,
   "nodeMirror": "%s"
@@ -121,8 +119,7 @@ func configGetAll() {
 	fmt.Printf(s, config.AutoUpdate, config.NodeMirror)
 }
 
-func configSet(configField string, value string) error {
-	config := models.LoadPolyNodeConfig()
+func configSet(config models.PolyNodeConfig, configField string, value string) error {
 	if configField == "autoupdate" {
 		v, err := strconv.ParseBool(value)
 		if err != nil {
