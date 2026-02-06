@@ -4,6 +4,7 @@ import (
 	"archive/tar"
 	"archive/zip"
 	"compress/gzip"
+	"fmt"
 	"io"
 	"os"
 	"path/filepath"
@@ -11,14 +12,21 @@ import (
 
 	"github.com/sionpixley/PolyNode/internal/constants/command"
 	"github.com/sionpixley/PolyNode/internal/models"
+	flag "github.com/spf13/pflag"
 )
 
 func ConvertToCommand(commandStr string) models.Command {
 	switch commandStr {
 	case "add":
 		return command.Add
+	case "config-get":
+		return command.ConfigGet
+	case "config-set":
+		return command.ConfigSet
 	case "current":
 		return command.Current
+	case "default":
+		return command.Default
 	case "install":
 		return command.Install
 	case "ls":
@@ -31,8 +39,6 @@ func ConvertToCommand(commandStr string) models.Command {
 		return command.Remove
 	case "search":
 		return command.Search
-	case "temp":
-		return command.Temp
 	case "use":
 		return command.Use
 	default:
@@ -79,13 +85,13 @@ func ExtractGzip(source string, destination string) error {
 	if err != nil {
 		return err
 	}
-	defer file.Close()
+	defer func() { _ = file.Close() }()
 
 	gzipReader, err := gzip.NewReader(file)
 	if err != nil {
 		return err
 	}
-	defer gzipReader.Close()
+	defer func() { _ = gzipReader.Close() }()
 
 	tarReader := tar.NewReader(gzipReader)
 
@@ -144,7 +150,7 @@ func ExtractZip(source string, destination string) error {
 	if err != nil {
 		return err
 	}
-	defer zipReader.Close()
+	defer func() { _ = zipReader.Close() }()
 
 	for _, file := range zipReader.File {
 		target := filepath.Join(destination, stripTopDir(strings.ReplaceAll(file.Name, "\\", "/")))
@@ -207,6 +213,13 @@ func ExtractZip(source string, destination string) error {
 
 func KnownCommand(comm string) bool {
 	return ConvertToCommand(comm) != command.Other
+}
+
+func LogUserError(err error) {
+	flag.CommandLine.SetOutput(os.Stderr)
+	flag.Usage()
+	_, _ = fmt.Fprintln(os.Stderr, err)
+	os.Exit(1)
 }
 
 func ValidVersionFormat(version string) bool {

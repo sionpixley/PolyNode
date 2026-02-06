@@ -6,6 +6,7 @@ import (
 	"net/http"
 	"os"
 	"os/exec"
+	"strconv"
 	"strings"
 
 	"github.com/sionpixley/PolyNode/internal"
@@ -47,7 +48,7 @@ func add(version string, operatingSystem models.OperatingSystem, arch models.Arc
 	if err != nil {
 		return err
 	}
-	defer response.Body.Close()
+	defer func() { _ = response.Body.Close() }()
 
 	nodePath := internal.PolynHomeDir + internal.PathSeparator + "node"
 	err = os.MkdirAll(nodePath, os.ModePerm)
@@ -98,6 +99,49 @@ func add(version string, operatingSystem models.OperatingSystem, arch models.Arc
 	return nil
 }
 
+func configGet(configField string) {
+	config := models.LoadPolyNodeConfig()
+	if configField == "autoupdate" {
+		fmt.Println(config.AutoUpdate)
+	} else if configField == "nodemirror" {
+		fmt.Println(config.NodeMirror)
+	} else {
+		err := fmt.Errorf(constants.InvalidConfigFieldError, configField)
+		utilities.LogUserError(err)
+	}
+}
+
+func configGetAll() {
+	config := models.LoadPolyNodeConfig()
+	s := `{
+  "autoUpdate": %t,
+  "nodeMirror": "%s"
+}
+`
+	fmt.Printf(s, config.AutoUpdate, config.NodeMirror)
+}
+
+func configSet(configField string, value string) error {
+	config := models.LoadPolyNodeConfig()
+	if configField == "autoupdate" {
+		v, err := strconv.ParseBool(value)
+		if err != nil {
+			err = fmt.Errorf("invalid value: '%s' is not a valid bool value", value)
+			utilities.LogUserError(err)
+		}
+
+		config.AutoUpdate = v
+		return config.Save()
+	} else if configField == "nodemirror" {
+		config.NodeMirror = value
+		return config.Save()
+	}
+
+	e := fmt.Errorf(constants.InvalidConfigFieldError, configField)
+	utilities.LogUserError(e)
+	return nil
+}
+
 func current() {
 	output, err := exec.Command("node", "-v").Output()
 	if err != nil {
@@ -107,13 +151,53 @@ func current() {
 	}
 }
 
+func def(version string, operatingSystem models.OperatingSystem) error {
+	var err error
+
+	if utilities.ValidVersionFormat(version) {
+		version = utilities.ConvertToSemanticVersion(version)
+	} else {
+		version, err = convertPrefixToVersionLocalDesc(version)
+		// We don't want to do anything when the error's value is 'skip'.
+		// If the error is 'skip' then that means the node directory doesn't exist.
+		// We don't treat it like an error in that case.
+		// This is unique to this function (asc and desc versions) throughout the system (so far at least). 2025-02-25
+		if err != nil && err.Error() != "skip" {
+			return err
+		}
+	}
+
+	fmt.Printf("switching to Node.js %s...", version)
+
+	nodejsPath := internal.PolynHomeDir + internal.PathSeparator + "nodejs"
+	err = os.RemoveAll(nodejsPath)
+	if err != nil {
+		return err
+	}
+
+	if operatingSystem == opsys.Windows {
+		err = exec.Command("cmd", "/c", "mklink", "/j", nodejsPath, internal.PolynHomeDir+"\\node\\"+version).Run()
+		if err != nil {
+			return err
+		}
+	} else {
+		err = os.Symlink(internal.PolynHomeDir+"/node/"+version, nodejsPath)
+		if err != nil {
+			return err
+		}
+	}
+
+	fmt.Println("done")
+	return nil
+}
+
 func install(version string, operatingSystem models.OperatingSystem, arch models.Architecture, config models.PolyNodeConfig) error {
 	err := add(version, operatingSystem, arch, config)
 	if err != nil {
 		return err
 	}
 
-	return use(version, operatingSystem)
+	return def(version, operatingSystem)
 }
 
 func list() {
@@ -184,7 +268,7 @@ func remove(version string) error {
 func search(prefix string, operatingSystem models.OperatingSystem, arch models.Architecture, config models.PolyNodeConfig) error {
 	prefix = utilities.ConvertToSemanticVersion(prefix)
 
-	allVersions, err := getAllNodeVersionsForOsAndArch(operatingSystem, arch, config)
+	allVersions, err := getAllNodeVersionsForOSAndArch(operatingSystem, arch, config)
 	if err != nil {
 		return err
 	}
@@ -207,7 +291,7 @@ func search(prefix string, operatingSystem models.OperatingSystem, arch models.A
 }
 
 func searchDefault(operatingSystem models.OperatingSystem, arch models.Architecture, config models.PolyNodeConfig) error {
-	nodeVersions, err := getAllNodeVersionsForOsAndArch(operatingSystem, arch, config)
+	nodeVersions, err := getAllNodeVersionsForOSAndArch(operatingSystem, arch, config)
 	if err != nil {
 		return err
 	}
@@ -248,7 +332,7 @@ func searchDefault(operatingSystem models.OperatingSystem, arch models.Architect
 	return nil
 }
 
-func temp(version string, operatingSystem models.OperatingSystem) error {
+func use(version string, operatingSystem models.OperatingSystem) error {
 	var err error
 
 	if utilities.ValidVersionFormat(version) {
@@ -274,45 +358,5 @@ func temp(version string, operatingSystem models.OperatingSystem) error {
 		fmt.Printf("export PATH=%s", internal.PolynHomeDir+"/node/"+version+"/bin:$PATH")
 	}
 
-	return nil
-}
-
-func use(version string, operatingSystem models.OperatingSystem) error {
-	var err error
-
-	if utilities.ValidVersionFormat(version) {
-		version = utilities.ConvertToSemanticVersion(version)
-	} else {
-		version, err = convertPrefixToVersionLocalDesc(version)
-		// We don't want to do anything when the error's value is 'skip'.
-		// If the error is 'skip' then that means the node directory doesn't exist.
-		// We don't treat it like an error in that case.
-		// This is unique to this function (asc and desc versions) throughout the system (so far at least). 2025-02-25
-		if err != nil && err.Error() != "skip" {
-			return err
-		}
-	}
-
-	fmt.Printf("switching to Node.js %s...", version)
-
-	nodejsPath := internal.PolynHomeDir + internal.PathSeparator + "nodejs"
-	err = os.RemoveAll(nodejsPath)
-	if err != nil {
-		return err
-	}
-
-	if operatingSystem == opsys.Windows {
-		err = exec.Command("cmd", "/c", "mklink", "/j", nodejsPath, internal.PolynHomeDir+"\\node\\"+version).Run()
-		if err != nil {
-			return err
-		}
-	} else {
-		err = os.Symlink(internal.PolynHomeDir+"/node/"+version, nodejsPath)
-		if err != nil {
-			return err
-		}
-	}
-
-	fmt.Println("done")
 	return nil
 }

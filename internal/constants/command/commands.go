@@ -7,11 +7,13 @@ import "github.com/sionpixley/PolyNode/internal/models"
 const (
 	Other models.Command = iota
 	Add
+	ConfigGet
+	ConfigSet
 	Current
+	Default
 	Install
 	List
 	Remove
 	Search
-	Temp
 	Use
 )

@@ -21,7 +21,7 @@ import (
 
 func convertKeywordToVersion(keyword string, operatingSystem models.OperatingSystem, arch models.Architecture, config models.PolyNodeConfig) string {
 	if keyword == "lts" {
-		nodeVersions, err := getAllNodeVersionsForOsAndArch(operatingSystem, arch, config)
+		nodeVersions, err := getAllNodeVersionsForOSAndArch(operatingSystem, arch, config)
 		if err != nil {
 			return keyword
 		}
@@ -33,7 +33,7 @@ func convertKeywordToVersion(keyword string, operatingSystem models.OperatingSys
 		}
 		return keyword
 	} else if keyword == "latest" {
-		nodeVersions, err := getAllNodeVersionsForOsAndArch(operatingSystem, arch, config)
+		nodeVersions, err := getAllNodeVersionsForOSAndArch(operatingSystem, arch, config)
 		if err != nil {
 			return keyword
 		}
@@ -44,7 +44,7 @@ func convertKeywordToVersion(keyword string, operatingSystem models.OperatingSys
 	return keyword
 }
 
-func convertOsAndArchToNodeVersionFile(operatingSystem models.OperatingSystem, architecture models.Architecture) (string, error) {
+func convertOSAndArchToNodeVersionFile(operatingSystem models.OperatingSystem, architecture models.Architecture) (string, error) {
 	switch operatingSystem {
 	case opsys.AIX:
 		return "aix-ppc64", nil
@@ -81,7 +81,7 @@ func convertOsAndArchToNodeVersionFile(operatingSystem models.OperatingSystem, a
 }
 
 func convertPrefixToVersionDown(prefix string, operatingSystem models.OperatingSystem, arch models.Architecture, config models.PolyNodeConfig) (string, error) {
-	nodeVersions, err := getAllNodeVersionsForOsAndArch(operatingSystem, arch, config)
+	nodeVersions, err := getAllNodeVersionsForOSAndArch(operatingSystem, arch, config)
 	if err != nil {
 		return "", err
 	}
@@ -93,7 +93,7 @@ func convertPrefixToVersionDown(prefix string, operatingSystem models.OperatingS
 		}
 	}
 
-	return "", fmt.Errorf("polyn error: no Node.js versions match the prefix '%s'", prefix)
+	return "", fmt.Errorf("polyn: no Node.js versions match the prefix '%s'", prefix)
 }
 
 func convertPrefixToVersionLocalAsc(prefix string) (string, error) {
@@ -136,7 +136,7 @@ func convertPrefixToVersionLocalAsc(prefix string) (string, error) {
 		}
 	}
 
-	return "", fmt.Errorf("polyn error: no downloaded Node.js versions match the prefix '%s'", prefix)
+	return "", fmt.Errorf("polyn: no downloaded Node.js versions match the prefix '%s'", prefix)
 }
 
 func convertPrefixToVersionLocalDesc(prefix string) (string, error) {
@@ -179,10 +179,10 @@ func convertPrefixToVersionLocalDesc(prefix string) (string, error) {
 		}
 	}
 
-	return "", fmt.Errorf("polyn error: no downloaded Node.js versions match the prefix '%s'", prefix)
+	return "", fmt.Errorf("polyn: no downloaded Node.js versions match the prefix '%s'", prefix)
 }
 
-func getAllNodeVersionsForOsAndArch(operatingSystem models.OperatingSystem, arch models.Architecture, config models.PolyNodeConfig) ([]models.NodeVersion, error) {
+func getAllNodeVersionsForOSAndArch(operatingSystem models.OperatingSystem, arch models.Architecture, config models.PolyNodeConfig) ([]models.NodeVersion, error) {
 	url := config.NodeMirror + "/index.json"
 
 	client := new(http.Client)
@@ -195,7 +195,7 @@ func getAllNodeVersionsForOsAndArch(operatingSystem models.OperatingSystem, arch
 	if err != nil {
 		return nil, err
 	}
-	defer response.Body.Close()
+	defer func() { _ = response.Body.Close() }()
 
 	var nodeVersions []models.NodeVersion
 	err = json.NewDecoder(response.Body).Decode(&nodeVersions)
@@ -203,7 +203,7 @@ func getAllNodeVersionsForOsAndArch(operatingSystem models.OperatingSystem, arch
 		return nil, err
 	}
 
-	nodeVersionFile, err := convertOsAndArchToNodeVersionFile(operatingSystem, arch)
+	nodeVersionFile, err := convertOSAndArchToNodeVersionFile(operatingSystem, arch)
 	if err != nil {
 		return nil, err
 	}

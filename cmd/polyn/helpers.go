@@ -19,6 +19,7 @@ import (
 	"github.com/sionpixley/PolyNode/internal/models"
 	"github.com/sionpixley/PolyNode/internal/node"
 	"github.com/sionpixley/PolyNode/internal/utilities"
+	flag "github.com/spf13/pflag"
 )
 
 const isoDateTimeFormat = "2006-01-02T15:04:05.000Z07:00"
@@ -97,7 +98,7 @@ func downloadPolyNodeFile(filename string) error {
 	if err != nil {
 		return err
 	}
-	defer response.Body.Close()
+	defer func() { _ = response.Body.Close() }()
 
 	filename = internal.PolynHomeDir + internal.PathSeparator + filename
 	err = os.RemoveAll(filename)
@@ -109,7 +110,7 @@ func downloadPolyNodeFile(filename string) error {
 	if err != nil {
 		return err
 	}
-	defer file.Close()
+	defer func() { _ = file.Close() }()
 
 	_, err = io.Copy(file, response.Body)
 	if err != nil {
@@ -121,24 +122,23 @@ func downloadPolyNodeFile(filename string) error {
 }
 
 func execute(args []string, operatingSystem models.OperatingSystem, architecture models.Architecture, config models.PolyNodeConfig) {
-	switch {
-	case args[0] == "version":
-		fmt.Println(constants.Version)
-	case args[0] == "update":
-		err := updatePolyNode(operatingSystem, architecture)
+	var err error
+	if args[0] == "update" {
+		err = updatePolyNode(operatingSystem, architecture)
 		if err != nil {
 			log.Fatalln(err)
 		}
-	case utilities.KnownCommand(args[0]):
+	} else if utilities.KnownCommand(args[0]) {
 		node.Handle(args, operatingSystem, architecture, config)
-	default:
-		fmt.Println(constants.Help)
+	} else {
+		err = fmt.Errorf(constants.UnknownCommandError, args[0])
+		utilities.LogUserError(err)
 	}
 
 	if config.AutoUpdate {
-		e := autoUpdate(operatingSystem, architecture)
-		if e != nil {
-			log.Fatalln(e)
+		err = autoUpdate(operatingSystem, architecture)
+		if err != nil {
+			log.Fatalln(err)
 		}
 	}
 }
@@ -166,18 +166,30 @@ func getLastUpdate() time.Time {
 }
 
 func parseCLIArgs() []string {
-	if len(os.Args) == 1 {
-		fmt.Println(constants.Help)
+	flag.Usage = func() {
+		w := flag.CommandLine.Output()
+		_, _ = fmt.Fprintln(w, constants.Help)
+	}
+
+	var version bool
+	flag.BoolVarP(&version, "version", "v", false, "print the version and exit")
+
+	flag.Parse()
+
+	if version {
+		fmt.Println(constants.Version)
 		os.Exit(0)
 	}
 
-	args := make([]string, len(os.Args)-1)
-	for i, arg := range os.Args {
-		if i == 0 {
-			continue
-		} else {
-			args[i-1] = strings.ToLower(arg)
-		}
+	if flag.NArg() < 1 {
+		flag.CommandLine.SetOutput(os.Stdout)
+		flag.Usage()
+		os.Exit(0)
+	}
+
+	args := make([]string, flag.NArg())
+	for i := range flag.NArg() {
+		args[i] = strings.ToLower(flag.Arg(i))
 	}
 
 	return args

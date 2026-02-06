@@ -34,7 +34,7 @@ func main() {
 			err = install(currentBinaryLocation, home)
 		}
 	default:
-		err = errors.New("setup: unsupported operating system")
+		err = errors.New("polyn setup: unsupported operating system")
 	}
 
 	if err != nil {

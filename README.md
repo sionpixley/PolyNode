@@ -97,11 +97,11 @@ PolyNode does not require sudo/admin privileges to use the `polyn` command.
 
 ### Updating PolyNode to the latest release
 
+`polyn update`
+
 PolyNode has an auto updater, so manually updating your PolyNode is not usually required.
 
 You can turn off the auto updater in the [configuration file](#how-to-configure-polynode).
-
-`polyn update`
 
 ### Searching for available Node.js versions
 
@@ -115,9 +115,9 @@ A default list will print if no prefix is given.
 
 ### Downloading a new version of Node.js
 
-This command will only download a new version of Node.js. It will not set the new version as your currently-used version. See [Setting your default Node.js version](#setting-your-default-nodejs-version) or [Temporarily setting your Node.js version](#temporarily-setting-your-nodejs-version) on how to use the Node.js you download.
+`polyn add <version | keyword | prefix>`
 
-`polyn add <version or keyword or prefix>`
+This command will only download a new version of Node.js. It will not set the new version as your currently-used version. See [Setting your default Node.js version](#setting-your-default-nodejs-version) or [Temporarily setting your Node.js version](#temporarily-setting-your-nodejs-version) on how to use the Node.js you download.
 
 #### Examples
 
@@ -137,18 +137,18 @@ polyn add latest
 
 ### Setting your default Node.js version
 
-This command will set your Node.js version across all shell processes. All new shell processes will automatically use this Node.js version, unless overriden by [temporarily setting the Node.js version](#temporarily-setting-your-nodejs-version).
+`polyn default <version | prefix>`
 
-`polyn use <version or prefix>`
+This command will set your Node.js version across all shell processes. All new shell processes will automatically use this Node.js version, unless overriden by [temporarily setting the Node.js version](#temporarily-setting-your-nodejs-version).
 
 #### Examples
 
 ```sh
 # Setting your default to a specific Node.js version.
-polyn use 23.7.0
+polyn default 23.7.0
 
 # Setting your default to the latest Node.js release that matches a prefix.
-polyn use 23
+polyn default 23
 ```
 
 ### Temporarily setting your Node.js version
@@ -159,29 +159,29 @@ This command is useful if you need to run two separate projects at the same time
 
 #### Temporarily setting your Node.js on AIX, Linux, or macOS
 
-`eval $(polyn temp <version or prefix>)`
+`eval $(polyn use <version | prefix>)`
 
 ##### Examples
 
 ```sh
 # Temporarily setting your Node.js to a specific version.
-eval $(polyn temp 23.7.0)
+eval $(polyn use 23.7.0)
 
 # Temporarily setting your Node.js to the latest release that matches a prefix.
-eval $(polyn temp 23)
+eval $(polyn use 23)
 ```
 
 #### Temporarily setting your Node.js on Windows
 
-Unfortunately, Windows doesn't have a command equivalent to the POSIX `eval`. You will have to run `polyn temp <version or prefix>` and then copy and paste the command it outputs.
+Unfortunately, Windows doesn't have a command equivalent to the POSIX `eval`. You will have to run `polyn use <version | prefix>` and then copy and paste the command it outputs.
 
 ### Downloading and setting your default Node.js to a new version
 
+`polyn install <version | keyword | prefix>`
+
 This command downloads a specific version of Node.js and immediately sets it as your default version.
 
-The `install` command is equivalent to the `add` command followed by the `use` command.
-
-`polyn install <version or keyword or prefix>`
+The `install` command is equivalent to the `add` command followed by the `default` command.
 
 #### Examples
 
@@ -213,11 +213,11 @@ or
 
 ### Deleting a downloaded version of Node.js
 
-`polyn rm <version or prefix>`
+`polyn rm <version | prefix>`
 
 or 
 
-`polyn remove <version or prefix>`
+`polyn remove <version | prefix>`
 
 #### Examples
 
@@ -231,11 +231,17 @@ polyn rm 23
 
 ### Printing your current version of PolyNode
 
-`polyn version`
+`polyn -v`
+
+or
+
+`polyn --version`
 
 ## How to configure PolyNode
 
-PolyNode's configuration is handled through a JSON file named `polynrc.json` located in PolyNode's home directory (`$HOME/.PolyNode` for AIX/Linux/macOS or `%LOCALAPPDATA%\Programs\PolyNode` for Windows). Please see below for the default configuration for `polynrc.json`:
+`polyn config-set <config_field> <value>`
+
+PolyNode's configuration is handled through a JSON file named `polynrc.json` located in PolyNode's home directory (`$HOME/.PolyNode` for AIX/Linux/macOS or `%LOCALAPPDATA%\Programs\PolyNode` for Windows). You can either use the `config-set` command (recommended) or edit the file directly. Please see below for the default configuration for `polynrc.json`:
 
 ```json
 {
@@ -276,7 +282,7 @@ If you're just testing your build locally, I would recommend building a Docker i
 
 #### Required technologies
 
-- Go 1.25.6
+- Go 1.25.7
 
 #### Building on AIX
 

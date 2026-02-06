@@ -94,7 +94,7 @@ func install(currentBinaryLocation string, home string) error {
 	case strings.HasSuffix(shell, "/ksh"):
 		return addToPath(home, ".kshrc")
 	default:
-		return errors.New("setup: unsupported shell")
+		return errors.New("polyn setup: unsupported shell")
 	}
 }
 

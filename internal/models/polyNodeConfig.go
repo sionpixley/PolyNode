@@ -23,6 +23,16 @@ type PolyNodeConfig struct {
 	NodeMirror string `json:"nodeMirror"`
 }
 
+func (config *PolyNodeConfig) Save() error {
+	configPath := internal.PolynHomeDir + internal.PathSeparator + "polynrc.json"
+	jsonBytes, err := json.Marshal(config)
+	if err != nil {
+		return err
+	}
+
+	return os.WriteFile(configPath, jsonBytes, 0644)
+}
+
 func (config *PolyNodeConfig) UnmarshalJSON(b []byte) error {
 	var temp map[string]any
 	err := json.Unmarshal(b, &temp)
