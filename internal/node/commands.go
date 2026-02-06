@@ -6,6 +6,7 @@ import (
 	"net/http"
 	"os"
 	"os/exec"
+	"strconv"
 	"strings"
 
 	"github.com/sionpixley/PolyNode/internal"
@@ -113,23 +114,21 @@ func configGet(configField string) {
 func configSet(configField string, value string) error {
 	config := models.LoadPolyNodeConfig()
 	if configField == "autoupdate" {
-		if value == "true" {
-			config.AutoUpdate = true
-		} else if value == "false" {
-			config.AutoUpdate = false
-		} else {
-			err := fmt.Errorf("invalid value: '%s' is not a valid bool value", value)
+		v, err := strconv.ParseBool(value)
+		if err != nil {
+			err = fmt.Errorf("invalid value: '%s' is not a valid bool value", value)
 			utilities.LogUserError(err)
 		}
 
+		config.AutoUpdate = v
 		return config.Save()
 	} else if configField == "nodemirror" {
 		config.NodeMirror = value
 		return config.Save()
 	}
 
-	err := fmt.Errorf(constants.InvalidConfigFieldError, configField)
-	utilities.LogUserError(err)
+	e := fmt.Errorf(constants.InvalidConfigFieldError, configField)
+	utilities.LogUserError(e)
 	return nil
 }
 
