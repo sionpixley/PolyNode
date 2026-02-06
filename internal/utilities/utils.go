@@ -11,6 +11,7 @@ import (
 	"strings"
 
 	"github.com/sionpixley/PolyNode/internal/constants/command"
+	"github.com/sionpixley/PolyNode/internal/constants/subcomm"
 	"github.com/sionpixley/PolyNode/internal/models"
 	flag "github.com/spf13/pflag"
 )
@@ -19,6 +20,8 @@ func ConvertToCommand(commandStr string) models.Command {
 	switch commandStr {
 	case "add":
 		return command.Add
+	case "config":
+		return command.Config
 	case "current":
 		return command.Current
 	case "default":
@@ -48,6 +51,16 @@ func ConvertToSemanticVersion(version string) string {
 	}
 
 	return "v" + version
+}
+
+func ConvertToSubcommand(commandStr string) models.Subcommand {
+	if commandStr == "get" {
+		return subcomm.Get
+	} else if commandStr == "set" {
+		return subcomm.Set
+	}
+
+	return subcomm.Other
 }
 
 func ExtractFile(source string, destination string) error {

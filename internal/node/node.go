@@ -1,11 +1,13 @@
 package node
 
 import (
+	"errors"
 	"fmt"
 	"log"
 
 	"github.com/sionpixley/PolyNode/internal/constants"
 	"github.com/sionpixley/PolyNode/internal/constants/command"
+	"github.com/sionpixley/PolyNode/internal/constants/subcomm"
 	"github.com/sionpixley/PolyNode/internal/models"
 	"github.com/sionpixley/PolyNode/internal/utilities"
 )
@@ -20,6 +22,31 @@ func Handle(args []string, operatingSystem models.OperatingSystem, arch models.A
 			err = add(convertKeywordToVersion(args[1], operatingSystem, arch, config), operatingSystem, arch, config)
 		} else {
 			err = fmt.Errorf(constants.MissingVersionKeywordOrPrefixError, args[0])
+			utilities.LogUserError(err)
+		}
+	case command.Config:
+		if len(args) > 1 {
+			scomm := utilities.ConvertToSubcommand(args[1])
+			if scomm == subcomm.Get {
+				if len(args) > 2 {
+					configGet(args[2])
+				} else {
+					err = fmt.Errorf(constants.MissingConfigFieldError, "config get")
+					utilities.LogUserError(err)
+				}
+			} else if scomm == subcomm.Set {
+				if len(args) > 3 {
+					err = configSet(args[2], args[3])
+				} else if len(args) > 2 {
+					err = fmt.Errorf("missing argument: 'config set %s' requires a new value", args[2])
+					utilities.LogUserError(err)
+				} else {
+					err = fmt.Errorf(constants.MissingConfigFieldError, "config set")
+					utilities.LogUserError(err)
+				}
+			}
+		} else {
+			err = errors.New("missing argument: 'config' command requires a subcommand 'get' or 'set'")
 			utilities.LogUserError(err)
 		}
 	case command.Current:

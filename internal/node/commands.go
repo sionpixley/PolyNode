@@ -98,6 +98,41 @@ func add(version string, operatingSystem models.OperatingSystem, arch models.Arc
 	return nil
 }
 
+func configGet(configField string) {
+	config := models.LoadPolyNodeConfig()
+	if configField == "autoupdate" {
+		fmt.Println(config.AutoUpdate)
+	} else if configField == "nodemirror" {
+		fmt.Println(config.NodeMirror)
+	} else {
+		err := fmt.Errorf(constants.InvalidConfigFieldError, configField)
+		utilities.LogUserError(err)
+	}
+}
+
+func configSet(configField string, value string) error {
+	config := models.LoadPolyNodeConfig()
+	if configField == "autoupdate" {
+		if value == "true" {
+			config.AutoUpdate = true
+		} else if value == "false" {
+			config.AutoUpdate = false
+		} else {
+			err := fmt.Errorf("invalid value: '%s' is not a valid bool value", value)
+			utilities.LogUserError(err)
+		}
+
+		return config.Save()
+	} else if configField == "nodemirror" {
+		config.NodeMirror = value
+		return config.Save()
+	}
+
+	err := fmt.Errorf(constants.InvalidConfigFieldError, configField)
+	utilities.LogUserError(err)
+	return nil
+}
+
 func current() {
 	output, err := exec.Command("node", "-v").Output()
 	if err != nil {

@@ -7,6 +7,7 @@ import "github.com/sionpixley/PolyNode/internal/models"
 const (
 	Other models.Command = iota
 	Add
+	Config
 	Current
 	Default
 	Install
