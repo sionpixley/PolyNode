@@ -16,7 +16,7 @@ import (
 	"github.com/sionpixley/PolyNode/internal/utilities"
 )
 
-func add(version string, operatingSystem models.OperatingSystem, arch models.Architecture, config models.PolyNodeConfig) error {
+func add(version string, operatingSystem models.OperatingSystem, arch models.Architecture, config *models.PolyNodeConfig) error {
 	var err error
 
 	if utilities.ValidVersionFormat(version) {
@@ -99,7 +99,7 @@ func add(version string, operatingSystem models.OperatingSystem, arch models.Arc
 	return nil
 }
 
-func configGet(config models.PolyNodeConfig, configField string) {
+func configGet(config *models.PolyNodeConfig, configField string) {
 	if configField == "autoupdate" {
 		fmt.Println(config.AutoUpdate)
 	} else if configField == "nodemirror" {
@@ -110,7 +110,7 @@ func configGet(config models.PolyNodeConfig, configField string) {
 	}
 }
 
-func configGetAll(config models.PolyNodeConfig) {
+func configGetAll(config *models.PolyNodeConfig) {
 	s := `{
   "autoUpdate": %t,
   "nodeMirror": "%s"
@@ -119,7 +119,7 @@ func configGetAll(config models.PolyNodeConfig) {
 	fmt.Printf(s, config.AutoUpdate, config.NodeMirror)
 }
 
-func configSet(config models.PolyNodeConfig, configField string, value string) error {
+func configSet(config *models.PolyNodeConfig, configField string, value string) error {
 	if configField == "autoupdate" {
 		v, err := strconv.ParseBool(value)
 		if err != nil {
@@ -188,7 +188,7 @@ func def(version string, operatingSystem models.OperatingSystem) error {
 	return nil
 }
 
-func install(version string, operatingSystem models.OperatingSystem, arch models.Architecture, config models.PolyNodeConfig) error {
+func install(version string, operatingSystem models.OperatingSystem, arch models.Architecture, config *models.PolyNodeConfig) error {
 	err := add(version, operatingSystem, arch, config)
 	if err != nil {
 		return err
@@ -262,7 +262,7 @@ func remove(version string) error {
 	return nil
 }
 
-func search(prefix string, operatingSystem models.OperatingSystem, arch models.Architecture, config models.PolyNodeConfig) error {
+func search(prefix string, operatingSystem models.OperatingSystem, arch models.Architecture, config *models.PolyNodeConfig) error {
 	prefix = utilities.ConvertToSemanticVersion(prefix)
 
 	allVersions, err := getAllNodeVersionsForOSAndArch(operatingSystem, arch, config)
@@ -287,7 +287,7 @@ func search(prefix string, operatingSystem models.OperatingSystem, arch models.A
 	return nil
 }
 
-func searchDefault(operatingSystem models.OperatingSystem, arch models.Architecture, config models.PolyNodeConfig) error {
+func searchDefault(operatingSystem models.OperatingSystem, arch models.Architecture, config *models.PolyNodeConfig) error {
 	nodeVersions, err := getAllNodeVersionsForOSAndArch(operatingSystem, arch, config)
 	if err != nil {
 		return err

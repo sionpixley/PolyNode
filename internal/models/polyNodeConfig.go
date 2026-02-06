@@ -57,27 +57,27 @@ func (config *PolyNodeConfig) UnmarshalJSON(b []byte) error {
 	return nil
 }
 
-func LoadPolyNodeConfig() PolyNodeConfig {
+func NewPolyNodeConfig() *PolyNodeConfig {
 	configPath := internal.PolynHomeDir + internal.PathSeparator + "polynrc.json"
 	if _, err := os.Stat(configPath); os.IsNotExist(err) {
 		// Default config
-		return defaultPolynrc
+		return &defaultPolynrc
 	} else if err != nil {
 		// Default config
-		return defaultPolynrc
+		return &defaultPolynrc
 	}
 
 	content, err := os.ReadFile(configPath)
 	if err != nil {
 		// Default config
-		return defaultPolynrc
+		return &defaultPolynrc
 	}
 
-	var config PolyNodeConfig
+	config := new(PolyNodeConfig)
 	err = config.UnmarshalJSON(content)
 	if err != nil {
 		// Default config
-		return defaultPolynrc
+		return &defaultPolynrc
 	}
 
 	return config

@@ -7,7 +7,7 @@ import (
 func main() {
 	operatingSystem := checkOS()
 	arch := checkArchitecture()
-	config := models.LoadPolyNodeConfig()
+	config := models.NewPolyNodeConfig()
 	args := parseCLIArgs()
 
 	execute(args, operatingSystem, arch, config)
