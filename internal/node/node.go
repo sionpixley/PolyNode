@@ -12,7 +12,7 @@ import (
 )
 
 // Handle function is the main function for Node.js actions.
-func Handle(args []string, operatingSystem models.OperatingSystem, arch models.Architecture, config models.PolyNodeConfig) {
+func Handle(args []string, operatingSystem models.OperatingSystem, arch models.Architecture, config *models.PolyNodeConfig) {
 	var err error
 	comm := utilities.ConvertToCommand(args[0])
 	switch comm {
@@ -25,13 +25,13 @@ func Handle(args []string, operatingSystem models.OperatingSystem, arch models.A
 		}
 	case command.ConfigGet:
 		if len(args) > 1 {
-			configGet(args[1])
+			configGet(config, args[1])
 		} else {
-			configGetAll()
+			configGetAll(config)
 		}
 	case command.ConfigSet:
 		if len(args) > 2 {
-			err = configSet(args[1], args[2])
+			err = configSet(config, args[1], args[2])
 		} else if len(args) > 1 {
 			err = fmt.Errorf("missing argument: 'config-set %s' requires a new value", args[1])
 			utilities.LogUserError(err)

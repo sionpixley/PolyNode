@@ -121,7 +121,7 @@ func downloadPolyNodeFile(filename string) error {
 	return nil
 }
 
-func execute(args []string, operatingSystem models.OperatingSystem, architecture models.Architecture, config models.PolyNodeConfig) {
+func execute(args []string, operatingSystem models.OperatingSystem, architecture models.Architecture, config *models.PolyNodeConfig) {
 	var err error
 	if args[0] == "update" {
 		err = updatePolyNode(operatingSystem, architecture)
