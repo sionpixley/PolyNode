@@ -111,6 +111,16 @@ func configGet(configField string) {
 	}
 }
 
+func configGetAll() {
+	config := models.LoadPolyNodeConfig()
+	s := `{
+  "autoUpdate": %t,
+  "nodeMirror": "%s"
+}
+`
+	fmt.Printf(s, config.AutoUpdate, config.NodeMirror)
+}
+
 func configSet(configField string, value string) error {
 	config := models.LoadPolyNodeConfig()
 	if configField == "autoupdate" {

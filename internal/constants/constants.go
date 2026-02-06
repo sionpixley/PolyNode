@@ -14,9 +14,10 @@ Commands:
     add <version | keyword | prefix>
         Downloads a specific version of Node.js, but does not switch it to your current version.
         Prefix will match the newest version with that prefix.
-    config get <config_field>
+    config-get [config_field]
         Prints the current value for the config field.
-    config set <config_field> <value>
+        If the config field is omitted, the full configuration file is printed.
+    config-set <config_field> <value>
         Sets the value for the config field.
     current
         Prints your current version of Node.js.
@@ -70,7 +71,6 @@ Config fields:
         Default value is 'https://nodejs.org/dist'.`
 
 	InvalidConfigFieldError            string = "invalid config field: '%s'"
-	MissingConfigFieldError            string = "missing argument: '%s' command requires a config field"
 	MissingVersionKeywordOrPrefixError string = "missing argument: the '%s' command is missing a version, keyword, or prefix"
 	MissingVersionOrPrefixError        string = "missing argument: the '%s' command is missing a version or prefix"
 
@@ -81,5 +81,5 @@ Config fields:
 	UnsupportedOSError   string = "polyn: unsupported operating system"
 
 	// Version constant is PolyNode's version.
-	Version string = "v4.0.0-rc.6"
+	Version string = "v4.0.0-rc.7"
 )
