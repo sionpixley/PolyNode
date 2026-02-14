@@ -1,5 +1,5 @@
 module github.com/sionpixley/PolyNode
 
-go 1.25.7
+go 1.26.0
 
 require github.com/spf13/pflag v1.0.10

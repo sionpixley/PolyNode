@@ -282,7 +282,7 @@ If you're just testing your build locally, I would recommend building a Docker i
 
 #### Required technologies
 
-- Go 1.25.7
+- Go 1.26.0
 
 #### Building on AIX
 
