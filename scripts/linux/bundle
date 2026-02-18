@@ -4,112 +4,140 @@
 
 env GOOS=linux GOARCH=arm64 go build -ldflags="-s -w" -tags=prod -o polyn ./cmd/polyn
 
-cd install
-env GOOS=linux GOARCH=arm64 go build -ldflags="-s -w" -o ../setup ./cmd/setup
+(
+  cd install || exit
+  env GOOS=linux GOARCH=arm64 go build -ldflags="-s -w" -o ../setup ./cmd/setup
+)
 
-cd ../uninstall
-env GOOS=linux GOARCH=arm64 go build -ldflags="-s -w" -o ../uninstall-arm64
+(
+  cd uninstall || exit
+  env GOOS=linux GOARCH=arm64 go build -ldflags="-s -w" -o ../uninstall-arm64
+)
 
-cd ..
 mkdir PolyNode-linux-arm64
 mv setup ./PolyNode-linux-arm64/setup
 
-cd PolyNode-linux-arm64
-mkdir PolyNode
-cd ..
+(
+  cd PolyNode-linux-arm64 || exit
+  mkdir PolyNode
+)
+
 mv polyn ./PolyNode-linux-arm64/PolyNode/polyn
 
 cp README.md ./PolyNode-linux-arm64/PolyNode
 cp LICENSE ./PolyNode-linux-arm64/PolyNode
 cp SECURITY.md ./PolyNode-linux-arm64/PolyNode
 
-cd ./PolyNode-linux-arm64/PolyNode
-mkdir uninstall
-cd ../..
+(
+  cd ./PolyNode-linux-arm64/PolyNode || exit
+  mkdir uninstall
+)
+
 mv uninstall-arm64 ./PolyNode-linux-arm64/PolyNode/uninstall/uninstall
 
 # Build Linux x64
 
 env GOOS=linux GOARCH=amd64 go build -ldflags="-s -w" -tags=prod -o polyn ./cmd/polyn
 
-cd install
-env GOOS=linux GOARCH=amd64 go build -ldflags="-s -w" -o ../setup ./cmd/setup
+(
+  cd install || exit
+  env GOOS=linux GOARCH=amd64 go build -ldflags="-s -w" -o ../setup ./cmd/setup
+)
 
-cd ../uninstall
-env GOOS=linux GOARCH=amd64 go build -ldflags="-s -w" -o ../uninstall-x64
+(
+  cd uninstall || exit
+  env GOOS=linux GOARCH=amd64 go build -ldflags="-s -w" -o ../uninstall-x64
+)
 
-cd ..
 mkdir PolyNode-linux-x64
-mv setup ./PolyNode-linux-x64
+mv setup ./PolyNode-linux-x64/setup
 
-cd PolyNode-linux-x64
-mkdir PolyNode
-cd ..
+(
+  cd PolyNode-linux-x64 || exit
+  mkdir PolyNode
+)
+
 mv polyn ./PolyNode-linux-x64/PolyNode/polyn
 
 cp README.md ./PolyNode-linux-x64/PolyNode
 cp LICENSE ./PolyNode-linux-x64/PolyNode
 cp SECURITY.md ./PolyNode-linux-x64/PolyNode
 
-cd ./PolyNode-linux-x64/PolyNode
-mkdir uninstall
-cd ../..
+(
+  cd ./PolyNode-linux-x64/PolyNode || exit
+  mkdir uninstall
+)
+
 mv uninstall-x64 ./PolyNode-linux-x64/PolyNode/uninstall/uninstall
 
 # Build Linux Power LE 64-bit
 
 env GOOS=linux GOARCH=ppc64le go build -ldflags="-s -w" -tags=prod -o polyn ./cmd/polyn
 
-cd install
-env GOOS=linux GOARCH=ppc64le go build -ldflags="-s -w" -o ../setup ./cmd/setup
+(
+  cd install || exit
+  env GOOS=linux GOARCH=ppc64le go build -ldflags="-s -w" -o ../setup ./cmd/setup
+)
 
-cd ../uninstall
-env GOOS=linux GOARCH=ppc64le go build -ldflags="-s -w" -o ../uninstall-ppc64le
+(
+  cd uninstall || exit
+  env GOOS=linux GOARCH=ppc64le go build -ldflags="-s -w" -o ../uninstall-ppc64le
+)
 
-cd ..
 mkdir PolyNode-linux-ppc64le
-mv setup ./PolyNode-linux-ppc64le
+mv setup ./PolyNode-linux-ppc64le/setup
 
-cd PolyNode-linux-ppc64le
-mkdir PolyNode
-cd ..
+(
+  cd PolyNode-linux-ppc64le || exit
+  mkdir PolyNode
+)
+
 mv polyn ./PolyNode-linux-ppc64le/PolyNode/polyn
 
 cp README.md ./PolyNode-linux-ppc64le/PolyNode
 cp LICENSE ./PolyNode-linux-ppc64le/PolyNode
 cp SECURITY.md ./PolyNode-linux-ppc64le/PolyNode
 
-cd ./PolyNode-linux-ppc64le/PolyNode
-mkdir uninstall
-cd ../..
+(
+  cd ./PolyNode-linux-ppc64le/PolyNode || exit
+  mkdir uninstall
+)
+
 mv uninstall-ppc64le ./PolyNode-linux-ppc64le/PolyNode/uninstall/uninstall
 
 # Build Linux s390x
 
 env GOOS=linux GOARCH=s390x go build -ldflags="-s -w" -tags=prod -o polyn ./cmd/polyn
 
-cd install
-env GOOS=linux GOARCH=s390x go build -ldflags="-s -w" -o ../setup ./cmd/setup
+(
+  cd install || exit
+  env GOOS=linux GOARCH=s390x go build -ldflags="-s -w" -o ../setup ./cmd/setup
+)
 
-cd ../uninstall
-env GOOS=linux GOARCH=s390x go build -ldflags="-s -w" -o ../uninstall-s390x
+(
+  cd uninstall || exit
+  env GOOS=linux GOARCH=s390x go build -ldflags="-s -w" -o ../uninstall-s390x
+)
 
-cd ..
 mkdir PolyNode-linux-s390x
-mv setup ./PolyNode-linux-s390x
+mv setup ./PolyNode-linux-s390x/setup
 
-cd PolyNode-linux-s390x
-mkdir PolyNode
-cd ..
+(
+  cd PolyNode-linux-s390x || exit
+  mkdir PolyNode
+)
+
 mv polyn ./PolyNode-linux-s390x/PolyNode/polyn
 
 cp README.md ./PolyNode-linux-s390x/PolyNode
 cp LICENSE ./PolyNode-linux-s390x/PolyNode
 cp SECURITY.md ./PolyNode-linux-s390x/PolyNode
 
-cd ./PolyNode-linux-s390x/PolyNode
-mkdir uninstall
-cd ../..
+(
+  cd ./PolyNode-linux-s390x/PolyNode || exit
+  mkdir uninstall
+)
+
 mv uninstall-s390x ./PolyNode-linux-s390x/PolyNode/uninstall/uninstall
 
 # Bundle

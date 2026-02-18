@@ -208,7 +208,7 @@ func getAllNodeVersionsForOSAndArch(operatingSystem models.OperatingSystem, arch
 		return nil, err
 	}
 
-	compatibleNodeVersions := []models.NodeVersion{}
+	var compatibleNodeVersions []models.NodeVersion
 	for _, nodeVersion := range nodeVersions {
 		if slices.Contains(nodeVersion.Files, nodeVersionFile) {
 			compatibleNodeVersions = append(compatibleNodeVersions, nodeVersion)

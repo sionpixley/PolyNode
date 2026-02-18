@@ -296,8 +296,8 @@ func searchDefault(operatingSystem models.OperatingSystem, arch models.Architect
 	maxEntries := 7
 
 	majorVersions := map[string]struct{}{}
-	stableVersions := []string{}
-	ltsVersions := []string{}
+	var stableVersions []string
+	var ltsVersions []string
 
 	for _, nodeVersion := range nodeVersions {
 		if len(stableVersions) == maxEntries && len(ltsVersions) == maxEntries {

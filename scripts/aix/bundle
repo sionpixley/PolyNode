@@ -4,28 +4,35 @@
 
 env GOOS=aix GOARCH=ppc64 go build -ldflags="-s -w" -tags=prod -o polyn ./cmd/polyn
 
-cd install
-env GOOS=aix GOARCH=ppc64 go build -ldflags="-s -w" -o ../setup ./cmd/setup
+(
+  cd install || exit
+  env GOOS=aix GOARCH=ppc64 go build -ldflags="-s -w" -o ../setup ./cmd/setup
+)
 
-cd ../uninstall
-env GOOS=aix GOARCH=ppc64 go build -ldflags="-s -w" -o ../uninstall-ppc64
+(
+  cd uninstall || exit
+  env GOOS=aix GOARCH=ppc64 go build -ldflags="-s -w" -o ../uninstall-ppc64
+)
 
-cd ..
 mkdir PolyNode-aix-ppc64
 mv setup ./PolyNode-aix-ppc64/setup
 
-cd PolyNode-aix-ppc64
-mkdir PolyNode
-cd ..
+(
+  cd PolyNode-aix-ppc64 || exit
+  mkdir PolyNode
+)
+
 mv polyn ./PolyNode-aix-ppc64/PolyNode/polyn
 
 cp README.md ./PolyNode-aix-ppc64/PolyNode
 cp LICENSE ./PolyNode-aix-ppc64/PolyNode
 cp SECURITY.md ./PolyNode-aix-ppc64/PolyNode
 
-cd ./PolyNode-aix-ppc64/PolyNode
-mkdir uninstall
-cd ../..
+(
+  cd ./PolyNode-aix-ppc64/PolyNode || exit
+  mkdir uninstall
+)
+
 mv uninstall-ppc64 ./PolyNode-aix-ppc64/PolyNode/uninstall/uninstall
 
 # Bundle
