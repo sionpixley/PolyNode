@@ -4,13 +4,13 @@ For the most up-to-date security policy, please visit the [GitHub repo](https://
 
 ## Supported Versions
 
-| Version | Supported  |
-| ------- | ---------- |
-| v4.x    | ✅         |
-| v3.x    | ❌         |
-| v2.x    | ❌         |
-| v1.x    | ❌         |
-| v0.x    | ❌         |
+| Version | Supported |
+|---------|-----------|
+| v4.x    | ✅        |
+| v3.x    | ❌        |
+| v2.x    | ❌        |
+| v1.x    | ❌        |
+| v0.x    | ❌        |
 
 ## Reporting a Vulnerability
 
