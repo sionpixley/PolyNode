@@ -44,7 +44,8 @@ Commands:
         Updates PolyNode to the latest release.
     use <version | prefix>
         Prints out the command needed to temporarily set your Node.js to a specific version.
-        If on AIX, Linux, or macOS, please use 'eval $(polyn use <version or prefix>)' instead.
+        If on AIX, Linux, or macOS, please use 'eval $(polyn use <version | prefix>)' instead.
+        If on Windows, please use 'iex (polyn use <version | prefix>)' instead (PowerShell only).
         Prefix will match the newest version with that prefix.
 
 Options:
@@ -81,5 +82,5 @@ Config fields:
 	UnsupportedOSError   string = "polyn: unsupported operating system"
 
 	// Version constant is PolyNode's version.
-	Version string = "v5.0.0-rc.1"
+	Version string = "v5.0.0-rc.2"
 )
