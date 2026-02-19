@@ -1,6 +1,6 @@
 #!/bin/sh
 
-sign=0
+sign=1
 
 signMacBinary() (
   binaryName="$1"
