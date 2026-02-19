@@ -7,16 +7,16 @@ buildPolyNode() {
   polyNodeDir="${baseDir}/PolyNode"
   uninstallDir="${polyNodeDir}/uninstall"
 
-  env GOOS=linux GOARCH="${polynArch}" go build -ldflags="-s -w" -tags=prod -o polyn ./cmd/polyn
+  env GOOS=linux GOARCH="$polynArch" go build -ldflags="-s -w" -tags=prod -o polyn ./cmd/polyn
 
   (
     cd install || exit
-    env GOOS=linux GOARCH="${polynArch}" go build -ldflags="-s -w" -o ../setup ./cmd/setup
+    env GOOS=linux GOARCH="$polynArch" go build -ldflags="-s -w" -o ../setup ./cmd/setup
   )
 
   (
     cd uninstall || exit
-    env GOOS=linux GOARCH="${polynArch}" go build -ldflags="-s -w" -o "../uninstall-${polynSuffix}"
+    env GOOS=linux GOARCH="$polynArch" go build -ldflags="-s -w" -o "../uninstall-${polynSuffix}"
   )
 
   mkdir -p "$uninstallDir"
@@ -33,7 +33,7 @@ buildPolyNode() {
   rm -rf "$baseDir"
 }
 
-buildPolyNode "arm64"
-buildPolyNode "amd64" "x64"
-buildPolyNode "ppc64le"
-buildPolyNode "s390x"
+buildPolyNode arm64
+buildPolyNode amd64 x64
+buildPolyNode ppc64le
+buildPolyNode s390x
