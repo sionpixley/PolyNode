@@ -1,0 +1,80 @@
+#!/bin/sh
+
+sign=0
+
+signMacBinary() (
+  binaryName="$1"
+  compressedName="${binaryName}.zip"
+
+  if [ "$sign" -eq 1 ]; then
+    codesign -v -f --timestamp --options=runtime --sign="$CODESIGN_TEAM_ID" "$binaryName"
+    zip "$compressedName" "$binaryName"
+    rm "$binaryName"
+    xcrun notarytool submit --apple-id="$CODESIGN_APPLE_ID" --team-id="$CODESIGN_TEAM_ID" --password="$CODESIGN_PASSWD" "$compressedName"
+    unzip "$compressedName"
+    rm "$compressedName"
+  fi
+)
+
+buildPolyNode() {
+  polynOS="$1"
+  polynArch="$2"
+  polynSuffix="${3:-$2}"
+  baseDir="./PolyNode-${polynOS}-${polynSuffix}"
+  polyNodeDir="${baseDir}/PolyNode"
+  uninstallDir="${polyNodeDir}/uninstall"
+
+  env GOOS="$polynOS" GOARCH="$polynArch" go build -ldflags="-s -w" -tags=prod -o polyn ./cmd/polyn
+
+  if [ "$polynOS" = "darwin" ]; then
+    signMacBinary polyn
+  fi
+
+  (
+    cd install || exit
+    env GOOS="$polynOS" GOARCH="$polynArch" go build -ldflags="-s -w" -o ../setup ./cmd/setup
+  )
+
+  if [ "$polynOS" = "darwin" ]; then
+    signMacBinary setup
+  fi
+
+  (
+    cd uninstall || exit
+    env GOOS="$polynOS" GOARCH="$polynArch" go build -ldflags="-s -w" -o "../uninstall-${polynSuffix}"
+  )
+
+  if [ "$polynOS" = "darwin" ]; then
+    signMacBinary "uninstall-${polynSuffix}"
+  fi
+
+  mkdir -p "$uninstallDir"
+
+  mv setup "${baseDir}/setup"
+  mv polyn "${polyNodeDir}/polyn"
+  mv "uninstall-${polynSuffix}" "${uninstallDir}/uninstall"
+
+  cp README.md LICENSE SECURITY.md "$polyNodeDir"
+
+  tar -czf "${baseDir}.tar.gz" "$baseDir"
+
+  if [ "$polynOS" = "linux" ]; then
+    tar -cJf "${baseDir}.tar.xz" "$baseDir"
+  fi
+
+  rm -rf "$baseDir"
+}
+
+for arg in "$@"; do
+  if [ "$arg" = "aix" ]; then
+    buildPolyNode aix ppc64
+  elif [ "$arg" = "darwin" ]; then
+    buildPolyNode darwin amd64 x64
+    buildPolyNode darwin arm64
+  elif [ "$arg" = "linux" ]; then
+    buildPolyNode linux amd64 x64
+    buildPolyNode linux arm64
+    buildPolyNode linux ppc64le
+    buildPolyNode linux s390x
+  fi
+done
