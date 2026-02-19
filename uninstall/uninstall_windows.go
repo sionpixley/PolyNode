@@ -14,6 +14,7 @@ timeout /t 1 /nobreak > nul
 cd %LOCALAPPDATA%
 del %LOCALAPPDATA%\Programs\PolyNode /s /f /q > nul
 rmdir %LOCALAPPDATA%\Programs\PolyNode /s /q
+timeout /t 1 /nobreak > nul
 if exist %LOCALAPPDATA%\Programs\PolyNode\ (
   del %LOCALAPPDATA%\Programs\PolyNode /s /q > nul
   rmdir %LOCALAPPDATA%\Programs\PolyNode /s /q

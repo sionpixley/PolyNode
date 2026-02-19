@@ -208,6 +208,7 @@ timeout /t 1 /nobreak > nul
 cd %LOCALAPPDATA%
 del %LOCALAPPDATA%\Programs\PolyNode\update-temp /s /f /q > nul
 rmdir %LOCALAPPDATA%\Programs\PolyNode\update-temp /s /q
+timeout /t 1 /nobreak > nul
 if exist %LOCALAPPDATA%\Programs\PolyNode\update-temp\ (
   del %LOCALAPPDATA%\Programs\PolyNode\update-temp /s /f /q > nul
   rmdir %LOCALAPPDATA%\Programs\PolyNode\update-temp /s /q
