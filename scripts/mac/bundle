@@ -23,20 +23,20 @@ buildPolyNode() {
   polyNodeDir="${baseDir}/PolyNode"
   uninstallDir="${polyNodeDir}/uninstall"
 
-  env GOOS=darwin GOARCH="${polynArch}" go build -ldflags="-s -w" -tags=prod -o polyn ./cmd/polyn
+  env GOOS=darwin GOARCH="$polynArch" go build -ldflags="-s -w" -tags=prod -o polyn ./cmd/polyn
 
   signBinary polyn
 
   (
     cd install || exit
-    env GOOS=darwin GOARCH="${polynArch}" go build -ldflags="-s -w" -o ../setup ./cmd/setup
+    env GOOS=darwin GOARCH="$polynArch" go build -ldflags="-s -w" -o ../setup ./cmd/setup
   )
 
   signBinary setup
 
   (
     cd uninstall || exit
-    env GOOS=darwin GOARCH="${polynArch}" go build -ldflags="-s -w" -o "../uninstall-${polynSuffix}"
+    env GOOS=darwin GOARCH="$polynArch" go build -ldflags="-s -w" -o "../uninstall-${polynSuffix}"
   )
 
   signBinary "uninstall-${polynSuffix}"
