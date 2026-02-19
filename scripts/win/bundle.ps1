@@ -20,7 +20,7 @@ function Build-PolyNode {
 
   Push-Location uninstall
   try {
-    go build -ldflags='-s -w' -o "../uninstall-$PolynSuffix.exe" ./cmd/uninstall
+    go build -ldflags='-s -w' -o "../uninstall-$PolynSuffix.exe"
   } finally {
     Pop-Location
   }
