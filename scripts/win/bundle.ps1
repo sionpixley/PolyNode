@@ -29,7 +29,7 @@ function Build-PolyNode {
   $polyNodeDir = "$baseDir\PolyNode"
   $uninstallDir = "$polyNodeDir\uninstall"
 
-  New-Item -Path $uninstallDir -ItemType Directory -Force | Out-Null
+  New-Item -Path $uninstallDir -ItemType Directory | Out-Null
 
   Move-Item -Path 'setup.exe' -Destination "$baseDir\setup.exe"
   Move-Item -Path 'polyn.exe' -Destination "$polyNodeDir\polyn.exe"
