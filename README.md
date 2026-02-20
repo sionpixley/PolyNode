@@ -176,6 +176,10 @@ eval $(polyn use 23)
 
 `iex (polyn use <version | prefix>)`
 
+or
+
+`Invoke-Expression (polyn use <version | prefix>)`
+
 The command above only works in PowerShell.
 
 ##### Examples
