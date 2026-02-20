@@ -6,7 +6,8 @@ For the most up-to-date security policy, please visit the [GitHub repo](https://
 
 | Version | Supported |
 |---------|-----------|
-| v4.x    | ✅        |
+| v5.x    | ✅        |
+| v4.x    | ❌        |
 | v3.x    | ❌        |
 | v2.x    | ❌        |
 | v1.x    | ❌        |

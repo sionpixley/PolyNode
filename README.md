@@ -173,7 +173,19 @@ eval $(polyn use 23)
 
 #### Temporarily setting your Node.js on Windows
 
-Unfortunately, Windows doesn't have a command equivalent to the POSIX `eval`. You will have to run `polyn use <version | prefix>` and then copy and paste the command it outputs.
+`iex (polyn use <version | prefix>)`
+
+The command above only works in PowerShell.
+
+##### Examples
+
+```pwsh
+# Temporarily setting your Node.js to a specific version.
+iex (polyn use 23.7.0)
+
+# Temporarily setting your Node.js to the latest release that matches a prefix.
+iex (polyn use 23)
+```
 
 ### Downloading and setting your default Node.js to a new version
 
