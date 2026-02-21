@@ -346,7 +346,7 @@ func use(version string, operatingSystem models.OperatingSystem) error {
 	}
 
 	if operatingSystem == opsys.Windows {
-		fmt.Printf("$env:Path = \"%s\\node\\%s;\" + $env:Path", internal.PolynHomeDir, version)
+		fmt.Printf("$env:Path = \"%s\\node\\%s;\" + $env:Path\n", internal.PolynHomeDir, version)
 		//nodeVersionPath := internal.PolynHomeDir + "\\node\\" + version
 		//fmt.Println("If using Command Prompt, run this command:")
 		//fmt.Printf("\n  set PATH=%s%s\n", nodeVersionPath, ";%PATH%")
