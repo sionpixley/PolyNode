@@ -6,6 +6,7 @@ import (
 	"fmt"
 	"net/http"
 	"os"
+	"os/exec"
 	"slices"
 	"sort"
 	"strconv"
@@ -257,4 +258,14 @@ func getArchiveName(operatingSystem models.OperatingSystem, architecture models.
 	}
 
 	return archiveName, nil
+}
+
+func runningInCmd() (bool, error) {
+	cmd := `Get-Process -Id ((Get-CimInstance -Class Win32_Process -Filter "Name = 'polyn.exe'")[0].ParentProcessId) | Select-Object -ExpandProperty Name`
+	output, err := exec.Command("powershell", "-NoLogo", "-NoProfile", "-NonInteractive", cmd).Output()
+	if err != nil {
+		return false, err
+	}
+
+	return strings.Contains(string(output), "cmd"), nil
 }
