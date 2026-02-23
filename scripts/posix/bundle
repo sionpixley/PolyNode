@@ -7,10 +7,12 @@ signMacBinary() (
   compressedName="${binaryName}.zip"
 
   if [ "$sign" -eq 1 ]; then
+    set +x
     codesign -v -f --timestamp --options=runtime --sign="$CODESIGN_TEAM_ID" "$binaryName"
     zip "$compressedName" "$binaryName"
     rm "$binaryName"
     xcrun notarytool submit --apple-id="$CODESIGN_APPLE_ID" --team-id="$CODESIGN_TEAM_ID" --password="$CODESIGN_PASSWD" "$compressedName"
+    set -x
     unzip "$compressedName"
     rm "$compressedName"
   fi
