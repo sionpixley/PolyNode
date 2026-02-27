@@ -7,6 +7,48 @@ import (
 	"github.com/sionpixley/PolyNode/internal/constants/opsys"
 )
 
+func TestConvertKeywordToVersion_Invalid(t *testing.T) {
+	expected := "invalid"
+	actual := convertKeywordToVersion("invalid", opsys.Linux, arch.ARM64, nil, getAllNodeVersionsMock)
+	if actual != expected {
+		t.Errorf("expected: %s actual: %s\n", expected, actual)
+	}
+}
+
+func TestConvertKeywordToVersion_Latest(t *testing.T) {
+	expected := "v2.0.0"
+	actual := convertKeywordToVersion("latest", opsys.Linux, arch.ARM64, nil, getAllNodeVersionsMock)
+	if actual != expected {
+		t.Errorf("expected: %s actual: %s\n", expected, actual)
+	}
+}
+
+func TestConvertKeywordToVersion_LTS(t *testing.T) {
+	expected := "v1.3.5"
+	actual := convertKeywordToVersion("lts", opsys.Linux, arch.ARM64, nil, getAllNodeVersionsMock)
+	if actual != expected {
+		t.Errorf("expected: %s actual: %s\n", expected, actual)
+	}
+}
+
+func TestConvertPrefixToVersionDown_Invalid(t *testing.T) {
+	_, err := convertPrefixToVersionDown("1.4", opsys.Linux, arch.ARM64, nil, getAllNodeVersionsMock)
+	if err == nil {
+		t.Error("expected: error actual: nil\n")
+	}
+}
+
+func TestConvertPrefixToVersionDown_Valid(t *testing.T) {
+	expected := "v1.3.5"
+	actual, err := convertPrefixToVersionDown("1.3", opsys.Linux, arch.ARM64, nil, getAllNodeVersionsMock)
+	if err != nil {
+		t.Errorf("%v\n", err)
+	}
+	if actual != expected {
+		t.Errorf("expected: %s actual: %s\n", expected, actual)
+	}
+}
+
 func TestConvertOSAndArchToNodeVersionFile_AIX(t *testing.T) {
 	expected := "aix-ppc64"
 	actual, err := convertOSAndArchToNodeVersionFile(opsys.AIX, arch.PPC64)

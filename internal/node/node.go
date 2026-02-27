@@ -18,7 +18,7 @@ func Handle(args []string, operatingSystem models.OperatingSystem, arch models.A
 	switch comm {
 	case command.Add:
 		if len(args) > 1 {
-			err = add(convertKeywordToVersion(args[1], operatingSystem, arch, config), operatingSystem, arch, config)
+			err = add(convertKeywordToVersion(args[1], operatingSystem, arch, config, getAllNodeVersionsForOSAndArch), operatingSystem, arch, config)
 		} else {
 			err = fmt.Errorf(constants.MissingVersionKeywordOrPrefixError, args[0])
 			utilities.LogUserError(err)
@@ -50,7 +50,7 @@ func Handle(args []string, operatingSystem models.OperatingSystem, arch models.A
 		}
 	case command.Install:
 		if len(args) > 1 {
-			err = install(convertKeywordToVersion(args[1], operatingSystem, arch, config), operatingSystem, arch, config)
+			err = install(convertKeywordToVersion(args[1], operatingSystem, arch, config, getAllNodeVersionsForOSAndArch), operatingSystem, arch, config)
 		} else {
 			err = fmt.Errorf(constants.MissingVersionKeywordOrPrefixError, args[0])
 			utilities.LogUserError(err)

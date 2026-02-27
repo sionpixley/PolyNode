@@ -20,9 +20,15 @@ import (
 	"github.com/sionpixley/PolyNode/internal/utilities"
 )
 
-func convertKeywordToVersion(keyword string, operatingSystem models.OperatingSystem, arch models.Architecture, config *models.PolyNodeConfig) string {
+func convertKeywordToVersion(
+	keyword string,
+	operatingSystem models.OperatingSystem,
+	arch models.Architecture,
+	config *models.PolyNodeConfig,
+	getAllNodeVersionsFunc func(models.OperatingSystem, models.Architecture, *models.PolyNodeConfig) ([]models.NodeVersion, error),
+) string {
 	if keyword == "lts" {
-		nodeVersions, err := getAllNodeVersionsForOSAndArch(operatingSystem, arch, config)
+		nodeVersions, err := getAllNodeVersionsFunc(operatingSystem, arch, config)
 		if err != nil {
 			return keyword
 		}
@@ -34,7 +40,7 @@ func convertKeywordToVersion(keyword string, operatingSystem models.OperatingSys
 		}
 		return keyword
 	} else if keyword == "latest" {
-		nodeVersions, err := getAllNodeVersionsForOSAndArch(operatingSystem, arch, config)
+		nodeVersions, err := getAllNodeVersionsFunc(operatingSystem, arch, config)
 		if err != nil {
 			return keyword
 		}
@@ -81,8 +87,14 @@ func convertOSAndArchToNodeVersionFile(operatingSystem models.OperatingSystem, a
 	}
 }
 
-func convertPrefixToVersionDown(prefix string, operatingSystem models.OperatingSystem, arch models.Architecture, config *models.PolyNodeConfig) (string, error) {
-	nodeVersions, err := getAllNodeVersionsForOSAndArch(operatingSystem, arch, config)
+func convertPrefixToVersionDown(
+	prefix string,
+	operatingSystem models.OperatingSystem,
+	arch models.Architecture,
+	config *models.PolyNodeConfig,
+	getAllNodeVersionsFunc func(models.OperatingSystem, models.Architecture, *models.PolyNodeConfig) ([]models.NodeVersion, error),
+) (string, error) {
+	nodeVersions, err := getAllNodeVersionsFunc(operatingSystem, arch, config)
 	if err != nil {
 		return "", err
 	}
