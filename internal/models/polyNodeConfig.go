@@ -19,8 +19,8 @@ var defaultPolynrc = PolyNodeConfig{
 }
 
 type PolyNodeConfig struct {
-	AutoUpdate bool   `json:"autoUpdate"`
 	NodeMirror string `json:"nodeMirror"`
+	AutoUpdate bool   `json:"autoUpdate"`
 }
 
 func (config *PolyNodeConfig) Save() error {
