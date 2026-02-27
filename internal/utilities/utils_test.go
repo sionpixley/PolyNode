@@ -164,14 +164,28 @@ func TestStripTopDir_ThreeParts(t *testing.T) {
 	}
 }
 
-func TestValidVersionFormat_Invalid(t *testing.T) {
+func TestValidVersionFormat_InvalidCharacter(t *testing.T) {
+	valid := ValidVersionFormat("v3.1b")
+	if valid {
+		t.Errorf("expected: %v actual: %v\n", false, valid)
+	}
+}
+
+func TestValidVersionFormat_InvalidNotEnoughParts(t *testing.T) {
 	valid := ValidVersionFormat("v3.1")
 	if valid {
 		t.Errorf("expected: %v actual: %v\n", false, valid)
 	}
 }
 
-func TestValidVersionFormat_Valid(t *testing.T) {
+func TestValidVersionFormat_ValidWithoutV(t *testing.T) {
+	valid := ValidVersionFormat("3.1.0")
+	if !valid {
+		t.Errorf("expected: %v actual: %v\n", true, valid)
+	}
+}
+
+func TestValidVersionFormat_ValidWithV(t *testing.T) {
 	valid := ValidVersionFormat("v3.1.0")
 	if !valid {
 		t.Errorf("expected: %v actual: %v\n", true, valid)
