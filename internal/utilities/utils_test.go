@@ -114,7 +114,7 @@ func TestConvertToSemanticVersion_WithoutV(t *testing.T) {
 	expected := "v2.1.56"
 	actual := ConvertToSemanticVersion("2.1.56")
 	if actual != expected {
-		t.Errorf("expected: %v actual: %v\n", expected, actual)
+		t.Errorf("expected: %s actual: %s\n", expected, actual)
 	}
 }
 
@@ -122,7 +122,7 @@ func TestConvertToSemanticVersion_WithV(t *testing.T) {
 	expected := "v2.1.56"
 	actual := ConvertToSemanticVersion("v2.1.56")
 	if actual != expected {
-		t.Errorf("expected: %v actual: %v\n", expected, actual)
+		t.Errorf("expected: %s actual: %s\n", expected, actual)
 	}
 }
 
@@ -144,7 +144,7 @@ func TestStripTopDir_OnePart(t *testing.T) {
 	expected := "example"
 	actual := stripTopDir("example")
 	if actual != expected {
-		t.Errorf("expected: %v actual: %v\n", expected, actual)
+		t.Errorf("expected: %s actual: %s\n", expected, actual)
 	}
 }
 
@@ -152,7 +152,15 @@ func TestStripTopDir_TwoParts(t *testing.T) {
 	expected := "example"
 	actual := stripTopDir("idk/example")
 	if actual != expected {
-		t.Errorf("expected: %v actual: %v\n", expected, actual)
+		t.Errorf("expected: %s actual: %s\n", expected, actual)
+	}
+}
+
+func TestStripTopDir_ThreeParts(t *testing.T) {
+	expected := "example/hello"
+	actual := stripTopDir("idk/example/hello")
+	if actual != expected {
+		t.Errorf("expected: %s actual: %s\n", expected, actual)
 	}
 }
 
