@@ -24,7 +24,7 @@ func main() {
 	}
 
 	if err != nil {
-		log.Fatalln(err)
+		log.Fatalf("polyn setup: %v\n", err)
 	}
 
 	fmt.Println("The polyn command has been installed.")

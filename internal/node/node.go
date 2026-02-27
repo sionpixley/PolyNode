@@ -83,6 +83,6 @@ func Handle(args []string, operatingSystem models.OperatingSystem, arch models.A
 	}
 
 	if err != nil {
-		log.Fatalln(err)
+		log.Fatalf("polyn: %v\n", err)
 	}
 }

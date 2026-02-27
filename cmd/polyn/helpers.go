@@ -24,9 +24,15 @@ import (
 
 const isoDateTimeFormat = "2006-01-02T15:04:05.000Z07:00"
 
-func autoUpdate(operatingSystem models.OperatingSystem, architecture models.Architecture) error {
+func autoUpdate(
+	operatingSystem models.OperatingSystem,
+	architecture models.Architecture,
+	isNotExistFunc func(error) bool,
+	readFileFunc func(string) ([]byte, error),
+	statFunc func(string) (os.FileInfo, error),
+) error {
 	now := time.Now().UTC()
-	lastUpdated := getLastUpdate()
+	lastUpdated := getLastUpdate(isNotExistFunc, readFileFunc, statFunc)
 	if now.Sub(lastUpdated).Hours() >= 720 {
 		err := updatePolyNode(operatingSystem, architecture)
 		if err != nil {
@@ -121,12 +127,20 @@ func downloadPolyNodeFile(filename string) error {
 	return nil
 }
 
-func execute(args []string, operatingSystem models.OperatingSystem, architecture models.Architecture, config *models.PolyNodeConfig) {
+func execute(
+	args []string,
+	operatingSystem models.OperatingSystem,
+	architecture models.Architecture,
+	config *models.PolyNodeConfig,
+	isNotExistFunc func(error) bool,
+	readFileFunc func(string) ([]byte, error),
+	statFunc func(string) (os.FileInfo, error),
+) {
 	var err error
 	if args[0] == "update" {
 		err = updatePolyNode(operatingSystem, architecture)
 		if err != nil {
-			log.Fatalln(err)
+			log.Fatalf("polyn: %v\n", err)
 		}
 	} else if utilities.KnownCommand(args[0]) {
 		node.Handle(args, operatingSystem, architecture, config)
@@ -136,22 +150,22 @@ func execute(args []string, operatingSystem models.OperatingSystem, architecture
 	}
 
 	if config.AutoUpdate {
-		err = autoUpdate(operatingSystem, architecture)
+		err = autoUpdate(operatingSystem, architecture, isNotExistFunc, readFileFunc, statFunc)
 		if err != nil {
-			log.Fatalln(err)
+			log.Fatalf("polyn: %v\n", err)
 		}
 	}
 }
 
-func getLastUpdate() time.Time {
+func getLastUpdate(isNotExistFunc func(error) bool, readFileFunc func(string) ([]byte, error), statFunc func(string) (os.FileInfo, error)) time.Time {
 	updateFilePath := internal.PolynHomeDir + internal.PathSeparator + "last-update.txt"
-	if _, err := os.Stat(updateFilePath); os.IsNotExist(err) {
+	if _, err := statFunc(updateFilePath); isNotExistFunc(err) {
 		return time.Now().UTC().AddDate(0, 0, -30)
 	} else if err != nil {
 		return time.Now().UTC().AddDate(0, 0, -30)
 	}
 
-	content, err := os.ReadFile(updateFilePath)
+	content, err := readFileFunc(updateFilePath)
 	if err != nil {
 		return time.Now().UTC().AddDate(0, 0, -30)
 	}

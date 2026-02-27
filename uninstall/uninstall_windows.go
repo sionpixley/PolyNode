@@ -24,7 +24,7 @@ if exist %LOCALAPPDATA%\Programs\PolyNode\ (
 func main() {
 	err := uninstall()
 	if err != nil {
-		log.Fatalln(err)
+		log.Fatalln("polyn uninstall: %v\n", err)
 	}
 }
 
