@@ -20,9 +20,9 @@ import (
 	"github.com/sionpixley/PolyNode/internal/utilities"
 )
 
-func convertKeywordToVersion(keyword string, operatingSystem models.OperatingSystem, arch models.Architecture, config *models.PolyNodeConfig) string {
+func convertKeywordToVersion(keyword string, operatingSystem models.OperatingSystem, arch models.Architecture, config *models.PolyNodeConfig, httpWrapper models.HTTPWrapper) string {
 	if keyword == "lts" {
-		nodeVersions, err := getAllNodeVersionsForOSAndArch(operatingSystem, arch, config)
+		nodeVersions, err := getAllNodeVersionsForOSAndArch(operatingSystem, arch, config, httpWrapper)
 		if err != nil {
 			return keyword
 		}
@@ -34,7 +34,7 @@ func convertKeywordToVersion(keyword string, operatingSystem models.OperatingSys
 		}
 		return keyword
 	} else if keyword == "latest" {
-		nodeVersions, err := getAllNodeVersionsForOSAndArch(operatingSystem, arch, config)
+		nodeVersions, err := getAllNodeVersionsForOSAndArch(operatingSystem, arch, config, httpWrapper)
 		if err != nil {
 			return keyword
 		}
@@ -81,8 +81,8 @@ func convertOSAndArchToNodeVersionFile(operatingSystem models.OperatingSystem, a
 	}
 }
 
-func convertPrefixToVersionDown(prefix string, operatingSystem models.OperatingSystem, arch models.Architecture, config *models.PolyNodeConfig) (string, error) {
-	nodeVersions, err := getAllNodeVersionsForOSAndArch(operatingSystem, arch, config)
+func convertPrefixToVersionDown(prefix string, operatingSystem models.OperatingSystem, arch models.Architecture, config *models.PolyNodeConfig, httpWrapper models.HTTPWrapper) (string, error) {
+	nodeVersions, err := getAllNodeVersionsForOSAndArch(operatingSystem, arch, config, httpWrapper)
 	if err != nil {
 		return "", err
 	}
@@ -183,16 +183,16 @@ func convertPrefixToVersionLocalDesc(prefix string) (string, error) {
 	return "", fmt.Errorf("polyn: no downloaded Node.js versions match the prefix '%s'", prefix)
 }
 
-func getAllNodeVersionsForOSAndArch(operatingSystem models.OperatingSystem, arch models.Architecture, config *models.PolyNodeConfig) ([]models.NodeVersion, error) {
+func getAllNodeVersionsForOSAndArch(operatingSystem models.OperatingSystem, arch models.Architecture, config *models.PolyNodeConfig, httpWrapper models.HTTPWrapper) ([]models.NodeVersion, error) {
 	url := config.NodeMirror + "/index.json"
 
-	client := new(http.Client)
-	request, err := http.NewRequest(http.MethodGet, url, nil)
+	client := httpWrapper.NewClient()
+	request, err := httpWrapper.NewRequest(http.MethodGet, url, nil)
 	if err != nil {
 		return nil, err
 	}
 
-	response, err := client.Do(request)
+	response, err := httpWrapper.Do(client, request)
 	if err != nil {
 		return nil, err
 	}

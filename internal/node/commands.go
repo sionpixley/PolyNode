@@ -16,13 +16,13 @@ import (
 	"github.com/sionpixley/PolyNode/internal/utilities"
 )
 
-func add(version string, operatingSystem models.OperatingSystem, arch models.Architecture, config *models.PolyNodeConfig) error {
+func add(version string, operatingSystem models.OperatingSystem, arch models.Architecture, config *models.PolyNodeConfig, httpWrapper models.HTTPWrapper) error {
 	var err error
 
 	if utilities.ValidVersionFormat(version) {
 		version = utilities.ConvertToSemanticVersion(version)
 	} else {
-		version, err = convertPrefixToVersionDown(version, operatingSystem, arch, config)
+		version, err = convertPrefixToVersionDown(version, operatingSystem, arch, config, httpWrapper)
 		if err != nil {
 			return err
 		}
@@ -38,13 +38,13 @@ func add(version string, operatingSystem models.OperatingSystem, arch models.Arc
 
 	url := config.NodeMirror + "/" + version + "/" + fileName
 
-	client := new(http.Client)
-	request, err := http.NewRequest(http.MethodGet, url, nil)
+	client := httpWrapper.NewClient()
+	request, err := httpWrapper.NewRequest(http.MethodGet, url, nil)
 	if err != nil {
 		return err
 	}
 
-	response, err := client.Do(request)
+	response, err := httpWrapper.Do(client, request)
 	if err != nil {
 		return err
 	}
@@ -188,8 +188,8 @@ func def(version string, operatingSystem models.OperatingSystem) error {
 	return nil
 }
 
-func install(version string, operatingSystem models.OperatingSystem, arch models.Architecture, config *models.PolyNodeConfig) error {
-	err := add(version, operatingSystem, arch, config)
+func install(version string, operatingSystem models.OperatingSystem, arch models.Architecture, config *models.PolyNodeConfig, httpWrapper models.HTTPWrapper) error {
+	err := add(version, operatingSystem, arch, config, httpWrapper)
 	if err != nil {
 		return err
 	}
@@ -262,10 +262,10 @@ func remove(version string) error {
 	return nil
 }
 
-func search(prefix string, operatingSystem models.OperatingSystem, arch models.Architecture, config *models.PolyNodeConfig) error {
+func search(prefix string, operatingSystem models.OperatingSystem, arch models.Architecture, config *models.PolyNodeConfig, httpWrapper models.HTTPWrapper) error {
 	prefix = utilities.ConvertToSemanticVersion(prefix)
 
-	allVersions, err := getAllNodeVersionsForOSAndArch(operatingSystem, arch, config)
+	allVersions, err := getAllNodeVersionsForOSAndArch(operatingSystem, arch, config, httpWrapper)
 	if err != nil {
 		return err
 	}
@@ -287,8 +287,8 @@ func search(prefix string, operatingSystem models.OperatingSystem, arch models.A
 	return nil
 }
 
-func searchDefault(operatingSystem models.OperatingSystem, arch models.Architecture, config *models.PolyNodeConfig) error {
-	nodeVersions, err := getAllNodeVersionsForOSAndArch(operatingSystem, arch, config)
+func searchDefault(operatingSystem models.OperatingSystem, arch models.Architecture, config *models.PolyNodeConfig, httpWrapper models.HTTPWrapper) error {
+	nodeVersions, err := getAllNodeVersionsForOSAndArch(operatingSystem, arch, config, httpWrapper)
 	if err != nil {
 		return err
 	}
