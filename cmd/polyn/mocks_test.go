@@ -2,22 +2,29 @@ package main
 
 import "os"
 
-func isNotExistMockFalse(_ error) bool {
+type osMockExist struct{}
+type osMockNotExist struct{}
+
+func (_ osMockExist) IsNotExist(_ error) bool {
 	return false
 }
 
-func isNotExistMockTrue(_ error) bool {
+func (_ osMockNotExist) IsNotExist(_ error) bool {
 	return true
 }
 
-func readFileMockEmptyFile(_ string) ([]byte, error) {
+func (_ osMockExist) ReadFile(_ string) ([]byte, error) {
+	return []byte("2025-02-26T12:23:11.723Z"), nil
+}
+
+func (_ osMockNotExist) ReadFile(_ string) ([]byte, error) {
 	return []byte{}, nil
 }
 
-func readFileMockFakeData(_ string) ([]byte, error) {
-	return []byte("2026-02-26T12:23:11.723Z"), nil
+func (_ osMockExist) Stat(_ string) (os.FileInfo, error) {
+	return nil, nil
 }
 
-func statMock(_ string) (os.FileInfo, error) {
+func (_ osMockNotExist) Stat(_ string) (os.FileInfo, error) {
 	return nil, nil
 }

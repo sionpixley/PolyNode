@@ -24,15 +24,9 @@ import (
 
 const isoDateTimeFormat = "2006-01-02T15:04:05.000Z07:00"
 
-func autoUpdate(
-	operatingSystem models.OperatingSystem,
-	architecture models.Architecture,
-	isNotExistFunc func(error) bool,
-	readFileFunc func(string) ([]byte, error),
-	statFunc func(string) (os.FileInfo, error),
-) error {
+func autoUpdate(operatingSystem models.OperatingSystem, architecture models.Architecture, osWrapper models.OSWrapper) error {
 	now := time.Now().UTC()
-	lastUpdated := getLastUpdate(isNotExistFunc, readFileFunc, statFunc)
+	lastUpdated := getLastUpdate(osWrapper)
 	if now.Sub(lastUpdated).Hours() >= 720 {
 		err := updatePolyNode(operatingSystem, architecture)
 		if err != nil {
@@ -127,15 +121,7 @@ func downloadPolyNodeFile(filename string) error {
 	return nil
 }
 
-func execute(
-	args []string,
-	operatingSystem models.OperatingSystem,
-	architecture models.Architecture,
-	config *models.PolyNodeConfig,
-	isNotExistFunc func(error) bool,
-	readFileFunc func(string) ([]byte, error),
-	statFunc func(string) (os.FileInfo, error),
-) {
+func execute(args []string, operatingSystem models.OperatingSystem, architecture models.Architecture, config *models.PolyNodeConfig, osWrapper models.OSWrapper) {
 	var err error
 	if args[0] == "update" {
 		err = updatePolyNode(operatingSystem, architecture)
@@ -150,22 +136,22 @@ func execute(
 	}
 
 	if config.AutoUpdate {
-		err = autoUpdate(operatingSystem, architecture, isNotExistFunc, readFileFunc, statFunc)
+		err = autoUpdate(operatingSystem, architecture, osWrapper)
 		if err != nil {
 			log.Fatalf("polyn: %v\n", err)
 		}
 	}
 }
 
-func getLastUpdate(isNotExistFunc func(error) bool, readFileFunc func(string) ([]byte, error), statFunc func(string) (os.FileInfo, error)) time.Time {
+func getLastUpdate(osWrapper models.OSWrapper) time.Time {
 	updateFilePath := internal.PolynHomeDir + internal.PathSeparator + "last-update.txt"
-	if _, err := statFunc(updateFilePath); isNotExistFunc(err) {
+	if _, err := osWrapper.Stat(updateFilePath); osWrapper.IsNotExist(err) {
 		return time.Now().UTC().AddDate(0, 0, -30)
 	} else if err != nil {
 		return time.Now().UTC().AddDate(0, 0, -30)
 	}
 
-	content, err := readFileFunc(updateFilePath)
+	content, err := osWrapper.ReadFile(updateFilePath)
 	if err != nil {
 		return time.Now().UTC().AddDate(0, 0, -30)
 	}

@@ -99,19 +99,21 @@ func TestConvertToOperatingSystem_Windows(t *testing.T) {
 }
 
 func TestGetLastUpdate_NoFile(t *testing.T) {
+	var osWrapper osMockNotExist
 	expected := time.Now().UTC().AddDate(0, 0, -30).Format(dateFormat)
-	actual := getLastUpdate(isNotExistMockTrue, readFileMockEmptyFile, statMock).Format(dateFormat)
+	actual := getLastUpdate(osWrapper).Format(dateFormat)
 	if actual != expected {
 		t.Errorf("expected: %s actual: %s\n", expected, actual)
 	}
 }
 
 func TestGetLastUpdate_File(t *testing.T) {
-	expected, err := time.Parse(isoDateTimeFormat, "2026-02-26T12:23:11.723Z")
+	var osWrapper osMockExist
+	expected, err := time.Parse(isoDateTimeFormat, "2025-02-26T12:23:11.723Z")
 	if err != nil {
 		t.Errorf("%v\n", err)
 	}
-	actual := getLastUpdate(isNotExistMockFalse, readFileMockFakeData, statMock)
+	actual := getLastUpdate(osWrapper)
 	if actual != expected {
 		t.Errorf("expected: %s actual: %s\n", expected, actual)
 	}
