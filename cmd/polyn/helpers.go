@@ -127,7 +127,7 @@ func execute(args []string, operatingSystem models.OperatingSystem, architecture
 			log.Fatalf("polyn: %v\n", err)
 		}
 	} else if utilities.KnownCommand(args[0]) {
-		node.Handle(args, operatingSystem, architecture, config, httpWrapper)
+		node.Handle(args, operatingSystem, architecture, config, httpWrapper, ioWrapper, osWrapper)
 	} else {
 		err = fmt.Errorf(constants.UnknownCommandError, args[0])
 		utilities.LogUserError(err)
@@ -294,7 +294,7 @@ func updatePolyNode(operatingSystem models.OperatingSystem, architecture models.
 
 	fmt.Printf("extracting %s...", filename)
 	filename = internal.PolynHomeDir + internal.PathSeparator + filename
-	err = utilities.ExtractFile(filename, internal.PolynHomeDir+internal.PathSeparator+"update-temp")
+	err = utilities.ExtractFile(filename, internal.PolynHomeDir+internal.PathSeparator+"update-temp", ioWrapper, osWrapper)
 	if err != nil {
 		return err
 	}

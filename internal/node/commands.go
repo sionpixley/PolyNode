@@ -16,7 +16,7 @@ import (
 	"github.com/sionpixley/PolyNode/internal/utilities"
 )
 
-func add(version string, operatingSystem models.OperatingSystem, arch models.Architecture, config *models.PolyNodeConfig, httpWrapper models.HTTPWrapper) error {
+func add(version string, operatingSystem models.OperatingSystem, arch models.Architecture, config *models.PolyNodeConfig, httpWrapper models.HTTPWrapper, ioWrapper models.IOWrapper, osWrapper models.OSWrapper) error {
 	var err error
 
 	if utilities.ValidVersionFormat(version) {
@@ -84,7 +84,7 @@ func add(version string, operatingSystem models.OperatingSystem, arch models.Arc
 	fmt.Println("done")
 
 	fmt.Printf("extracting %s...", fileName)
-	err = utilities.ExtractFile(filePath, folderPath)
+	err = utilities.ExtractFile(filePath, folderPath, ioWrapper, osWrapper)
 	if err != nil {
 		return err
 	}
@@ -188,8 +188,8 @@ func def(version string, operatingSystem models.OperatingSystem) error {
 	return nil
 }
 
-func install(version string, operatingSystem models.OperatingSystem, arch models.Architecture, config *models.PolyNodeConfig, httpWrapper models.HTTPWrapper) error {
-	err := add(version, operatingSystem, arch, config, httpWrapper)
+func install(version string, operatingSystem models.OperatingSystem, arch models.Architecture, config *models.PolyNodeConfig, httpWrapper models.HTTPWrapper, ioWrapper models.IOWrapper, osWrapper models.OSWrapper) error {
+	err := add(version, operatingSystem, arch, config, httpWrapper, ioWrapper, osWrapper)
 	if err != nil {
 		return err
 	}

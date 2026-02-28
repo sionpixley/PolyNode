@@ -1,12 +1,35 @@
 package main
 
-import "os"
+import (
+	"io"
+	"net/http"
+	"os"
+)
 
+type httpMock struct{}
+type ioMock struct{}
 type osMockExist struct{}
 type osMockNotExist struct{}
 
-func (_ osMockExist) Create(_ string) (*os.File, error) {
+func (_ httpMock) Do(_ *http.Request) (*http.Response, error) {
+	resp := &http.Response{StatusCode: http.StatusOK}
+	return resp, nil
+}
+
+func (_ httpMock) NewClient() *http.Client {
+	return nil
+}
+
+func (_ httpMock) NewRequest(_ string, _ string, _ io.Reader) (*http.Request, error) {
 	return nil, nil
+}
+
+func (_ ioMock) Copy(_ io.Writer, _ io.Reader) (int64, error) {
+	return 0, nil
+}
+
+func (_ osMockExist) Create(_ string) (*os.File, error) {
+	return &os.File{}, nil
 }
 
 func (_ osMockNotExist) Create(_ string) (*os.File, error) {

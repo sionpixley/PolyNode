@@ -14,6 +14,7 @@ type HTTPWrapper interface {
 
 type IOWrapper interface {
 	Copy(io.Writer, io.Reader) (int64, error)
+	ReadAll(io.Reader) ([]byte, error)
 }
 
 type OSWrapper interface {
