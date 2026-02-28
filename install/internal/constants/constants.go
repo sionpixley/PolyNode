@@ -1,6 +1,6 @@
 package constants
 
-const DefaultPolynrc string = `{
+const DefaultPolynrc = `{
   "autoUpdate": true,
   "nodeMirror": "https://nodejs.org/dist"
 }

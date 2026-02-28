@@ -1,7 +1,7 @@
 package constants
 
 const (
-	Help string = `Description:
+	Help = `Description:
 
     PolyNode is a CLI tool that helps install and manage multiple versions of Node.js on the same device.
 
@@ -71,16 +71,16 @@ Config fields:
         String that configures the URL to download Node.js.
         Default value is 'https://nodejs.org/dist'.`
 
-	InvalidConfigFieldError            string = "invalid config field: '%s'"
-	MissingVersionKeywordOrPrefixError string = "missing argument: the '%s' command is missing a version, keyword, or prefix"
-	MissingVersionOrPrefixError        string = "missing argument: the '%s' command is missing a version or prefix"
+	InvalidConfigFieldError            = "invalid config field: '%s'"
+	MissingVersionKeywordOrPrefixError = "missing argument: the '%s' command is missing a version, keyword, or prefix"
+	MissingVersionOrPrefixError        = "missing argument: the '%s' command is missing a version or prefix"
 
-	NoDownloadedNodejsMessage string = "There are no Node.js versions downloaded.\nTo download a Node.js version, use the 'add' or 'install' command."
+	NoDownloadedNodejsMessage = "There are no Node.js versions downloaded.\nTo download a Node.js version, use the 'add' or 'install' command."
 
-	UnknownCommandError  string = "unknown command: '%s' is not a known command"
-	UnsupportedArchError string = "polyn: unsupported CPU architecture"
-	UnsupportedOSError   string = "polyn: unsupported operating system"
+	UnknownCommandError  = "unknown command: '%s' is not a known command"
+	UnsupportedArchError = "polyn: unsupported CPU architecture"
+	UnsupportedOSError   = "polyn: unsupported operating system"
 
 	// Version constant is PolyNode's version.
-	Version string = "v5.0.0-rc.6"
+	Version = "v5.0.0-rc.7"
 )

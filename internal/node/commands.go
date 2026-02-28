@@ -22,7 +22,7 @@ func add(version string, operatingSystem models.OperatingSystem, arch models.Arc
 	if utilities.ValidVersionFormat(version) {
 		version = utilities.ConvertToSemanticVersion(version)
 	} else {
-		version, err = convertPrefixToVersionDown(version, operatingSystem, arch, config, getAllNodeVersionsForOSAndArch)
+		version, err = convertPrefixToVersionDown(version, operatingSystem, arch, config)
 		if err != nil {
 			return err
 		}

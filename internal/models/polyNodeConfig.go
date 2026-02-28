@@ -9,8 +9,8 @@ import (
 )
 
 const (
-	defaultAutoUpdate bool   = true
-	defaultNodeMirror string = "https://nodejs.org/dist"
+	defaultAutoUpdate = true
+	defaultNodeMirror = "https://nodejs.org/dist"
 )
 
 var defaultPolynrc = PolyNodeConfig{
