@@ -130,7 +130,7 @@ func execute(args []string, operatingSystem models.OperatingSystem, architecture
 		node.Handle(args, operatingSystem, architecture, config, httpWrapper, ioWrapper, osWrapper)
 	} else {
 		err = fmt.Errorf(constants.UnknownCommandError, args[0])
-		utilities.LogUserError(err)
+		utilities.LogUserError(err, osWrapper)
 	}
 
 	if config.AutoUpdate {

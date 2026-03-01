@@ -99,14 +99,14 @@ func add(version string, operatingSystem models.OperatingSystem, arch models.Arc
 	return nil
 }
 
-func configGet(config *models.PolyNodeConfig, configField string) {
+func configGet(config *models.PolyNodeConfig, configField string, osWrapper models.OSWrapper) {
 	if configField == "autoupdate" {
 		fmt.Println(config.AutoUpdate)
 	} else if configField == "nodemirror" {
 		fmt.Println(config.NodeMirror)
 	} else {
 		err := fmt.Errorf(constants.InvalidConfigFieldError, configField)
-		utilities.LogUserError(err)
+		utilities.LogUserError(err, osWrapper)
 	}
 }
 
@@ -119,12 +119,12 @@ func configGetAll(config *models.PolyNodeConfig) {
 	fmt.Printf(s, config.AutoUpdate, config.NodeMirror)
 }
 
-func configSet(config *models.PolyNodeConfig, configField string, value string) error {
+func configSet(config *models.PolyNodeConfig, configField string, value string, osWrapper models.OSWrapper) error {
 	if configField == "autoupdate" {
 		v, err := strconv.ParseBool(value)
 		if err != nil {
 			err = fmt.Errorf("invalid value: '%s' is not a valid bool value", value)
-			utilities.LogUserError(err)
+			utilities.LogUserError(err, osWrapper)
 		}
 
 		config.AutoUpdate = v
@@ -135,7 +135,7 @@ func configSet(config *models.PolyNodeConfig, configField string, value string) 
 	}
 
 	e := fmt.Errorf(constants.InvalidConfigFieldError, configField)
-	utilities.LogUserError(e)
+	utilities.LogUserError(e, osWrapper)
 	return nil
 }
 

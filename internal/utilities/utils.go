@@ -215,11 +215,11 @@ func KnownCommand(comm string) bool {
 	return ConvertToCommand(comm) != command.Other
 }
 
-func LogUserError(err error) {
-	flag.CommandLine.SetOutput(os.Stderr)
+func LogUserError(err error, osWrapper models.OSWrapper) {
+	flag.CommandLine.SetOutput(osWrapper.Stderr())
 	flag.Usage()
-	_, _ = fmt.Fprintln(os.Stderr, err)
-	os.Exit(1)
+	_, _ = fmt.Fprintln(osWrapper.Stderr(), err)
+	osWrapper.Exit(1)
 }
 
 func ValidVersionFormat(version string) bool {
