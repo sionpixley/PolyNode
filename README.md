@@ -1,6 +1,8 @@
 # PolyNode
 
-PolyNode is a Node.js version manager that does not require sudo/admin privileges and is installed on a per-user basis. Works on AIX, Linux, macOS, and Windows.
+PolyNode is a Node.js version manager designed to be fast, portable, and permission-friendly. 
+It's installed on a per-user basis, never requires sudo/admin privileges, and unlike some other version managers: It doesn't bootstrap the node binary nor add hooks to your shell.
+Works on AIX, Linux, macOS, and Windows.
 
 ## Table of contents
 

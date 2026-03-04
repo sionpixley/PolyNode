@@ -2,7 +2,6 @@ package node
 
 import (
 	"fmt"
-	"io"
 	"net/http"
 	"os"
 	"os/exec"
@@ -51,23 +50,23 @@ func add(version string, operatingSystem models.OperatingSystem, arch models.Arc
 	defer func() { _ = response.Body.Close() }()
 
 	nodePath := internal.PolynHomeDir + internal.PathSeparator + "node"
-	err = os.MkdirAll(nodePath, os.ModePerm)
+	err = osWrapper.MkdirAll(nodePath, os.ModePerm)
 	if err != nil {
 		return err
 	}
 
 	filePath := nodePath + internal.PathSeparator + fileName
-	err = os.RemoveAll(filePath)
+	err = osWrapper.RemoveAll(filePath)
 	if err != nil {
 		return err
 	}
 
-	file, err := os.Create(filePath)
+	file, err := osWrapper.Create(filePath)
 	if err != nil {
 		return err
 	}
 
-	_, err = io.Copy(file, response.Body)
+	_, err = ioWrapper.Copy(file, response.Body)
 	if err != nil {
 		_ = file.Close()
 		return err
@@ -76,7 +75,7 @@ func add(version string, operatingSystem models.OperatingSystem, arch models.Arc
 	_ = file.Close()
 
 	folderPath := nodePath + internal.PathSeparator + version
-	err = os.RemoveAll(folderPath)
+	err = osWrapper.RemoveAll(folderPath)
 	if err != nil {
 		return err
 	}
@@ -89,7 +88,7 @@ func add(version string, operatingSystem models.OperatingSystem, arch models.Arc
 		return err
 	}
 
-	err = os.RemoveAll(filePath)
+	err = osWrapper.RemoveAll(filePath)
 	if err != nil {
 		return err
 	}
@@ -128,10 +127,10 @@ func configSet(config *models.PolyNodeConfig, configField string, value string, 
 		}
 
 		config.AutoUpdate = v
-		return config.Save()
+		return config.Save(osWrapper)
 	} else if configField == "nodemirror" {
 		config.NodeMirror = value
-		return config.Save()
+		return config.Save(osWrapper)
 	}
 
 	e := fmt.Errorf(constants.InvalidConfigFieldError, configField)
@@ -139,8 +138,8 @@ func configSet(config *models.PolyNodeConfig, configField string, value string, 
 	return nil
 }
 
-func current() {
-	output, err := exec.Command("node", "-v").Output()
+func current(execWrapper models.ExecWrapper) {
+	output, err := execWrapper.Output(exec.Command("node", "-v"))
 	if err != nil {
 		fmt.Println("There aren't any Node.js versions set as the current version.")
 	} else {
@@ -148,13 +147,13 @@ func current() {
 	}
 }
 
-func def(version string, operatingSystem models.OperatingSystem) error {
+func def(version string, operatingSystem models.OperatingSystem, execWrapper models.ExecWrapper, osWrapper models.OSWrapper) error {
 	var err error
 
 	if utilities.ValidVersionFormat(version) {
 		version = utilities.ConvertToSemanticVersion(version)
 	} else {
-		version, err = convertPrefixToVersionLocalDesc(version)
+		version, err = convertPrefixToVersionLocalDesc(version, osWrapper)
 		// We don't want to do anything when the error's value is 'skip'.
 		// If the error is 'skip' then that means the node directory doesn't exist.
 		// We don't treat it like an error in that case.
@@ -167,18 +166,18 @@ func def(version string, operatingSystem models.OperatingSystem) error {
 	fmt.Printf("switching to Node.js %s...", version)
 
 	nodejsPath := internal.PolynHomeDir + internal.PathSeparator + "nodejs"
-	err = os.RemoveAll(nodejsPath)
+	err = osWrapper.RemoveAll(nodejsPath)
 	if err != nil {
 		return err
 	}
 
 	if operatingSystem == opsys.Windows {
-		err = exec.Command("cmd", "/c", "mklink", "/j", nodejsPath, internal.PolynHomeDir+"\\node\\"+version).Run()
+		err = execWrapper.Run(exec.Command("cmd", "/c", "mklink", "/j", nodejsPath, internal.PolynHomeDir+"\\node\\"+version))
 		if err != nil {
 			return err
 		}
 	} else {
-		err = os.Symlink(internal.PolynHomeDir+"/node/"+version, nodejsPath)
+		err = osWrapper.Symlink(internal.PolynHomeDir+"/node/"+version, nodejsPath)
 		if err != nil {
 			return err
 		}
@@ -188,17 +187,17 @@ func def(version string, operatingSystem models.OperatingSystem) error {
 	return nil
 }
 
-func install(version string, operatingSystem models.OperatingSystem, arch models.Architecture, config *models.PolyNodeConfig, httpWrapper models.HTTPWrapper, ioWrapper models.IOWrapper, osWrapper models.OSWrapper) error {
+func install(version string, operatingSystem models.OperatingSystem, arch models.Architecture, config *models.PolyNodeConfig, execWrapper models.ExecWrapper, httpWrapper models.HTTPWrapper, ioWrapper models.IOWrapper, osWrapper models.OSWrapper) error {
 	err := add(version, operatingSystem, arch, config, httpWrapper, ioWrapper, osWrapper)
 	if err != nil {
 		return err
 	}
 
-	return def(version, operatingSystem)
+	return def(version, operatingSystem, execWrapper, osWrapper)
 }
 
-func list() {
-	dir, err := os.ReadDir(internal.PolynHomeDir + internal.PathSeparator + "node")
+func list(execWrapper models.ExecWrapper, osWrapper models.OSWrapper) {
+	dir, err := osWrapper.ReadDir(internal.PolynHomeDir + internal.PathSeparator + "node")
 	if err != nil {
 		// This means that the node folder doesn't exist. So, there are no Node.js versions downloaded.
 		fmt.Println(constants.NoDownloadedNodejsMessage)
@@ -206,7 +205,7 @@ func list() {
 	}
 
 	var current string
-	output, err := exec.Command("node", "-v").Output()
+	output, err := execWrapper.Output(exec.Command("node", "-v"))
 	if err == nil {
 		current = strings.TrimSpace(string(output))
 	}
@@ -220,13 +219,13 @@ func list() {
 	}
 }
 
-func remove(version string) error {
+func remove(version string, execWrapper models.ExecWrapper, osWrapper models.OSWrapper) error {
 	var err error
 
 	if utilities.ValidVersionFormat(version) {
 		version = utilities.ConvertToSemanticVersion(version)
 	} else {
-		version, err = convertPrefixToVersionLocalAsc(version)
+		version, err = convertPrefixToVersionLocalAsc(version, osWrapper)
 		// We don't want to do anything when the error's value is 'skip'.
 		// If the error is 'skip' then that means the node directory doesn't exist.
 		// We don't treat it like an error in that case.
@@ -239,20 +238,20 @@ func remove(version string) error {
 	fmt.Printf("removing Node.js %s...", version)
 
 	folderName := internal.PolynHomeDir + internal.PathSeparator + "node" + internal.PathSeparator + version
-	err = os.RemoveAll(folderName)
+	err = osWrapper.RemoveAll(folderName)
 	if err != nil {
 		return err
 	}
 
 	var current string
-	output, err := exec.Command("node", "-v").Output()
+	output, err := execWrapper.Output(exec.Command("node", "-v"))
 	if err == nil {
 		current = strings.TrimSpace(string(output))
 	}
 
 	if current == version {
 		folderName := internal.PolynHomeDir + internal.PathSeparator + "nodejs"
-		err = os.RemoveAll(folderName)
+		err = osWrapper.RemoveAll(folderName)
 		if err != nil {
 			return err
 		}
@@ -329,13 +328,13 @@ func searchDefault(operatingSystem models.OperatingSystem, arch models.Architect
 	return nil
 }
 
-func use(version string, operatingSystem models.OperatingSystem) error {
+func use(version string, operatingSystem models.OperatingSystem, execWrapper models.ExecWrapper, osWrapper models.OSWrapper) error {
 	var err error
 
 	if utilities.ValidVersionFormat(version) {
 		version = utilities.ConvertToSemanticVersion(version)
 	} else {
-		version, err = convertPrefixToVersionLocalDesc(version)
+		version, err = convertPrefixToVersionLocalDesc(version, osWrapper)
 		// We don't want to do anything when the error's value is 'skip'.
 		// If the error is 'skip' then that means the node directory doesn't exist.
 		// We don't treat it like an error in that case.
@@ -346,7 +345,7 @@ func use(version string, operatingSystem models.OperatingSystem) error {
 	}
 
 	if operatingSystem == opsys.Windows {
-		if ranInCmd, err := runningInCmd(); err != nil {
+		if ranInCmd, err := runningInCmd(execWrapper); err != nil {
 			return err
 		} else if ranInCmd {
 			fmt.Printf("set PATH=%s\\node\\%s;%s\n", internal.PolynHomeDir, version, "%PATH%")

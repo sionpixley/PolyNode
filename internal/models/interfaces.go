@@ -4,7 +4,13 @@ import (
 	"io"
 	"net/http"
 	"os"
+	"os/exec"
 )
+
+type ExecWrapper interface {
+	Output(*exec.Cmd) ([]byte, error)
+	Run(*exec.Cmd) error
+}
 
 type HTTPWrapper interface {
 	Do(*http.Client, *http.Request) (*http.Response, error)

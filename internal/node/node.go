@@ -12,7 +12,7 @@ import (
 )
 
 // Handle function is the main function for Node.js actions.
-func Handle(args []string, operatingSystem models.OperatingSystem, arch models.Architecture, config *models.PolyNodeConfig, httpWrapper models.HTTPWrapper, ioWrapper models.IOWrapper, osWrapper models.OSWrapper) {
+func Handle(args []string, operatingSystem models.OperatingSystem, arch models.Architecture, config *models.PolyNodeConfig, execWrapper models.ExecWrapper, httpWrapper models.HTTPWrapper, ioWrapper models.IOWrapper, osWrapper models.OSWrapper) {
 	var err error
 	comm := utilities.ConvertToCommand(args[0])
 	switch comm {
@@ -40,26 +40,26 @@ func Handle(args []string, operatingSystem models.OperatingSystem, arch models.A
 			utilities.LogUserError(err, osWrapper)
 		}
 	case command.Current:
-		current()
+		current(execWrapper)
 	case command.Default:
 		if len(args) > 1 {
-			err = def(args[1], operatingSystem)
+			err = def(args[1], operatingSystem, execWrapper, osWrapper)
 		} else {
 			err = fmt.Errorf(constants.MissingVersionOrPrefixError, args[0])
 			utilities.LogUserError(err, osWrapper)
 		}
 	case command.Install:
 		if len(args) > 1 {
-			err = install(convertKeywordToVersion(args[1], operatingSystem, arch, config, httpWrapper), operatingSystem, arch, config, httpWrapper, ioWrapper, osWrapper)
+			err = install(convertKeywordToVersion(args[1], operatingSystem, arch, config, httpWrapper), operatingSystem, arch, config, execWrapper, httpWrapper, ioWrapper, osWrapper)
 		} else {
 			err = fmt.Errorf(constants.MissingVersionKeywordOrPrefixError, args[0])
 			utilities.LogUserError(err, osWrapper)
 		}
 	case command.List:
-		list()
+		list(execWrapper, osWrapper)
 	case command.Remove:
 		if len(args) > 1 {
-			err = remove(args[1])
+			err = remove(args[1], execWrapper, osWrapper)
 		} else {
 			err = fmt.Errorf(constants.MissingVersionOrPrefixError, args[0])
 			utilities.LogUserError(err, osWrapper)
@@ -72,7 +72,7 @@ func Handle(args []string, operatingSystem models.OperatingSystem, arch models.A
 		}
 	case command.Use:
 		if len(args) > 1 {
-			err = use(args[1], operatingSystem)
+			err = use(args[1], operatingSystem, execWrapper, osWrapper)
 		} else {
 			err = fmt.Errorf(constants.MissingVersionOrPrefixError, args[0])
 			utilities.LogUserError(err, osWrapper)

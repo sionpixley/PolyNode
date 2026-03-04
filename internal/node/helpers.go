@@ -5,7 +5,6 @@ import (
 	"errors"
 	"fmt"
 	"net/http"
-	"os"
 	"os/exec"
 	"slices"
 	"sort"
@@ -97,8 +96,8 @@ func convertPrefixToVersionDown(prefix string, operatingSystem models.OperatingS
 	return "", fmt.Errorf("polyn: no Node.js versions match the prefix '%s'", prefix)
 }
 
-func convertPrefixToVersionLocalAsc(prefix string) (string, error) {
-	dir, err := os.ReadDir(internal.PolynHomeDir + internal.PathSeparator + "node")
+func convertPrefixToVersionLocalAsc(prefix string, osWrapper models.OSWrapper) (string, error) {
+	dir, err := osWrapper.ReadDir(internal.PolynHomeDir + internal.PathSeparator + "node")
 	if err != nil {
 		// The node directory doesn't exist.
 		// Passing a 'skip' to explicitly not treat this code path as an error.
@@ -140,8 +139,8 @@ func convertPrefixToVersionLocalAsc(prefix string) (string, error) {
 	return "", fmt.Errorf("polyn: no downloaded Node.js versions match the prefix '%s'", prefix)
 }
 
-func convertPrefixToVersionLocalDesc(prefix string) (string, error) {
-	dir, err := os.ReadDir(internal.PolynHomeDir + internal.PathSeparator + "node")
+func convertPrefixToVersionLocalDesc(prefix string, osWrapper models.OSWrapper) (string, error) {
+	dir, err := osWrapper.ReadDir(internal.PolynHomeDir + internal.PathSeparator + "node")
 	if err != nil {
 		// The node directory doesn't exist.
 		// Passing a 'skip' to explicitly not treat this code path as an error.
@@ -260,9 +259,9 @@ func getArchiveName(operatingSystem models.OperatingSystem, architecture models.
 	return archiveName, nil
 }
 
-func runningInCmd() (bool, error) {
+func runningInCmd(execWrapper models.ExecWrapper) (bool, error) {
 	cmd := `Get-Process -Id ((Get-CimInstance -Class Win32_Process -Filter "Name = 'polyn.exe'")[0].ParentProcessId) | Select-Object -ExpandProperty Name`
-	output, err := exec.Command("powershell", "-NoLogo", "-NoProfile", "-NonInteractive", cmd).Output()
+	output, err := execWrapper.Output(exec.Command("powershell", "-NoLogo", "-NoProfile", "-NonInteractive", cmd))
 	if err != nil {
 		return false, err
 	}

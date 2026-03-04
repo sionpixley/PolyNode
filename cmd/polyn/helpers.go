@@ -22,11 +22,11 @@ import (
 
 const isoDateTimeFormat = "2006-01-02T15:04:05.000Z07:00"
 
-func autoUpdate(operatingSystem models.OperatingSystem, architecture models.Architecture, httpWrapper models.HTTPWrapper, ioWrapper models.IOWrapper, osWrapper models.OSWrapper) error {
+func autoUpdate(operatingSystem models.OperatingSystem, architecture models.Architecture, execWrapper models.ExecWrapper, httpWrapper models.HTTPWrapper, ioWrapper models.IOWrapper, osWrapper models.OSWrapper) error {
 	now := time.Now().UTC()
 	lastUpdated := getLastUpdate(osWrapper)
 	if now.Sub(lastUpdated).Hours() >= 720 {
-		err := updatePolyNode(operatingSystem, architecture, httpWrapper, ioWrapper, osWrapper)
+		err := updatePolyNode(operatingSystem, architecture, execWrapper, httpWrapper, ioWrapper, osWrapper)
 		if err != nil {
 			return err
 		}
@@ -119,22 +119,22 @@ func downloadPolyNodeFile(filename string, httpWrapper models.HTTPWrapper, ioWra
 	return nil
 }
 
-func execute(args []string, operatingSystem models.OperatingSystem, architecture models.Architecture, config *models.PolyNodeConfig, httpWrapper models.HTTPWrapper, ioWrapper models.IOWrapper, osWrapper models.OSWrapper) {
+func execute(args []string, operatingSystem models.OperatingSystem, architecture models.Architecture, config *models.PolyNodeConfig, execWrapper models.ExecWrapper, httpWrapper models.HTTPWrapper, ioWrapper models.IOWrapper, osWrapper models.OSWrapper) {
 	var err error
 	if args[0] == "update" {
-		err = updatePolyNode(operatingSystem, architecture, httpWrapper, ioWrapper, osWrapper)
+		err = updatePolyNode(operatingSystem, architecture, execWrapper, httpWrapper, ioWrapper, osWrapper)
 		if err != nil {
 			log.Fatalf("polyn: %v\n", err)
 		}
 	} else if utilities.KnownCommand(args[0]) {
-		node.Handle(args, operatingSystem, architecture, config, httpWrapper, ioWrapper, osWrapper)
+		node.Handle(args, operatingSystem, architecture, config, execWrapper, httpWrapper, ioWrapper, osWrapper)
 	} else {
 		err = fmt.Errorf(constants.UnknownCommandError, args[0])
 		utilities.LogUserError(err, osWrapper)
 	}
 
 	if config.AutoUpdate {
-		err = autoUpdate(operatingSystem, architecture, httpWrapper, ioWrapper, osWrapper)
+		err = autoUpdate(operatingSystem, architecture, execWrapper, httpWrapper, ioWrapper, osWrapper)
 		if err != nil {
 			log.Fatalf("polyn: %v\n", err)
 		}
@@ -193,7 +193,7 @@ func parseCLIArgs(osWrapper models.OSWrapper) []string {
 	return args
 }
 
-func runUpdateScript(operatingSystem models.OperatingSystem, osWrapper models.OSWrapper) error {
+func runUpdateScript(operatingSystem models.OperatingSystem, execWrapper models.ExecWrapper, osWrapper models.OSWrapper) error {
 	fmt.Print("running update...")
 
 	if operatingSystem == opsys.Windows {
@@ -218,13 +218,13 @@ if exist %LOCALAPPDATA%\Programs\PolyNode\update-temp\ (
 			return err
 		}
 
-		err = exec.Command("cmd", "/c", "start", "/b", batchfilePath).Run()
+		err = execWrapper.Run(exec.Command("cmd", "/c", "start", "/b", batchfilePath))
 		if err != nil {
 			return err
 		}
 	} else {
 		updateTemp := internal.PolynHomeDir + internal.PathSeparator + "update-temp"
-		err := exec.Command(updateTemp + internal.PathSeparator + "setup").Run()
+		err := execWrapper.Run(exec.Command(updateTemp + internal.PathSeparator + "setup"))
 		if err != nil {
 			return err
 		}
@@ -247,7 +247,7 @@ func supportedOS(operatingSystem models.OperatingSystem) bool {
 	return operatingSystem != opsys.Other
 }
 
-func updatePolyNode(operatingSystem models.OperatingSystem, architecture models.Architecture, httpWrapper models.HTTPWrapper, ioWrapper models.IOWrapper, osWrapper models.OSWrapper) error {
+func updatePolyNode(operatingSystem models.OperatingSystem, architecture models.Architecture, execWrapper models.ExecWrapper, httpWrapper models.HTTPWrapper, ioWrapper models.IOWrapper, osWrapper models.OSWrapper) error {
 	var filename string
 	switch operatingSystem {
 	case opsys.AIX:
@@ -300,5 +300,5 @@ func updatePolyNode(operatingSystem models.OperatingSystem, architecture models.
 	}
 	fmt.Println("done")
 
-	return runUpdateScript(operatingSystem, osWrapper)
+	return runUpdateScript(operatingSystem, execWrapper, osWrapper)
 }
