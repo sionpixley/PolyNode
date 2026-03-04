@@ -5,7 +5,7 @@ import (
 )
 
 func main() {
-	var execWrapper models.ExecWrapper
+	var execWrapper models.ExecWrap
 	var httpWrapper models.HTTPWrap
 	var ioWrapper models.IOWrap
 	var osWrapper models.OSWrap
