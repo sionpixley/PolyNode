@@ -4,6 +4,7 @@ import (
 	"testing"
 
 	"github.com/sionpixley/PolyNode/internal/constants/command"
+	"github.com/sionpixley/PolyNode/internal/models"
 )
 
 func TestConvertToCommand_Add(t *testing.T) {
@@ -123,6 +124,17 @@ func TestConvertToSemanticVersion_WithV(t *testing.T) {
 	actual := ConvertToSemanticVersion("v2.1.56")
 	if actual != expected {
 		t.Errorf("expected: %s actual: %s\n", expected, actual)
+	}
+}
+
+func TestExtractGzip(t *testing.T) {
+	gzipWrapper := new(models.GzipMock)
+	ioWrapper := new(models.IOMock)
+	osWrapper := new(models.OSMockExist)
+	tarWrapper := new(models.TarMock)
+	err := ExtractGzip("test.tar.gz", "node", gzipWrapper, ioWrapper, osWrapper, tarWrapper)
+	if err != nil {
+		t.Errorf("%v\n", err)
 	}
 }
 

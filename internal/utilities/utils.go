@@ -3,7 +3,6 @@ package utilities
 import (
 	"archive/tar"
 	"archive/zip"
-	"compress/gzip"
 	"fmt"
 	"io"
 	"os"
@@ -54,7 +53,7 @@ func ConvertToSemanticVersion(version string) string {
 	return "v" + version
 }
 
-func ExtractFile(source string, destination string, ioWrapper models.IOWrapper, osWrapper models.OSWrapper) error {
+func ExtractFile(source string, destination string, gzipWrapper models.GzipWrapper, ioWrapper models.IOWrapper, osWrapper models.OSWrapper, tarWrapper models.TarWrapper) error {
 	err := osWrapper.RemoveAll(destination)
 	if err != nil {
 		return err
@@ -66,7 +65,7 @@ func ExtractFile(source string, destination string, ioWrapper models.IOWrapper, 
 	}
 
 	if strings.HasSuffix(source, ".gz") {
-		err = ExtractGzip(source, destination, ioWrapper, osWrapper)
+		err = ExtractGzip(source, destination, gzipWrapper, ioWrapper, osWrapper, tarWrapper)
 		if err != nil {
 			return err
 		}
@@ -80,23 +79,23 @@ func ExtractFile(source string, destination string, ioWrapper models.IOWrapper, 
 	return osWrapper.RemoveAll(source)
 }
 
-func ExtractGzip(source string, destination string, ioWrapper models.IOWrapper, osWrapper models.OSWrapper) error {
+func ExtractGzip(source string, destination string, gzipWrapper models.GzipWrapper, ioWrapper models.IOWrapper, osWrapper models.OSWrapper, tarWrapper models.TarWrapper) error {
 	file, err := osWrapper.Open(source)
 	if err != nil {
 		return err
 	}
 	defer func() { _ = file.Close() }()
 
-	gzipReader, err := gzip.NewReader(file)
+	gzipReader, err := gzipWrapper.NewReader(file)
 	if err != nil {
 		return err
 	}
-	defer func() { _ = gzipReader.Close() }()
+	defer func() { _ = gzipWrapper.Close(gzipReader) }()
 
-	tarReader := tar.NewReader(gzipReader)
+	tarReader := tarWrapper.NewReader(gzipReader)
 
 	for {
-		header, err := tarReader.Next()
+		header, err := tarWrapper.Next(tarReader)
 		if err == io.EOF {
 			break
 		} else if err != nil {
@@ -114,9 +113,9 @@ func ExtractGzip(source string, destination string, ioWrapper models.IOWrapper, 
 			if e := osWrapper.MkdirAll(filepath.Dir(target), os.FileMode(header.Mode)); e != nil {
 				return e
 			}
-			outFile, err := osWrapper.OpenFile(target, os.O_CREATE|os.O_RDWR|os.O_TRUNC, os.FileMode(header.Mode))
-			if err != nil {
-				return err
+			outFile, e := osWrapper.OpenFile(target, os.O_CREATE|os.O_RDWR|os.O_TRUNC, os.FileMode(header.Mode))
+			if e != nil {
+				return e
 			}
 			if _, e2 := ioWrapper.Copy(outFile, tarReader); e2 != nil {
 				_ = outFile.Close()

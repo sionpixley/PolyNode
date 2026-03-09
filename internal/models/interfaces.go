@@ -1,6 +1,8 @@
 package models
 
 import (
+	"archive/tar"
+	"compress/gzip"
 	"io"
 	"net/http"
 	"os"
@@ -10,6 +12,11 @@ import (
 type ExecWrapper interface {
 	Output(*exec.Cmd) ([]byte, error)
 	Run(*exec.Cmd) error
+}
+
+type GzipWrapper interface {
+	Close(*gzip.Reader) error
+	NewReader(io.Reader) (*gzip.Reader, error)
 }
 
 type HTTPWrapper interface {
@@ -39,4 +46,9 @@ type OSWrapper interface {
 	Stdout() *os.File
 	Symlink(string, string) error
 	WriteFile(string, []byte, os.FileMode) error
+}
+
+type TarWrapper interface {
+	NewReader(io.Reader) *tar.Reader
+	Next(*tar.Reader) (*tar.Header, error)
 }

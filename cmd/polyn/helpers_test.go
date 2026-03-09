@@ -6,6 +6,7 @@ import (
 
 	"github.com/sionpixley/PolyNode/internal/constants/arch"
 	"github.com/sionpixley/PolyNode/internal/constants/opsys"
+	"github.com/sionpixley/PolyNode/internal/models"
 )
 
 const dateFormat = "2006-01-02"
@@ -99,37 +100,28 @@ func TestConvertToOperatingSystem_Windows(t *testing.T) {
 }
 
 func TestDownloadPolyNodeFile(t *testing.T) {
-	httpWrapper := new(httpMock)
-	ioWrapper := new(ioMock)
-	osWrapper := new(osMockExist)
+	httpWrapper := new(models.HTTPMock)
+	ioWrapper := new(models.IOMock)
+	osWrapper := new(models.OSMockExist)
 	err := downloadPolyNodeFile("test", httpWrapper, ioWrapper, osWrapper)
 	if err != nil {
 		t.Errorf("%v\n", err)
 	}
 
 	switch {
-	case httpWrapper.timesDoCalled < 1:
+	case httpWrapper.TimesDoCalled < 1:
 		t.Error("expected httpWrapper.Do to have been called\n")
-	case ioWrapper.timesCopyCalled < 1:
+	case ioWrapper.TimesCopyCalled < 1:
 		t.Error("expected ioWrapper.Copy to have been called\n")
-	case osWrapper.timesRemoveAllCalled < 1:
+	case osWrapper.TimesRemoveAllCalled < 1:
 		t.Error("expected osWrapper.RemoveAll to have been called\n")
-	case osWrapper.timesCreateCalled < 1:
+	case osWrapper.TimesCreateCalled < 1:
 		t.Error("expected osWrapper.Create to have been called\n")
 	}
 }
 
-func TestGetLastUpdate_NoFile(t *testing.T) {
-	osWrapper := new(osMockNotExist)
-	expected := time.Now().UTC().AddDate(0, 0, -30).Format(dateFormat)
-	actual := getLastUpdate(osWrapper).Format(dateFormat)
-	if actual != expected {
-		t.Errorf("expected: %s actual: %s\n", expected, actual)
-	}
-}
-
 func TestGetLastUpdate_File(t *testing.T) {
-	osWrapper := new(osMockExist)
+	osWrapper := new(models.OSMockExist)
 	expected, err := time.Parse(isoDateTimeFormat, "2025-02-26T12:23:11.723Z")
 	if err != nil {
 		t.Errorf("%v\n", err)
@@ -140,66 +132,80 @@ func TestGetLastUpdate_File(t *testing.T) {
 	}
 }
 
+func TestGetLastUpdate_NoFile(t *testing.T) {
+	osWrapper := new(models.OSMockNotExist)
+	expected := time.Now().UTC().AddDate(0, 0, -30).Format(dateFormat)
+	actual := getLastUpdate(osWrapper).Format(dateFormat)
+	if actual != expected {
+		t.Errorf("expected: %s actual: %s\n", expected, actual)
+	}
+}
+
 func TestRunUpdateScript_AIX(t *testing.T) {
-	execWrapper := new(execMock)
-	osWrapper := new(osMockExist)
+	execWrapper := new(models.ExecMock)
+	osWrapper := new(models.OSMockExist)
 	err := runUpdateScript(opsys.AIX, execWrapper, osWrapper)
 	if err != nil {
 		t.Errorf("%v\n", err)
 	}
 
 	switch {
-	case execWrapper.timesRunCalled < 1:
+	case execWrapper.TimesRunCalled < 1:
 		t.Error("expected execWrapper.Run to have been called\n")
-	case osWrapper.timesRemoveAllCalled < 1:
+	case osWrapper.TimesRemoveAllCalled < 1:
 		t.Error("expected osWrapper.RemoveAll to have been called\n")
 	}
 }
 
 func TestRunUpdateScript_Linux(t *testing.T) {
-	execWrapper := new(execMock)
-	osWrapper := new(osMockExist)
+	execWrapper := new(models.ExecMock)
+	osWrapper := new(models.OSMockExist)
 	err := runUpdateScript(opsys.Linux, execWrapper, osWrapper)
 	if err != nil {
 		t.Errorf("%v\n", err)
 	}
 
 	switch {
-	case execWrapper.timesRunCalled < 1:
+	case execWrapper.TimesRunCalled < 1:
 		t.Error("expected execWrapper.Run to have been called\n")
-	case osWrapper.timesRemoveAllCalled < 1:
+	case osWrapper.TimesRemoveAllCalled < 1:
 		t.Error("expected osWrapper.RemoveAll to have been called\n")
 	}
 }
 
 func TestRunUpdateScript_Mac(t *testing.T) {
-	execWrapper := new(execMock)
-	osWrapper := new(osMockExist)
+	execWrapper := new(models.ExecMock)
+	osWrapper := new(models.OSMockExist)
 	err := runUpdateScript(opsys.Mac, execWrapper, osWrapper)
 	if err != nil {
 		t.Errorf("%v\n", err)
 	}
 
 	switch {
-	case execWrapper.timesRunCalled < 1:
+	case execWrapper.TimesRunCalled < 1:
 		t.Error("expected execWrapper.Run to have been called\n")
-	case osWrapper.timesRemoveAllCalled < 1:
+	case osWrapper.TimesRemoveAllCalled < 1:
 		t.Error("expected osWrapper.RemoveAll to have been called\n")
 	}
 }
 
 func TestRunUpdateScript_Windows(t *testing.T) {
-	execWrapper := new(execMock)
-	osWrapper := new(osMockExist)
+	execWrapper := new(models.ExecMock)
+	osWrapper := new(models.OSMockExist)
 	err := runUpdateScript(opsys.Windows, execWrapper, osWrapper)
 	if err != nil {
 		t.Errorf("%v\n", err)
 	}
 
 	switch {
-	case osWrapper.timesWriteFileCalled < 1:
+	case osWrapper.TimesWriteFileCalled < 1:
 		t.Error("expected osWrapper.WriteFile to have been called\n")
-	case execWrapper.timesRunCalled < 1:
+	case execWrapper.TimesRunCalled < 1:
 		t.Error("expected execWrapper.Run to have been called\n")
 	}
 }
+
+func TestUpdatePolyNode_AIX(t *testing.T)     {}
+func TestUpdatePolyNode_Linux(t *testing.T)   {}
+func TestUpdatePolyNode_Mac(t *testing.T)     {}
+func TestUpdatePolyNode_Windows(t *testing.T) {}
