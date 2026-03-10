@@ -34,7 +34,9 @@ Works on AIX, Linux, macOS, and Windows.
     10. [Printing your current version of PolyNode](#printing-your-current-version-of-polynode)
 5. [How to configure](#how-to-configure-polynode)
     1. [Configuration fields](#configuration-fields)
-        1. [nodeMirror](#nodemirror)
+        1. [autoUpdate](#autoupdate)
+        2. [nodeMirror](#nodemirror)
+        3. [timeoutInSeconds](#timeoutinseconds)
 6. [How to uninstall](#how-to-uninstall-polynode)
     1. [AIX, Linux, or macOS](#aix-linux-or-macos)
     2. [Windows](#windows)
@@ -265,7 +267,8 @@ PolyNode's configuration is handled through a JSON file named `polynrc.json` loc
 ```json
 {
   "autoUpdate": true,
-  "nodeMirror": "https://nodejs.org/dist"
+  "nodeMirror": "https://nodejs.org/dist",
+  "timeoutInSeconds": 180
 }
 ```
 
@@ -278,6 +281,10 @@ This field is a `bool` that configures if PolyNode's auto updater should run. De
 #### nodeMirror
 
 This field is a `string` that configures the URL to download Node.js. Default value is `"https://nodejs.org/dist"`.
+
+#### timeoutInSeconds
+
+This fields is an `int` that configures the timeout (in seconds, not milliseconds) for the internal HTTP client. Default value is `180`. To turn off the timeout, set this field to `0`.
 
 ## How to uninstall PolyNode
 

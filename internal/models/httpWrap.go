@@ -12,8 +12,8 @@ func (_ HTTPWrap) Do(client *http.Client, request *http.Request) (*http.Response
 	return client.Do(request)
 }
 
-func (_ HTTPWrap) NewClient() *http.Client {
-	return &http.Client{Timeout: time.Minute * 3}
+func (_ HTTPWrap) NewClient(config *PolyNodeConfig) *http.Client {
+	return &http.Client{Timeout: time.Second * time.Duration(config.TimeoutInSeconds)}
 }
 
 func (_ HTTPWrap) NewRequest(method string, url string, body io.Reader) (*http.Request, error) {

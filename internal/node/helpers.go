@@ -185,7 +185,7 @@ func convertPrefixToVersionLocalDesc(prefix string, osWrapper models.OSWrapper) 
 func getAllNodeVersionsForOSAndArch(operatingSystem models.OperatingSystem, arch models.Architecture, config *models.PolyNodeConfig, httpWrapper models.HTTPWrapper) ([]models.NodeVersion, error) {
 	url := config.NodeMirror + "/index.json"
 
-	client := httpWrapper.NewClient()
+	client := httpWrapper.NewClient(config)
 	request, err := httpWrapper.NewRequest(http.MethodGet, url, nil)
 	if err != nil {
 		return nil, err

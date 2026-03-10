@@ -22,11 +22,11 @@ import (
 
 const iso8601 = "2006-01-02T15:04:05.000Z07:00"
 
-func autoUpdate(operatingSystem models.OperatingSystem, architecture models.Architecture, execWrapper models.ExecWrapper, gzipWrapper models.GzipWrapper, httpWrapper models.HTTPWrapper, ioWrapper models.IOWrapper, osWrapper models.OSWrapper, tarWrapper models.TarWrapper, zipWrapper models.ZipWrapper) error {
+func autoUpdate(operatingSystem models.OperatingSystem, architecture models.Architecture, config *models.PolyNodeConfig, execWrapper models.ExecWrapper, gzipWrapper models.GzipWrapper, httpWrapper models.HTTPWrapper, ioWrapper models.IOWrapper, osWrapper models.OSWrapper, tarWrapper models.TarWrapper, zipWrapper models.ZipWrapper) error {
 	now := time.Now().UTC()
 	lastUpdated := getLastUpdate(osWrapper)
 	if now.Sub(lastUpdated).Hours() >= 720 {
-		err := updatePolyNode(operatingSystem, architecture, execWrapper, gzipWrapper, httpWrapper, ioWrapper, osWrapper, tarWrapper, zipWrapper)
+		err := updatePolyNode(operatingSystem, architecture, config, execWrapper, gzipWrapper, httpWrapper, ioWrapper, osWrapper, tarWrapper, zipWrapper)
 		if err != nil {
 			return err
 		}
@@ -83,10 +83,10 @@ func convertToOperatingSystem(osStr string) models.OperatingSystem {
 	}
 }
 
-func downloadPolyNodeFile(filename string, httpWrapper models.HTTPWrapper, ioWrapper models.IOWrapper, osWrapper models.OSWrapper) error {
+func downloadPolyNodeFile(filename string, config *models.PolyNodeConfig, httpWrapper models.HTTPWrapper, ioWrapper models.IOWrapper, osWrapper models.OSWrapper) error {
 	fmt.Print("downloading the latest release of PolyNode...")
 
-	client := httpWrapper.NewClient()
+	client := httpWrapper.NewClient(config)
 	request, err := httpWrapper.NewRequest(http.MethodGet, "https://github.com/sionpixley/PolyNode/releases/latest/download/"+filename, nil)
 	if err != nil {
 		return err
@@ -122,7 +122,7 @@ func downloadPolyNodeFile(filename string, httpWrapper models.HTTPWrapper, ioWra
 func execute(args []string, operatingSystem models.OperatingSystem, architecture models.Architecture, config *models.PolyNodeConfig, execWrapper models.ExecWrapper, gzipWrapper models.GzipWrapper, httpWrapper models.HTTPWrapper, ioWrapper models.IOWrapper, osWrapper models.OSWrapper, tarWrapper models.TarWrapper, zipWrapper models.ZipWrapper) {
 	var err error
 	if args[0] == "update" {
-		err = updatePolyNode(operatingSystem, architecture, execWrapper, gzipWrapper, httpWrapper, ioWrapper, osWrapper, tarWrapper, zipWrapper)
+		err = updatePolyNode(operatingSystem, architecture, config, execWrapper, gzipWrapper, httpWrapper, ioWrapper, osWrapper, tarWrapper, zipWrapper)
 		if err != nil {
 			log.Fatalf("polyn: %v\n", err)
 		}
@@ -134,7 +134,7 @@ func execute(args []string, operatingSystem models.OperatingSystem, architecture
 	}
 
 	if config.AutoUpdate {
-		err = autoUpdate(operatingSystem, architecture, execWrapper, gzipWrapper, httpWrapper, ioWrapper, osWrapper, tarWrapper, zipWrapper)
+		err = autoUpdate(operatingSystem, architecture, config, execWrapper, gzipWrapper, httpWrapper, ioWrapper, osWrapper, tarWrapper, zipWrapper)
 		if err != nil {
 			log.Fatalf("polyn: %v\n", err)
 		}
@@ -271,7 +271,7 @@ func supportedOS(operatingSystem models.OperatingSystem) bool {
 	}
 }
 
-func updatePolyNode(operatingSystem models.OperatingSystem, architecture models.Architecture, execWrapper models.ExecWrapper, gzipWrapper models.GzipWrapper, httpWrapper models.HTTPWrapper, ioWrapper models.IOWrapper, osWrapper models.OSWrapper, tarWrapper models.TarWrapper, zipWrapper models.ZipWrapper) error {
+func updatePolyNode(operatingSystem models.OperatingSystem, architecture models.Architecture, config *models.PolyNodeConfig, execWrapper models.ExecWrapper, gzipWrapper models.GzipWrapper, httpWrapper models.HTTPWrapper, ioWrapper models.IOWrapper, osWrapper models.OSWrapper, tarWrapper models.TarWrapper, zipWrapper models.ZipWrapper) error {
 	var filename string
 	switch operatingSystem {
 	case opsys.AIX:
@@ -311,7 +311,7 @@ func updatePolyNode(operatingSystem models.OperatingSystem, architecture models.
 		return errors.New(constants.UnsupportedOSError)
 	}
 
-	err := downloadPolyNodeFile(filename, httpWrapper, ioWrapper, osWrapper)
+	err := downloadPolyNodeFile(filename, config, httpWrapper, ioWrapper, osWrapper)
 	if err != nil {
 		return err
 	}

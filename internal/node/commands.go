@@ -37,7 +37,7 @@ func add(version string, operatingSystem models.OperatingSystem, arch models.Arc
 
 	url := config.NodeMirror + "/" + version + "/" + fileName
 
-	client := httpWrapper.NewClient()
+	client := httpWrapper.NewClient(config)
 	request, err := httpWrapper.NewRequest(http.MethodGet, url, nil)
 	if err != nil {
 		return err
@@ -99,11 +99,14 @@ func add(version string, operatingSystem models.OperatingSystem, arch models.Arc
 }
 
 func configGet(config *models.PolyNodeConfig, configField string, osWrapper models.OSWrapper) {
-	if configField == "autoupdate" {
+	switch configField {
+	case "autoupdate":
 		fmt.Println(config.AutoUpdate)
-	} else if configField == "nodemirror" {
+	case "nodemirror":
 		fmt.Println(config.NodeMirror)
-	} else {
+	case "timeoutinseconds":
+		fmt.Println(config.TimeoutInSeconds)
+	default:
 		err := fmt.Errorf(constants.InvalidConfigFieldError, configField)
 		utilities.LogUserError(err, osWrapper)
 	}
@@ -119,7 +122,8 @@ func configGetAll(config *models.PolyNodeConfig) {
 }
 
 func configSet(config *models.PolyNodeConfig, configField string, value string, osWrapper models.OSWrapper) error {
-	if configField == "autoupdate" {
+	switch configField {
+	case "autoupdate":
 		v, err := strconv.ParseBool(value)
 		if err != nil {
 			err = fmt.Errorf("invalid value: '%s' is not a valid bool value", value)
@@ -128,14 +132,23 @@ func configSet(config *models.PolyNodeConfig, configField string, value string, 
 
 		config.AutoUpdate = v
 		return config.Save(osWrapper)
-	} else if configField == "nodemirror" {
+	case "nodemirror":
 		config.NodeMirror = value
 		return config.Save(osWrapper)
-	}
+	case "timeoutinseconds":
+		v, e := strconv.Atoi(value)
+		if e != nil {
+			e = fmt.Errorf("invalid value: '%s' is not a valid int value", value)
+			utilities.LogUserError(e, osWrapper)
+		}
 
-	e := fmt.Errorf(constants.InvalidConfigFieldError, configField)
-	utilities.LogUserError(e, osWrapper)
-	return nil
+		config.TimeoutInSeconds = v
+		return config.Save(osWrapper)
+	default:
+		e2 := fmt.Errorf(constants.InvalidConfigFieldError, configField)
+		utilities.LogUserError(e2, osWrapper)
+		return nil
+	}
 }
 
 func current(execWrapper models.ExecWrapper) {

@@ -8,18 +8,21 @@ import (
 )
 
 const (
-	defaultAutoUpdate = true
-	defaultNodeMirror = "https://nodejs.org/dist"
+	defaultAutoUpdate       = true
+	defaultNodeMirror       = "https://nodejs.org/dist"
+	defaultTimeoutInSeconds = 180
 )
 
 var defaultPolynrc = PolyNodeConfig{
-	AutoUpdate: defaultAutoUpdate,
-	NodeMirror: defaultNodeMirror,
+	AutoUpdate:       defaultAutoUpdate,
+	NodeMirror:       defaultNodeMirror,
+	TimeoutInSeconds: defaultTimeoutInSeconds,
 }
 
 type PolyNodeConfig struct {
-	NodeMirror string `json:"nodeMirror"`
-	AutoUpdate bool   `json:"autoUpdate"`
+	NodeMirror       string `json:"nodeMirror"`
+	AutoUpdate       bool   `json:"autoUpdate"`
+	TimeoutInSeconds int    `json:"timeoutInSeconds"`
 }
 
 func (config *PolyNodeConfig) Save(osWrapper OSWrapper) error {
@@ -51,6 +54,18 @@ func (config *PolyNodeConfig) UnmarshalJSON(b []byte) error {
 		config.NodeMirror = strings.ToLower(strings.TrimSuffix(strings.TrimSpace(mirror.(string)), "/"))
 	} else {
 		config.NodeMirror = defaultNodeMirror
+	}
+
+	timeout, exists := temp["timeout"]
+	if exists {
+		val := timeout.(int)
+		if val < 0 {
+			config.TimeoutInSeconds = defaultTimeoutInSeconds
+		} else {
+			config.TimeoutInSeconds = val
+		}
+	} else {
+		config.TimeoutInSeconds = defaultTimeoutInSeconds
 	}
 
 	return nil

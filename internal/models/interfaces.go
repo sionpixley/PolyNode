@@ -22,7 +22,7 @@ type GzipWrapper interface {
 
 type HTTPWrapper interface {
 	Do(*http.Client, *http.Request) (*http.Response, error)
-	NewClient() *http.Client
+	NewClient(*PolyNodeConfig) *http.Client
 	NewRequest(string, string, io.Reader) (*http.Request, error)
 }
 

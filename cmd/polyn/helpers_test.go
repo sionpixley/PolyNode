@@ -103,7 +103,7 @@ func TestDownloadPolyNodeFile(t *testing.T) {
 	httpWrapper := new(models.HTTPMock)
 	ioWrapper := new(models.IOMock)
 	osWrapper := new(models.OSMockExist)
-	err := downloadPolyNodeFile("test", httpWrapper, ioWrapper, osWrapper)
+	err := downloadPolyNodeFile("test", nil, httpWrapper, ioWrapper, osWrapper)
 	if err != nil {
 		t.Errorf("%v\n", err)
 	}
@@ -328,7 +328,7 @@ func TestUpdatePolyNode_AIX(t *testing.T) {
 	tarWrapper := new(models.TarMock)
 	zipWrapper := new(models.ZipMock)
 
-	err := updatePolyNode(opsys.AIX, arch.PPC64, execWrapper, gzipWrapper, httpWrapper, ioWrapper, osWrapper, tarWrapper, zipWrapper)
+	err := updatePolyNode(opsys.AIX, arch.PPC64, nil, execWrapper, gzipWrapper, httpWrapper, ioWrapper, osWrapper, tarWrapper, zipWrapper)
 	if err != nil {
 		t.Errorf("%v\n", err)
 	}
@@ -343,7 +343,7 @@ func TestUpdatePolyNode_Linux(t *testing.T) {
 	tarWrapper := new(models.TarMock)
 	zipWrapper := new(models.ZipMock)
 
-	err := updatePolyNode(opsys.Linux, arch.X64, execWrapper, gzipWrapper, httpWrapper, ioWrapper, osWrapper, tarWrapper, zipWrapper)
+	err := updatePolyNode(opsys.Linux, arch.X64, nil, execWrapper, gzipWrapper, httpWrapper, ioWrapper, osWrapper, tarWrapper, zipWrapper)
 	if err != nil {
 		t.Errorf("%v\n", err)
 	}
@@ -358,7 +358,7 @@ func TestUpdatePolyNode_Mac(t *testing.T) {
 	tarWrapper := new(models.TarMock)
 	zipWrapper := new(models.ZipMock)
 
-	err := updatePolyNode(opsys.Mac, arch.ARM64, execWrapper, gzipWrapper, httpWrapper, ioWrapper, osWrapper, tarWrapper, zipWrapper)
+	err := updatePolyNode(opsys.Mac, arch.ARM64, nil, execWrapper, gzipWrapper, httpWrapper, ioWrapper, osWrapper, tarWrapper, zipWrapper)
 	if err != nil {
 		t.Errorf("%v\n", err)
 	}
@@ -373,7 +373,7 @@ func TestUpdatePolyNode_UnsupportedArch(t *testing.T) {
 	tarWrapper := new(models.TarMock)
 	zipWrapper := new(models.ZipMock)
 
-	err := updatePolyNode(opsys.Linux, arch.PPC64, execWrapper, gzipWrapper, httpWrapper, ioWrapper, osWrapper, tarWrapper, zipWrapper)
+	err := updatePolyNode(opsys.Linux, arch.PPC64, nil, execWrapper, gzipWrapper, httpWrapper, ioWrapper, osWrapper, tarWrapper, zipWrapper)
 	if err == nil {
 		t.Error("expected: error actual: nil\n")
 	}
@@ -388,7 +388,7 @@ func TestUpdatePolyNode_UnsupportedOS(t *testing.T) {
 	tarWrapper := new(models.TarMock)
 	zipWrapper := new(models.ZipMock)
 
-	err := updatePolyNode(12, arch.X64, execWrapper, gzipWrapper, httpWrapper, ioWrapper, osWrapper, tarWrapper, zipWrapper)
+	err := updatePolyNode(12, arch.X64, nil, execWrapper, gzipWrapper, httpWrapper, ioWrapper, osWrapper, tarWrapper, zipWrapper)
 	if err == nil {
 		t.Error("expected: error actual: nil\n")
 	}
@@ -403,7 +403,7 @@ func TestUpdatePolyNode_Windows(t *testing.T) {
 	tarWrapper := new(models.TarMock)
 	zipWrapper := new(models.ZipMock)
 
-	err := updatePolyNode(opsys.Windows, arch.X64, execWrapper, gzipWrapper, httpWrapper, ioWrapper, osWrapper, tarWrapper, zipWrapper)
+	err := updatePolyNode(opsys.Windows, arch.X64, nil, execWrapper, gzipWrapper, httpWrapper, ioWrapper, osWrapper, tarWrapper, zipWrapper)
 	if err != nil {
 		t.Errorf("%v\n", err)
 	}

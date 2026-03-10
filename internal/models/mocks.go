@@ -109,7 +109,7 @@ func (httpWrapper *HTTPMock) Do(_ *http.Client, _ *http.Request) (*http.Response
 	return resp, nil
 }
 
-func (httpWrapper *HTTPMock) NewClient() *http.Client {
+func (httpWrapper *HTTPMock) NewClient(_ *PolyNodeConfig) *http.Client {
 	httpWrapper.TimesNewClientCalled += 1
 	return nil
 }

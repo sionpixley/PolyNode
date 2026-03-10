@@ -69,7 +69,11 @@ Config fields:
         Default value is 'true'.
     nodeMirror
         String that configures the URL to download Node.js.
-        Default value is 'https://nodejs.org/dist'.`
+        Default value is 'https://nodejs.org/dist'.
+    timeoutInSeconds
+        Int that configures the timeout (in seconds) for the internal HTTP client.
+        To turn off the timeout, set this field to '0'.
+        Default value is '180'.`
 
 	InvalidConfigFieldError            = "invalid config field: '%s'"
 	MissingVersionKeywordOrPrefixError = "missing argument: the '%s' command is missing a version, keyword, or prefix"
@@ -82,5 +86,5 @@ Config fields:
 	UnsupportedOSError   = "polyn: unsupported operating system"
 
 	// Version constant is PolyNode's version.
-	Version = "v5.0.0-rc.11"
+	Version = "v5.0.0-rc.12"
 )
