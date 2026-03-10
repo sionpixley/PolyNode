@@ -115,10 +115,11 @@ func configGet(config *models.PolyNodeConfig, configField string, osWrapper mode
 func configGetAll(config *models.PolyNodeConfig) {
 	s := `{
   "autoUpdate": %t,
-  "nodeMirror": "%s"
+  "nodeMirror": "%s",
+  "timeoutInSeconds": %d
 }
 `
-	fmt.Printf(s, config.AutoUpdate, config.NodeMirror)
+	fmt.Printf(s, config.AutoUpdate, config.NodeMirror, config.TimeoutInSeconds)
 }
 
 func configSet(config *models.PolyNodeConfig, configField string, value string, osWrapper models.OSWrapper) error {

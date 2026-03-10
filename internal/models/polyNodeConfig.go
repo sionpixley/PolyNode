@@ -21,8 +21,8 @@ var defaultPolynrc = PolyNodeConfig{
 
 type PolyNodeConfig struct {
 	NodeMirror       string `json:"nodeMirror"`
-	AutoUpdate       bool   `json:"autoUpdate"`
 	TimeoutInSeconds int    `json:"timeoutInSeconds"`
+	AutoUpdate       bool   `json:"autoUpdate"`
 }
 
 func (config *PolyNodeConfig) Save(osWrapper OSWrapper) error {
