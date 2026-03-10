@@ -13,7 +13,7 @@ func (_ HTTPWrap) Do(client *http.Client, request *http.Request) (*http.Response
 }
 
 func (_ HTTPWrap) NewClient() *http.Client {
-	return &http.Client{Timeout: time.Second * 20}
+	return &http.Client{Timeout: time.Minute * 3}
 }
 
 func (_ HTTPWrap) NewRequest(method string, url string, body io.Reader) (*http.Request, error) {

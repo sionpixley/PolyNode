@@ -2,6 +2,7 @@ package models
 
 import (
 	"archive/tar"
+	"archive/zip"
 	"compress/gzip"
 	"io"
 	"net/http"
@@ -70,6 +71,12 @@ type OSMockNotExist struct {
 type TarMock struct {
 	TimesNewReaderCalled int
 	TimesNextCalled      int
+}
+
+type ZipMock struct {
+	TimesCloseCalled      int
+	TimesFileCalled       int
+	TimesOpenReaderCalled int
 }
 
 func (execWrapper *ExecMock) Output(_ *exec.Cmd) ([]byte, error) {
@@ -271,10 +278,26 @@ func (osWrapper *OSMockNotExist) WriteFile(_ string, _ []byte, _ os.FileMode) er
 }
 
 func (tarWrapper *TarMock) NewReader(reader io.Reader) *tar.Reader {
+	tarWrapper.TimesNewReaderCalled += 1
 	return tar.NewReader(reader)
 }
 
 func (tarWrapper *TarMock) Next(_ *tar.Reader) (*tar.Header, error) {
 	tarWrapper.TimesNextCalled += 1
 	return nil, io.EOF
+}
+
+func (zipWrapper *ZipMock) Close(_ *zip.ReadCloser) error {
+	zipWrapper.TimesCloseCalled += 1
+	return nil
+}
+
+func (zipWrapper *ZipMock) File(_ *zip.ReadCloser) []*zip.File {
+	zipWrapper.TimesFileCalled += 1
+	return []*zip.File{}
+}
+
+func (zipWrapper *ZipMock) OpenReader(_ string) (*zip.ReadCloser, error) {
+	zipWrapper.TimesOpenReaderCalled += 1
+	return nil, nil
 }

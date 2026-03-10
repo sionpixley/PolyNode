@@ -20,13 +20,13 @@ import (
 	flag "github.com/spf13/pflag"
 )
 
-const isoDateTimeFormat = "2006-01-02T15:04:05.000Z07:00"
+const iso8601 = "2006-01-02T15:04:05.000Z07:00"
 
-func autoUpdate(operatingSystem models.OperatingSystem, architecture models.Architecture, execWrapper models.ExecWrapper, gzipWrapper models.GzipWrapper, httpWrapper models.HTTPWrapper, ioWrapper models.IOWrapper, osWrapper models.OSWrapper, tarWrapper models.TarWrapper) error {
+func autoUpdate(operatingSystem models.OperatingSystem, architecture models.Architecture, execWrapper models.ExecWrapper, gzipWrapper models.GzipWrapper, httpWrapper models.HTTPWrapper, ioWrapper models.IOWrapper, osWrapper models.OSWrapper, tarWrapper models.TarWrapper, zipWrapper models.ZipWrapper) error {
 	now := time.Now().UTC()
 	lastUpdated := getLastUpdate(osWrapper)
 	if now.Sub(lastUpdated).Hours() >= 720 {
-		err := updatePolyNode(operatingSystem, architecture, execWrapper, gzipWrapper, httpWrapper, ioWrapper, osWrapper, tarWrapper)
+		err := updatePolyNode(operatingSystem, architecture, execWrapper, gzipWrapper, httpWrapper, ioWrapper, osWrapper, tarWrapper, zipWrapper)
 		if err != nil {
 			return err
 		}
@@ -119,22 +119,22 @@ func downloadPolyNodeFile(filename string, httpWrapper models.HTTPWrapper, ioWra
 	return nil
 }
 
-func execute(args []string, operatingSystem models.OperatingSystem, architecture models.Architecture, config *models.PolyNodeConfig, execWrapper models.ExecWrapper, gzipWrapper models.GzipWrapper, httpWrapper models.HTTPWrapper, ioWrapper models.IOWrapper, osWrapper models.OSWrapper, tarWrapper models.TarWrapper) {
+func execute(args []string, operatingSystem models.OperatingSystem, architecture models.Architecture, config *models.PolyNodeConfig, execWrapper models.ExecWrapper, gzipWrapper models.GzipWrapper, httpWrapper models.HTTPWrapper, ioWrapper models.IOWrapper, osWrapper models.OSWrapper, tarWrapper models.TarWrapper, zipWrapper models.ZipWrapper) {
 	var err error
 	if args[0] == "update" {
-		err = updatePolyNode(operatingSystem, architecture, execWrapper, gzipWrapper, httpWrapper, ioWrapper, osWrapper, tarWrapper)
+		err = updatePolyNode(operatingSystem, architecture, execWrapper, gzipWrapper, httpWrapper, ioWrapper, osWrapper, tarWrapper, zipWrapper)
 		if err != nil {
 			log.Fatalf("polyn: %v\n", err)
 		}
 	} else if utilities.KnownCommand(args[0]) {
-		node.Handle(args, operatingSystem, architecture, config, execWrapper, gzipWrapper, httpWrapper, ioWrapper, osWrapper, tarWrapper)
+		node.Handle(args, operatingSystem, architecture, config, execWrapper, gzipWrapper, httpWrapper, ioWrapper, osWrapper, tarWrapper, zipWrapper)
 	} else {
 		err = fmt.Errorf(constants.UnknownCommandError, args[0])
 		utilities.LogUserError(err, osWrapper)
 	}
 
 	if config.AutoUpdate {
-		err = autoUpdate(operatingSystem, architecture, execWrapper, gzipWrapper, httpWrapper, ioWrapper, osWrapper, tarWrapper)
+		err = autoUpdate(operatingSystem, architecture, execWrapper, gzipWrapper, httpWrapper, ioWrapper, osWrapper, tarWrapper, zipWrapper)
 		if err != nil {
 			log.Fatalf("polyn: %v\n", err)
 		}
@@ -155,7 +155,7 @@ func getLastUpdate(osWrapper models.OSWrapper) time.Time {
 	}
 
 	timeStr := strings.TrimSpace(string(content))
-	t, err := time.Parse(isoDateTimeFormat, timeStr)
+	t, err := time.Parse(iso8601, timeStr)
 	if err != nil {
 		return time.Now().UTC().AddDate(0, 0, -30)
 	}
@@ -240,14 +240,38 @@ if exist %LOCALAPPDATA%\Programs\PolyNode\update-temp\ (
 }
 
 func supportedArchitecture(architecture models.Architecture) bool {
-	return architecture != arch.Other
+	switch architecture {
+	case arch.ARM64:
+		fallthrough
+	case arch.PPC64:
+		fallthrough
+	case arch.PPC64LE:
+		fallthrough
+	case arch.S390X:
+		fallthrough
+	case arch.X64:
+		return true
+	default:
+		return false
+	}
 }
 
 func supportedOS(operatingSystem models.OperatingSystem) bool {
-	return operatingSystem != opsys.Other
+	switch operatingSystem {
+	case opsys.AIX:
+		fallthrough
+	case opsys.Linux:
+		fallthrough
+	case opsys.Mac:
+		fallthrough
+	case opsys.Windows:
+		return true
+	default:
+		return false
+	}
 }
 
-func updatePolyNode(operatingSystem models.OperatingSystem, architecture models.Architecture, execWrapper models.ExecWrapper, gzipWrapper models.GzipWrapper, httpWrapper models.HTTPWrapper, ioWrapper models.IOWrapper, osWrapper models.OSWrapper, tarWrapper models.TarWrapper) error {
+func updatePolyNode(operatingSystem models.OperatingSystem, architecture models.Architecture, execWrapper models.ExecWrapper, gzipWrapper models.GzipWrapper, httpWrapper models.HTTPWrapper, ioWrapper models.IOWrapper, osWrapper models.OSWrapper, tarWrapper models.TarWrapper, zipWrapper models.ZipWrapper) error {
 	var filename string
 	switch operatingSystem {
 	case opsys.AIX:
@@ -294,7 +318,7 @@ func updatePolyNode(operatingSystem models.OperatingSystem, architecture models.
 
 	fmt.Printf("extracting %s...", filename)
 	filename = internal.PolynHomeDir + internal.PathSeparator + filename
-	err = utilities.ExtractFile(filename, internal.PolynHomeDir+internal.PathSeparator+"update-temp", gzipWrapper, ioWrapper, osWrapper, tarWrapper)
+	err = utilities.ExtractFile(filename, internal.PolynHomeDir+internal.PathSeparator+"update-temp", gzipWrapper, ioWrapper, osWrapper, tarWrapper, zipWrapper)
 	if err != nil {
 		return err
 	}

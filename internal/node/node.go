@@ -12,13 +12,13 @@ import (
 )
 
 // Handle function is the main function for Node.js actions.
-func Handle(args []string, operatingSystem models.OperatingSystem, arch models.Architecture, config *models.PolyNodeConfig, execWrapper models.ExecWrapper, gzipWrapper models.GzipWrapper, httpWrapper models.HTTPWrapper, ioWrapper models.IOWrapper, osWrapper models.OSWrapper, tarWrapper models.TarWrapper) {
+func Handle(args []string, operatingSystem models.OperatingSystem, arch models.Architecture, config *models.PolyNodeConfig, execWrapper models.ExecWrapper, gzipWrapper models.GzipWrapper, httpWrapper models.HTTPWrapper, ioWrapper models.IOWrapper, osWrapper models.OSWrapper, tarWrapper models.TarWrapper, zipWrapper models.ZipWrapper) {
 	var err error
 	comm := utilities.ConvertToCommand(args[0])
 	switch comm {
 	case command.Add:
 		if len(args) > 1 {
-			err = add(convertKeywordToVersion(args[1], operatingSystem, arch, config, httpWrapper), operatingSystem, arch, config, httpWrapper, gzipWrapper, ioWrapper, osWrapper, tarWrapper)
+			err = add(convertKeywordToVersion(args[1], operatingSystem, arch, config, httpWrapper), operatingSystem, arch, config, httpWrapper, gzipWrapper, ioWrapper, osWrapper, tarWrapper, zipWrapper)
 		} else {
 			err = fmt.Errorf(constants.MissingVersionKeywordOrPrefixError, args[0])
 			utilities.LogUserError(err, osWrapper)
@@ -50,7 +50,7 @@ func Handle(args []string, operatingSystem models.OperatingSystem, arch models.A
 		}
 	case command.Install:
 		if len(args) > 1 {
-			err = install(convertKeywordToVersion(args[1], operatingSystem, arch, config, httpWrapper), operatingSystem, arch, config, execWrapper, gzipWrapper, httpWrapper, ioWrapper, osWrapper, tarWrapper)
+			err = install(convertKeywordToVersion(args[1], operatingSystem, arch, config, httpWrapper), operatingSystem, arch, config, execWrapper, gzipWrapper, httpWrapper, ioWrapper, osWrapper, tarWrapper, zipWrapper)
 		} else {
 			err = fmt.Errorf(constants.MissingVersionKeywordOrPrefixError, args[0])
 			utilities.LogUserError(err, osWrapper)

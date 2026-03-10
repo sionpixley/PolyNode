@@ -2,6 +2,7 @@ package models
 
 import (
 	"archive/tar"
+	"archive/zip"
 	"compress/gzip"
 	"io"
 	"net/http"
@@ -51,4 +52,10 @@ type OSWrapper interface {
 type TarWrapper interface {
 	NewReader(io.Reader) *tar.Reader
 	Next(*tar.Reader) (*tar.Header, error)
+}
+
+type ZipWrapper interface {
+	Close(*zip.ReadCloser) error
+	File(*zip.ReadCloser) []*zip.File
+	OpenReader(string) (*zip.ReadCloser, error)
 }

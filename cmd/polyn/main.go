@@ -11,11 +11,12 @@ func main() {
 	var ioWrapper models.IOWrap
 	var osWrapper models.OSWrap
 	var tarWrapper models.TarWrap
+	var zipWrapper models.ZipWrap
 
 	operatingSystem := checkOS()
 	arch := checkArchitecture()
 	config := models.NewPolyNodeConfig(osWrapper)
 	args := parseCLIArgs(osWrapper)
 
-	execute(args, operatingSystem, arch, config, execWrapper, gzipWrapper, httpWrapper, ioWrapper, osWrapper, tarWrapper)
+	execute(args, operatingSystem, arch, config, execWrapper, gzipWrapper, httpWrapper, ioWrapper, osWrapper, tarWrapper, zipWrapper)
 }

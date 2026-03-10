@@ -2,7 +2,6 @@ package utilities
 
 import (
 	"archive/tar"
-	"archive/zip"
 	"fmt"
 	"io"
 	"os"
@@ -53,7 +52,7 @@ func ConvertToSemanticVersion(version string) string {
 	return "v" + version
 }
 
-func ExtractFile(source string, destination string, gzipWrapper models.GzipWrapper, ioWrapper models.IOWrapper, osWrapper models.OSWrapper, tarWrapper models.TarWrapper) error {
+func ExtractFile(source string, destination string, gzipWrapper models.GzipWrapper, ioWrapper models.IOWrapper, osWrapper models.OSWrapper, tarWrapper models.TarWrapper, zipWrapper models.ZipWrapper) error {
 	err := osWrapper.RemoveAll(destination)
 	if err != nil {
 		return err
@@ -70,7 +69,7 @@ func ExtractFile(source string, destination string, gzipWrapper models.GzipWrapp
 			return err
 		}
 	} else {
-		err = ExtractZip(source, destination, ioWrapper, osWrapper)
+		err = ExtractZip(source, destination, ioWrapper, osWrapper, zipWrapper)
 		if err != nil {
 			return err
 		}
@@ -144,14 +143,14 @@ func ExtractGzip(source string, destination string, gzipWrapper models.GzipWrapp
 	return nil
 }
 
-func ExtractZip(source string, destination string, ioWrapper models.IOWrapper, osWrapper models.OSWrapper) error {
-	zipReader, err := zip.OpenReader(source)
+func ExtractZip(source string, destination string, ioWrapper models.IOWrapper, osWrapper models.OSWrapper, zipWrapper models.ZipWrapper) error {
+	zipReader, err := zipWrapper.OpenReader(source)
 	if err != nil {
 		return err
 	}
-	defer func() { _ = zipReader.Close() }()
+	defer func() { _ = zipWrapper.Close(zipReader) }()
 
-	for _, file := range zipReader.File {
+	for _, file := range zipWrapper.File(zipReader) {
 		target := filepath.Join(destination, stripTopDir(strings.ReplaceAll(file.Name, "\\", "/")))
 
 		if file.FileInfo().IsDir() {

@@ -15,7 +15,7 @@ import (
 	"github.com/sionpixley/PolyNode/internal/utilities"
 )
 
-func add(version string, operatingSystem models.OperatingSystem, arch models.Architecture, config *models.PolyNodeConfig, httpWrapper models.HTTPWrapper, gzipWrapper models.GzipWrapper, ioWrapper models.IOWrapper, osWrapper models.OSWrapper, tarWrapper models.TarWrapper) error {
+func add(version string, operatingSystem models.OperatingSystem, arch models.Architecture, config *models.PolyNodeConfig, httpWrapper models.HTTPWrapper, gzipWrapper models.GzipWrapper, ioWrapper models.IOWrapper, osWrapper models.OSWrapper, tarWrapper models.TarWrapper, zipWrapper models.ZipWrapper) error {
 	var err error
 
 	if utilities.ValidVersionFormat(version) {
@@ -83,7 +83,7 @@ func add(version string, operatingSystem models.OperatingSystem, arch models.Arc
 	fmt.Println("done")
 
 	fmt.Printf("extracting %s...", fileName)
-	err = utilities.ExtractFile(filePath, folderPath, gzipWrapper, ioWrapper, osWrapper, tarWrapper)
+	err = utilities.ExtractFile(filePath, folderPath, gzipWrapper, ioWrapper, osWrapper, tarWrapper, zipWrapper)
 	if err != nil {
 		return err
 	}
@@ -187,8 +187,8 @@ func def(version string, operatingSystem models.OperatingSystem, execWrapper mod
 	return nil
 }
 
-func install(version string, operatingSystem models.OperatingSystem, arch models.Architecture, config *models.PolyNodeConfig, execWrapper models.ExecWrapper, gzipWrapper models.GzipWrapper, httpWrapper models.HTTPWrapper, ioWrapper models.IOWrapper, osWrapper models.OSWrapper, tarWrapper models.TarWrapper) error {
-	err := add(version, operatingSystem, arch, config, httpWrapper, gzipWrapper, ioWrapper, osWrapper, tarWrapper)
+func install(version string, operatingSystem models.OperatingSystem, arch models.Architecture, config *models.PolyNodeConfig, execWrapper models.ExecWrapper, gzipWrapper models.GzipWrapper, httpWrapper models.HTTPWrapper, ioWrapper models.IOWrapper, osWrapper models.OSWrapper, tarWrapper models.TarWrapper, zipWrapper models.ZipWrapper) error {
+	err := add(version, operatingSystem, arch, config, httpWrapper, gzipWrapper, ioWrapper, osWrapper, tarWrapper, zipWrapper)
 	if err != nil {
 		return err
 	}
