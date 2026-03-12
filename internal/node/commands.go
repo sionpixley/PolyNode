@@ -99,12 +99,12 @@ func add(version string, operatingSystem models.OperatingSystem, arch models.Arc
 }
 
 func configGet(config *models.PolyNodeConfig, configField string, osWrapper models.OSWrapper) {
-	switch configField {
-	case "autoupdate":
+	switch {
+	case strings.EqualFold(configField, "autoUpdate"):
 		fmt.Println(config.AutoUpdate)
-	case "nodemirror":
+	case strings.EqualFold(configField, "nodeMirror"):
 		fmt.Println(config.NodeMirror)
-	case "timeoutinseconds":
+	case strings.EqualFold(configField, "timeoutInSeconds"):
 		fmt.Println(config.TimeoutInSeconds)
 	default:
 		err := fmt.Errorf(constants.InvalidConfigFieldError, configField)
@@ -123,8 +123,8 @@ func configGetAll(config *models.PolyNodeConfig) {
 }
 
 func configSet(config *models.PolyNodeConfig, configField string, value string, osWrapper models.OSWrapper) error {
-	switch configField {
-	case "autoupdate":
+	switch {
+	case strings.EqualFold(configField, "autoUpdate"):
 		v, err := strconv.ParseBool(value)
 		if err != nil {
 			err = fmt.Errorf("invalid value: '%s' is not a valid bool value", value)
@@ -133,10 +133,10 @@ func configSet(config *models.PolyNodeConfig, configField string, value string, 
 
 		config.AutoUpdate = v
 		return config.Save(osWrapper)
-	case "nodemirror":
+	case strings.EqualFold(configField, "nodeMirror"):
 		config.NodeMirror = value
 		return config.Save(osWrapper)
-	case "timeoutinseconds":
+	case strings.EqualFold(configField, "timeoutInSeconds"):
 		v, e := strconv.Atoi(value)
 		if e != nil {
 			e = fmt.Errorf("invalid value: '%s' is not a valid int value", value)
@@ -286,7 +286,7 @@ func search(prefix string, operatingSystem models.OperatingSystem, arch models.A
 	var builder strings.Builder
 	builder.WriteString("Node.js\n--------------------------")
 	for _, nodeVersion := range allVersions {
-		if nodeVersion.Lts && strings.HasPrefix(nodeVersion.Version, prefix) {
+		if nodeVersion.LTS && strings.HasPrefix(nodeVersion.Version, prefix) {
 			builder.WriteString("\n")
 			builder.WriteString(nodeVersion.Version)
 			builder.WriteString(" (lts)")
@@ -320,9 +320,9 @@ func searchDefault(operatingSystem models.OperatingSystem, arch models.Architect
 		majorVersion := strings.Split(nodeVersion.Version, ".")[0]
 		if _, exists := majorVersions[majorVersion]; !exists {
 			majorVersions[majorVersion] = struct{}{}
-			if nodeVersion.Lts && len(ltsVersions) < maxEntries {
+			if nodeVersion.LTS && len(ltsVersions) < maxEntries {
 				ltsVersions = append(ltsVersions, nodeVersion.Version)
-			} else if !nodeVersion.Lts && len(stableVersions) < maxEntries {
+			} else if !nodeVersion.LTS && len(stableVersions) < maxEntries {
 				stableVersions = append(stableVersions, nodeVersion.Version)
 			}
 		}

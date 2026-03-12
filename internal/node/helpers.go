@@ -20,19 +20,19 @@ import (
 )
 
 func convertKeywordToVersion(keyword string, operatingSystem models.OperatingSystem, arch models.Architecture, config *models.PolyNodeConfig, httpWrapper models.HTTPWrapper) string {
-	if keyword == "lts" {
+	if strings.EqualFold(keyword, "lts") {
 		nodeVersions, err := getAllNodeVersionsForOSAndArch(operatingSystem, arch, config, httpWrapper)
 		if err != nil {
 			return keyword
 		}
 
 		for _, nodeVersion := range nodeVersions {
-			if nodeVersion.Lts {
+			if nodeVersion.LTS {
 				return nodeVersion.Version
 			}
 		}
 		return keyword
-	} else if keyword == "latest" {
+	} else if strings.EqualFold(keyword, "latest") {
 		nodeVersions, err := getAllNodeVersionsForOSAndArch(operatingSystem, arch, config, httpWrapper)
 		if err != nil {
 			return keyword

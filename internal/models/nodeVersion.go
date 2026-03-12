@@ -7,7 +7,7 @@ import (
 type NodeVersion struct {
 	Version string   `json:"version"`
 	Files   []string `json:"files"`
-	Lts     bool     `json:"lts"`
+	LTS     bool     `json:"lts"`
 }
 
 func (nodeVersion *NodeVersion) UnmarshalJSON(b []byte) error {
@@ -27,9 +27,9 @@ func (nodeVersion *NodeVersion) UnmarshalJSON(b []byte) error {
 
 	switch temp["lts"].(type) {
 	case bool:
-		nodeVersion.Lts = false
+		nodeVersion.LTS = false
 	default:
-		nodeVersion.Lts = true
+		nodeVersion.LTS = true
 	}
 
 	return nil

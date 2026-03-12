@@ -121,7 +121,7 @@ func downloadPolyNodeFile(filename string, config *models.PolyNodeConfig, httpWr
 
 func execute(args []string, operatingSystem models.OperatingSystem, architecture models.Architecture, config *models.PolyNodeConfig, execWrapper models.ExecWrapper, gzipWrapper models.GzipWrapper, httpWrapper models.HTTPWrapper, ioWrapper models.IOWrapper, osWrapper models.OSWrapper, tarWrapper models.TarWrapper, zipWrapper models.ZipWrapper) {
 	var err error
-	if args[0] == "update" {
+	if strings.EqualFold(args[0], "update") {
 		err = updatePolyNode(operatingSystem, architecture, config, execWrapper, gzipWrapper, httpWrapper, ioWrapper, osWrapper, tarWrapper, zipWrapper)
 		if err != nil {
 			log.Fatalf("polyn: %v\n", err)
@@ -185,12 +185,7 @@ func parseCLIArgs(osWrapper models.OSWrapper) []string {
 		osWrapper.Exit(0)
 	}
 
-	args := make([]string, flag.NArg())
-	for i := range flag.NArg() {
-		args[i] = strings.ToLower(flag.Arg(i))
-	}
-
-	return args
+	return flag.Args()
 }
 
 func runUpdateScript(operatingSystem models.OperatingSystem, execWrapper models.ExecWrapper, osWrapper models.OSWrapper) error {

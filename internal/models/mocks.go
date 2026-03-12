@@ -101,7 +101,11 @@ func (gzipWrapper *GzipMock) NewReader(_ io.Reader) (*gzip.Reader, error) {
 
 func (httpWrapper *HTTPMock) Do(_ *http.Client, _ *http.Request) (*http.Response, error) {
 	httpWrapper.TimesDoCalled += 1
-	message := `{ "message": "ok" }`
+	message := `[
+{"version":"v25.8.1","files":["aix-ppc64","headers","linux-arm64","linux-ppc64le","linux-s390x","linux-x64","osx-arm64-tar","osx-x64-pkg","osx-x64-tar","src","win-arm64-7z","win-arm64-zip","win-x64-7z","win-x64-exe","win-x64-msi","win-x64-zip"],"lts":false},
+{"version":"v25.8.0","files":["aix-ppc64","headers","linux-arm64","linux-ppc64le","linux-s390x","linux-x64","osx-arm64-tar","osx-x64-pkg","osx-x64-tar","src","win-arm64-7z","win-arm64-zip","win-x64-7z","win-x64-exe","win-x64-msi","win-x64-zip"],"lts":false},
+{"version":"v24.14.0","files":["aix-ppc64","headers","linux-arm64","linux-ppc64le","linux-s390x","linux-x64","osx-arm64-tar","osx-x64-pkg","osx-x64-tar","src","win-arm64-7z","win-arm64-zip","win-x64-7z","win-x64-exe","win-x64-msi","win-x64-zip"],"lts":"Krypton"}
+]`
 	resp := &http.Response{
 		StatusCode: http.StatusOK,
 		Body:       io.NopCloser(strings.NewReader(message)),

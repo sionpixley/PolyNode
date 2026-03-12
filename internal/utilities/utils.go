@@ -14,30 +14,30 @@ import (
 )
 
 func ConvertToCommand(commandStr string) models.Command {
-	switch commandStr {
-	case "add":
+	switch {
+	case strings.EqualFold(commandStr, "add"):
 		return command.Add
-	case "config-get":
+	case strings.EqualFold(commandStr, "config-get"):
 		return command.ConfigGet
-	case "config-set":
+	case strings.EqualFold(commandStr, "config-set"):
 		return command.ConfigSet
-	case "current":
+	case strings.EqualFold(commandStr, "current"):
 		return command.Current
-	case "default":
+	case strings.EqualFold(commandStr, "default"):
 		return command.Default
-	case "install":
+	case strings.EqualFold(commandStr, "install"):
 		return command.Install
-	case "ls":
+	case strings.EqualFold(commandStr, "ls"):
 		fallthrough
-	case "list":
+	case strings.EqualFold(commandStr, "list"):
 		return command.List
-	case "rm":
+	case strings.EqualFold(commandStr, "rm"):
 		fallthrough
-	case "remove":
+	case strings.EqualFold(commandStr, "remove"):
 		return command.Remove
-	case "search":
+	case strings.EqualFold(commandStr, "search"):
 		return command.Search
-	case "use":
+	case strings.EqualFold(commandStr, "use"):
 		return command.Use
 	default:
 		return command.Other

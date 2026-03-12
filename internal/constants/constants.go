@@ -86,5 +86,5 @@ Config fields:
 	UnsupportedOSError   = "polyn: unsupported operating system"
 
 	// Version constant is PolyNode's version.
-	Version = "v5.0.0-rc.13"
+	Version = "v5.0.0-rc.14"
 )
