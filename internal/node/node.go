@@ -18,7 +18,7 @@ func Handle(args []string, operatingSystem models.OperatingSystem, arch models.A
 	switch comm {
 	case command.Add:
 		if len(args) > 1 {
-			err = add(convertKeywordToVersion(args[1], operatingSystem, arch, config, httpWrapper), operatingSystem, arch, config, httpWrapper, gzipWrapper, ioWrapper, osWrapper, tarWrapper, zipWrapper)
+			err = add(convertKeywordToVersion(args[1], operatingSystem, arch, config, httpWrapper), operatingSystem, arch, config, gzipWrapper, httpWrapper, ioWrapper, osWrapper, tarWrapper, zipWrapper)
 		} else {
 			err = fmt.Errorf(constants.MissingVersionKeywordOrPrefixError, args[0])
 			utilities.LogUserError(err, osWrapper)
