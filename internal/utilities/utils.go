@@ -4,6 +4,7 @@ import (
 	"archive/tar"
 	"fmt"
 	"io"
+	"log"
 	"os"
 	"path/filepath"
 	"strings"
@@ -213,6 +214,10 @@ func ExtractZip(source string, destination string, ioWrapper models.IOWrapper, o
 
 func KnownCommand(comm string) bool {
 	return ConvertToCommand(comm) != command.Other
+}
+
+func LogFatal(err error) {
+	log.Fatalf("%v\n", err)
 }
 
 func LogUserError(err error, osWrapper models.OSWrapper) {

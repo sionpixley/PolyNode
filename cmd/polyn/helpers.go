@@ -3,7 +3,6 @@ package main
 import (
 	"errors"
 	"fmt"
-	"log"
 	"net/http"
 	"os/exec"
 	"runtime"
@@ -38,7 +37,8 @@ func autoUpdate(operatingSystem models.OperatingSystem, architecture models.Arch
 func checkArchitecture() models.Architecture {
 	architecture := convertToArchitecture(runtime.GOARCH)
 	if !supportedArchitecture(architecture) {
-		log.Fatalln(constants.UnsupportedArchError)
+		err := errors.New(constants.UnsupportedArchError)
+		utilities.LogFatal(err)
 	}
 	return architecture
 }
@@ -46,7 +46,8 @@ func checkArchitecture() models.Architecture {
 func checkOS() models.OperatingSystem {
 	operatingSystem := convertToOperatingSystem(runtime.GOOS)
 	if !supportedOS(operatingSystem) {
-		log.Fatalln(constants.UnsupportedOSError)
+		err := errors.New(constants.UnsupportedOSError)
+		utilities.LogFatal(err)
 	}
 	return operatingSystem
 }
@@ -124,7 +125,7 @@ func execute(args []string, operatingSystem models.OperatingSystem, architecture
 	if strings.EqualFold(args[0], "update") {
 		err = updatePolyNode(operatingSystem, architecture, config, execWrapper, gzipWrapper, httpWrapper, ioWrapper, osWrapper, tarWrapper, zipWrapper)
 		if err != nil {
-			log.Fatalf("polyn: %v\n", err)
+			utilities.LogFatal(err)
 		}
 	} else if utilities.KnownCommand(args[0]) {
 		node.Handle(args, operatingSystem, architecture, config, execWrapper, gzipWrapper, httpWrapper, ioWrapper, osWrapper, tarWrapper, zipWrapper)
@@ -136,7 +137,7 @@ func execute(args []string, operatingSystem models.OperatingSystem, architecture
 	if config.AutoUpdate {
 		err = autoUpdate(operatingSystem, architecture, config, execWrapper, gzipWrapper, httpWrapper, ioWrapper, osWrapper, tarWrapper, zipWrapper)
 		if err != nil {
-			log.Fatalf("polyn: %v\n", err)
+			utilities.LogFatal(err)
 		}
 	}
 }

@@ -93,7 +93,7 @@ func convertPrefixToVersionDown(prefix string, operatingSystem models.OperatingS
 		}
 	}
 
-	return "", fmt.Errorf("polyn: no Node.js versions match the prefix '%s'", prefix)
+	return "", fmt.Errorf(constants.NoVersionMatchPrefixError, prefix)
 }
 
 func convertPrefixToVersionLocalAsc(prefix string, osWrapper models.OSWrapper) (string, error) {
@@ -136,7 +136,7 @@ func convertPrefixToVersionLocalAsc(prefix string, osWrapper models.OSWrapper) (
 		}
 	}
 
-	return "", fmt.Errorf("polyn: no downloaded Node.js versions match the prefix '%s'", prefix)
+	return "", fmt.Errorf(constants.NoVersionMatchPrefixError, prefix)
 }
 
 func convertPrefixToVersionLocalDesc(prefix string, osWrapper models.OSWrapper) (string, error) {
@@ -179,7 +179,7 @@ func convertPrefixToVersionLocalDesc(prefix string, osWrapper models.OSWrapper) 
 		}
 	}
 
-	return "", fmt.Errorf("polyn: no downloaded Node.js versions match the prefix '%s'", prefix)
+	return "", fmt.Errorf(constants.NoVersionMatchPrefixError, prefix)
 }
 
 func getAllNodeVersionsForOSAndArch(operatingSystem models.OperatingSystem, arch models.Architecture, config *models.PolyNodeConfig, httpWrapper models.HTTPWrapper) ([]models.NodeVersion, error) {

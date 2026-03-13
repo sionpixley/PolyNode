@@ -81,9 +81,11 @@ Config fields:
 
 	NoDownloadedNodejsMessage = "There are no Node.js versions downloaded.\nTo download a Node.js version, use the 'add' or 'install' command."
 
+	NoVersionMatchPrefixError = "no Node.js versions match the prefix '%s'"
+
 	UnknownCommandError  = "unknown command: '%s' is not a known command"
-	UnsupportedArchError = "polyn: unsupported CPU architecture"
-	UnsupportedOSError   = "polyn: unsupported operating system"
+	UnsupportedArchError = "unsupported CPU architecture"
+	UnsupportedOSError   = "unsupported operating system"
 
 	// Version constant is PolyNode's version.
 	Version = "v5.0.0-rc.15"

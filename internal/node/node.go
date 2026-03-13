@@ -3,7 +3,6 @@ package node
 import (
 	"errors"
 	"fmt"
-	"log"
 
 	"github.com/sionpixley/PolyNode/internal/constants"
 	"github.com/sionpixley/PolyNode/internal/constants/command"
@@ -90,6 +89,6 @@ func Handle(args []string, operatingSystem models.OperatingSystem, arch models.A
 	}
 
 	if err != nil {
-		log.Fatalf("polyn: %v\n", err)
+		utilities.LogFatal(err)
 	}
 }
