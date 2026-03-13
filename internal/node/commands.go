@@ -16,7 +16,7 @@ import (
 	"github.com/sionpixley/PolyNode/internal/utilities"
 )
 
-func add(version string, operatingSystem models.OperatingSystem, arch models.Architecture, config *models.PolyNodeConfig, httpWrapper models.HTTPWrapper, gzipWrapper models.GzipWrapper, ioWrapper models.IOWrapper, osWrapper models.OSWrapper, tarWrapper models.TarWrapper, zipWrapper models.ZipWrapper) error {
+func add(version string, operatingSystem models.OperatingSystem, arch models.Architecture, config *models.PolyNodeConfig, gzipWrapper models.GzipWrapper, httpWrapper models.HTTPWrapper, ioWrapper models.IOWrapper, osWrapper models.OSWrapper, tarWrapper models.TarWrapper, zipWrapper models.ZipWrapper) error {
 	var err error
 
 	if utilities.ValidVersionFormat(version) {
@@ -205,7 +205,7 @@ func def(version string, operatingSystem models.OperatingSystem, execWrapper mod
 }
 
 func install(version string, operatingSystem models.OperatingSystem, arch models.Architecture, config *models.PolyNodeConfig, execWrapper models.ExecWrapper, gzipWrapper models.GzipWrapper, httpWrapper models.HTTPWrapper, ioWrapper models.IOWrapper, osWrapper models.OSWrapper, tarWrapper models.TarWrapper, zipWrapper models.ZipWrapper) error {
-	err := add(version, operatingSystem, arch, config, httpWrapper, gzipWrapper, ioWrapper, osWrapper, tarWrapper, zipWrapper)
+	err := add(version, operatingSystem, arch, config, gzipWrapper, httpWrapper, ioWrapper, osWrapper, tarWrapper, zipWrapper)
 	if err != nil {
 		return err
 	}
@@ -256,6 +256,7 @@ func migrate(version string, operatingSystem models.OperatingSystem, arch models
 		return err
 	}
 
+	var newVersion string
 	for _, nodeVersion := range nodeVersions {
 		if strings.HasPrefix(nodeVersion.Version, majorVersion) {
 			if version == nodeVersion.Version {
@@ -263,7 +264,8 @@ func migrate(version string, operatingSystem models.OperatingSystem, arch models
 				return nil
 			}
 
-			err = install(nodeVersion.Version, operatingSystem, arch, config, execWrapper, gzipWrapper, httpWrapper, ioWrapper, osWrapper, tarWrapper, zipWrapper)
+			newVersion = nodeVersion.Version
+			err = add(newVersion, operatingSystem, arch, config, gzipWrapper, httpWrapper, ioWrapper, osWrapper, tarWrapper, zipWrapper)
 			if err != nil {
 				return err
 			}
@@ -271,16 +273,12 @@ func migrate(version string, operatingSystem models.OperatingSystem, arch models
 		}
 	}
 
-	fmt.Print("migrating global npm packages (this might take a while)...")
-
-	var npm string
-	if operatingSystem == opsys.Windows {
-		npm = internal.PolynHomeDir + "\\node\\" + version + "\\npm"
-	} else {
-		npm = internal.PolynHomeDir + "/node/" + version + "/bin/npm"
+	err = use(version, operatingSystem, execWrapper, osWrapper)
+	if err != nil {
+		return err
 	}
 
-	data, err := execWrapper.Output(exec.Command(npm, "ls", "-g", "--depth=0", "--json"))
+	data, err := execWrapper.Output(exec.Command("npm", "ls", "-g", "--depth=0", "--json"))
 	if err != nil {
 		return err
 	}
@@ -302,6 +300,13 @@ func migrate(version string, operatingSystem models.OperatingSystem, arch models
 			dependencies = append(dependencies, name+"@"+dependency.Version)
 		}
 	}
+
+	err = use(newVersion, operatingSystem, execWrapper, osWrapper)
+	if err != nil {
+		return err
+	}
+
+	fmt.Print("migrating global npm packages (this might take a while)...")
 
 	if len(dependencies) > 2 {
 		err = execWrapper.Run(exec.Command("npm", dependencies...))
