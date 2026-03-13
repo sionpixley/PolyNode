@@ -13,6 +13,7 @@ const (
 	Default
 	Install
 	List
+	Migrate
 	Remove
 	Search
 	Use

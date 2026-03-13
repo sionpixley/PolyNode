@@ -1,6 +1,7 @@
 package node
 
 import (
+	"encoding/json"
 	"fmt"
 	"net/http"
 	"os"
@@ -174,6 +175,8 @@ func def(version string, operatingSystem models.OperatingSystem, execWrapper mod
 		// This is unique to this function (asc and desc versions) throughout the system (so far at least). 2025-02-25
 		if err != nil && err.Error() != "skip" {
 			return err
+		} else if err != nil {
+			return nil
 		}
 	}
 
@@ -233,6 +236,83 @@ func list(execWrapper models.ExecWrapper, osWrapper models.OSWrapper) {
 	}
 }
 
+func migrate(version string, operatingSystem models.OperatingSystem, arch models.Architecture, config *models.PolyNodeConfig, execWrapper models.ExecWrapper, gzipWrapper models.GzipWrapper, httpWrapper models.HTTPWrapper, ioWrapper models.IOWrapper, osWrapper models.OSWrapper, tarWrapper models.TarWrapper, zipWrapper models.ZipWrapper) error {
+	var err error
+	version, err = convertPrefixToVersionLocalDesc(version, osWrapper)
+	// We don't want to do anything when the error's value is 'skip'.
+	// If the error is 'skip' then that means the node directory doesn't exist.
+	// We don't treat it like an error in that case.
+	// This is unique to this function (asc and desc versions) throughout the system (so far at least). 2025-02-25
+	if err != nil && err.Error() != "skip" {
+		return err
+	} else if err != nil {
+		return nil
+	}
+
+	majorVersion := strings.Split(version, ".")[0]
+
+	nodeVersions, err := getAllNodeVersionsForOSAndArch(operatingSystem, arch, config, httpWrapper)
+	if err != nil {
+		return err
+	}
+
+	for _, nodeVersion := range nodeVersions {
+		if strings.HasPrefix(nodeVersion.Version, majorVersion) {
+			if version == nodeVersion.Version {
+				fmt.Printf("%s is already the most recent %s\n", version, majorVersion)
+				return nil
+			}
+
+			err = install(nodeVersion.Version, operatingSystem, arch, config, execWrapper, gzipWrapper, httpWrapper, ioWrapper, osWrapper, tarWrapper, zipWrapper)
+			if err != nil {
+				return err
+			}
+		}
+	}
+
+	fmt.Print("migrating global npm packages (this might take a while)...")
+
+	var npm string
+	if operatingSystem == opsys.Windows {
+		npm = internal.PolynHomeDir + "\\node\\" + version + "\\npm"
+	} else {
+		npm = internal.PolynHomeDir + "/node/" + version + "/bin/npm"
+	}
+
+	data, err := execWrapper.Output(exec.Command(npm, "ls", "-g", "--depth=0", "--json"))
+	if err != nil {
+		return err
+	}
+
+	var npmList models.NPMList
+	err = json.Unmarshal(data, &npmList)
+	if err != nil {
+		return err
+	}
+
+	exclusions := map[string]struct{}{
+		"corepack": {},
+		"npm":      {},
+	}
+
+	dependencies := []string{"install", "-g"}
+	for name, dependency := range npmList.Dependencies {
+		if _, exists := exclusions[name]; !exists {
+			dependencies = append(dependencies, name+"@"+dependency.Version)
+		}
+	}
+
+	if len(dependencies) > 2 {
+		err = execWrapper.Run(exec.Command("npm", dependencies...))
+		if err != nil {
+			return err
+		}
+	}
+
+	fmt.Println("done")
+	return nil
+}
+
 func remove(version string, execWrapper models.ExecWrapper, osWrapper models.OSWrapper) error {
 	var err error
 
@@ -246,6 +326,8 @@ func remove(version string, execWrapper models.ExecWrapper, osWrapper models.OSW
 		// This is unique to this function (asc and desc versions) throughout the system (so far at least). 2025-02-25
 		if err != nil && err.Error() != "skip" {
 			return err
+		} else if err != nil {
+			return nil
 		}
 	}
 
@@ -355,6 +437,8 @@ func use(version string, operatingSystem models.OperatingSystem, execWrapper mod
 		// This is unique to this function (asc and desc versions) throughout the system (so far at least). 2025-02-25
 		if err != nil && err.Error() != "skip" {
 			return err
+		} else if err != nil {
+			return nil
 		}
 	}
 

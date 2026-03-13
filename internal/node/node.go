@@ -57,6 +57,13 @@ func Handle(args []string, operatingSystem models.OperatingSystem, arch models.A
 		}
 	case command.List:
 		list(execWrapper, osWrapper)
+	case command.Migrate:
+		if len(args) > 1 {
+			err = migrate(args[1], operatingSystem, arch, config, execWrapper, gzipWrapper, httpWrapper, ioWrapper, osWrapper, tarWrapper, zipWrapper)
+		} else {
+			err = fmt.Errorf(constants.MissingVersionKeywordOrPrefixError, args[0])
+			utilities.LogUserError(err, osWrapper)
+		}
 	case command.Remove:
 		if len(args) > 1 {
 			err = remove(args[1], execWrapper, osWrapper)

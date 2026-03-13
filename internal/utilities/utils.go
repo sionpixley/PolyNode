@@ -31,6 +31,8 @@ func ConvertToCommand(commandStr string) models.Command {
 		fallthrough
 	case strings.EqualFold(commandStr, "list"):
 		return command.List
+	case strings.EqualFold(commandStr, "migrate"):
+		return command.Migrate
 	case strings.EqualFold(commandStr, "rm"):
 		fallthrough
 	case strings.EqualFold(commandStr, "remove"):
