@@ -267,6 +267,7 @@ func migrate(version string, operatingSystem models.OperatingSystem, arch models
 			if err != nil {
 				return err
 			}
+			break
 		}
 	}
 
