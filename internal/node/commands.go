@@ -273,7 +273,7 @@ func migrate(version string, operatingSystem models.OperatingSystem, arch models
 		}
 	}
 
-	err = use(version, operatingSystem, execWrapper, osWrapper)
+	err = def(version, operatingSystem, execWrapper, osWrapper)
 	if err != nil {
 		return err
 	}
@@ -301,7 +301,7 @@ func migrate(version string, operatingSystem models.OperatingSystem, arch models
 		}
 	}
 
-	err = use(newVersion, operatingSystem, execWrapper, osWrapper)
+	err = def(newVersion, operatingSystem, execWrapper, osWrapper)
 	if err != nil {
 		return err
 	}
