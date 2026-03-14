@@ -27,11 +27,12 @@ Works on AIX, Linux, macOS, and Windows.
             1. [Examples](#examples-3)
     6. [Downloading and setting your default Node.js to a new version](#downloading-and-setting-your-default-nodejs-to-a-new-version)
         1. [Examples](#examples-4)
-    7. [Printing your current version of Node.js](#printing-your-current-version-of-nodejs)
-    8. [Printing all downloaded versions of Node.js](#printing-all-downloaded-versions-of-nodejs)
-    9. [Deleting a downloaded version of Node.js](#deleting-a-downloaded-version-of-nodejs)
+    7. [Updating your Node.js](#updating-your-nodejs-to-the-latest-minor-or-patch-release)
+    8. [Printing your current version of Node.js](#printing-your-current-version-of-nodejs)
+    9. [Printing all downloaded versions of Node.js](#printing-all-downloaded-versions-of-nodejs)
+    10. [Deleting a downloaded version of Node.js](#deleting-a-downloaded-version-of-nodejs)
         1. [Examples](#examples-5)
-    10. [Printing your current version of PolyNode](#printing-your-current-version-of-polynode)
+    11. [Printing your current version of PolyNode](#printing-your-current-version-of-polynode)
 5. [How to configure](#how-to-configure-polynode)
     1. [Configuration fields](#configuration-fields)
         1. [autoUpdate](#autoupdate)
@@ -218,6 +219,29 @@ polyn install lts
 
 # Downloading and setting your default to the latest Node.js release.
 polyn install latest
+```
+
+### Updating your Node.js to the latest minor or patch release
+
+`polyn migrate <version | prefix>`
+
+This command downloads the most recent minor or patch Node.js release for the version or prefix given.
+
+It also reinstalls all global npm packages from the old version.
+
+It does not upgrade between major Node.js versions, only minor or patch versions.
+
+#### Examples
+
+```sh
+# Downloading an out-of-date Node.js for the example.
+polyn install 24.0.0
+
+# Downloading some global npm packages for the example.
+npm install -g pnpm@10 @angular/cli@21
+
+# Downloading the most recent v24 and reinstalling all global npm packages (^ line above).
+polyn migrate 24
 ```
 
 ### Printing your current version of Node.js
