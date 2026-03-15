@@ -7,12 +7,10 @@ sign=1
 env GOOS=darwin GOARCH=arm64 go build -ldflags="-s -w" -tags=prod -o polyn ./cmd/polyn
 
 if [ $sign -eq 1 ]; then
-  set +x
   codesign -v -f --timestamp --options=runtime --sign=$CODESIGN_TEAM_ID polyn
   zip polyn.zip polyn
   rm polyn
   xcrun notarytool submit --apple-id=$CODESIGN_APPLE_ID --team-id=$CODESIGN_TEAM_ID --password=$CODESIGN_PASSWD polyn.zip
-  set -x
   unzip polyn.zip
   rm polyn.zip
 fi
@@ -23,12 +21,10 @@ fi
 )
 
 if [ $sign -eq 1 ]; then
-  set +x
   codesign -v -f --timestamp --options=runtime --sign=$CODESIGN_TEAM_ID setup
   zip setup.zip setup
   rm setup
   xcrun notarytool submit --apple-id=$CODESIGN_APPLE_ID --team-id=$CODESIGN_TEAM_ID --password=$CODESIGN_PASSWD setup.zip
-  set -x
   unzip setup.zip
   rm setup.zip
 fi
@@ -39,12 +35,10 @@ fi
 )
 
 if [ $sign -eq 1 ]; then
-  set +x
   codesign -v -f --timestamp --options=runtime --sign=$CODESIGN_TEAM_ID uninstall-arm64
   zip uninstall.zip uninstall-arm64
   rm uninstall-arm64
   xcrun notarytool submit --apple-id=$CODESIGN_APPLE_ID --team-id=$CODESIGN_TEAM_ID --password=$CODESIGN_PASSWD uninstall.zip
-  set -x
   unzip uninstall.zip
   rm uninstall.zip
 fi
@@ -75,12 +69,10 @@ mv uninstall-arm64 ./PolyNode-darwin-arm64/PolyNode/uninstall/uninstall
 env GOOS=darwin GOARCH=amd64 go build -ldflags="-s -w" -tags=prod -o polyn ./cmd/polyn
 
 if [ $sign -eq 1 ]; then
-  set +x
   codesign -v -f --timestamp --options=runtime --sign=$CODESIGN_TEAM_ID polyn
   zip polyn.zip polyn
   rm polyn
   xcrun notarytool submit --apple-id=$CODESIGN_APPLE_ID --team-id=$CODESIGN_TEAM_ID --password=$CODESIGN_PASSWD polyn.zip
-  set -x
   unzip polyn.zip
   rm polyn.zip
 fi
@@ -91,12 +83,10 @@ fi
 )
 
 if [ $sign -eq 1 ]; then
-  set +x
   codesign -v -f --timestamp --options=runtime --sign=$CODESIGN_TEAM_ID setup
   zip setup.zip setup
   rm setup
   xcrun notarytool submit --apple-id=$CODESIGN_APPLE_ID --team-id=$CODESIGN_TEAM_ID --password=$CODESIGN_PASSWD setup.zip
-  set -x
   unzip setup.zip
   rm setup.zip
 fi
@@ -107,12 +97,10 @@ fi
 )
 
 if [ $sign -eq 1 ]; then
-  set +x
   codesign -v -f --timestamp --options=runtime --sign=$CODESIGN_TEAM_ID uninstall-x64
   zip uninstall.zip uninstall-x64
   rm uninstall-x64
   xcrun notarytool submit --apple-id=$CODESIGN_APPLE_ID --team-id=$CODESIGN_TEAM_ID --password=$CODESIGN_PASSWD uninstall.zip
-  set -x
   unzip uninstall.zip
   rm uninstall.zip
 fi
