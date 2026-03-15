@@ -5,10 +5,18 @@ import (
 )
 
 func main() {
+	var execWrapper models.ExecWrap
+	var gzipWrapper models.GzipWrap
+	var httpWrapper models.HTTPWrap
+	var ioWrapper models.IOWrap
+	var osWrapper models.OSWrap
+	var tarWrapper models.TarWrap
+	var zipWrapper models.ZipWrap
+
 	operatingSystem := checkOS()
 	arch := checkArchitecture()
-	config := models.NewPolyNodeConfig()
-	args := parseCLIArgs()
+	config := models.NewPolyNodeConfig(osWrapper)
+	args := parseCLIArgs(osWrapper)
 
-	execute(args, operatingSystem, arch, config)
+	execute(args, operatingSystem, arch, config, execWrapper, gzipWrapper, httpWrapper, ioWrapper, osWrapper, tarWrapper, zipWrapper)
 }

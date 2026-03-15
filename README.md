@@ -1,6 +1,8 @@
 # PolyNode
 
-PolyNode is a Node.js version manager that does not require sudo/admin privileges and is installed on a per-user basis. Works on AIX, Linux, macOS, and Windows.
+PolyNode is a Node.js version manager designed to be fast, portable, and permission-friendly. 
+It's installed on a per-user basis, never requires sudo/admin privileges, and unlike some other version managers: It doesn't bootstrap the node binary nor add hooks to your shell.
+Works on AIX, Linux, macOS, and Windows.
 
 ## Table of contents
 
@@ -22,16 +24,20 @@ PolyNode is a Node.js version manager that does not require sudo/admin privilege
         1. [AIX, Linux, or macOS](#temporarily-setting-your-nodejs-on-aix-linux-or-macos)
             1. [Examples](#examples-2)
         2. [Windows](#temporarily-setting-your-nodejs-on-windows)
+            1. [Examples](#examples-3)
     6. [Downloading and setting your default Node.js to a new version](#downloading-and-setting-your-default-nodejs-to-a-new-version)
-        1. [Examples](#examples-3)
-    7. [Printing your current version of Node.js](#printing-your-current-version-of-nodejs)
-    8. [Printing all downloaded versions of Node.js](#printing-all-downloaded-versions-of-nodejs)
-    9. [Deleting a downloaded version of Node.js](#deleting-a-downloaded-version-of-nodejs)
         1. [Examples](#examples-4)
-    10. [Printing your current version of PolyNode](#printing-your-current-version-of-polynode)
+    7. [Updating your Node.js](#updating-your-nodejs)
+    8. [Printing your current version of Node.js](#printing-your-current-version-of-nodejs)
+    9. [Printing all downloaded versions of Node.js](#printing-all-downloaded-versions-of-nodejs)
+    10. [Deleting a downloaded version of Node.js](#deleting-a-downloaded-version-of-nodejs)
+        1. [Examples](#examples-5)
+    11. [Printing your current version of PolyNode](#printing-your-current-version-of-polynode)
 5. [How to configure](#how-to-configure-polynode)
     1. [Configuration fields](#configuration-fields)
-        1. [nodeMirror](#nodemirror)
+        1. [autoUpdate](#autoupdate)
+        2. [nodeMirror](#nodemirror)
+        3. [timeoutInSeconds](#timeoutinseconds)
 6. [How to uninstall](#how-to-uninstall-polynode)
     1. [AIX, Linux, or macOS](#aix-linux-or-macos)
     2. [Windows](#windows)
@@ -139,7 +145,7 @@ polyn add latest
 
 `polyn default <version | prefix>`
 
-This command will set your Node.js version across all shell processes. All new shell processes will automatically use this Node.js version, unless overriden by [temporarily setting the Node.js version](#temporarily-setting-your-nodejs-version).
+This command will set your Node.js version across all shell processes. All new shell processes will automatically use this Node.js version, unless overridden by [temporarily setting the Node.js version](#temporarily-setting-your-nodejs-version).
 
 #### Examples
 
@@ -173,7 +179,23 @@ eval $(polyn use 23)
 
 #### Temporarily setting your Node.js on Windows
 
-Unfortunately, Windows doesn't have a command equivalent to the POSIX `eval`. You will have to run `polyn use <version | prefix>` and then copy and paste the command it outputs.
+`iex (polyn use <version | prefix>)`
+
+or
+
+`Invoke-Expression (polyn use <version | prefix>)`
+
+The command above only works in PowerShell. If you're using Command Prompt, you will have to run `polyn use <version | prefix>` and manually copy and paste the command it outputs.
+
+##### Examples
+
+```pwsh
+# Temporarily setting your Node.js to a specific version.
+iex (polyn use 23.7.0)
+
+# Temporarily setting your Node.js to the latest release that matches a prefix.
+iex (polyn use 23)
+```
 
 ### Downloading and setting your default Node.js to a new version
 
@@ -197,6 +219,31 @@ polyn install lts
 
 # Downloading and setting your default to the latest Node.js release.
 polyn install latest
+```
+
+### Updating your Node.js
+
+`polyn migrate <from_version | prefix> [to_version | keyword | prefix]`
+
+Downloads the `to_version` and sets it as your default version.
+
+If the `to_version` is omitted, the most recent Node.js with the same prefix as `from_version` is chosen.
+
+It also reinstalls all global npm packages from `from_version`.
+
+Prefix will match the newest version with that prefix.
+
+#### Examples
+
+```sh
+# Downloading an out-of-date Node.js for the example.
+polyn install 18
+
+# Downloading some global npm packages for the example.
+npm install -g pnpm@9 @angular/cli@17
+
+# Downloading the most recent LTS and reinstalling all global npm packages (^ line above).
+polyn migrate 18 lts
 ```
 
 ### Printing your current version of Node.js
@@ -246,7 +293,8 @@ PolyNode's configuration is handled through a JSON file named `polynrc.json` loc
 ```json
 {
   "autoUpdate": true,
-  "nodeMirror": "https://nodejs.org/dist"
+  "nodeMirror": "https://nodejs.org/dist",
+  "timeoutInSeconds": 180
 }
 ```
 
@@ -259,6 +307,10 @@ This field is a `bool` that configures if PolyNode's auto updater should run. De
 #### nodeMirror
 
 This field is a `string` that configures the URL to download Node.js. Default value is `"https://nodejs.org/dist"`.
+
+#### timeoutInSeconds
+
+This fields is an `int` that configures the timeout (in seconds, not milliseconds) for the internal HTTP client. Default value is `180`. To turn off the timeout, set this field to `0`.
 
 ## How to uninstall PolyNode
 
@@ -282,23 +334,23 @@ If you're just testing your build locally, I would recommend building a Docker i
 
 #### Required technologies
 
-- Go 1.25.7
+- Go 1.26.1 or newer
 
 #### Building on AIX
 
-Run the POSIX shell script `./scripts/aix/bundle`. This script will build PolyNode's source code for Power 64-bit and bundle the artifacts as a .tar.gz file.
+Make sure your working directory is the root of the project and then run the POSIX shell script `./scripts/posix/bundle aix`. This script will build PolyNode's source code for Power 64-bit and bundle the artifacts as a .tar.gz file.
 
 #### Building on Linux
 
-Run the POSIX shell script `./scripts/linux/bundle`. This script will build PolyNode's source code for x64, ARM64, Power LE 64-bit, and s390x and bundle the artifacts as separate .tar.xz and .tar.gz files. The contents of the .tar.xz files and the .tar.gz files are identical. Both formats are provided for backwards compatiblity reasons.
+Make sure your working directory is the root of the project and then run the POSIX shell script `./scripts/posix/bundle linux`. This script will build PolyNode's source code for x64, ARM64, Power LE 64-bit, and s390x and bundle the artifacts as separate .tar.xz and .tar.gz files. The contents of the .tar.xz files and the .tar.gz files are identical. Both formats are provided for backwards compatibility reasons.
 
 #### Building on macOS
 
-macOS has a POSIX shell script (`./scripts/mac/bundle`) that builds and notarizes PolyNode's source code for x64 and ARM64 and bundles the artifacts as separate .tar.gz files. If you don't need to distribute the binaries, then you don't need the notarization step. Just edit the bundle script and set the `sign` variable to `0`.
+Make sure your working directory is the root of the project and then run the POSIX shell script `./scripts/posix/bundle darwin`. This script builds and notarizes PolyNode's source code for x64 and ARM64 and bundles the artifacts as separate .tar.gz files. If you don't need to distribute the binaries, then you don't need the notarization step. Just edit the bundle script and set the `sign` variable to `0`.
 
 #### Building on Windows
 
-Run the batchfile `.\scripts\win\bundle.cmd`. This batchfile will build PolyNode's source code for x64 and ARM64 and bundle the artifacts as separate .zip files.
+Make sure your working directory is the root of the project and then run the PowerShell script `.\scripts\win\bundle.ps1`. This script will build PolyNode's source code for x64 and ARM64 and bundle the artifacts as separate .zip files.
 
 ### Dockerfile
 

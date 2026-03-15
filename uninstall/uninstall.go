@@ -27,7 +27,7 @@ func main() {
 	}
 
 	if err != nil {
-		log.Fatalln(err)
+		log.Fatalf("polyn uninstall: %v\n", err)
 	}
 }
 

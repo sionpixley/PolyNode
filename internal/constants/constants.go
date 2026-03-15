@@ -1,7 +1,7 @@
 package constants
 
 const (
-	Help string = `Description:
+	Help = `Description:
 
     PolyNode is a CLI tool that helps install and manage multiple versions of Node.js on the same device.
 
@@ -31,6 +31,11 @@ Commands:
         Prints the list of downloaded Node.js versions.
     ls
         Alias for 'list' command.
+    migrate <from_version | prefix> [to_version | keyword | prefix]
+        Downloads the to_version and sets it as your default version.
+        If the to_version is omitted, the most recent Node.js with the same prefix as from_version is chosen.
+        It also reinstalls all global npm packages from from_version.
+        Prefix will match the newest version with that prefix.
     remove <version | prefix>
         Deletes a version of Node.js.
         Prefix will match the oldest version with that prefix.
@@ -44,7 +49,8 @@ Commands:
         Updates PolyNode to the latest release.
     use <version | prefix>
         Prints out the command needed to temporarily set your Node.js to a specific version.
-        If on AIX, Linux, or macOS, please use 'eval $(polyn use <version or prefix>)' instead.
+        If on AIX, Linux, or macOS, please use 'eval $(polyn use <version | prefix>)' instead.
+        If on Windows, please use 'iex (polyn use <version | prefix>)' instead (PowerShell only).
         Prefix will match the newest version with that prefix.
 
 Options:
@@ -68,18 +74,24 @@ Config fields:
         Default value is 'true'.
     nodeMirror
         String that configures the URL to download Node.js.
-        Default value is 'https://nodejs.org/dist'.`
+        Default value is 'https://nodejs.org/dist'.
+    timeoutInSeconds
+        Int that configures the timeout (in seconds) for the internal HTTP client.
+        To turn off the timeout, set this field to '0'.
+        Default value is '180'.`
 
-	InvalidConfigFieldError            string = "invalid config field: '%s'"
-	MissingVersionKeywordOrPrefixError string = "missing argument: the '%s' command is missing a version, keyword, or prefix"
-	MissingVersionOrPrefixError        string = "missing argument: the '%s' command is missing a version or prefix"
+	InvalidConfigFieldError            = "invalid config field: '%s'"
+	MissingVersionKeywordOrPrefixError = "missing argument: the '%s' command is missing a version, keyword, or prefix"
+	MissingVersionOrPrefixError        = "missing argument: the '%s' command is missing a version or prefix"
 
-	NoDownloadedNodejsMessage string = "There are no Node.js versions downloaded.\nTo download a Node.js version, use the 'add' or 'install' command."
+	NoDownloadedNodejsMessage = "There are no Node.js versions downloaded.\nTo download a Node.js version, use the 'add' or 'install' command."
 
-	UnknownCommandError  string = "unknown command: '%s' is not a known command"
-	UnsupportedArchError string = "polyn: unsupported CPU architecture"
-	UnsupportedOSError   string = "polyn: unsupported operating system"
+	NoVersionMatchPrefixError = "no Node.js versions match the prefix '%s'"
+
+	UnknownCommandError  = "unknown command: '%s' is not a known command"
+	UnsupportedArchError = "unsupported CPU architecture"
+	UnsupportedOSError   = "unsupported operating system"
 
 	// Version constant is PolyNode's version.
-	Version string = "v4.0.1"
+	Version = "v5.0.0"
 )

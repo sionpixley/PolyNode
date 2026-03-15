@@ -2,35 +2,37 @@ package models
 
 import (
 	"encoding/json"
-	"os"
 	"strings"
 
 	"github.com/sionpixley/PolyNode/internal"
 )
 
 const (
-	defaultAutoUpdate bool   = true
-	defaultNodeMirror string = "https://nodejs.org/dist"
+	defaultAutoUpdate       = true
+	defaultNodeMirror       = "https://nodejs.org/dist"
+	defaultTimeoutInSeconds = 180
 )
 
 var defaultPolynrc = PolyNodeConfig{
-	AutoUpdate: defaultAutoUpdate,
-	NodeMirror: defaultNodeMirror,
+	AutoUpdate:       defaultAutoUpdate,
+	NodeMirror:       defaultNodeMirror,
+	TimeoutInSeconds: defaultTimeoutInSeconds,
 }
 
 type PolyNodeConfig struct {
-	AutoUpdate bool   `json:"autoUpdate"`
-	NodeMirror string `json:"nodeMirror"`
+	NodeMirror       string `json:"nodeMirror"`
+	TimeoutInSeconds int    `json:"timeoutInSeconds"`
+	AutoUpdate       bool   `json:"autoUpdate"`
 }
 
-func (config *PolyNodeConfig) Save() error {
+func (config *PolyNodeConfig) Save(osWrapper OSWrapper) error {
 	configPath := internal.PolynHomeDir + internal.PathSeparator + "polynrc.json"
 	jsonBytes, err := json.Marshal(config)
 	if err != nil {
 		return err
 	}
 
-	return os.WriteFile(configPath, jsonBytes, 0644)
+	return osWrapper.WriteFile(configPath, jsonBytes, 0644)
 }
 
 func (config *PolyNodeConfig) UnmarshalJSON(b []byte) error {
@@ -54,12 +56,24 @@ func (config *PolyNodeConfig) UnmarshalJSON(b []byte) error {
 		config.NodeMirror = defaultNodeMirror
 	}
 
+	timeout, exists := temp["timeout"]
+	if exists {
+		val := timeout.(int)
+		if val < 0 {
+			config.TimeoutInSeconds = defaultTimeoutInSeconds
+		} else {
+			config.TimeoutInSeconds = val
+		}
+	} else {
+		config.TimeoutInSeconds = defaultTimeoutInSeconds
+	}
+
 	return nil
 }
 
-func NewPolyNodeConfig() *PolyNodeConfig {
+func NewPolyNodeConfig(osWrapper OSWrapper) *PolyNodeConfig {
 	configPath := internal.PolynHomeDir + internal.PathSeparator + "polynrc.json"
-	if _, err := os.Stat(configPath); os.IsNotExist(err) {
+	if _, err := osWrapper.Stat(configPath); osWrapper.IsNotExist(err) {
 		// Default config
 		return &defaultPolynrc
 	} else if err != nil {
@@ -67,7 +81,7 @@ func NewPolyNodeConfig() *PolyNodeConfig {
 		return &defaultPolynrc
 	}
 
-	content, err := os.ReadFile(configPath)
+	content, err := osWrapper.ReadFile(configPath)
 	if err != nil {
 		// Default config
 		return &defaultPolynrc

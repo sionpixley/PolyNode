@@ -56,7 +56,7 @@ func copyUpdatableFiles(currentBinaryLocation string, home string) error {
 
 func createLastUpdateFile(home string) error {
 	now := time.Now().UTC()
-	return os.WriteFile(home+"\\PolyNode\\last-update.txt", []byte(now.Format(constants.ISODateTimeFormat)), 0644)
+	return os.WriteFile(home+"\\PolyNode\\last-update.txt", []byte(now.Format(constants.ISO8601)), 0644)
 }
 
 func createPolynConfig(home string) error {
