@@ -338,19 +338,19 @@ If you're just testing your build locally, I would recommend building a Docker i
 
 #### Building on AIX
 
-Make sure your working directory is the root of the project and then run the POSIX shell script `./scripts/posix/bundle aix`. This script will build PolyNode's source code for Power 64-bit and bundle the artifacts as a .tar.gz file.
+Make sure your working directory is the root of the project and then run the POSIX shell script `./scripts/aix/bundle`. This script will build PolyNode's source code for Power 64-bit and bundle the artifacts as a .tar.gz file.
 
 #### Building on Linux
 
-Make sure your working directory is the root of the project and then run the POSIX shell script `./scripts/posix/bundle linux`. This script will build PolyNode's source code for x64, ARM64, Power LE 64-bit, and s390x and bundle the artifacts as separate .tar.xz and .tar.gz files. The contents of the .tar.xz files and the .tar.gz files are identical. Both formats are provided for backwards compatibility reasons.
+Make sure your working directory is the root of the project and then run the POSIX shell script `./scripts/linux/bundle`. This script will build PolyNode's source code for x64, ARM64, Power LE 64-bit, and s390x and bundle the artifacts as separate .tar.xz and .tar.gz files. The contents of the .tar.xz files and the .tar.gz files are identical. Both formats are provided for backwards compatibility reasons.
 
 #### Building on macOS
 
-Make sure your working directory is the root of the project and then run the POSIX shell script `./scripts/posix/bundle darwin`. This script builds and notarizes PolyNode's source code for x64 and ARM64 and bundles the artifacts as separate .tar.gz files. If you don't need to distribute the binaries, then you don't need the notarization step. Just edit the bundle script and set the `sign` variable to `0`.
+Make sure your working directory is the root of the project and then run the POSIX shell script `./scripts/mac/bundle`. This script builds and notarizes PolyNode's source code for x64 and ARM64 and bundles the artifacts as separate .tar.gz files. If you don't need to distribute the binaries, then you don't need the notarization step. Just edit the bundle script and set the `sign` variable to `0`.
 
 #### Building on Windows
 
-Make sure your working directory is the root of the project and then run the PowerShell script `.\scripts\win\bundle.ps1`. This script will build PolyNode's source code for x64 and ARM64 and bundle the artifacts as separate .zip files.
+Make sure your working directory is the root of the project and then run the batchfile `.\scripts\win\bundle.cmd`. This batchfile will build PolyNode's source code for x64 and ARM64 and bundle the artifacts as separate .zip files.
 
 ### Dockerfile
 
