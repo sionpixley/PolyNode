@@ -27,7 +27,7 @@ Works on AIX, Linux, macOS, and Windows.
             1. [Examples](#examples-3)
     6. [Downloading and setting your default Node.js to a new version](#downloading-and-setting-your-default-nodejs-to-a-new-version)
         1. [Examples](#examples-4)
-    7. [Updating your Node.js](#updating-your-nodejs-to-the-latest-minor-or-patch-release)
+    7. [Updating your Node.js](#updating-your-nodejs)
     8. [Printing your current version of Node.js](#printing-your-current-version-of-nodejs)
     9. [Printing all downloaded versions of Node.js](#printing-all-downloaded-versions-of-nodejs)
     10. [Deleting a downloaded version of Node.js](#deleting-a-downloaded-version-of-nodejs)
@@ -221,27 +221,29 @@ polyn install lts
 polyn install latest
 ```
 
-### Updating your Node.js to the latest minor or patch release
+### Updating your Node.js
 
-`polyn migrate <version | prefix>`
+`polyn migrate <from_version | prefix> [to_version | keyword | prefix]`
 
-This command downloads the most recent minor or patch Node.js release for the version or prefix given.
+Downloads the `to_version` and sets it as your default version.
 
-It also reinstalls all global npm packages from the old version.
+If the `to_version` is omitted, the most recent Node.js with the same prefix as `from_version` is chosen.
 
-It does not upgrade between major Node.js versions, only minor or patch versions.
+It also reinstalls all global npm packages from `from_version`.
+
+Prefix will match the newest version with that prefix.
 
 #### Examples
 
 ```sh
 # Downloading an out-of-date Node.js for the example.
-polyn install 24.0.0
+polyn install 18
 
 # Downloading some global npm packages for the example.
-npm install -g pnpm@10 @angular/cli@21
+npm install -g pnpm@9 @angular/cli@17
 
-# Downloading the most recent v24 and reinstalling all global npm packages (^ line above).
-polyn migrate 24
+# Downloading the most recent LTS and reinstalling all global npm packages (^ line above).
+polyn migrate 18 lts
 ```
 
 ### Printing your current version of Node.js

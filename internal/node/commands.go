@@ -236,9 +236,9 @@ func list(execWrapper models.ExecWrapper, osWrapper models.OSWrapper) {
 	}
 }
 
-func migrate(version string, operatingSystem models.OperatingSystem, arch models.Architecture, config *models.PolyNodeConfig, execWrapper models.ExecWrapper, gzipWrapper models.GzipWrapper, httpWrapper models.HTTPWrapper, ioWrapper models.IOWrapper, osWrapper models.OSWrapper, tarWrapper models.TarWrapper, zipWrapper models.ZipWrapper) error {
+func migrate(from string, to string, operatingSystem models.OperatingSystem, arch models.Architecture, config *models.PolyNodeConfig, execWrapper models.ExecWrapper, gzipWrapper models.GzipWrapper, httpWrapper models.HTTPWrapper, ioWrapper models.IOWrapper, osWrapper models.OSWrapper, tarWrapper models.TarWrapper, zipWrapper models.ZipWrapper) error {
 	var err error
-	version, err = convertPrefixToVersionLocalDesc(version, osWrapper)
+	from, err = convertPrefixToVersionLocalDesc(from, osWrapper)
 	// We don't want to do anything when the error's value is 'skip'.
 	// If the error is 'skip' then that means the node directory doesn't exist.
 	// We don't treat it like an error in that case.
@@ -249,31 +249,23 @@ func migrate(version string, operatingSystem models.OperatingSystem, arch models
 		return nil
 	}
 
-	majorVersion := strings.Split(version, ".")[0]
-
-	nodeVersions, err := getAllNodeVersionsForOSAndArch(operatingSystem, arch, config, httpWrapper)
+	to, err = convertPrefixToVersionDown(to, operatingSystem, arch, config, httpWrapper)
 	if err != nil {
 		return err
 	}
 
-	var newVersion string
-	for _, nodeVersion := range nodeVersions {
-		if strings.HasPrefix(nodeVersion.Version, majorVersion) {
-			if version == nodeVersion.Version {
-				fmt.Printf("%s is already the most recent %s\n", version, majorVersion)
-				return nil
-			}
-
-			newVersion = nodeVersion.Version
-			err = add(newVersion, operatingSystem, arch, config, gzipWrapper, httpWrapper, ioWrapper, osWrapper, tarWrapper, zipWrapper)
-			if err != nil {
-				return err
-			}
-			break
-		}
+	if from == to {
+		majorVersion := strings.Split(from, ".")[0]
+		fmt.Printf("%s is already the most recent %s\n", from, majorVersion)
+		return nil
 	}
 
-	err = def(version, operatingSystem, execWrapper, osWrapper)
+	err = add(to, operatingSystem, arch, config, gzipWrapper, httpWrapper, ioWrapper, osWrapper, tarWrapper, zipWrapper)
+	if err != nil {
+		return err
+	}
+
+	err = def(from, operatingSystem, execWrapper, osWrapper)
 	if err != nil {
 		return err
 	}
@@ -301,7 +293,7 @@ func migrate(version string, operatingSystem models.OperatingSystem, arch models
 		}
 	}
 
-	err = def(newVersion, operatingSystem, execWrapper, osWrapper)
+	err = def(to, operatingSystem, execWrapper, osWrapper)
 	if err != nil {
 		return err
 	}
@@ -309,13 +301,14 @@ func migrate(version string, operatingSystem models.OperatingSystem, arch models
 	fmt.Print("migrating global npm packages (this might take a while)...")
 
 	if len(dependencies) > 2 {
-		err = execWrapper.Run(exec.Command("npm", dependencies...))
+		data, err = execWrapper.Output(exec.Command("npm", dependencies...))
 		if err != nil {
 			return err
 		}
 	}
 
 	fmt.Println("done")
+	fmt.Print(string(data))
 	return nil
 }
 

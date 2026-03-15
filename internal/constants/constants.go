@@ -31,10 +31,11 @@ Commands:
         Prints the list of downloaded Node.js versions.
     ls
         Alias for 'list' command.
-    migrate <version | prefix>
-        Downloads the most recent minor or patch Node.js release for the version or prefix given.
-        It also reinstalls all global npm packages from the old version.
-        It does not upgrade between major Node.js versions, only minor or patch versions.
+    migrate <from_version | prefix> [to_version | keyword | prefix]
+        Downloads the to_version and sets it as your default version.
+        If the to_version is omitted, the most recent Node.js with the same prefix as from_version is chosen.
+        It also reinstalls all global npm packages from from_version.
+        Prefix will match the newest version with that prefix.
     remove <version | prefix>
         Deletes a version of Node.js.
         Prefix will match the oldest version with that prefix.
@@ -92,5 +93,5 @@ Config fields:
 	UnsupportedOSError   = "unsupported operating system"
 
 	// Version constant is PolyNode's version.
-	Version = "v5.0.0-rc.15"
+	Version = "v5.0.0-rc.16"
 )

@@ -57,8 +57,10 @@ func Handle(args []string, operatingSystem models.OperatingSystem, arch models.A
 	case command.List:
 		list(execWrapper, osWrapper)
 	case command.Migrate:
-		if len(args) > 1 {
-			err = migrate(args[1], operatingSystem, arch, config, execWrapper, gzipWrapper, httpWrapper, ioWrapper, osWrapper, tarWrapper, zipWrapper)
+		if len(args) > 2 {
+			err = migrate(args[1], convertKeywordToVersion(args[2], operatingSystem, arch, config, httpWrapper), operatingSystem, arch, config, execWrapper, gzipWrapper, httpWrapper, ioWrapper, osWrapper, tarWrapper, zipWrapper)
+		} else if len(args) > 1 {
+			err = migrate(args[1], args[1], operatingSystem, arch, config, execWrapper, gzipWrapper, httpWrapper, ioWrapper, osWrapper, tarWrapper, zipWrapper)
 		} else {
 			err = fmt.Errorf(constants.MissingVersionKeywordOrPrefixError, args[0])
 			utilities.LogUserError(err, osWrapper)
