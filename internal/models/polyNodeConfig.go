@@ -2,6 +2,7 @@ package models
 
 import (
 	"encoding/json"
+	"os"
 	"strings"
 
 	"github.com/sionpixley/PolyNode/internal"
@@ -25,14 +26,14 @@ type PolyNodeConfig struct {
 	AutoUpdate       bool   `json:"autoUpdate"`
 }
 
-func (config *PolyNodeConfig) Save(osWrapper OSWrapper) error {
+func (config *PolyNodeConfig) Save() error {
 	configPath := internal.PolynHomeDir + internal.PathSeparator + "polynrc.json"
 	jsonBytes, err := json.Marshal(config)
 	if err != nil {
 		return err
 	}
 
-	return osWrapper.WriteFile(configPath, jsonBytes, 0644)
+	return os.WriteFile(configPath, jsonBytes, 0644)
 }
 
 func (config *PolyNodeConfig) UnmarshalJSON(b []byte) error {
@@ -71,9 +72,9 @@ func (config *PolyNodeConfig) UnmarshalJSON(b []byte) error {
 	return nil
 }
 
-func NewPolyNodeConfig(osWrapper OSWrapper) *PolyNodeConfig {
+func NewPolyNodeConfig() *PolyNodeConfig {
 	configPath := internal.PolynHomeDir + internal.PathSeparator + "polynrc.json"
-	if _, err := osWrapper.Stat(configPath); osWrapper.IsNotExist(err) {
+	if _, err := os.Stat(configPath); os.IsNotExist(err) {
 		// Default config
 		return &defaultPolynrc
 	} else if err != nil {
@@ -81,7 +82,7 @@ func NewPolyNodeConfig(osWrapper OSWrapper) *PolyNodeConfig {
 		return &defaultPolynrc
 	}
 
-	content, err := osWrapper.ReadFile(configPath)
+	content, err := os.ReadFile(configPath)
 	if err != nil {
 		// Default config
 		return &defaultPolynrc

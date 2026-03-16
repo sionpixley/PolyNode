@@ -2,6 +2,8 @@ package utilities
 
 import (
 	"archive/tar"
+	"archive/zip"
+	"compress/gzip"
 	"fmt"
 	"io"
 	"log"
@@ -55,49 +57,49 @@ func ConvertToSemanticVersion(version string) string {
 	return "v" + version
 }
 
-func ExtractFile(source string, destination string, gzipWrapper models.GzipWrapper, ioWrapper models.IOWrapper, osWrapper models.OSWrapper, tarWrapper models.TarWrapper, zipWrapper models.ZipWrapper) error {
-	err := osWrapper.RemoveAll(destination)
+func ExtractFile(source string, destination string) error {
+	err := os.RemoveAll(destination)
 	if err != nil {
 		return err
 	}
 
-	err = osWrapper.MkdirAll(destination, os.ModePerm)
+	err = os.MkdirAll(destination, os.ModePerm)
 	if err != nil {
 		return err
 	}
 
 	if strings.HasSuffix(source, ".gz") {
-		err = ExtractGzip(source, destination, gzipWrapper, ioWrapper, osWrapper, tarWrapper)
+		err = ExtractGzip(source, destination)
 		if err != nil {
 			return err
 		}
 	} else {
-		err = ExtractZip(source, destination, ioWrapper, osWrapper, zipWrapper)
+		err = ExtractZip(source, destination)
 		if err != nil {
 			return err
 		}
 	}
 
-	return osWrapper.RemoveAll(source)
+	return os.RemoveAll(source)
 }
 
-func ExtractGzip(source string, destination string, gzipWrapper models.GzipWrapper, ioWrapper models.IOWrapper, osWrapper models.OSWrapper, tarWrapper models.TarWrapper) error {
-	file, err := osWrapper.Open(source)
+func ExtractGzip(source string, destination string) error {
+	file, err := os.Open(source)
 	if err != nil {
 		return err
 	}
 	defer func() { _ = file.Close() }()
 
-	gzipReader, err := gzipWrapper.NewReader(file)
+	gzipReader, err := gzip.NewReader(file)
 	if err != nil {
 		return err
 	}
-	defer func() { _ = gzipWrapper.Close(gzipReader) }()
+	defer func() { _ = gzipReader.Close() }()
 
-	tarReader := tarWrapper.NewReader(gzipReader)
+	tarReader := tar.NewReader(gzipReader)
 
 	for {
-		header, err := tarWrapper.Next(tarReader)
+		header, err := tarReader.Next()
 		if err == io.EOF {
 			break
 		} else if err != nil {
@@ -108,34 +110,34 @@ func ExtractGzip(source string, destination string, gzipWrapper models.GzipWrapp
 
 		switch header.Typeflag {
 		case tar.TypeDir:
-			if e := osWrapper.MkdirAll(target, os.FileMode(header.Mode)); e != nil {
+			if e := os.MkdirAll(target, os.FileMode(header.Mode)); e != nil {
 				return e
 			}
 		case tar.TypeReg:
-			if e := osWrapper.MkdirAll(filepath.Dir(target), os.FileMode(header.Mode)); e != nil {
+			if e := os.MkdirAll(filepath.Dir(target), os.FileMode(header.Mode)); e != nil {
 				return e
 			}
-			outFile, e := osWrapper.OpenFile(target, os.O_CREATE|os.O_RDWR|os.O_TRUNC, os.FileMode(header.Mode))
+			outFile, e := os.OpenFile(target, os.O_CREATE|os.O_RDWR|os.O_TRUNC, os.FileMode(header.Mode))
 			if e != nil {
 				return e
 			}
-			if _, e2 := ioWrapper.Copy(outFile, tarReader); e2 != nil {
+			if _, e2 := io.Copy(outFile, tarReader); e2 != nil {
 				_ = outFile.Close()
 				return e2
 			}
 			_ = outFile.Close()
 		case tar.TypeSymlink:
-			if e := osWrapper.MkdirAll(filepath.Dir(target), os.FileMode(header.Mode)); e != nil {
+			if e := os.MkdirAll(filepath.Dir(target), os.FileMode(header.Mode)); e != nil {
 				return e
 			}
-			if e2 := osWrapper.Symlink(header.Linkname, target); e2 != nil {
+			if e2 := os.Symlink(header.Linkname, target); e2 != nil {
 				return e2
 			}
 		case tar.TypeLink:
-			if e := osWrapper.MkdirAll(filepath.Dir(target), os.FileMode(header.Mode)); e != nil {
+			if e := os.MkdirAll(filepath.Dir(target), os.FileMode(header.Mode)); e != nil {
 				return e
 			}
-			if e2 := osWrapper.Link(header.Linkname, target); e2 != nil {
+			if e2 := os.Link(header.Linkname, target); e2 != nil {
 				return e2
 			}
 		default:
@@ -146,22 +148,22 @@ func ExtractGzip(source string, destination string, gzipWrapper models.GzipWrapp
 	return nil
 }
 
-func ExtractZip(source string, destination string, ioWrapper models.IOWrapper, osWrapper models.OSWrapper, zipWrapper models.ZipWrapper) error {
-	zipReader, err := zipWrapper.OpenReader(source)
+func ExtractZip(source string, destination string) error {
+	zipReader, err := zip.OpenReader(source)
 	if err != nil {
 		return err
 	}
-	defer func() { _ = zipWrapper.Close(zipReader) }()
+	defer func() { _ = zipReader.Close() }()
 
-	for _, file := range zipWrapper.File(zipReader) {
+	for _, file := range zipReader.File {
 		target := filepath.Join(destination, stripTopDir(strings.ReplaceAll(file.Name, "\\", "/")))
 
 		if file.FileInfo().IsDir() {
-			if e := osWrapper.MkdirAll(target, file.Mode()); e != nil {
+			if e := os.MkdirAll(target, file.Mode()); e != nil {
 				return e
 			}
 		} else if file.Mode()&os.ModeSymlink != 0 {
-			if e := osWrapper.MkdirAll(filepath.Dir(target), file.Mode()); e != nil {
+			if e := os.MkdirAll(filepath.Dir(target), file.Mode()); e != nil {
 				return e
 			}
 
@@ -170,20 +172,20 @@ func ExtractZip(source string, destination string, ioWrapper models.IOWrapper, o
 				return err
 			}
 
-			link, err := ioWrapper.ReadAll(src)
+			link, err := io.ReadAll(src)
 			if err != nil {
 				_ = src.Close()
 				return err
 			}
 
-			if e2 := osWrapper.Symlink(string(link), target); e2 != nil {
+			if e2 := os.Symlink(string(link), target); e2 != nil {
 				_ = src.Close()
 				return e2
 			}
 
 			_ = src.Close()
 		} else {
-			if e := osWrapper.MkdirAll(filepath.Dir(target), file.Mode()); e != nil {
+			if e := os.MkdirAll(filepath.Dir(target), file.Mode()); e != nil {
 				return e
 			}
 
@@ -192,13 +194,13 @@ func ExtractZip(source string, destination string, ioWrapper models.IOWrapper, o
 				return err
 			}
 
-			dist, err := osWrapper.OpenFile(target, os.O_CREATE|os.O_RDWR|os.O_TRUNC, file.Mode())
+			dist, err := os.OpenFile(target, os.O_CREATE|os.O_RDWR|os.O_TRUNC, file.Mode())
 			if err != nil {
 				_ = src.Close()
 				return err
 			}
 
-			if _, e2 := ioWrapper.Copy(dist, src); e2 != nil {
+			if _, e2 := io.Copy(dist, src); e2 != nil {
 				_ = src.Close()
 				_ = dist.Close()
 				return e2
@@ -220,11 +222,11 @@ func LogFatal(err error) {
 	log.Fatalf("%v\n", err)
 }
 
-func LogUserError(err error, osWrapper models.OSWrapper) {
-	flag.CommandLine.SetOutput(osWrapper.Stderr())
+func LogUserError(err error) {
+	flag.CommandLine.SetOutput(os.Stderr)
 	flag.Usage()
-	_, _ = fmt.Fprintln(osWrapper.Stderr(), err)
-	osWrapper.Exit(1)
+	_, _ = fmt.Fprintln(os.Stderr, err)
+	os.Exit(1)
 }
 
 func ValidVersionFormat(version string) bool {

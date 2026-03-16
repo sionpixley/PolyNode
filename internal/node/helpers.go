@@ -5,11 +5,13 @@ import (
 	"errors"
 	"fmt"
 	"net/http"
+	"os"
 	"os/exec"
 	"slices"
 	"sort"
 	"strconv"
 	"strings"
+	"time"
 
 	"github.com/sionpixley/PolyNode/internal"
 	"github.com/sionpixley/PolyNode/internal/constants"
@@ -19,9 +21,9 @@ import (
 	"github.com/sionpixley/PolyNode/internal/utilities"
 )
 
-func convertKeywordToVersion(keyword string, operatingSystem models.OperatingSystem, arch models.Architecture, config *models.PolyNodeConfig, httpWrapper models.HTTPWrapper) string {
+func convertKeywordToVersion(keyword string, operatingSystem models.OperatingSystem, arch models.Architecture, config *models.PolyNodeConfig) string {
 	if strings.EqualFold(keyword, "lts") {
-		nodeVersions, err := getAllNodeVersionsForOSAndArch(operatingSystem, arch, config, httpWrapper)
+		nodeVersions, err := getAllNodeVersionsForOSAndArch(operatingSystem, arch, config)
 		if err != nil {
 			return keyword
 		}
@@ -33,7 +35,7 @@ func convertKeywordToVersion(keyword string, operatingSystem models.OperatingSys
 		}
 		return keyword
 	} else if strings.EqualFold(keyword, "latest") {
-		nodeVersions, err := getAllNodeVersionsForOSAndArch(operatingSystem, arch, config, httpWrapper)
+		nodeVersions, err := getAllNodeVersionsForOSAndArch(operatingSystem, arch, config)
 		if err != nil {
 			return keyword
 		}
@@ -80,8 +82,8 @@ func convertOSAndArchToNodeVersionFile(operatingSystem models.OperatingSystem, a
 	}
 }
 
-func convertPrefixToVersionDown(prefix string, operatingSystem models.OperatingSystem, arch models.Architecture, config *models.PolyNodeConfig, httpWrapper models.HTTPWrapper) (string, error) {
-	nodeVersions, err := getAllNodeVersionsForOSAndArch(operatingSystem, arch, config, httpWrapper)
+func convertPrefixToVersionDown(prefix string, operatingSystem models.OperatingSystem, arch models.Architecture, config *models.PolyNodeConfig) (string, error) {
+	nodeVersions, err := getAllNodeVersionsForOSAndArch(operatingSystem, arch, config)
 	if err != nil {
 		return "", err
 	}
@@ -96,8 +98,8 @@ func convertPrefixToVersionDown(prefix string, operatingSystem models.OperatingS
 	return "", fmt.Errorf(constants.NoVersionMatchPrefixError, prefix)
 }
 
-func convertPrefixToVersionLocalAsc(prefix string, osWrapper models.OSWrapper) (string, error) {
-	dir, err := osWrapper.ReadDir(internal.PolynHomeDir + internal.PathSeparator + "node")
+func convertPrefixToVersionLocalAsc(prefix string) (string, error) {
+	dir, err := os.ReadDir(internal.PolynHomeDir + internal.PathSeparator + "node")
 	if err != nil {
 		// The node directory doesn't exist.
 		// Passing a 'skip' to explicitly not treat this code path as an error.
@@ -139,8 +141,8 @@ func convertPrefixToVersionLocalAsc(prefix string, osWrapper models.OSWrapper) (
 	return "", fmt.Errorf(constants.NoVersionMatchPrefixError, prefix)
 }
 
-func convertPrefixToVersionLocalDesc(prefix string, osWrapper models.OSWrapper) (string, error) {
-	dir, err := osWrapper.ReadDir(internal.PolynHomeDir + internal.PathSeparator + "node")
+func convertPrefixToVersionLocalDesc(prefix string) (string, error) {
+	dir, err := os.ReadDir(internal.PolynHomeDir + internal.PathSeparator + "node")
 	if err != nil {
 		// The node directory doesn't exist.
 		// Passing a 'skip' to explicitly not treat this code path as an error.
@@ -182,16 +184,16 @@ func convertPrefixToVersionLocalDesc(prefix string, osWrapper models.OSWrapper) 
 	return "", fmt.Errorf(constants.NoVersionMatchPrefixError, prefix)
 }
 
-func getAllNodeVersionsForOSAndArch(operatingSystem models.OperatingSystem, arch models.Architecture, config *models.PolyNodeConfig, httpWrapper models.HTTPWrapper) ([]models.NodeVersion, error) {
+func getAllNodeVersionsForOSAndArch(operatingSystem models.OperatingSystem, arch models.Architecture, config *models.PolyNodeConfig) ([]models.NodeVersion, error) {
 	url := config.NodeMirror + "/index.json"
 
-	client := httpWrapper.NewClient(config)
-	request, err := httpWrapper.NewRequest(http.MethodGet, url, nil)
+	client := &http.Client{Timeout: time.Duration(config.TimeoutInSeconds) * time.Second}
+	request, err := http.NewRequest(http.MethodGet, url, nil)
 	if err != nil {
 		return nil, err
 	}
 
-	response, err := httpWrapper.Do(client, request)
+	response, err := client.Do(request)
 	if err != nil {
 		return nil, err
 	}
@@ -259,9 +261,9 @@ func getArchiveName(operatingSystem models.OperatingSystem, architecture models.
 	return archiveName, nil
 }
 
-func runningInCmd(execWrapper models.ExecWrapper) (bool, error) {
+func runningInCmd() (bool, error) {
 	cmd := `Get-Process -Id ((Get-CimInstance -Class Win32_Process -Filter "Name = 'polyn.exe'")[0].ParentProcessId) | Select-Object -ExpandProperty Name`
-	output, err := execWrapper.Output(exec.Command("powershell", "-NoLogo", "-NoProfile", "-NonInteractive", cmd))
+	output, err := exec.Command("powershell", "-NoLogo", "-NoProfile", "-NonInteractive", cmd).Output()
 	if err != nil {
 		return false, err
 	}

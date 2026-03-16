@@ -1,12 +1,10 @@
 package node
 
 import (
-	"slices"
 	"testing"
 
 	"github.com/sionpixley/PolyNode/internal/constants/arch"
 	"github.com/sionpixley/PolyNode/internal/constants/opsys"
-	"github.com/sionpixley/PolyNode/internal/models"
 )
 
 func TestConvertOSAndArchToNodeVersionFile_AIX(t *testing.T) {
@@ -122,38 +120,6 @@ func TestConvertOSAndArchToNodeVersionFile_Windows_X64(t *testing.T) {
 	}
 }
 
-func TestGetAllNodeVersionsForOSAndArch(t *testing.T) {
-	httpWrapper := new(models.HTTPMock)
-	osWrapper := new(models.OSMockNotExist)
-	config := models.NewPolyNodeConfig(osWrapper)
-
-	expected := []models.NodeVersion{
-		{
-			Version: "v25.8.1",
-			Files:   []string{"aix-ppc64", "headers", "linux-arm64", "linux-ppc64le", "linux-s390x", "linux-x64", "osx-arm64-tar", "osx-x64-pkg", "osx-x64-tar", "src", "win-arm64-7z", "win-arm64-zip", "win-x64-7z", "win-x64-exe", "win-x64-msi", "win-x64-zip"},
-			LTS:     false,
-		},
-		{
-			Version: "v25.8.0",
-			Files:   []string{"aix-ppc64", "headers", "linux-arm64", "linux-ppc64le", "linux-s390x", "linux-x64", "osx-arm64-tar", "osx-x64-pkg", "osx-x64-tar", "src", "win-arm64-7z", "win-arm64-zip", "win-x64-7z", "win-x64-exe", "win-x64-msi", "win-x64-zip"},
-			LTS:     false,
-		},
-		{
-			Version: "v24.14.0",
-			Files:   []string{"aix-ppc64", "headers", "linux-arm64", "linux-ppc64le", "linux-s390x", "linux-x64", "osx-arm64-tar", "osx-x64-pkg", "osx-x64-tar", "src", "win-arm64-7z", "win-arm64-zip", "win-x64-7z", "win-x64-exe", "win-x64-msi", "win-x64-zip"},
-			LTS:     true,
-		},
-	}
-	actual, err := getAllNodeVersionsForOSAndArch(opsys.Linux, arch.ARM64, config, httpWrapper)
-	if err != nil {
-		t.Errorf("%v\n", err)
-	}
-
-	if !slicesEqual(actual, expected) {
-		t.Errorf("expected: %v actual: %v\n", expected, actual)
-	}
-}
-
 func TestGetArchiveName_AIX(t *testing.T) {
 	expected := "aix-ppc64.tar.gz"
 	actual, err := getArchiveName(opsys.AIX, arch.PPC64)
@@ -243,31 +209,4 @@ func TestGetArchiveName_UnsupportedOS(t *testing.T) {
 	if err == nil {
 		t.Error("expected: error actual: nil\n")
 	}
-}
-
-func equal(a models.NodeVersion, b models.NodeVersion) bool {
-	switch {
-	case a.Version != b.Version:
-		fallthrough
-	case !slices.Equal(a.Files, b.Files):
-		fallthrough
-	case a.LTS != b.LTS:
-		return false
-	default:
-		return true
-	}
-}
-
-func slicesEqual(a []models.NodeVersion, b []models.NodeVersion) bool {
-	if len(a) != len(b) {
-		return false
-	}
-
-	for i := range len(a) {
-		if !equal(a[i], b[i]) {
-			return false
-		}
-	}
-
-	return true
 }

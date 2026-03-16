@@ -1,11 +1,9 @@
 package utilities
 
 import (
-	"errors"
 	"testing"
 
 	"github.com/sionpixley/PolyNode/internal/constants/command"
-	"github.com/sionpixley/PolyNode/internal/models"
 )
 
 func TestConvertToCommand_Add(t *testing.T) {
@@ -128,49 +126,6 @@ func TestConvertToSemanticVersion_WithV(t *testing.T) {
 	}
 }
 
-func TestExtractGzip(t *testing.T) {
-	gzipWrapper := new(models.GzipMock)
-	ioWrapper := new(models.IOMock)
-	osWrapper := new(models.OSMockExist)
-	tarWrapper := new(models.TarMock)
-	err := ExtractGzip("test.tar.gz", "node", gzipWrapper, ioWrapper, osWrapper, tarWrapper)
-	if err != nil {
-		t.Errorf("%v\n", err)
-	}
-
-	switch {
-	case osWrapper.TimesOpenCalled < 1:
-		t.Error("expected osWrapper.Open to have been called\n")
-	case gzipWrapper.TimesNewReaderCalled < 1:
-		t.Error("expected gzipWrapper.NewReader to have been called\n")
-	case tarWrapper.TimesNewReaderCalled < 1:
-		t.Error("expected tarWrapper.NewReader to have been called\n")
-	case tarWrapper.TimesNextCalled < 1:
-		t.Error("expected tarWrapper.Next to have been called\n")
-	case gzipWrapper.TimesCloseCalled < 1:
-		t.Error("expected gzipWrapper.Close to have been called\n")
-	}
-}
-
-func TestExtractZip(t *testing.T) {
-	ioWrapper := new(models.IOMock)
-	osWrapper := new(models.OSMockExist)
-	zipWrapper := new(models.ZipMock)
-	err := ExtractZip("test.zip", "node", ioWrapper, osWrapper, zipWrapper)
-	if err != nil {
-		t.Errorf("%v\n", err)
-	}
-
-	switch {
-	case zipWrapper.TimesOpenReaderCalled < 1:
-		t.Error("expected zipWrapper.OpenReader to have been called\n")
-	case zipWrapper.TimesFileCalled < 1:
-		t.Error("expected zipWrapper.File to have been called\n")
-	case zipWrapper.TimesCloseCalled < 1:
-		t.Error("expected zipWrapper.Close to have been called\n")
-	}
-}
-
 func TestKnownCommand_Known(t *testing.T) {
 	known := KnownCommand("use")
 	if !known {
@@ -182,18 +137,6 @@ func TestKnownCommand_Unknown(t *testing.T) {
 	known := KnownCommand("unknown")
 	if known {
 		t.Errorf("expected: %v actual: %v\n", false, known)
-	}
-}
-
-func TestLogUserError(t *testing.T) {
-	osWrapper := new(models.OSMockExist)
-	LogUserError(errors.New("test"), osWrapper)
-
-	switch {
-	case osWrapper.TimesStderrCalled < 2:
-		t.Error("expected osWrapper.Stderr to have been called\n")
-	case osWrapper.TimesExitCalled < 1:
-		t.Error("expected osWrapper.Exit to have been called\n")
 	}
 }
 

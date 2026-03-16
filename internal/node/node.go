@@ -11,83 +11,83 @@ import (
 )
 
 // Handle function is the main function for Node.js actions.
-func Handle(args []string, operatingSystem models.OperatingSystem, arch models.Architecture, config *models.PolyNodeConfig, execWrapper models.ExecWrapper, gzipWrapper models.GzipWrapper, httpWrapper models.HTTPWrapper, ioWrapper models.IOWrapper, osWrapper models.OSWrapper, tarWrapper models.TarWrapper, zipWrapper models.ZipWrapper) {
+func Handle(args []string, operatingSystem models.OperatingSystem, arch models.Architecture, config *models.PolyNodeConfig) {
 	var err error
 	comm := utilities.ConvertToCommand(args[0])
 	switch comm {
 	case command.Add:
 		if len(args) > 1 {
-			err = add(convertKeywordToVersion(args[1], operatingSystem, arch, config, httpWrapper), operatingSystem, arch, config, gzipWrapper, httpWrapper, ioWrapper, osWrapper, tarWrapper, zipWrapper)
+			err = add(convertKeywordToVersion(args[1], operatingSystem, arch, config), operatingSystem, arch, config)
 		} else {
 			err = fmt.Errorf(constants.MissingVersionKeywordOrPrefixError, args[0])
-			utilities.LogUserError(err, osWrapper)
+			utilities.LogUserError(err)
 		}
 	case command.ConfigGet:
 		if len(args) > 1 {
-			configGet(config, args[1], osWrapper)
+			configGet(config, args[1])
 		} else {
 			configGetAll(config)
 		}
 	case command.ConfigSet:
 		if len(args) > 2 {
-			err = configSet(config, args[1], args[2], osWrapper)
+			err = configSet(config, args[1], args[2])
 		} else if len(args) > 1 {
 			err = fmt.Errorf("missing argument: 'config-set %s' requires a new value", args[1])
-			utilities.LogUserError(err, osWrapper)
+			utilities.LogUserError(err)
 		} else {
 			err = errors.New("missing argument: 'config-set' command requires a config field")
-			utilities.LogUserError(err, osWrapper)
+			utilities.LogUserError(err)
 		}
 	case command.Current:
-		current(execWrapper)
+		current()
 	case command.Default:
 		if len(args) > 1 {
-			err = def(args[1], operatingSystem, execWrapper, osWrapper)
+			err = def(args[1], operatingSystem)
 		} else {
 			err = fmt.Errorf(constants.MissingVersionOrPrefixError, args[0])
-			utilities.LogUserError(err, osWrapper)
+			utilities.LogUserError(err)
 		}
 	case command.Install:
 		if len(args) > 1 {
-			err = install(convertKeywordToVersion(args[1], operatingSystem, arch, config, httpWrapper), operatingSystem, arch, config, execWrapper, gzipWrapper, httpWrapper, ioWrapper, osWrapper, tarWrapper, zipWrapper)
+			err = install(convertKeywordToVersion(args[1], operatingSystem, arch, config), operatingSystem, arch, config)
 		} else {
 			err = fmt.Errorf(constants.MissingVersionKeywordOrPrefixError, args[0])
-			utilities.LogUserError(err, osWrapper)
+			utilities.LogUserError(err)
 		}
 	case command.List:
-		list(execWrapper, osWrapper)
+		list()
 	case command.Migrate:
 		if len(args) > 2 {
-			err = migrate(args[1], convertKeywordToVersion(args[2], operatingSystem, arch, config, httpWrapper), operatingSystem, arch, config, execWrapper, gzipWrapper, httpWrapper, ioWrapper, osWrapper, tarWrapper, zipWrapper)
+			err = migrate(args[1], convertKeywordToVersion(args[2], operatingSystem, arch, config), operatingSystem, arch, config)
 		} else if len(args) > 1 {
-			err = migrate(args[1], args[1], operatingSystem, arch, config, execWrapper, gzipWrapper, httpWrapper, ioWrapper, osWrapper, tarWrapper, zipWrapper)
+			err = migrate(args[1], args[1], operatingSystem, arch, config)
 		} else {
 			err = fmt.Errorf(constants.MissingVersionKeywordOrPrefixError, args[0])
-			utilities.LogUserError(err, osWrapper)
+			utilities.LogUserError(err)
 		}
 	case command.Remove:
 		if len(args) > 1 {
-			err = remove(args[1], execWrapper, osWrapper)
+			err = remove(args[1])
 		} else {
 			err = fmt.Errorf(constants.MissingVersionOrPrefixError, args[0])
-			utilities.LogUserError(err, osWrapper)
+			utilities.LogUserError(err)
 		}
 	case command.Search:
 		if len(args) > 1 {
-			err = search(args[1], operatingSystem, arch, config, httpWrapper)
+			err = search(args[1], operatingSystem, arch, config)
 		} else {
-			err = searchDefault(operatingSystem, arch, config, httpWrapper)
+			err = searchDefault(operatingSystem, arch, config)
 		}
 	case command.Use:
 		if len(args) > 1 {
-			err = use(args[1], operatingSystem, execWrapper, osWrapper)
+			err = use(args[1], operatingSystem)
 		} else {
 			err = fmt.Errorf(constants.MissingVersionOrPrefixError, args[0])
-			utilities.LogUserError(err, osWrapper)
+			utilities.LogUserError(err)
 		}
 	default:
 		err = fmt.Errorf(constants.UnknownCommandError, args[0])
-		utilities.LogUserError(err, osWrapper)
+		utilities.LogUserError(err)
 	}
 
 	if err != nil {

@@ -3,7 +3,9 @@ package main
 import (
 	"errors"
 	"fmt"
+	"io"
 	"net/http"
+	"os"
 	"os/exec"
 	"runtime"
 	"strings"
@@ -21,11 +23,11 @@ import (
 
 const iso8601 = "2006-01-02T15:04:05.000Z07:00"
 
-func autoUpdate(operatingSystem models.OperatingSystem, architecture models.Architecture, config *models.PolyNodeConfig, execWrapper models.ExecWrapper, gzipWrapper models.GzipWrapper, httpWrapper models.HTTPWrapper, ioWrapper models.IOWrapper, osWrapper models.OSWrapper, tarWrapper models.TarWrapper, zipWrapper models.ZipWrapper) error {
+func autoUpdate(operatingSystem models.OperatingSystem, architecture models.Architecture, config *models.PolyNodeConfig) error {
 	now := time.Now().UTC()
-	lastUpdated := getLastUpdate(osWrapper)
+	lastUpdated := getLastUpdate()
 	if now.Sub(lastUpdated).Hours() >= 720 {
-		err := updatePolyNode(operatingSystem, architecture, config, execWrapper, gzipWrapper, httpWrapper, ioWrapper, osWrapper, tarWrapper, zipWrapper)
+		err := updatePolyNode(operatingSystem, architecture, config)
 		if err != nil {
 			return err
 		}
@@ -84,34 +86,34 @@ func convertToOperatingSystem(osStr string) models.OperatingSystem {
 	}
 }
 
-func downloadPolyNodeFile(filename string, config *models.PolyNodeConfig, httpWrapper models.HTTPWrapper, ioWrapper models.IOWrapper, osWrapper models.OSWrapper) error {
+func downloadPolyNodeFile(filename string, config *models.PolyNodeConfig) error {
 	fmt.Print("downloading the latest release of PolyNode...")
 
-	client := httpWrapper.NewClient(config)
-	request, err := httpWrapper.NewRequest(http.MethodGet, "https://github.com/sionpixley/PolyNode/releases/latest/download/"+filename, nil)
+	client := &http.Client{Timeout: time.Duration(config.TimeoutInSeconds) * time.Second}
+	request, err := http.NewRequest(http.MethodGet, "https://github.com/sionpixley/PolyNode/releases/latest/download/"+filename, nil)
 	if err != nil {
 		return err
 	}
 
-	response, err := httpWrapper.Do(client, request)
+	response, err := client.Do(request)
 	if err != nil {
 		return err
 	}
 	defer func() { _ = response.Body.Close() }()
 
 	filename = internal.PolynHomeDir + internal.PathSeparator + filename
-	err = osWrapper.RemoveAll(filename)
+	err = os.RemoveAll(filename)
 	if err != nil {
 		return err
 	}
 
-	file, err := osWrapper.Create(filename)
+	file, err := os.Create(filename)
 	if err != nil {
 		return err
 	}
 	defer func() { _ = file.Close() }()
 
-	_, err = ioWrapper.Copy(file, response.Body)
+	_, err = io.Copy(file, response.Body)
 	if err != nil {
 		return err
 	}
@@ -120,37 +122,37 @@ func downloadPolyNodeFile(filename string, config *models.PolyNodeConfig, httpWr
 	return nil
 }
 
-func execute(args []string, operatingSystem models.OperatingSystem, architecture models.Architecture, config *models.PolyNodeConfig, execWrapper models.ExecWrapper, gzipWrapper models.GzipWrapper, httpWrapper models.HTTPWrapper, ioWrapper models.IOWrapper, osWrapper models.OSWrapper, tarWrapper models.TarWrapper, zipWrapper models.ZipWrapper) {
+func execute(args []string, operatingSystem models.OperatingSystem, architecture models.Architecture, config *models.PolyNodeConfig) {
 	var err error
 	if strings.EqualFold(args[0], "update") {
-		err = updatePolyNode(operatingSystem, architecture, config, execWrapper, gzipWrapper, httpWrapper, ioWrapper, osWrapper, tarWrapper, zipWrapper)
+		err = updatePolyNode(operatingSystem, architecture, config)
 		if err != nil {
 			utilities.LogFatal(err)
 		}
 	} else if utilities.KnownCommand(args[0]) {
-		node.Handle(args, operatingSystem, architecture, config, execWrapper, gzipWrapper, httpWrapper, ioWrapper, osWrapper, tarWrapper, zipWrapper)
+		node.Handle(args, operatingSystem, architecture, config)
 	} else {
 		err = fmt.Errorf(constants.UnknownCommandError, args[0])
-		utilities.LogUserError(err, osWrapper)
+		utilities.LogUserError(err)
 	}
 
 	if config.AutoUpdate {
-		err = autoUpdate(operatingSystem, architecture, config, execWrapper, gzipWrapper, httpWrapper, ioWrapper, osWrapper, tarWrapper, zipWrapper)
+		err = autoUpdate(operatingSystem, architecture, config)
 		if err != nil {
 			utilities.LogFatal(err)
 		}
 	}
 }
 
-func getLastUpdate(osWrapper models.OSWrapper) time.Time {
+func getLastUpdate() time.Time {
 	updateFilePath := internal.PolynHomeDir + internal.PathSeparator + "last-update.txt"
-	if _, err := osWrapper.Stat(updateFilePath); osWrapper.IsNotExist(err) {
+	if _, err := os.Stat(updateFilePath); os.IsNotExist(err) {
 		return time.Now().UTC().AddDate(0, 0, -30)
 	} else if err != nil {
 		return time.Now().UTC().AddDate(0, 0, -30)
 	}
 
-	content, err := osWrapper.ReadFile(updateFilePath)
+	content, err := os.ReadFile(updateFilePath)
 	if err != nil {
 		return time.Now().UTC().AddDate(0, 0, -30)
 	}
@@ -164,7 +166,7 @@ func getLastUpdate(osWrapper models.OSWrapper) time.Time {
 	return t
 }
 
-func parseCLIArgs(osWrapper models.OSWrapper) []string {
+func parseCLIArgs() []string {
 	flag.Usage = func() {
 		w := flag.CommandLine.Output()
 		_, _ = fmt.Fprintln(w, constants.Help)
@@ -177,19 +179,19 @@ func parseCLIArgs(osWrapper models.OSWrapper) []string {
 
 	if version {
 		fmt.Println(constants.Version)
-		osWrapper.Exit(0)
+		os.Exit(0)
 	}
 
 	if flag.NArg() < 1 {
-		flag.CommandLine.SetOutput(osWrapper.Stdout())
+		flag.CommandLine.SetOutput(os.Stdout)
 		flag.Usage()
-		osWrapper.Exit(0)
+		os.Exit(0)
 	}
 
 	return flag.Args()
 }
 
-func runUpdateScript(operatingSystem models.OperatingSystem, execWrapper models.ExecWrapper, osWrapper models.OSWrapper) error {
+func runUpdateScript(operatingSystem models.OperatingSystem) error {
 	fmt.Print("running update...")
 
 	if operatingSystem == opsys.Windows {
@@ -209,23 +211,23 @@ if exist %LOCALAPPDATA%\Programs\PolyNode\update-temp\ (
 )
 (goto) 2>nul & del "%~f0"`
 
-		err := osWrapper.WriteFile(batchfilePath, []byte(updateBatchfile), 0744)
+		err := os.WriteFile(batchfilePath, []byte(updateBatchfile), 0744)
 		if err != nil {
 			return err
 		}
 
-		err = execWrapper.Run(exec.Command("cmd", "/c", "start", "/b", batchfilePath))
+		err = exec.Command("cmd", "/c", "start", "/b", batchfilePath).Run()
 		if err != nil {
 			return err
 		}
 	} else {
 		updateTemp := internal.PolynHomeDir + internal.PathSeparator + "update-temp"
-		err := execWrapper.Run(exec.Command(updateTemp + internal.PathSeparator + "setup"))
+		err := exec.Command(updateTemp + internal.PathSeparator + "setup").Run()
 		if err != nil {
 			return err
 		}
 
-		err = osWrapper.RemoveAll(updateTemp)
+		err = os.RemoveAll(updateTemp)
 		if err != nil {
 			return err
 		}
@@ -267,7 +269,7 @@ func supportedOS(operatingSystem models.OperatingSystem) bool {
 	}
 }
 
-func updatePolyNode(operatingSystem models.OperatingSystem, architecture models.Architecture, config *models.PolyNodeConfig, execWrapper models.ExecWrapper, gzipWrapper models.GzipWrapper, httpWrapper models.HTTPWrapper, ioWrapper models.IOWrapper, osWrapper models.OSWrapper, tarWrapper models.TarWrapper, zipWrapper models.ZipWrapper) error {
+func updatePolyNode(operatingSystem models.OperatingSystem, architecture models.Architecture, config *models.PolyNodeConfig) error {
 	var filename string
 	switch operatingSystem {
 	case opsys.AIX:
@@ -307,18 +309,18 @@ func updatePolyNode(operatingSystem models.OperatingSystem, architecture models.
 		return errors.New(constants.UnsupportedOSError)
 	}
 
-	err := downloadPolyNodeFile(filename, config, httpWrapper, ioWrapper, osWrapper)
+	err := downloadPolyNodeFile(filename, config)
 	if err != nil {
 		return err
 	}
 
 	fmt.Printf("extracting %s...", filename)
 	filename = internal.PolynHomeDir + internal.PathSeparator + filename
-	err = utilities.ExtractFile(filename, internal.PolynHomeDir+internal.PathSeparator+"update-temp", gzipWrapper, ioWrapper, osWrapper, tarWrapper, zipWrapper)
+	err = utilities.ExtractFile(filename, internal.PolynHomeDir+internal.PathSeparator+"update-temp")
 	if err != nil {
 		return err
 	}
 	fmt.Println("done")
 
-	return runUpdateScript(operatingSystem, execWrapper, osWrapper)
+	return runUpdateScript(operatingSystem)
 }
