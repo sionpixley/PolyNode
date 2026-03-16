@@ -443,16 +443,28 @@ func use(version string, operatingSystem models.OperatingSystem) error {
 		}
 	}
 
+	oldVersion, err := exec.Command("node", "-v").Output()
+	if err != nil {
+		return err
+	}
+
+	path := os.Getenv("PATH")
 	if operatingSystem == opsys.Windows {
+		newDir := internal.PolynHomeDir + "\\node\\" + version
+		path = strings.Replace(path, internal.PolynHomeDir+"\\node\\"+string(oldVersion), newDir, 1)
+		path = strings.Replace(path, internal.PolynHomeDir+"\\nodejs", newDir, 1)
 		if ranInCmd, err := runningInCmd(); err != nil {
 			return err
 		} else if ranInCmd {
-			fmt.Printf("set PATH=%s\\node\\%s;%s\n", internal.PolynHomeDir, version, "%PATH%")
+			fmt.Printf("set PATH=%s\n", path)
 		} else {
-			fmt.Printf("$env:Path = \"%s\\node\\%s;\" + $env:Path\n", internal.PolynHomeDir, version)
+			fmt.Printf("$env:Path = %s\n", path)
 		}
 	} else {
-		fmt.Printf("export PATH=%s", internal.PolynHomeDir+"/node/"+version+"/bin:$PATH")
+		newDir := internal.PolynHomeDir + "/node/" + version + "/bin"
+		path = strings.Replace(path, internal.PolynHomeDir+"/node/"+string(oldVersion)+"/bin", newDir, 1)
+		path = strings.Replace(path, internal.PolynHomeDir+"/nodejs/bin", newDir, 1)
+		fmt.Printf("export PATH=%s\n", path)
 	}
 
 	return nil
