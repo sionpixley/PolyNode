@@ -268,12 +268,16 @@ func migrate(from string, to string, operatingSystem models.OperatingSystem, arc
 		return err
 	}
 
-	err = def(from, operatingSystem)
-	if err != nil {
-		return err
+	var path string
+	if operatingSystem == opsys.Windows {
+		path = internal.PolynHomeDir + `\node\` + from + ";" + os.Getenv("PATH")
+	} else {
+		path = internal.PolynHomeDir + "/node/" + from + "/bin:" + os.Getenv("PATH")
 	}
 
-	data, err := exec.Command("npm", "ls", "-g", "--depth=0", "--json").Output()
+	cmd := exec.Command("npm", "ls", "-g", "--depth=0", "--json")
+	cmd.Env = append(os.Environ(), "PATH="+path)
+	data, err := cmd.Output()
 	if err != nil {
 		return err
 	}
@@ -304,7 +308,14 @@ func migrate(from string, to string, operatingSystem models.OperatingSystem, arc
 	fmt.Print("migrating global npm packages (this might take a while)...")
 
 	if len(dependencies) > 2 {
-		data, err = exec.Command("npm", dependencies...).Output()
+		if operatingSystem == opsys.Windows {
+			path = internal.PolynHomeDir + `\node\` + from + ";" + os.Getenv("PATH")
+		} else {
+			path = internal.PolynHomeDir + "/node/" + to + "/bin:" + os.Getenv("PATH")
+		}
+		cmd = exec.Command("npm", dependencies...)
+		cmd.Env = append(os.Environ(), "PATH="+path)
+		data, err = cmd.Output()
 		if err != nil {
 			return err
 		}
@@ -450,8 +461,8 @@ func use(version string, operatingSystem models.OperatingSystem) error {
 		re := regexp.MustCompile(internal.PolynHomeDir + `\node\[^;]+`)
 		path = re.ReplaceAllString(path, newDir)
 		path = strings.ReplaceAll(path, internal.PolynHomeDir+`\nodejs`, newDir)
-		if ranInCmd, err := runningInCmd(); err != nil {
-			return err
+		if ranInCmd, e := runningInCmd(); e != nil {
+			return e
 		} else if ranInCmd {
 			fmt.Printf("set PATH=%s\n", path)
 		} else {
