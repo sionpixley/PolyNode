@@ -36,10 +36,10 @@ func add(version string, operatingSystem models.OperatingSystem, arch models.Arc
 		return err
 	}
 
-	fileName := "node-" + version + "-" + archiveName
+	fileName := fmt.Sprintf("node-%s-%s", version, archiveName)
 	fmt.Printf("downloading %s...", fileName)
 
-	url := config.NodeMirror + "/" + version + "/" + fileName
+	url := fmt.Sprintf("%s/%s/%s", config.NodeMirror, version, fileName)
 
 	client := &http.Client{Timeout: time.Duration(config.TimeoutInSeconds) * time.Second}
 	request, err := http.NewRequest(http.MethodGet, url, nil)
@@ -53,13 +53,13 @@ func add(version string, operatingSystem models.OperatingSystem, arch models.Arc
 	}
 	defer func() { _ = response.Body.Close() }()
 
-	nodePath := internal.PolynHomeDir + internal.PathSeparator + "node"
+	nodePath := fmt.Sprintf("%s%snode", internal.PolynHomeDir, internal.PathSeparator)
 	err = os.MkdirAll(nodePath, os.ModePerm)
 	if err != nil {
 		return err
 	}
 
-	filePath := nodePath + internal.PathSeparator + fileName
+	filePath := fmt.Sprintf("%s%s%s", internal.PolynHomeDir, internal.PathSeparator, fileName)
 	err = os.RemoveAll(filePath)
 	if err != nil {
 		return err
@@ -78,7 +78,7 @@ func add(version string, operatingSystem models.OperatingSystem, arch models.Arc
 	// Calling file.Close() explicitly instead of with defer to prevent lock errors.
 	_ = file.Close()
 
-	folderPath := nodePath + internal.PathSeparator + version
+	folderPath := fmt.Sprintf("%s%s%s", nodePath, internal.PathSeparator, version)
 	err = os.RemoveAll(folderPath)
 	if err != nil {
 		return err
@@ -185,19 +185,19 @@ func def(version string, operatingSystem models.OperatingSystem) error {
 
 	fmt.Printf("switching to Node.js %s...", version)
 
-	nodejsPath := internal.PolynHomeDir + internal.PathSeparator + "nodejs"
+	nodejsPath := fmt.Sprintf("%s%snodejs", internal.PolynHomeDir, internal.PathSeparator)
 	err = os.RemoveAll(nodejsPath)
 	if err != nil {
 		return err
 	}
 
 	if operatingSystem == opsys.Windows {
-		err = exec.Command("cmd", "/c", "mklink", "/j", nodejsPath, internal.PolynHomeDir+"\\node\\"+version).Run()
+		err = exec.Command("cmd", "/c", "mklink", "/j", nodejsPath, fmt.Sprintf(`%s\node\%s`, internal.PolynHomeDir, version)).Run()
 		if err != nil {
 			return err
 		}
 	} else {
-		err = os.Symlink(internal.PolynHomeDir+"/node/"+version, nodejsPath)
+		err = os.Symlink(fmt.Sprintf("%s/node/%s", internal.PolynHomeDir, version), nodejsPath)
 		if err != nil {
 			return err
 		}
@@ -270,13 +270,13 @@ func migrate(from string, to string, operatingSystem models.OperatingSystem, arc
 
 	var path string
 	if operatingSystem == opsys.Windows {
-		path = internal.PolynHomeDir + `\node\` + from + ";" + os.Getenv("PATH")
+		path = fmt.Sprintf(`%s\node\%s;%s`, internal.PolynHomeDir, from, os.Getenv("PATH"))
 	} else {
-		path = internal.PolynHomeDir + "/node/" + from + "/bin:" + os.Getenv("PATH")
+		path = fmt.Sprintf("%s/node/%s/bin:%s", internal.PolynHomeDir, from, os.Getenv("PATH"))
 	}
 
 	cmd := exec.Command("npm", "ls", "-g", "--depth=0", "--json")
-	cmd.Env = append(os.Environ(), "PATH="+path)
+	cmd.Env = append(os.Environ(), fmt.Sprintf("PATH=%s", path))
 	data, err := cmd.Output()
 	if err != nil {
 		return err
@@ -309,12 +309,12 @@ func migrate(from string, to string, operatingSystem models.OperatingSystem, arc
 
 	if len(dependencies) > 2 {
 		if operatingSystem == opsys.Windows {
-			path = internal.PolynHomeDir + `\node\` + from + ";" + os.Getenv("PATH")
+			path = fmt.Sprintf(`%s\node\%s;%s`, internal.PolynHomeDir, to, os.Getenv("PATH"))
 		} else {
-			path = internal.PolynHomeDir + "/node/" + to + "/bin:" + os.Getenv("PATH")
+			path = fmt.Sprintf("%s/node/%s/bin:%s", internal.PolynHomeDir, to, os.Getenv("PATH"))
 		}
 		cmd = exec.Command("npm", dependencies...)
-		cmd.Env = append(os.Environ(), "PATH="+path)
+		cmd.Env = append(os.Environ(), fmt.Sprintf("PATH=%s", path))
 		data, err = cmd.Output()
 		if err != nil {
 			return err
@@ -346,7 +346,7 @@ func remove(version string) error {
 
 	fmt.Printf("removing Node.js %s...", version)
 
-	folderName := internal.PolynHomeDir + internal.PathSeparator + "node" + internal.PathSeparator + version
+	folderName := fmt.Sprintf("%s%snode%s%s", internal.PolynHomeDir, internal.PathSeparator, internal.PathSeparator, version)
 	err = os.RemoveAll(folderName)
 	if err != nil {
 		return err
@@ -359,7 +359,7 @@ func remove(version string) error {
 	}
 
 	if c == version {
-		folderName = internal.PolynHomeDir + internal.PathSeparator + "nodejs"
+		folderName = fmt.Sprintf("%s%snodejs", internal.PolynHomeDir, internal.PathSeparator)
 		err = os.RemoveAll(folderName)
 		if err != nil {
 			return err
@@ -425,12 +425,12 @@ func searchDefault(operatingSystem models.OperatingSystem, arch models.Architect
 
 	output := "Latest stable versions of Node.js\n---------------------------------"
 	for _, stableVersion := range stableVersions {
-		output += "\n" + stableVersion
+		output += fmt.Sprintf("\n%s", stableVersion)
 	}
 
 	output += "\n\nLatest LTS versions of Node.js\n---------------------------------"
 	for _, ltsVersion := range ltsVersions {
-		output += "\n" + ltsVersion + " (lts)"
+		output += fmt.Sprintf("\n%s (lts)", ltsVersion)
 	}
 
 	fmt.Println(output)
@@ -457,23 +457,23 @@ func use(version string, operatingSystem models.OperatingSystem) error {
 
 	path := os.Getenv("PATH")
 	if operatingSystem == opsys.Windows {
-		newDir := `PolyNode\node\` + version
+		newDir := fmt.Sprintf(`PolyNode\node\%s`, version)
 		re := regexp.MustCompile(`PolyNode\\node\\[^;]+`)
 		path = re.ReplaceAllString(path, newDir)
 		path = strings.ReplaceAll(path, `PolyNode\nodejs`, newDir)
 		if ranInCmd, e := runningInCmd(); e != nil {
 			return e
 		} else if ranInCmd {
-			fmt.Printf("set PATH=%s\n", path)
+			fmt.Printf("set PATH=\"%s\"\n", path)
 		} else {
-			fmt.Printf("$env:Path = %s\n", path)
+			fmt.Printf("$env:Path = \"%s\"\n", path)
 		}
 	} else {
-		newDir := "PolyNode/node/" + version + "/bin"
+		newDir := fmt.Sprintf("PolyNode/node/%s/bin", version)
 		re := regexp.MustCompile(`PolyNode/node/[^/]+/bin`)
 		path = re.ReplaceAllString(path, newDir)
 		path = strings.ReplaceAll(path, "PolyNode/nodejs/bin", newDir)
-		fmt.Printf("export PATH=%s\n", path)
+		fmt.Printf("export PATH=\"%s\"\n", path)
 	}
 
 	return nil
