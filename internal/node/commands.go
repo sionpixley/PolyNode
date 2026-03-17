@@ -7,6 +7,7 @@ import (
 	"net/http"
 	"os"
 	"os/exec"
+	"regexp"
 	"strconv"
 	"strings"
 	"time"
@@ -443,16 +444,12 @@ func use(version string, operatingSystem models.OperatingSystem) error {
 		}
 	}
 
-	oldVersion, err := exec.Command("node", "-v").Output()
-	if err != nil {
-		return err
-	}
-
 	path := os.Getenv("PATH")
 	if operatingSystem == opsys.Windows {
-		newDir := internal.PolynHomeDir + "\\node\\" + version
-		path = strings.Replace(path, internal.PolynHomeDir+"\\node\\"+string(oldVersion), newDir, 1)
-		path = strings.Replace(path, internal.PolynHomeDir+"\\nodejs", newDir, 1)
+		newDir := internal.PolynHomeDir + `\node\` + version
+		re := regexp.MustCompile(internal.PolynHomeDir + `\node\[^;]+`)
+		path = re.ReplaceAllString(path, newDir)
+		path = strings.ReplaceAll(path, internal.PolynHomeDir+`\nodejs`, newDir)
 		if ranInCmd, err := runningInCmd(); err != nil {
 			return err
 		} else if ranInCmd {
@@ -462,7 +459,8 @@ func use(version string, operatingSystem models.OperatingSystem) error {
 		}
 	} else {
 		newDir := internal.PolynHomeDir + "/node/" + version + "/bin"
-		path = strings.Replace(path, internal.PolynHomeDir+"/node/"+string(oldVersion)+"/bin", newDir, 1)
+		re := regexp.MustCompile(internal.PolynHomeDir + `/node/[^/]+/bin`)
+		path = re.ReplaceAllString(path, newDir)
 		path = strings.Replace(path, internal.PolynHomeDir+"/nodejs/bin", newDir, 1)
 		fmt.Printf("export PATH=%s\n", path)
 	}
