@@ -461,7 +461,7 @@ func use(version string, operatingSystem models.OperatingSystem) error {
 		newDir := internal.PolynHomeDir + "/node/" + version + "/bin"
 		re := regexp.MustCompile(internal.PolynHomeDir + `/node/[^/]+/bin`)
 		path = re.ReplaceAllString(path, newDir)
-		path = strings.Replace(path, internal.PolynHomeDir+"/nodejs/bin", newDir, 1)
+		path = strings.ReplaceAll(path, internal.PolynHomeDir+"/nodejs/bin", newDir)
 		fmt.Printf("export PATH=%s\n", path)
 	}
 
