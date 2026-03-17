@@ -457,10 +457,10 @@ func use(version string, operatingSystem models.OperatingSystem) error {
 
 	path := os.Getenv("PATH")
 	if operatingSystem == opsys.Windows {
-		newDir := internal.PolynHomeDir + `\node\` + version
-		re := regexp.MustCompile(internal.PolynHomeDir + `\node\[^;]+`)
+		newDir := `PolyNode\node\` + version
+		re := regexp.MustCompile(`PolyNode\\node\\[^;]+`)
 		path = re.ReplaceAllString(path, newDir)
-		path = strings.ReplaceAll(path, internal.PolynHomeDir+`\nodejs`, newDir)
+		path = strings.ReplaceAll(path, `PolyNode\nodejs`, newDir)
 		if ranInCmd, e := runningInCmd(); e != nil {
 			return e
 		} else if ranInCmd {
@@ -469,10 +469,10 @@ func use(version string, operatingSystem models.OperatingSystem) error {
 			fmt.Printf("$env:Path = %s\n", path)
 		}
 	} else {
-		newDir := internal.PolynHomeDir + "/node/" + version + "/bin"
-		re := regexp.MustCompile(internal.PolynHomeDir + `/node/[^/]+/bin`)
+		newDir := "PolyNode/node/" + version + "/bin"
+		re := regexp.MustCompile(`PolyNode/node/[^/]+/bin`)
 		path = re.ReplaceAllString(path, newDir)
-		path = strings.ReplaceAll(path, internal.PolynHomeDir+"/nodejs/bin", newDir)
+		path = strings.ReplaceAll(path, "PolyNode/nodejs/bin", newDir)
 		fmt.Printf("export PATH=%s\n", path)
 	}
 
