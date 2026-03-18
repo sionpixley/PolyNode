@@ -305,7 +305,7 @@ func migrate(from string, to string, operatingSystem models.OperatingSystem, arc
 		return err
 	}
 
-	fmt.Print("migrating global npm packages (this might take a while)...")
+	fmt.Print("migrating global npm packages (this may take a while)...")
 
 	if len(dependencies) > 2 {
 		if operatingSystem == opsys.Windows {
