@@ -36,10 +36,10 @@ func add(version string, operatingSystem models.OperatingSystem, arch models.Arc
 		return err
 	}
 
-	fileName := fmt.Sprintf("node-%s-%s", version, archiveName)
+	fileName := "node-" + version + "-" + archiveName
 	fmt.Printf("downloading %s...", fileName)
 
-	url := fmt.Sprintf("%s/%s/%s", config.NodeMirror, version, fileName)
+	url := config.NodeMirror + "/" + version + "/" + fileName
 
 	client := &http.Client{Timeout: time.Duration(config.TimeoutInSeconds) * time.Second}
 	request, err := http.NewRequest(http.MethodGet, url, nil)
@@ -53,13 +53,13 @@ func add(version string, operatingSystem models.OperatingSystem, arch models.Arc
 	}
 	defer func() { _ = response.Body.Close() }()
 
-	nodePath := fmt.Sprintf("%s%snode", internal.PolynHomeDir, internal.PathSeparator)
+	nodePath := internal.PolynHomeDir + internal.PathSeparator + "node"
 	err = os.MkdirAll(nodePath, os.ModePerm)
 	if err != nil {
 		return err
 	}
 
-	filePath := fmt.Sprintf("%s%s%s", internal.PolynHomeDir, internal.PathSeparator, fileName)
+	filePath := internal.PolynHomeDir + internal.PathSeparator + fileName
 	err = os.RemoveAll(filePath)
 	if err != nil {
 		return err
@@ -78,7 +78,7 @@ func add(version string, operatingSystem models.OperatingSystem, arch models.Arc
 	// Calling file.Close() explicitly instead of with defer to prevent lock errors.
 	_ = file.Close()
 
-	folderPath := fmt.Sprintf("%s%s%s", nodePath, internal.PathSeparator, version)
+	folderPath := nodePath + internal.PathSeparator + version
 	err = os.RemoveAll(folderPath)
 	if err != nil {
 		return err
@@ -185,19 +185,19 @@ func def(version string, operatingSystem models.OperatingSystem) error {
 
 	fmt.Printf("switching to Node.js %s...", version)
 
-	nodejsPath := fmt.Sprintf("%s%snodejs", internal.PolynHomeDir, internal.PathSeparator)
+	nodejsPath := internal.PolynHomeDir + internal.PathSeparator + "nodejs"
 	err = os.RemoveAll(nodejsPath)
 	if err != nil {
 		return err
 	}
 
 	if operatingSystem == opsys.Windows {
-		err = exec.Command("cmd", "/c", "mklink", "/j", nodejsPath, fmt.Sprintf(`%s\node\%s`, internal.PolynHomeDir, version)).Run()
+		err = exec.Command("cmd", "/c", "mklink", "/j", nodejsPath, internal.PolynHomeDir+`\node\`+version).Run()
 		if err != nil {
 			return err
 		}
 	} else {
-		err = os.Symlink(fmt.Sprintf("%s/node/%s", internal.PolynHomeDir, version), nodejsPath)
+		err = os.Symlink(internal.PolynHomeDir+"/node/"+version, nodejsPath)
 		if err != nil {
 			return err
 		}
@@ -270,13 +270,13 @@ func migrate(from string, to string, operatingSystem models.OperatingSystem, arc
 
 	var path string
 	if operatingSystem == opsys.Windows {
-		path = fmt.Sprintf(`%s\node\%s;%s`, internal.PolynHomeDir, from, os.Getenv("PATH"))
+		path = internal.PolynHomeDir + `\node\` + from + ";" + os.Getenv("PATH")
 	} else {
-		path = fmt.Sprintf("%s/node/%s/bin:%s", internal.PolynHomeDir, from, os.Getenv("PATH"))
+		path = internal.PolynHomeDir + "/node/" + from + "/bin:" + os.Getenv("PATH")
 	}
 
 	cmd := exec.Command("npm", "ls", "-g", "--depth=0", "--json")
-	cmd.Env = append(os.Environ(), fmt.Sprintf("PATH=%s", path))
+	cmd.Env = append(os.Environ(), "PATH="+path)
 	data, err := cmd.Output()
 	if err != nil {
 		return err
@@ -309,12 +309,12 @@ func migrate(from string, to string, operatingSystem models.OperatingSystem, arc
 
 	if len(dependencies) > 2 {
 		if operatingSystem == opsys.Windows {
-			path = fmt.Sprintf(`%s\node\%s;%s`, internal.PolynHomeDir, to, os.Getenv("PATH"))
+			path = internal.PolynHomeDir + `\node\` + to + ";" + os.Getenv("PATH")
 		} else {
-			path = fmt.Sprintf("%s/node/%s/bin:%s", internal.PolynHomeDir, to, os.Getenv("PATH"))
+			path = internal.PolynHomeDir + "/node/" + to + "/bin:" + os.Getenv("PATH")
 		}
 		cmd = exec.Command("npm", dependencies...)
-		cmd.Env = append(os.Environ(), fmt.Sprintf("PATH=%s", path))
+		cmd.Env = append(os.Environ(), "PATH="+path)
 		data, err = cmd.Output()
 		if err != nil {
 			return err
@@ -346,7 +346,7 @@ func remove(version string) error {
 
 	fmt.Printf("removing Node.js %s...", version)
 
-	folderName := fmt.Sprintf("%s%snode%s%s", internal.PolynHomeDir, internal.PathSeparator, internal.PathSeparator, version)
+	folderName := internal.PolynHomeDir + internal.PathSeparator + "node" + internal.PathSeparator + version
 	err = os.RemoveAll(folderName)
 	if err != nil {
 		return err
@@ -359,7 +359,7 @@ func remove(version string) error {
 	}
 
 	if c == version {
-		folderName = fmt.Sprintf("%s%snodejs", internal.PolynHomeDir, internal.PathSeparator)
+		folderName = internal.PolynHomeDir + internal.PathSeparator + "nodejs"
 		err = os.RemoveAll(folderName)
 		if err != nil {
 			return err
@@ -425,12 +425,12 @@ func searchDefault(operatingSystem models.OperatingSystem, arch models.Architect
 
 	output := "Latest stable versions of Node.js\n---------------------------------"
 	for _, stableVersion := range stableVersions {
-		output += fmt.Sprintf("\n%s", stableVersion)
+		output += "\n" + stableVersion
 	}
 
 	output += "\n\nLatest LTS versions of Node.js\n---------------------------------"
 	for _, ltsVersion := range ltsVersions {
-		output += fmt.Sprintf("\n%s (lts)", ltsVersion)
+		output += "\n" + ltsVersion + " (lts)"
 	}
 
 	fmt.Println(output)
@@ -457,7 +457,7 @@ func use(version string, operatingSystem models.OperatingSystem) error {
 
 	path := os.Getenv("PATH")
 	if operatingSystem == opsys.Windows {
-		newDir := fmt.Sprintf(`PolyNode\node\%s`, version)
+		newDir := `PolyNode\node\` + version
 		re := regexp.MustCompile(`PolyNode\\node\\[^;]+`)
 		path = re.ReplaceAllString(path, newDir)
 		path = strings.ReplaceAll(path, `PolyNode\nodejs`, newDir)
@@ -469,7 +469,7 @@ func use(version string, operatingSystem models.OperatingSystem) error {
 			fmt.Printf("$env:Path = \"%s\"\n", path)
 		}
 	} else {
-		newDir := fmt.Sprintf("PolyNode/node/%s/bin", version)
+		newDir := "PolyNode/node/" + version + "/bin"
 		re := regexp.MustCompile(`PolyNode/node/[^/]+/bin`)
 		path = re.ReplaceAllString(path, newDir)
 		path = strings.ReplaceAll(path, "PolyNode/nodejs/bin", newDir)

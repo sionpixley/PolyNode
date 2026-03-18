@@ -99,43 +99,43 @@ func ExtractGzip(source string, destination string) error {
 	tarReader := tar.NewReader(gzipReader)
 
 	for {
-		header, err := tarReader.Next()
-		if err == io.EOF {
+		header, e := tarReader.Next()
+		if e == io.EOF {
 			break
-		} else if err != nil {
-			return err
+		} else if e != nil {
+			return e
 		}
 
 		target := filepath.Join(destination, stripTopDir(header.Name))
 
 		switch header.Typeflag {
 		case tar.TypeDir:
-			if e := os.MkdirAll(target, os.FileMode(header.Mode)); e != nil {
-				return e
+			if e2 := os.MkdirAll(target, os.FileMode(header.Mode)); e2 != nil {
+				return e2
 			}
 		case tar.TypeReg:
-			if e := os.MkdirAll(filepath.Dir(target), os.FileMode(header.Mode)); e != nil {
+			if e2 := os.MkdirAll(filepath.Dir(target), os.FileMode(header.Mode)); e2 != nil {
+				return e2
+			}
+			outFile, e2 := os.OpenFile(target, os.O_CREATE|os.O_RDWR|os.O_TRUNC, os.FileMode(header.Mode))
+			if e2 != nil {
 				return e
 			}
-			outFile, e := os.OpenFile(target, os.O_CREATE|os.O_RDWR|os.O_TRUNC, os.FileMode(header.Mode))
-			if e != nil {
-				return e
-			}
-			if _, e2 := io.Copy(outFile, tarReader); e2 != nil {
+			if _, e2 = io.Copy(outFile, tarReader); e2 != nil {
 				_ = outFile.Close()
 				return e2
 			}
 			_ = outFile.Close()
 		case tar.TypeSymlink:
-			if e := os.MkdirAll(filepath.Dir(target), os.FileMode(header.Mode)); e != nil {
-				return e
+			if e2 := os.MkdirAll(filepath.Dir(target), os.FileMode(header.Mode)); e2 != nil {
+				return e2
 			}
 			if e2 := os.Symlink(header.Linkname, target); e2 != nil {
 				return e2
 			}
 		case tar.TypeLink:
-			if e := os.MkdirAll(filepath.Dir(target), os.FileMode(header.Mode)); e != nil {
-				return e
+			if e2 := os.MkdirAll(filepath.Dir(target), os.FileMode(header.Mode)); e2 != nil {
+				return e2
 			}
 			if e2 := os.Link(header.Linkname, target); e2 != nil {
 				return e2
@@ -167,15 +167,15 @@ func ExtractZip(source string, destination string) error {
 				return e
 			}
 
-			src, err := file.Open()
-			if err != nil {
-				return err
+			src, e := file.Open()
+			if e != nil {
+				return e
 			}
 
-			link, err := io.ReadAll(src)
-			if err != nil {
+			link, e := io.ReadAll(src)
+			if e != nil {
 				_ = src.Close()
-				return err
+				return e
 			}
 
 			if e2 := os.Symlink(string(link), target); e2 != nil {
@@ -189,15 +189,15 @@ func ExtractZip(source string, destination string) error {
 				return e
 			}
 
-			src, err := file.Open()
-			if err != nil {
-				return err
+			src, e := file.Open()
+			if e != nil {
+				return e
 			}
 
-			dist, err := os.OpenFile(target, os.O_CREATE|os.O_RDWR|os.O_TRUNC, file.Mode())
-			if err != nil {
+			dist, e := os.OpenFile(target, os.O_CREATE|os.O_RDWR|os.O_TRUNC, file.Mode())
+			if e != nil {
 				_ = src.Close()
-				return err
+				return e
 			}
 
 			if _, e2 := io.Copy(dist, src); e2 != nil {

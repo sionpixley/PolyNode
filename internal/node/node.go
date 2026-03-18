@@ -17,7 +17,8 @@ func Handle(args []string, operatingSystem models.OperatingSystem, arch models.A
 	switch comm {
 	case command.Add:
 		if len(args) > 1 {
-			err = add(convertKeywordToVersion(args[1], operatingSystem, arch, config), operatingSystem, arch, config)
+			v := convertKeywordToVersion(args[1], operatingSystem, arch, config)
+			err = add(v, operatingSystem, arch, config)
 		} else {
 			err = fmt.Errorf(constants.MissingVersionKeywordOrPrefixError, args[0])
 			utilities.LogUserError(err)
@@ -49,7 +50,8 @@ func Handle(args []string, operatingSystem models.OperatingSystem, arch models.A
 		}
 	case command.Install:
 		if len(args) > 1 {
-			err = install(convertKeywordToVersion(args[1], operatingSystem, arch, config), operatingSystem, arch, config)
+			v := convertKeywordToVersion(args[1], operatingSystem, arch, config)
+			err = install(v, operatingSystem, arch, config)
 		} else {
 			err = fmt.Errorf(constants.MissingVersionKeywordOrPrefixError, args[0])
 			utilities.LogUserError(err)
@@ -58,7 +60,8 @@ func Handle(args []string, operatingSystem models.OperatingSystem, arch models.A
 		list()
 	case command.Migrate:
 		if len(args) > 2 {
-			err = migrate(args[1], convertKeywordToVersion(args[2], operatingSystem, arch, config), operatingSystem, arch, config)
+			v := convertKeywordToVersion(args[2], operatingSystem, arch, config)
+			err = migrate(args[1], v, operatingSystem, arch, config)
 		} else if len(args) > 1 {
 			err = migrate(args[1], args[1], operatingSystem, arch, config)
 		} else {
