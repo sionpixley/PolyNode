@@ -83,7 +83,7 @@ func Handle(args []string, operatingSystem models.OperatingSystem, arch models.A
 		}
 	case command.Use:
 		if len(args) > 1 {
-			err = use(args[1], operatingSystem)
+			err = use(args[1], operatingSystem, config)
 		} else {
 			err = fmt.Errorf(constants.MissingVersionOrPrefixError, args[0])
 			utilities.LogUserError(err)

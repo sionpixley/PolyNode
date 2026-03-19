@@ -437,7 +437,8 @@ func searchDefault(operatingSystem models.OperatingSystem, arch models.Architect
 	return nil
 }
 
-func use(version string, operatingSystem models.OperatingSystem) error {
+func use(version string, operatingSystem models.OperatingSystem, config *models.PolyNodeConfig) error {
+	config.AutoUpdate = false
 	var err error
 
 	if utilities.ValidVersionFormat(version) {
