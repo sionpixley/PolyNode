@@ -83,15 +83,15 @@ Config fields:
 	InvalidConfigFieldError            = "invalid config field: '%s'"
 	MissingVersionKeywordOrPrefixError = "missing argument: the '%s' command is missing a version, keyword, or prefix"
 	MissingVersionOrPrefixError        = "missing argument: the '%s' command is missing a version or prefix"
+	NoDownloadedNodejsError            = "there are no Node.js versions downloaded"
 
 	NoDownloadedNodejsMessage = "There are no Node.js versions downloaded.\nTo download a Node.js version, use the 'add' or 'install' command."
 
 	NoVersionMatchPrefixError = "no Node.js versions match the prefix '%s'"
-
-	UnknownCommandError  = "unknown command: '%s' is not a known command"
-	UnsupportedArchError = "unsupported CPU architecture"
-	UnsupportedOSError   = "unsupported operating system"
+	UnknownCommandError       = "unknown command: '%s' is not a known command"
+	UnsupportedArchError      = "unsupported CPU architecture"
+	UnsupportedOSError        = "unsupported operating system"
 
 	// Version constant is PolyNode's version.
-	Version = "v5.0.2"
+	Version = "v5.0.3"
 )

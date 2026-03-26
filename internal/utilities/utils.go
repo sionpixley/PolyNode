@@ -219,7 +219,7 @@ func KnownCommand(comm string) bool {
 }
 
 func LogFatal(err error) {
-	log.Fatalf("%v\n", err)
+	log.Fatalf("polyn: %v\n", err)
 }
 
 func LogUserError(err error) {

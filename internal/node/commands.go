@@ -172,14 +172,8 @@ func def(version string, operatingSystem models.OperatingSystem) error {
 		version = utilities.ConvertToSemanticVersion(version)
 	} else {
 		version, err = convertPrefixToVersionLocalDesc(version)
-		// We don't want to do anything when the error's value is 'skip'.
-		// If the error is 'skip' then that means the node directory doesn't exist.
-		// We don't treat it like an error in that case.
-		// This is unique to this function (asc and desc versions) throughout the system (so far at least). 2025-02-25
-		if err != nil && err.Error() != "skip" {
+		if err != nil {
 			return err
-		} else if err != nil {
-			return nil
 		}
 	}
 
@@ -242,14 +236,8 @@ func list() {
 func migrate(from string, to string, operatingSystem models.OperatingSystem, arch models.Architecture, config *models.PolyNodeConfig) error {
 	var err error
 	from, err = convertPrefixToVersionLocalDesc(from)
-	// We don't want to do anything when the error's value is 'skip'.
-	// If the error is 'skip' then that means the node directory doesn't exist.
-	// We don't treat it like an error in that case.
-	// This is unique to this function (asc and desc versions) throughout the system (so far at least). 2025-02-25
-	if err != nil && err.Error() != "skip" {
+	if err != nil {
 		return err
-	} else if err != nil {
-		return nil
 	}
 
 	to, err = convertPrefixToVersionDown(to, operatingSystem, arch, config)
@@ -307,6 +295,7 @@ func migrate(from string, to string, operatingSystem models.OperatingSystem, arc
 
 	fmt.Print("migrating global npm packages (this may take a while)...")
 
+	var data2 []byte
 	if len(dependencies) > 2 {
 		if operatingSystem == opsys.Windows {
 			path = internal.PolynHomeDir + `\node\` + to + ";" + os.Getenv("PATH")
@@ -315,14 +304,17 @@ func migrate(from string, to string, operatingSystem models.OperatingSystem, arc
 		}
 		cmd = exec.Command("npm", dependencies...)
 		cmd.Env = append(os.Environ(), "PATH="+path)
-		data, err = cmd.Output()
+		data2, err = cmd.Output()
 		if err != nil {
 			return err
 		}
 	}
 
 	fmt.Println("done")
-	fmt.Print(string(data))
+	if data2 != nil {
+		fmt.Print(string(data))
+	}
+
 	return nil
 }
 
@@ -333,14 +325,8 @@ func remove(version string) error {
 		version = utilities.ConvertToSemanticVersion(version)
 	} else {
 		version, err = convertPrefixToVersionLocalAsc(version)
-		// We don't want to do anything when the error's value is 'skip'.
-		// If the error is 'skip' then that means the node directory doesn't exist.
-		// We don't treat it like an error in that case.
-		// This is unique to this function (asc and desc versions) throughout the system (so far at least). 2025-02-25
-		if err != nil && err.Error() != "skip" {
+		if err != nil {
 			return err
-		} else if err != nil {
-			return nil
 		}
 	}
 
@@ -438,21 +424,17 @@ func searchDefault(operatingSystem models.OperatingSystem, arch models.Architect
 }
 
 func use(version string, operatingSystem models.OperatingSystem, config *models.PolyNodeConfig) error {
+	// We don't want the auto updater to run because it will mess up the output for the 'use' command.
 	config.AutoUpdate = false
+
 	var err error
 
 	if utilities.ValidVersionFormat(version) {
 		version = utilities.ConvertToSemanticVersion(version)
 	} else {
 		version, err = convertPrefixToVersionLocalDesc(version)
-		// We don't want to do anything when the error's value is 'skip'.
-		// If the error is 'skip' then that means the node directory doesn't exist.
-		// We don't treat it like an error in that case.
-		// This is unique to this function (asc and desc versions) throughout the system (so far at least). 2025-02-25
-		if err != nil && err.Error() != "skip" {
+		if err != nil {
 			return err
-		} else if err != nil {
-			return nil
 		}
 	}
 
