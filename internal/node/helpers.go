@@ -101,10 +101,7 @@ func convertPrefixToVersionDown(prefix string, operatingSystem models.OperatingS
 func convertPrefixToVersionLocalAsc(prefix string) (string, error) {
 	dir, err := os.ReadDir(internal.PolynHomeDir + internal.PathSeparator + "node")
 	if err != nil {
-		// The node directory doesn't exist.
-		// Passing a 'skip' to explicitly not treat this code path as an error.
-		fmt.Println(constants.NoDownloadedNodejsMessage)
-		return "", errors.New("skip")
+		return "", errors.New(constants.NoDownloadedNodejsError)
 	}
 
 	prefix = utilities.ConvertToSemanticVersion(prefix)
@@ -144,10 +141,7 @@ func convertPrefixToVersionLocalAsc(prefix string) (string, error) {
 func convertPrefixToVersionLocalDesc(prefix string) (string, error) {
 	dir, err := os.ReadDir(internal.PolynHomeDir + internal.PathSeparator + "node")
 	if err != nil {
-		// The node directory doesn't exist.
-		// Passing a 'skip' to explicitly not treat this code path as an error.
-		fmt.Println(constants.NoDownloadedNodejsMessage)
-		return "", errors.New("skip")
+		return "", errors.New(constants.NoDownloadedNodejsError)
 	}
 
 	prefix = utilities.ConvertToSemanticVersion(prefix)
