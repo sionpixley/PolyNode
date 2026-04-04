@@ -1,7 +1,7 @@
-FROM fedora:latest AS base
+FROM debian:latest AS base
 
-RUN dnf upgrade --refresh -y
-RUN dnf install libatomic -y
+RUN apt update && apt upgrade -y
+RUN apt install ca-certificates libatomic1 -y
 
 ENV SHELL=/bin/bash
 ENV PATH=$PATH:/root/.PolyNode:/root/.PolyNode/nodejs/bin
