@@ -312,7 +312,7 @@ func migrate(from string, to string, operatingSystem models.OperatingSystem, arc
 
 	fmt.Println("done")
 	if data2 != nil {
-		fmt.Print(string(data))
+		fmt.Print(string(data2))
 	}
 
 	return nil
