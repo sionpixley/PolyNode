@@ -1,11 +1,11 @@
 package models
 
 type NPMPackage struct {
-	Overridden bool   `json:"overridden"`
 	Version    string `json:"version"`
+	Overridden bool   `json:"overridden"`
 }
 
 type NPMList struct {
-	Name         string                `json:"name"`
 	Dependencies map[string]NPMPackage `json:"dependencies"`
+	Name         string                `json:"name"`
 }
