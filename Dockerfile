@@ -6,7 +6,7 @@ RUN apt install ca-certificates libatomic1 -y
 ENV SHELL=/bin/bash
 ENV PATH=$PATH:/root/.PolyNode:/root/.PolyNode/nodejs/bin
 
-FROM golang:alpine AS build
+FROM golang:trixie AS build
 
 WORKDIR /PolyNode
 
