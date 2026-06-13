@@ -11,7 +11,6 @@ import (
 
 const uninstallBatch string = `@echo off
 timeout /t 1 /nobreak > nul
-cd %LOCALAPPDATA%
 del %LOCALAPPDATA%\Programs\PolyNode /s /f /q > nul
 rmdir %LOCALAPPDATA%\Programs\PolyNode /s /q
 timeout /t 1 /nobreak > nul
@@ -59,10 +58,11 @@ func uninstall() error {
 		return err
 	}
 
-	err = os.WriteFile(home+"\\polyn-uninstall-temp.cmd", []byte(uninstallBatch), 0744)
+	batchfilePath := home + "\\polyn-uninstall-temp.cmd"
+	err = os.WriteFile(batchfilePath, []byte(uninstallBatch), 0744)
 	if err != nil {
 		return err
 	}
 
-	return exec.Command("cmd", "/c", "start", "/b", home+"\\polyn-uninstall-temp").Run()
+	return exec.Command(batchfilePath).Start()
 }

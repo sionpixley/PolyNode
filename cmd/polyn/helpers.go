@@ -200,8 +200,8 @@ func runUpdateScript(operatingSystem models.OperatingSystem) error {
 timeout /t 1 /nobreak > nul
 cd %LOCALAPPDATA%\Programs\PolyNode\update-temp
 .\setup
-timeout /t 1 /nobreak > nul
 cd %LOCALAPPDATA%
+timeout /t 1 /nobreak > nul
 del %LOCALAPPDATA%\Programs\PolyNode\update-temp /s /f /q > nul
 rmdir %LOCALAPPDATA%\Programs\PolyNode\update-temp /s /q
 timeout /t 1 /nobreak > nul
@@ -216,7 +216,7 @@ if exist %LOCALAPPDATA%\Programs\PolyNode\update-temp\ (
 			return err
 		}
 
-		err = exec.Command("cmd", "/c", "start", "/b", batchfilePath).Run()
+		err = exec.Command(batchfilePath).Start()
 		if err != nil {
 			return err
 		}
