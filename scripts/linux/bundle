@@ -1,25 +1,25 @@
 #!/bin/sh
 
 build() (
-  goArch="$1"
-  polynArch="$2"
-  buildPolyn "$goArch"
-  buildInstall "$goArch"
-  buildUninstall "$goArch" "$polynArch"
-  construct "$polynArch"
-  bundle "$polynArch"
+  go_arch="$1"
+  polyn_arch="$2"
+  build_polyn "$go_arch"
+  build_install "$go_arch"
+  build_uninstall "$go_arch" "$polyn_arch"
+  construct "$polyn_arch"
+  bundle "$polyn_arch"
 )
 
-buildInstall() (
+build_install() (
   cd install || exit
   env GOOS=linux GOARCH="$1" go build -ldflags="-s -w" -o ../setup ./cmd/setup
 )
 
-buildPolyn() {
+build_polyn() {
   env GOOS=linux GOARCH="$1" go build -ldflags="-s -w" -tags=prod -o polyn ./cmd/polyn
 }
 
-buildUninstall() (
+build_uninstall() (
   cd uninstall || exit
   env GOOS=linux GOARCH="$1" go build -ldflags="-s -w" -o ../"uninstall-${2}"
 )

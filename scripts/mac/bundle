@@ -3,34 +3,34 @@
 sign=1
 
 build() (
-  goArch="$1"
-  polynArch="$2"
-  buildPolyn "$goArch"
-  buildInstall "$goArch"
-  buildUninstall "$goArch" "$polynArch"
-  construct "$polynArch"
-  bundle "$polynArch"
+  go_arch="$1"
+  polyn_arch="$2"
+  build_polyn "$go_arch"
+  build_install "$go_arch"
+  build_uninstall "$go_arch" "$polyn_arch"
+  construct "$polyn_arch"
+  bundle "$polyn_arch"
 )
 
-buildInstall() {
+build_install() {
   (
     cd install || exit
     env GOOS=darwin GOARCH="$1" go build -ldflags="-s -w" -o ../setup ./cmd/setup
   )
-  signBinary setup
+  sign_binary setup
 }
 
-buildPolyn() {
+build_polyn() {
   env GOOS=darwin GOARCH="$1" go build -ldflags="-s -w" -tags=prod -o polyn ./cmd/polyn
-  signBinary polyn
+  sign_binary polyn
 }
 
-buildUninstall() {
+build_uninstall() {
   (
     cd uninstall || exit
     env GOOS=darwin GOARCH="$1" go build -ldflags="-s -w" -o ../"uninstall-${2}"
   )
-  signBinary "uninstall-${2}"
+  sign_binary "uninstall-${2}"
 }
 
 bundle() {
@@ -46,7 +46,7 @@ construct() {
   mv "uninstall-${1}" ./"PolyNode-darwin-${1}"/PolyNode/uninstall/uninstall
 }
 
-signBinary() {
+sign_binary() {
   if [ "$sign" -eq 1 ]; then
     codesign -v -f --timestamp --options=runtime --sign="$CODESIGN_TEAM_ID" "$1"
     zip "${1}.zip" "$1"
