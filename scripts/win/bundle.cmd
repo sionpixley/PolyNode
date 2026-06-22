@@ -1,5 +1,19 @@
 @echo off
 
+:: Create Windows manifests
+
+set version=5.0.8.0
+
+cd .\cmd\polyn
+go-winres make --file-version=%version% --product-version=%version%
+
+cd ..\..\install\cmd\setup
+go-winres make --file-version=%version% --product-version=%version%
+
+cd ..\..\..\uninstall
+go-winres make --file-version=%version% --product-version=%version%
+cd ..
+
 :: Build Windows ARM64
 
 set GOOS=windows
