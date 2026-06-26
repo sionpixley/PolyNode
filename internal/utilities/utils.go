@@ -109,10 +109,7 @@ func ExtractGzip(source string, destination string) error {
 		}
 
 		target := filepath.Join(destination, stripTopDir(header.Name))
-		rel, e := filepath.Rel(destination, target)
-		if e != nil {
-			return e
-		} else if rel == ".." || strings.HasPrefix(rel, ".."+internal.PathSeparator) {
+		if !isWithin(destination, target) {
 			return fmt.Errorf(constants.IllegalPathError, header.Name)
 		}
 
@@ -135,6 +132,9 @@ func ExtractGzip(source string, destination string) error {
 			}
 			_ = outFile.Close()
 		case tar.TypeSymlink:
+			if !isWithin(destination, resolveLinkTarget(target, header.Linkname)) {
+				return fmt.Errorf(constants.IllegalLinkError, header.Name, header.Linkname)
+			}
 			if e2 := os.MkdirAll(filepath.Dir(target), os.FileMode(header.Mode)); e2 != nil {
 				return e2
 			}
@@ -142,10 +142,14 @@ func ExtractGzip(source string, destination string) error {
 				return e2
 			}
 		case tar.TypeLink:
+			linkSource := filepath.Join(destination, stripTopDir(header.Linkname))
+			if !isWithin(destination, linkSource) {
+				return fmt.Errorf(constants.IllegalLinkError, header.Name, header.Linkname)
+			}
 			if e2 := os.MkdirAll(filepath.Dir(target), os.FileMode(header.Mode)); e2 != nil {
 				return e2
 			}
-			if e2 := os.Link(header.Linkname, target); e2 != nil {
+			if e2 := os.Link(linkSource, target); e2 != nil {
 				return e2
 			}
 		default:
@@ -165,10 +169,7 @@ func ExtractZip(source string, destination string) error {
 
 	for _, file := range zipReader.File {
 		target := filepath.Join(destination, stripTopDir(strings.ReplaceAll(file.Name, "\\", "/")))
-		rel, e := filepath.Rel(destination, target)
-		if e != nil {
-			return e
-		} else if rel == ".." || strings.HasPrefix(rel, ".."+internal.PathSeparator) {
+		if !isWithin(destination, target) {
 			return fmt.Errorf(constants.IllegalPathError, file.Name)
 		}
 
@@ -177,10 +178,6 @@ func ExtractZip(source string, destination string) error {
 				return e
 			}
 		} else if file.Mode()&os.ModeSymlink != 0 {
-			if e := os.MkdirAll(filepath.Dir(target), file.Mode()); e != nil {
-				return e
-			}
-
 			src, e := file.Open()
 			if e != nil {
 				return e
@@ -191,13 +188,20 @@ func ExtractZip(source string, destination string) error {
 				_ = src.Close()
 				return e
 			}
+			_ = src.Close()
 
-			if e2 := os.Symlink(string(link), target); e2 != nil {
-				_ = src.Close()
-				return e2
+			linkname := string(link)
+			if !isWithin(destination, resolveLinkTarget(target, linkname)) {
+				return fmt.Errorf(constants.IllegalLinkError, file.Name, linkname)
 			}
 
-			_ = src.Close()
+			if e := os.MkdirAll(filepath.Dir(target), file.Mode()); e != nil {
+				return e
+			}
+
+			if e2 := os.Symlink(linkname, target); e2 != nil {
+				return e2
+			}
 		} else {
 			if e := os.MkdirAll(filepath.Dir(target), file.Mode()); e != nil {
 				return e
@@ -286,4 +290,21 @@ func stripTopDir(path string) string {
 	}
 
 	return path
+}
+
+func resolveLinkTarget(linkPath string, linkname string) string {
+	if filepath.IsAbs(linkname) {
+		return filepath.Clean(linkname)
+	}
+
+	return filepath.Clean(filepath.Join(filepath.Dir(linkPath), linkname))
+}
+
+func isWithin(base string, target string) bool {
+	rel, err := filepath.Rel(base, target)
+	if err != nil {
+		return false
+	}
+
+	return rel != ".." && !strings.HasPrefix(rel, ".."+internal.PathSeparator)
 }
