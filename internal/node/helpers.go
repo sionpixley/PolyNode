@@ -193,6 +193,10 @@ func getAllNodeVersionsForOSAndArch(operatingSystem models.OperatingSystem, arch
 	}
 	defer func() { _ = response.Body.Close() }()
 
+	if response.StatusCode != http.StatusOK {
+		return nil, fmt.Errorf(constants.DownloadFailedError, url)
+	}
+
 	var nodeVersions []models.NodeVersion
 	err = json.NewDecoder(response.Body).Decode(&nodeVersions)
 	if err != nil {

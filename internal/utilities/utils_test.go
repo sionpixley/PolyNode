@@ -1,6 +1,7 @@
 package utilities
 
 import (
+	"path/filepath"
 	"testing"
 
 	"github.com/sionpixley/PolyNode/internal/constants/command"
@@ -189,5 +190,68 @@ func TestValidVersionFormat_ValidWithV(t *testing.T) {
 	valid := ValidVersionFormat("v3.1.0")
 	if !valid {
 		t.Errorf("expected: %v actual: %v\n", true, valid)
+	}
+}
+
+func TestIsWithin_Inside(t *testing.T) {
+	base := filepath.Join("tmp", "dest")
+	target := filepath.Join(base, "sub", "file")
+	if !isWithin(base, target) {
+		t.Errorf("expected: %v actual: %v\n", true, false)
+	}
+}
+
+func TestIsWithin_Same(t *testing.T) {
+	base := filepath.Join("tmp", "dest")
+	if !isWithin(base, base) {
+		t.Errorf("expected: %v actual: %v\n", true, false)
+	}
+}
+
+func TestIsWithin_Sibling(t *testing.T) {
+	base := filepath.Join("tmp", "dest")
+	target := filepath.Join("tmp", "other")
+	if isWithin(base, target) {
+		t.Errorf("expected: %v actual: %v\n", false, true)
+	}
+}
+
+func TestIsWithin_Parent(t *testing.T) {
+	base := filepath.Join("tmp", "dest")
+	target := "tmp"
+	if isWithin(base, target) {
+		t.Errorf("expected: %v actual: %v\n", false, true)
+	}
+}
+
+func TestResolveLinkTarget_RelativeInside(t *testing.T) {
+	dest := filepath.Join("tmp", "dest")
+	linkPath := filepath.Join(dest, "bin", "node")
+	expected := filepath.Join(dest, "lib", "x")
+	actual := resolveLinkTarget(linkPath, filepath.Join("..", "lib", "x"))
+	if actual != expected {
+		t.Errorf("expected: %s actual: %s\n", expected, actual)
+	}
+}
+
+func TestResolveLinkTarget_RelativeEscape(t *testing.T) {
+	dest := filepath.Join("tmp", "dest")
+	linkPath := filepath.Join(dest, "a")
+	resolved := resolveLinkTarget(linkPath, filepath.Join("..", "..", "etc", "passwd"))
+	if isWithin(dest, resolved) {
+		t.Errorf("expected: %v actual: %v\n", false, true)
+	}
+}
+
+func TestResolveLinkTarget_Absolute(t *testing.T) {
+	dest := filepath.Join("tmp", "dest")
+	linkPath := filepath.Join(dest, "a")
+	abs := string(filepath.Separator) + filepath.Join("etc", "passwd")
+	resolved := resolveLinkTarget(linkPath, abs)
+	if resolved != filepath.Clean(abs) {
+		t.Errorf("expected: %s actual: %s\n", filepath.Clean(abs), resolved)
+	}
+	if isWithin(dest, resolved) {
+		t.Errorf("expected: %v actual: %v\n", false, true)
 	}
 }

@@ -1,6 +1,8 @@
 package constants
 
 const (
+	DownloadFailedError = "download failed: %s"
+
 	Help = `Description:
 
     PolyNode is a CLI tool that helps install and manage multiple versions of Node.js on the same device.
@@ -80,18 +82,20 @@ Config fields:
         To turn off the timeout, set this field to '0'.
         Default value is '180'.`
 
-	InvalidConfigFieldError            = "invalid config field: '%s'"
+	InvalidConfigFieldError            = "invalid config field: %s"
+	IllegalLinkError                   = "illegal link target in archive: %s -> %s"
+	IllegalPathError                   = "illegal path in archive: %s"
 	MissingVersionKeywordOrPrefixError = "missing argument: the '%s' command is missing a version, keyword, or prefix"
 	MissingVersionOrPrefixError        = "missing argument: the '%s' command is missing a version or prefix"
 	NoDownloadedNodejsError            = "there are no Node.js versions downloaded"
 
 	NoDownloadedNodejsMessage = "There are no Node.js versions downloaded.\nTo download a Node.js version, use the 'add' or 'install' command."
 
-	NoVersionMatchPrefixError = "no Node.js versions match the prefix '%s'"
-	UnknownCommandError       = "unknown command: '%s' is not a known command"
+	NoVersionMatchPrefixError = "no Node.js versions match the prefix: %s"
+	UnknownCommandError       = "unknown command: %s"
 	UnsupportedArchError      = "unsupported CPU architecture"
 	UnsupportedOSError        = "unsupported operating system"
 
 	// Version constant is PolyNode's version.
-	Version = "v5.0.8"
+	Version = "v5.0.9"
 )
