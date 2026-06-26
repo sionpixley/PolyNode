@@ -11,6 +11,8 @@ import (
 	"path/filepath"
 	"strings"
 
+	"github.com/sionpixley/PolyNode/internal"
+	"github.com/sionpixley/PolyNode/internal/constants"
 	"github.com/sionpixley/PolyNode/internal/constants/command"
 	"github.com/sionpixley/PolyNode/internal/models"
 	flag "github.com/spf13/pflag"
@@ -107,6 +109,12 @@ func ExtractGzip(source string, destination string) error {
 		}
 
 		target := filepath.Join(destination, stripTopDir(header.Name))
+		rel, e := filepath.Rel(destination, target)
+		if e != nil {
+			return e
+		} else if rel == ".." || strings.HasPrefix(rel, ".."+internal.PathSeparator) {
+			return fmt.Errorf(constants.IllegalPathError, header.Name)
+		}
 
 		switch header.Typeflag {
 		case tar.TypeDir:
@@ -157,6 +165,12 @@ func ExtractZip(source string, destination string) error {
 
 	for _, file := range zipReader.File {
 		target := filepath.Join(destination, stripTopDir(strings.ReplaceAll(file.Name, "\\", "/")))
+		rel, e := filepath.Rel(destination, target)
+		if e != nil {
+			return e
+		} else if rel == ".." || strings.HasPrefix(rel, ".."+internal.PathSeparator) {
+			return fmt.Errorf(constants.IllegalPathError, file.Name)
+		}
 
 		if file.FileInfo().IsDir() {
 			if e := os.MkdirAll(target, file.Mode()); e != nil {

@@ -43,28 +43,20 @@ func (config *PolyNodeConfig) UnmarshalJSON(b []byte) error {
 		return err
 	}
 
-	autoUpdate, exists := temp["autoUpdate"]
-	if exists {
-		config.AutoUpdate = autoUpdate.(bool)
+	if autoUpdate, ok := temp["autoUpdate"].(bool); ok {
+		config.AutoUpdate = autoUpdate
 	} else {
 		config.AutoUpdate = defaultAutoUpdate
 	}
 
-	mirror, exists := temp["nodeMirror"]
-	if exists {
-		config.NodeMirror = strings.ToLower(strings.TrimSuffix(strings.TrimSpace(mirror.(string)), "/"))
+	if mirror, ok := temp["nodeMirror"].(string); ok {
+		config.NodeMirror = strings.ToLower(strings.TrimSuffix(strings.TrimSpace(mirror), "/"))
 	} else {
 		config.NodeMirror = defaultNodeMirror
 	}
 
-	timeout, exists := temp["timeout"]
-	if exists {
-		val := timeout.(int)
-		if val < 0 {
-			config.TimeoutInSeconds = defaultTimeoutInSeconds
-		} else {
-			config.TimeoutInSeconds = val
-		}
+	if timeout, ok := temp["timeoutInSeconds"].(float64); ok && timeout >= 0 {
+		config.TimeoutInSeconds = int(timeout)
 	} else {
 		config.TimeoutInSeconds = defaultTimeoutInSeconds
 	}

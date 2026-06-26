@@ -53,6 +53,10 @@ func add(version string, operatingSystem models.OperatingSystem, arch models.Arc
 	}
 	defer func() { _ = response.Body.Close() }()
 
+	if response.StatusCode != http.StatusOK {
+		return fmt.Errorf(constants.DownloadFailedError, fileName)
+	}
+
 	nodePath := internal.PolynHomeDir + internal.PathSeparator + "node"
 	err = os.MkdirAll(nodePath, os.ModePerm)
 	if err != nil {

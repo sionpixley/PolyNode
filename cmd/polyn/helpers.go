@@ -101,6 +101,10 @@ func downloadPolyNodeFile(filename string, config *models.PolyNodeConfig) error 
 	}
 	defer func() { _ = response.Body.Close() }()
 
+	if response.StatusCode != http.StatusOK {
+		return fmt.Errorf(constants.DownloadFailedError, filename)
+	}
+
 	filename = internal.PolynHomeDir + internal.PathSeparator + filename
 	err = os.RemoveAll(filename)
 	if err != nil {
