@@ -21,7 +21,7 @@ func addToPath(home string) error {
 		return err
 	}
 
-	path += ";" + home + "\\PolyNode;" + home + "\\PolyNode\\nodejs"
+	path = home + "\\PolyNode;" + home + "\\PolyNode\\nodejs;" + path
 	return key.SetStringValue("Path", path)
 }
 

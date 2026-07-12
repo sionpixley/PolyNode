@@ -42,7 +42,7 @@ func removePath(home string, rcFile string) error {
 	var content string
 	for scanner.Scan() {
 		line := scanner.Text()
-		if !strings.Contains(line, "export PATH=$PATH:"+home+"/.PolyNode:"+home+"/.PolyNode/nodejs/bin") {
+		if !strings.Contains(line, "export PATH=$PATH:"+home+"/.PolyNode:"+home+"/.PolyNode/nodejs/bin") && !strings.Contains(line, "export PATH="+home+"/.PolyNode:"+home+"/.PolyNode/nodejs/bin:$PATH") {
 			content += line + "\n"
 		}
 	}
