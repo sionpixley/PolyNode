@@ -89,7 +89,7 @@ func convertToOperatingSystem(osStr string) models.OperatingSystem {
 func downloadPolyNodeFile(filename string, config *models.PolyNodeConfig) error {
 	fmt.Print("downloading the latest release of PolyNode...")
 
-	client := &http.Client{Timeout: time.Duration(config.TimeoutInSeconds) * time.Second}
+	client := utilities.NewHTTPClient(config)
 	request, err := http.NewRequest(http.MethodGet, "https://github.com/sionpixley/PolyNode/releases/latest/download/"+filename, nil)
 	if err != nil {
 		return err

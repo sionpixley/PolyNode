@@ -10,7 +10,6 @@ import (
 	"regexp"
 	"strconv"
 	"strings"
-	"time"
 
 	"github.com/sionpixley/PolyNode/internal"
 	"github.com/sionpixley/PolyNode/internal/constants"
@@ -41,7 +40,7 @@ func add(version string, operatingSystem models.OperatingSystem, arch models.Arc
 
 	url := config.NodeMirror + "/" + version + "/" + fileName
 
-	client := &http.Client{Timeout: time.Duration(config.TimeoutInSeconds) * time.Second}
+	client := utilities.NewHTTPClient(config)
 	request, err := http.NewRequest(http.MethodGet, url, nil)
 	if err != nil {
 		return err
