@@ -2,6 +2,9 @@ package models
 
 import (
 	"encoding/json"
+	"fmt"
+
+	"github.com/sionpixley/PolyNode/internal/constants"
 )
 
 type NodeVersion struct {
@@ -17,12 +20,23 @@ func (nodeVersion *NodeVersion) UnmarshalJSON(b []byte) error {
 		return err
 	}
 
-	nodeVersion.Version = temp["version"].(string)
+	if version, ok := temp["version"].(string); ok {
+		nodeVersion.Version = version
+	} else {
+		return fmt.Errorf(constants.InvalidJSONResponseError, "nodeVersion")
+	}
 
-	rawFiles := temp["files"].([]any)
-	nodeVersion.Files = make([]string, len(rawFiles))
-	for i, rawFile := range rawFiles {
-		nodeVersion.Files[i] = rawFile.(string)
+	if rawFiles, ok := temp["files"].([]any); ok {
+		nodeVersion.Files = make([]string, len(rawFiles))
+		for i, rawFile := range rawFiles {
+			if file, ok := rawFile.(string); ok {
+				nodeVersion.Files[i] = file
+			} else {
+				return fmt.Errorf(constants.InvalidJSONResponseError, "nodeVersion")
+			}
+		}
+	} else {
+		return fmt.Errorf(constants.InvalidJSONResponseError, "nodeVersion")
 	}
 
 	switch temp["lts"].(type) {

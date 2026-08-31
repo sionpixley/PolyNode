@@ -83,6 +83,7 @@ Config fields:
         Default value is '180'.`
 
 	InvalidConfigFieldError            = "invalid config field: %s"
+	InvalidJSONResponseError           = "invalid JSON response for type: %s"
 	IllegalLinkError                   = "illegal link target in archive: %s -> %s"
 	IllegalPathError                   = "illegal path in archive: %s"
 	MissingVersionKeywordOrPrefixError = "missing argument: the '%s' command is missing a version, keyword, or prefix"
@@ -97,5 +98,5 @@ Config fields:
 	UnsupportedOSError        = "unsupported operating system"
 
 	// Version constant is PolyNode's version.
-	Version = "v5.0.9"
+	Version = "v5.0.10"
 )

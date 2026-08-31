@@ -7,9 +7,11 @@ import (
 	"fmt"
 	"io"
 	"log"
+	"net/http"
 	"os"
 	"path/filepath"
 	"strings"
+	"time"
 
 	"github.com/sionpixley/PolyNode/internal"
 	"github.com/sionpixley/PolyNode/internal/constants"
@@ -245,6 +247,10 @@ func LogUserError(err error) {
 	flag.Usage()
 	_, _ = fmt.Fprintln(os.Stderr, err)
 	os.Exit(1)
+}
+
+func NewHTTPClient(config *models.PolyNodeConfig) *http.Client {
+	return &http.Client{Timeout: time.Duration(config.TimeoutInSeconds) * time.Second}
 }
 
 func ValidVersionFormat(version string) bool {

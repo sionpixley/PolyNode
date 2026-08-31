@@ -10,7 +10,6 @@ import (
 	"regexp"
 	"strconv"
 	"strings"
-	"time"
 
 	"github.com/sionpixley/PolyNode/internal"
 	"github.com/sionpixley/PolyNode/internal/constants"
@@ -41,7 +40,7 @@ func add(version string, operatingSystem models.OperatingSystem, arch models.Arc
 
 	url := config.NodeMirror + "/" + version + "/" + fileName
 
-	client := &http.Client{Timeout: time.Duration(config.TimeoutInSeconds) * time.Second}
+	client := utilities.NewHTTPClient(config)
 	request, err := http.NewRequest(http.MethodGet, url, nil)
 	if err != nil {
 		return err
@@ -77,6 +76,7 @@ func add(version string, operatingSystem models.OperatingSystem, arch models.Arc
 	_, err = io.Copy(file, response.Body)
 	if err != nil {
 		_ = file.Close()
+		_ = os.RemoveAll(filePath)
 		return err
 	}
 	// Calling file.Close() explicitly instead of with defer to prevent lock errors.
@@ -85,6 +85,7 @@ func add(version string, operatingSystem models.OperatingSystem, arch models.Arc
 	folderPath := nodePath + internal.PathSeparator + version
 	err = os.RemoveAll(folderPath)
 	if err != nil {
+		_ = os.RemoveAll(filePath)
 		return err
 	}
 
@@ -93,6 +94,7 @@ func add(version string, operatingSystem models.OperatingSystem, arch models.Arc
 	fmt.Printf("extracting %s...", fileName)
 	err = utilities.ExtractFile(filePath, folderPath)
 	if err != nil {
+		_ = os.RemoveAll(filePath)
 		return err
 	}
 
