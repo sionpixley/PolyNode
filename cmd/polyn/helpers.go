@@ -119,6 +119,7 @@ func downloadPolyNodeFile(filename string, config *models.PolyNodeConfig) error 
 
 	_, err = io.Copy(file, response.Body)
 	if err != nil {
+		_ = os.RemoveAll(filename)
 		return err
 	}
 

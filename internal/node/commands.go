@@ -76,6 +76,7 @@ func add(version string, operatingSystem models.OperatingSystem, arch models.Arc
 	_, err = io.Copy(file, response.Body)
 	if err != nil {
 		_ = file.Close()
+		_ = os.RemoveAll(filePath)
 		return err
 	}
 	// Calling file.Close() explicitly instead of with defer to prevent lock errors.
@@ -84,6 +85,7 @@ func add(version string, operatingSystem models.OperatingSystem, arch models.Arc
 	folderPath := nodePath + internal.PathSeparator + version
 	err = os.RemoveAll(folderPath)
 	if err != nil {
+		_ = os.RemoveAll(filePath)
 		return err
 	}
 
@@ -92,6 +94,7 @@ func add(version string, operatingSystem models.OperatingSystem, arch models.Arc
 	fmt.Printf("extracting %s...", fileName)
 	err = utilities.ExtractFile(filePath, folderPath)
 	if err != nil {
+		_ = os.RemoveAll(filePath)
 		return err
 	}
 
