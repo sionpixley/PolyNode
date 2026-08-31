@@ -98,5 +98,5 @@ Config fields:
 	UnsupportedOSError        = "unsupported operating system"
 
 	// Version constant is PolyNode's version.
-	Version = "v5.0.9"
+	Version = "v5.0.10"
 )

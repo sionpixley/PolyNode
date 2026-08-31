@@ -2,7 +2,7 @@
 
 :: Create Windows manifests
 
-set version=5.0.9.0
+set version=5.0.10.0
 
 cd .\cmd\polyn
 go-winres make --file-version=%version% --product-version=%version%
